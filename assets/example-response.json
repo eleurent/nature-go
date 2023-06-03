@@ -1,0 +1,474 @@
+{
+    "query": {
+        "project": "all",
+        "images": [
+            "b2f7f501857eb5b879d712ad455732bc"
+        ],
+        "organs": [
+            "flower"
+        ],
+        "includeRelatedImages": false
+    },
+    "language": "en",
+    "preferedReferential": "the-plant-list",
+    "bestMatch": "Leontopodium nivale (Ten.) Huet ex Hand.-Mazz.",
+    "results": [
+        {
+            "score": 0.72139,
+            "species": {
+                "scientificNameWithoutAuthor": "Leontopodium nivale",
+                "scientificNameAuthorship": "(Ten.) Huet ex Hand.-Mazz.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Leontopodium",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Leontopodium"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [
+                    "Edelwyss",
+                    "Edelweiss",
+                    "Alpine Star"
+                ],
+                "scientificName": "Leontopodium nivale (Ten.) Huet ex Hand.-Mazz."
+            },
+            "gbif": {
+                "id": "3140685"
+            }
+        },
+        {
+            "score": 0.06021,
+            "species": {
+                "scientificNameWithoutAuthor": "Leontopodium jacotianum",
+                "scientificNameAuthorship": "Beauverd",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Leontopodium",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Leontopodium"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [],
+                "scientificName": "Leontopodium jacotianum Beauverd"
+            },
+            "gbif": {
+                "id": "3140731"
+            }
+        },
+        {
+            "score": 0.05572,
+            "species": {
+                "scientificNameWithoutAuthor": "Leontopodium kurilense",
+                "scientificNameAuthorship": "Takeda",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Leontopodium",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Leontopodium"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [],
+                "scientificName": "Leontopodium kurilense Takeda"
+            },
+            "gbif": {
+                "id": "3140737"
+            }
+        },
+        {
+            "score": 0.00903,
+            "species": {
+                "scientificNameWithoutAuthor": "Leontopodium haplophylloides",
+                "scientificNameAuthorship": "Hand.-Mazz.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Leontopodium",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Leontopodium"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [],
+                "scientificName": "Leontopodium haplophylloides Hand.-Mazz."
+            },
+            "gbif": {
+                "id": "3140726"
+            }
+        },
+        {
+            "score": 0.00591,
+            "species": {
+                "scientificNameWithoutAuthor": "Anaphalis nepalensis",
+                "scientificNameAuthorship": "(Spreng.) Hand.-Mazz.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Anaphalis",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Anaphalis"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [],
+                "scientificName": "Anaphalis nepalensis (Spreng.) Hand.-Mazz."
+            },
+            "gbif": {
+                "id": "3136925"
+            }
+        },
+        {
+            "score": 0.00551,
+            "species": {
+                "scientificNameWithoutAuthor": "Leontopodium pusillum",
+                "scientificNameAuthorship": "(Beauverd) Hand.-Mazz.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Leontopodium",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Leontopodium"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [],
+                "scientificName": "Leontopodium pusillum (Beauverd) Hand.-Mazz."
+            },
+            "gbif": {
+                "id": "3140746"
+            }
+        },
+        {
+            "score": 0.00498,
+            "species": {
+                "scientificNameWithoutAuthor": "Gnaphalium supinum",
+                "scientificNameAuthorship": "L.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Gnaphalium",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Gnaphalium"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [
+                    "Zwerg-Ruhrkraut",
+                    "Alpine arctic cudweed",
+                    "Dwarf Cudweed"
+                ],
+                "scientificName": "Gnaphalium supinum L."
+            },
+            "gbif": {
+                "id": "5390790"
+            }
+        },
+        {
+            "score": 0.00492,
+            "species": {
+                "scientificNameWithoutAuthor": "Filago carpetana",
+                "scientificNameAuthorship": "(Lange) Chrtek & Holub",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Filago",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Filago"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [],
+                "scientificName": "Filago carpetana (Lange) Chrtek & Holub"
+            },
+            "gbif": {
+                "id": "3115914"
+            }
+        },
+        {
+            "score": 0.00385,
+            "species": {
+                "scientificNameWithoutAuthor": "Leontopodium himalayanum",
+                "scientificNameAuthorship": "DC.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Leontopodium",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Leontopodium"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [],
+                "scientificName": "Leontopodium himalayanum DC."
+            },
+            "gbif": {
+                "id": "3140664"
+            }
+        },
+        {
+            "score": 0.00255,
+            "species": {
+                "scientificNameWithoutAuthor": "Gnaphalium antennarioides",
+                "scientificNameAuthorship": "DC.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Gnaphalium",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Gnaphalium"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [],
+                "scientificName": "Gnaphalium antennarioides DC."
+            },
+            "gbif": {
+                "id": "7838634"
+            }
+        },
+        {
+            "score": 0.00227,
+            "species": {
+                "scientificNameWithoutAuthor": "Gnaphalium palustre",
+                "scientificNameAuthorship": "Nutt.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Gnaphalium",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Gnaphalium"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [
+                    "Western marsh cudweed",
+                    "Lowland cudweed"
+                ],
+                "scientificName": "Gnaphalium palustre Nutt."
+            },
+            "gbif": {
+                "id": "5390744"
+            }
+        },
+        {
+            "score": 0.00186,
+            "species": {
+                "scientificNameWithoutAuthor": "Gnaphalium hoppeanum",
+                "scientificNameAuthorship": "W.D.J.Koch",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Gnaphalium",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Gnaphalium"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [],
+                "scientificName": "Gnaphalium hoppeanum W.D.J.Koch"
+            },
+            "gbif": {
+                "id": "5390710"
+            }
+        },
+        {
+            "score": 0.00179,
+            "species": {
+                "scientificNameWithoutAuthor": "Luciliocline subspicata",
+                "scientificNameAuthorship": "(Wedd.) Anderb. & S.E.Freire",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Luciliocline",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Luciliocline"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [],
+                "scientificName": "Luciliocline subspicata (Wedd.) Anderb. & S.E.Freire"
+            },
+            "gbif": {
+                "id": "3117263"
+            }
+        },
+        {
+            "score": 0.00143,
+            "species": {
+                "scientificNameWithoutAuthor": "Pseudognaphalium liebmannii",
+                "scientificNameAuthorship": "(Sch.Bip. ex Klatt) Anderb.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Pseudognaphalium",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Pseudognaphalium"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [],
+                "scientificName": "Pseudognaphalium liebmannii (Sch.Bip. ex Klatt) Anderb."
+            },
+            "gbif": {
+                "id": "3101042"
+            }
+        },
+        {
+            "score": 0.00131,
+            "species": {
+                "scientificNameWithoutAuthor": "Antennaria media",
+                "scientificNameAuthorship": "Greene",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Antennaria",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Antennaria"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [
+                    "Rocky Mountain pussytoes",
+                    "Dark pussytoes"
+                ],
+                "scientificName": "Antennaria media Greene"
+            },
+            "gbif": {
+                "id": "5385509"
+            }
+        },
+        {
+            "score": 0.00123,
+            "species": {
+                "scientificNameWithoutAuthor": "Pardoglossum cheirifolium",
+                "scientificNameAuthorship": "(L.) E.Barbier & Mathez",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Pardoglossum",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Pardoglossum"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Boraginaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Boraginaceae"
+                },
+                "commonNames": [],
+                "scientificName": "Pardoglossum cheirifolium (L.) E.Barbier & Mathez"
+            },
+            "gbif": {
+                "id": "7295152"
+            }
+        },
+        {
+            "score": 0.00118,
+            "species": {
+                "scientificNameWithoutAuthor": "Antennaria lanata",
+                "scientificNameAuthorship": "(Hook.) Greene",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Antennaria",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Antennaria"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [
+                    "Woolly pussytoes"
+                ],
+                "scientificName": "Antennaria lanata (Hook.) Greene"
+            },
+            "gbif": {
+                "id": "5385629"
+            }
+        },
+        {
+            "score": 0.00109,
+            "species": {
+                "scientificNameWithoutAuthor": "Omphalodes littoralis",
+                "scientificNameAuthorship": "Lehm.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Omphalodes",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Omphalodes"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Boraginaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Boraginaceae"
+                },
+                "commonNames": [],
+                "scientificName": "Omphalodes littoralis Lehm."
+            },
+            "gbif": {
+                "id": "4059742"
+            }
+        },
+        {
+            "score": 0.00105,
+            "species": {
+                "scientificNameWithoutAuthor": "Luciliocline santanica",
+                "scientificNameAuthorship": "(Cabrera) Anderb. & S.E.Freire",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Luciliocline",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Luciliocline"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [],
+                "scientificName": "Luciliocline santanica (Cabrera) Anderb. & S.E.Freire"
+            },
+            "gbif": {
+                "id": "3117270"
+            }
+        },
+        {
+            "score": 0.00102,
+            "species": {
+                "scientificNameWithoutAuthor": "Anaphalioides papuana",
+                "scientificNameAuthorship": "(Lauterb.) Glenny",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Anaphalioides",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Anaphalioides"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Compositae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Compositae"
+                },
+                "commonNames": [],
+                "scientificName": "Anaphalioides papuana (Lauterb.) Glenny"
+            },
+            "gbif": {
+                "id": "3096962"
+            }
+        }
+    ],
+    "version": "2022-10-24 (7.0)"
+}
