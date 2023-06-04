@@ -9,6 +9,7 @@ import Button from './components/Button';
 import ImageViewer from './components/ImageViewer';
 import IconButton from './components/IconButton';
 import IdentificationDetails from './components/IdentificationDetails';
+import Carousel from './components/Carousel';
 
 const PlaceholderImage = require('./assets/images/background-image.png');
 const PlaceholderResponse = require('./assets/example-response.json');
@@ -18,6 +19,7 @@ const ApiKey = require('./assets/api-key.json');
 export default function App() {
 
   const [selectedImage, setSelectedImage] = useState(null);
+  const [availableImages, setAvailableImages] = useState([]);
   const [showAppOptions, setShowAppOptions] = useState(false);
   const [responseText, setResponseText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +32,7 @@ export default function App() {
     });
 
     if (!result.canceled) {
+      setAvailableImages(availableImages.concat([result.assets[0].uri]));
       selectImage(result.assets[0].uri)
     } else {
       alert('You did not select any image.');
@@ -90,6 +93,9 @@ export default function App() {
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.imageContainer}>
         <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage} />
+        <View style={styles.carouselContainer}>
+          <Carousel images={availableImages} />
+        </View>
         <IdentificationDetails result={apiResults} />
       </View>
       {showAppOptions ? (
@@ -136,5 +142,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
+  carouselContainer: {
+    flex: 1,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // paddingTop: 5,
+  }
 });
 
