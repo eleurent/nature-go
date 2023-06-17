@@ -19,3 +19,9 @@ web-build/
 
 # keys
 frontend/assets/api-key.json
+
+# django
+backend/nature_go/media
+*.pyc
+
+.vscode

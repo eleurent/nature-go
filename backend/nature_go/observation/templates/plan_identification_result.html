@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Plant Identification Result</h1>
+<p>Species: {{ observation.species }}</p>
+<p>Location: {{ observation.location }}</p>
+<p>Date: {{ observation.date }}</p>
+<img src="{{ observation.image.url }}" alt="Observation Image">
+{% endblock %}

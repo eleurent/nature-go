@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Plant Identification</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="image">Image:</label>
+    <input type="file" name="image" id="image">
+    <br>
+    <label for="location">Location:</label>
+    <input type="text" name="location" id="location">
+    <br>
+    <label for="date">Date:</label>
+    <input type="date" name="date" id="date">
+    <br>
+    <input type="submit" value="Identify Plant">
+</form>
+{% endblock %}

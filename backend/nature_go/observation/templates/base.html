@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="{% url 'species_list' %}">Species List</a></li>
+      <li><a href="{% url 'plant_identification' %}">New Identification</a></li>
+      <li><a href="{% url 'admin:index' %}">Admin</a></li>
+    </ul>
+  </nav>
+
+  {% block content %}
+  {% endblock %}
+</body>
+</html>
