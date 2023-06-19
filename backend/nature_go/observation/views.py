@@ -1,9 +1,12 @@
-import requests
-from django.shortcuts import render, redirect
-from django.views import View
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Species, Observation
+from django.contrib.auth.models import User
+from rest_framework import generics
+
+from observation.models import Species, Observation
+from observation.serializers import ObservationSerializer, UserSerializer
+
 
 PAYLOAD = {'species': ['Edelweiss', 'Harebell']}
 
@@ -59,3 +62,26 @@ class SpeciesDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['observations'] = Observation.objects.filter(species=self.object)
         return context
+
+
+class ObservationList(generics.ListCreateAPIView):
+    queryset = Observation.objects.all()
+    serializer_class = ObservationSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class ObservationDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Observation.objects.all()
+    serializer_class = ObservationSerializer
+
+
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
