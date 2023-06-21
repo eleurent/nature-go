@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 
 class Species(models.Model):
     name = models.CharField(max_length=255)
+    commonNames = models.JSONField(default=list)
+    scientificName = models.CharField(max_length=255)
+    genus = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
