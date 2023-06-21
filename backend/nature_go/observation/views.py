@@ -96,3 +96,17 @@ class SpeciesList(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Species.objects.filter(observation__user=user).distinct()
+
+
+class SpeciesDetail(generics.RetrieveAPIView):
+    queryset = Species.objects.all()
+    serializer_class = SpeciesSerializer
+
+
+class SpeciesObservationsList(generics.ListAPIView):
+    serializer_class = ObservationSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        species_id = self.kwargs['pk']
+        return Observation.objects.filter(user=user, species=species_id)
