@@ -7,6 +7,7 @@ class Species(models.Model):
     commonNames = models.JSONField(default=list)
     scientificName = models.CharField(max_length=255)
     genus = models.CharField(max_length=255)
+    family = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name

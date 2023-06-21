@@ -22,4 +22,4 @@ class ObservationSerializer(serializers.ModelSerializer):
 class SpeciesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Species
-        fields = ['name']
+        fields = ['id', 'name', 'commonNames', 'scientificName', 'genus', 'family']
