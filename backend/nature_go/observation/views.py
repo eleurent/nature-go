@@ -5,10 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework import generics
 
 from observation.models import Species, Observation
-from observation.serializers import ObservationSerializer, UserSerializer
-
-
-PAYLOAD = {'species': ['Edelweiss', 'Harebell']}
+from observation.serializers import ObservationSerializer, UserSerializer, SpeciesSerializer
 
 
 class PlantIdentificationView(LoginRequiredMixin, TemplateView):
@@ -21,8 +18,9 @@ class PlantIdentificationView(LoginRequiredMixin, TemplateView):
         # files = {'image': image}
         # response = requests.post(url, files=files)
         # payload = response.json()
-        payload = PAYLOAD
-        request.session['species_list'] = payload['species']
+        request.session['species_list'] = [
+            species.name for species in Species.objects.all().distinct()]
+
 
         location = ''
         date = ''
@@ -53,6 +51,10 @@ class SpeciesListView(LoginRequiredMixin, ListView):
     model = Species
     template_name = 'species_list.html'
 
+    def get_queryset(self):
+        user = self.request.user
+        return Species.objects.filter(observation__user=user).distinct()
+
 
 class SpeciesDetailView(LoginRequiredMixin, DetailView):
     model = Species
@@ -60,7 +62,8 @@ class SpeciesDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['observations'] = Observation.objects.filter(species=self.object)
+        context['observations'] = Observation.objects.filter(
+            species=self.object, user=self.request.user)
         return context
 
 
@@ -85,3 +88,11 @@ class UserList(generics.ListAPIView):
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class SpeciesList(generics.ListAPIView):
+    serializer_class = SpeciesSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Species.objects.filter(observation__user=user).distinct()

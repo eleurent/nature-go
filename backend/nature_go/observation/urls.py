@@ -10,6 +10,7 @@ urlpatterns = [
 ] + format_suffix_patterns([
     path('api/observations/', views.ObservationList.as_view()),
     path('api/observations/<int:pk>/', views.ObservationDetail.as_view()),
-    path('users/', views.UserList.as_view()),
-    path('users/<int:pk>/', views.UserDetail.as_view()),
+    path('api/users/', views.UserList.as_view()),
+    path('api/users/<int:pk>/', views.UserDetail.as_view()),
+    path('api/species/', views.SpeciesList.as_view()),
 ])

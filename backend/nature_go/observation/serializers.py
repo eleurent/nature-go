@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
-from observation.models import Observation
+from observation.models import Observation, Species
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,3 +18,8 @@ class ObservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Observation
         fields = ['id', 'user', 'image', 'species', 'location', 'date']
+
+class SpeciesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Species
+        fields = ['name']
