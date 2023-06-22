@@ -2,10 +2,16 @@ from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework import generics
 
 from observation.models import Species, Observation
-from observation.serializers import ObservationSerializer, UserSerializer, SpeciesSerializer
+from observation.serializers import ObservationSerializer, UserSerializer, SpeciesSerializer, CreateUserSerializer
 
 
 class PlantIdentificationView(LoginRequiredMixin, TemplateView):
@@ -110,3 +116,31 @@ class SpeciesObservationsList(generics.ListAPIView):
         user = self.request.user
         species_id = self.kwargs['pk']
         return Observation.objects.filter(user=user, species=species_id)
+
+
+class CreateUserAPIView(generics.CreateAPIView):
+    serializer_class = CreateUserSerializer
+    permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        # We create a token than will be used for future auth
+        token = Token.objects.create(user=serializer.instance)
+        token_data = {"token": token.key}
+        return Response(
+            {**serializer.data, **token_data},
+            status=status.HTTP_201_CREATED,
+            headers=headers
+        )
+
+
+class LogoutUserAPIView(APIView):
+    queryset = get_user_model().objects.all()
+
+    def get(self, request, format=None):
+        # simply delete the token to force a login
+        request.user.auth_token.delete()
+        return Response(status=status.HTTP_200_OK)

@@ -2,4 +2,4 @@
 
 Run with
 
-```npx expo start -c```
+```npx expo start```

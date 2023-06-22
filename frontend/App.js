@@ -10,10 +10,12 @@ import ImageViewer from './components/ImageViewer';
 import IconButton from './components/IconButton';
 import IdentificationDetails from './components/IdentificationDetails';
 import Carousel from './components/Carousel';
+import Login from './components/Login';
 
 const PlaceholderImage = require('./assets/images/background-image.png');
 const PlaceholderResponse = require('./assets/example-response.json');
-const API_URL = 'https://my-api.plantnet.org/v2/identify/all?include-related-images=false&no-reject=false&lang=fr&api-key=';
+// const API_URL = 'https://my-api.plantnet.org/v2/identify/all?include-related-images=false&no-reject=false&lang=fr&api-key=';
+const API_URL = 'http://127.0.0.1:8000/api/species/'
 const ApiKey = require('./assets/api-key.json');
 
 export default function App() {
@@ -41,7 +43,8 @@ export default function App() {
 
   const selectImage = (uri) => {
     setSelectedImage(uri);
-    if (Platform.OS === 'web')
+    // if (Platform.OS === 'web')
+    if (false)
       handlePlantNetResponse(PlaceholderResponse);
     else
       callPlantNetAPI(uri);
@@ -56,29 +59,30 @@ export default function App() {
 
   const callPlantNetAPI = async (imageUri) => {
     setIsLoading(true);
-    const uri = imageUri;
-    const formData = new FormData();
-    formData.append('images', {
-      uri,
-      type: 'image/jpeg',
-      name: 'image.jpg',
-    });
-    formData.append('organs', 'flower');
-    try {
-      const response = await axios.post(
-        API_URL + ApiKey.key,
-        formData,
-        {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-      handlePlantNetResponse(response.data);
-    } catch (error) {
-      console.error(error);
-    }
+    // const uri = imageUri;
+    // const formData = new FormData();
+    // formData.append('images', {
+    //   uri,
+    //   type: 'image/jpeg',
+    //   name: 'image.jpg',
+    // });
+    // formData.append('organs', 'flower');
+    // try {
+    //   const response = await axios.post(
+    //     // API_URL + ApiKey.key,
+    //     API_URL,
+    //     formData,
+    //     {
+    //       headers: {
+    //         Accept: 'application/json',
+    //         'Content-Type': 'multipart/form-data',
+    //       },
+    //     }
+    //   );
+    //   handlePlantNetResponse(response.data);
+    // } catch (error) {
+    //   console.error(error);
+    // }
     setIsLoading(false);
   };
 
@@ -98,6 +102,7 @@ export default function App() {
         </View>
         <IdentificationDetails result={apiResults} />
       </View>
+      <Login />
       {showAppOptions ? (
         <View style={styles.optionsContainer}>
           {isLoading && <ActivityIndicator />}
