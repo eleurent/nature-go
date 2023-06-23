@@ -1,157 +1,62 @@
-import axios from 'axios';
 import { useState } from 'react'; 
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, ActivityIndicator, Text, Platform } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-
-import Button from './components/Button';
-import ImageViewer from './components/ImageViewer';
-import IconButton from './components/IconButton';
-import IdentificationDetails from './components/IdentificationDetails';
-import Carousel from './components/Carousel';
-import Login from './components/Login';
-
-const PlaceholderImage = require('./assets/images/background-image.png');
-const PlaceholderResponse = require('./assets/example-response.json');
-// const API_URL = 'https://my-api.plantnet.org/v2/identify/all?include-related-images=false&no-reject=false&lang=fr&api-key=';
-const API_URL = 'http://127.0.0.1:8000/api/species/'
-const ApiKey = require('./assets/api-key.json');
+import { StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View, Text, TextInput, Button } from 'react-native';
 
 export default function App() {
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [availableImages, setAvailableImages] = useState([]);
-  const [showAppOptions, setShowAppOptions] = useState(false);
-  const [responseText, setResponseText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [apiResults, setApiResults] = useState(null);
-
-  const pickImageAsync = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setAvailableImages(availableImages.concat([result.assets[0].uri]));
-      selectImage(result.assets[0].uri)
-    } else {
-      alert('You did not select any image.');
-    }
+  const HomeScreen = ({ navigation }) => {
+    return (
+      <Button
+        title="Botany"
+        onPress={() =>
+          navigation.navigate('SpeciesList')
+        }
+      />
+    );
   };
 
-  const selectImage = (uri) => {
-    setSelectedImage(uri);
-    // if (Platform.OS === 'web')
-    if (false)
-      handlePlantNetResponse(PlaceholderResponse);
-    else
-      callPlantNetAPI(uri);
-    setShowAppOptions(true);
-  }
-
-  const onReset = () => {
-    setShowAppOptions(false);
-    setApiResults(null);
-    setSelectedImage(null);
+  const SpeciesListScreen = ({ navigation, route }) => {
+    const species_list = ['Edelweiss', 'Harebell'];
+    return (
+      <>{
+        species_list.map((data, index) => {
+          return (
+            <Button key={index} title={data} onPress={() => navigation.navigate('SpeciesDetail', { name: data })} />
+          );
+        })
+      }</>
+    );
   };
 
-  const callPlantNetAPI = async (imageUri) => {
-    setIsLoading(true);
-    // const uri = imageUri;
-    // const formData = new FormData();
-    // formData.append('images', {
-    //   uri,
-    //   type: 'image/jpeg',
-    //   name: 'image.jpg',
-    // });
-    // formData.append('organs', 'flower');
-    // try {
-    //   const response = await axios.post(
-    //     // API_URL + ApiKey.key,
-    //     API_URL,
-    //     formData,
-    //     {
-    //       headers: {
-    //         Accept: 'application/json',
-    //         'Content-Type': 'multipart/form-data',
-    //       },
-    //     }
-    //   );
-    //   handlePlantNetResponse(response.data);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-    setIsLoading(false);
+  const SpeciesDetailScreen = ({ navigation, route }) => {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>{route.params.name}</Text>
+      </View>
+    );
   };
 
-  const handlePlantNetResponse = (data) => {
-    setApiResults(data.results[0]);
-  };
-
-
-
+  const Stack = createNativeStackNavigator();
 
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <View style={styles.imageContainer}>
-        <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage} />
-        <View style={styles.carouselContainer}>
-          <Carousel images={availableImages} />
-        </View>
-        <IdentificationDetails result={apiResults} />
-      </View>
-      <Login />
-      {showAppOptions ? (
-        <View style={styles.optionsContainer}>
-          {isLoading && <ActivityIndicator />}
-          <Text>{responseText}</Text>
-          <View style={styles.optionsRow}>
-            <IconButton icon="refresh" label="Reset" onPress={onReset}/>
-          </View>
-        </View>
-      ) : (
-        <View style={styles.footerContainer}>
-          <Button theme="primary" label="Choose a photo" onPress={pickImageAsync}/>
-          <Button label="View album" onPress={() => alert("Album")}/>
-          {(Platform.OS === 'web') ? (<Button label="Use this photo" onPress={() => selectImage(null)} />) : (null)}
-        </View>
-      )}
-
-      <StatusBar style="auto" />
-    </GestureHandlerRootView>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'Contents' }}
+        />
+        <Stack.Screen name="SpeciesList" component={SpeciesListScreen}
+          options={{ title: 'Botany' }} />
+        <Stack.Screen name="SpeciesDetail" component={SpeciesDetailScreen} options={{ title: 'Species detail' }} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#25292e',
-    alignItems: 'center',
-  },
-  imageContainer: {
-    flex: 1 ,
-    paddingTop: 58,
-  },
-  footerContainer: {
-    flex: 1 / 3,
-    alignItems: 'center',
-  },
-  optionsContainer: {
-    position: 'absolute',
-    bottom: 80,
-  },
-  optionsRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  carouselContainer: {
-    flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // paddingTop: 5,
-  }
 });
 
