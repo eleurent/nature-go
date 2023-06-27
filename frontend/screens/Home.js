@@ -1,7 +1,21 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../authContext';
 import { View, Text, TouchableOpacity, Image, Button, ImageBackground, StyleSheet } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
+
+const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        quality: 1,
+    });
+
+    if (!result.canceled) {
+        console.log(result.assets[0].uri);
+    } else {
+        alert('You did not select any image.');
+    }
+};
 
 export default function HomeScreen({ navigation }) {
     const { authMethods } = useContext(AuthContext);
@@ -11,9 +25,9 @@ export default function HomeScreen({ navigation }) {
     });
 
     return (
-        <View style={styles.container} >
+        <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
-                <View>
+                <View style={{ marginTop: 60 }} >
                     <View style={styles.categoryRowContainer}>
                         <View style={{ flex: 1 }}></View>
                         <TouchableOpacity
@@ -65,6 +79,20 @@ export default function HomeScreen({ navigation }) {
                     </View>
                 </View>
                 {/* <Button title="Sign out" onPress={authMethods.signOut} /> */}
+                <View style={{marginTop: 'auto'}}>
+                    <View style={styles.categoryRowContainer}>
+                        <View style={{ flex: 1 }}></View>
+                        <TouchableOpacity
+                            style={styles.categoryContainer}
+                            activeOpacity={0.5}
+                            onPress={pickImageAsync}>
+                            <Image style={styles.categoryImage}
+                                source={require('../assets/images/binoculars.png')}
+                            />
+                        </TouchableOpacity>
+                        <View style={{ flex: 1 }}></View>
+                    </View>
+                </View>
             </ImageBackground>
         </View>
     );
@@ -73,6 +101,7 @@ export default function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
+        display: 'flex',
         flex: 1,
         flexDirection: 'column',
     },
