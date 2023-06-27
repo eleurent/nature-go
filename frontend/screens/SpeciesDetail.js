@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, Image, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground } from 'react-native';
 import { useFonts, SpecialElite_400Regular } from '@expo-google-fonts/special-elite';
 import { Tinos_400Regular_Italic, Tinos_400Regular } from '@expo-google-fonts/tinos';
 import axios from 'axios';
-const SPECIES_DETAILS_URL = 'http://localhost:8000/api/species/'
+
+import Carousel from '../components/Carousel';
+
+const SPECIES_DETAILS_URL = (id) => `http://localhost:8000/api/species/${id}/`
+const SPECIES_OBSERVATIONS_URL = (id) => `http://localhost:8000/api/species/${id}/observations/`
 
 
 export default function SpeciesDetailScreen({ navigation, route }) {
 
-    const [speciesDetails, setSpeciesDetails] = useState([]);
+    const [speciesDetails, setSpeciesDetails] = useState({});
+    const [speciesObservations, setSpeciesObservations] = useState([]);
     let [fontsLoaded] = useFonts({
         SpecialElite_400Regular,
         Tinos_400Regular_Italic,
@@ -17,12 +22,18 @@ export default function SpeciesDetailScreen({ navigation, route }) {
 
     useEffect(() => {
         const fetchSpeciesDetails = async () => {
-            const response = await axios.get(SPECIES_DETAILS_URL + route.params.id + '/');
+            const response = await axios.get(SPECIES_DETAILS_URL(route.params.id));
             console.log(response.data);
             setSpeciesDetails(response.data);
         };
+        const fetchSpeciesObservations = async () => {
+            const response = await axios.get(SPECIES_OBSERVATIONS_URL(route.params.id));
+            console.log(response.data);
+            setSpeciesObservations(response.data);
+        };
 
         fetchSpeciesDetails();
+        fetchSpeciesObservations();
     }, []);
 
     return (
@@ -40,6 +51,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse gravida magna non feugiat dapibus. Maecenas luctus lacus et tortor rutrum, in vulputate elit pharetra. Fusce rhoncus ipsum id neque ultrices, eu efficitur nisi luctus. Maecenas tristique justo at interdum pulvinar. Nunc non venenatis ipsum, sit amet venenatis ligula
                     </Text>
                 </View>
+                <Carousel images={ speciesObservations.map(o => o.image) }/>
             </ImageBackground>
         </View>
     );

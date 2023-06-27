@@ -2,7 +2,7 @@ import React from 'react';
 import { View, ScrollView, Image, StyleSheet, Dimensions } from 'react-native';
 
 export default function Carousel( {images} ) {
-    if (images && images.length > 1) {
+    if (images) {
         return (
             <View
                 style={styles.scrollContainer}
