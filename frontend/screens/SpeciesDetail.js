@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, Image, StyleSheet, ImageBackground } from 'react-native';
 import { useFonts, SpecialElite_400Regular } from '@expo-google-fonts/special-elite';
-import { Tinos_400Regular_Italic } from '@expo-google-fonts/tinos';
+import { Tinos_400Regular_Italic, Tinos_400Regular } from '@expo-google-fonts/tinos';
 import axios from 'axios';
 const SPECIES_DETAILS_URL = 'http://localhost:8000/api/species/'
 
@@ -12,6 +12,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     let [fontsLoaded] = useFonts({
         SpecialElite_400Regular,
         Tinos_400Regular_Italic,
+        Tinos_400Regular,
     });
 
     useEffect(() => {
@@ -30,9 +31,14 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                 <Image style={styles.illustrationImage}
                     source={speciesDetails.illustration_url}
                 />
-                <View style={styles.nameContainer}>
-                    <Text style={styles.speciesName}>{speciesDetails.name}</Text>
-                    <Text style={styles.speciesScientificName}>{speciesDetails.scientificName}</Text>
+                <View style={styles.textContainer}>
+                    <View style={styles.nameContainer}>
+                        <Text style={styles.speciesName}>{speciesDetails.name}</Text>
+                        <Text style={styles.speciesScientificName}>{speciesDetails.scientificName}</Text>
+                    </View>
+                    <Text style={styles.descriptionText}>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse gravida magna non feugiat dapibus. Maecenas luctus lacus et tortor rutrum, in vulputate elit pharetra. Fusce rhoncus ipsum id neque ultrices, eu efficitur nisi luctus. Maecenas tristique justo at interdum pulvinar. Nunc non venenatis ipsum, sit amet venenatis ligula
+                    </Text>
                 </View>
             </ImageBackground>
         </View>
@@ -54,18 +60,33 @@ const styles = StyleSheet.create({
         width: 375,
         height: 375
     },
-    nameContainer: {
+    textContainer: {
         flex: 1,
         flexDirection: 'column',
+    },
+    nameContainer: {
         textAlign: 'center',
     },
     speciesName: {
         fontFamily: 'SpecialElite_400Regular',
         fontWeight: 400,
         fontSize: 20,
+        color: '#331100',
+        opacity: 0.9
     },
     speciesScientificName: {
         fontFamily: 'Tinos_400Regular_Italic',
         fontSize: 12,
+        color: '#332200',
+        opacity: 0.7
+    },
+    descriptionText: {
+        fontFamily: 'SpecialElite_400Regular',
+        fontSize: 14,
+        color:  '#332200',
+        opacity: 0.7,
+        marginTop: 30,
+        paddingHorizontal: 20,
+        textAlign: 'justify',
     },
 });
