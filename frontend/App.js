@@ -22,7 +22,8 @@ export default function App() {
   return (
     <AuthContext.Provider value = {{ authState, authMethods }}>
       <NavigationContainer>
-        <Stack.Navigator>
+
+        <Stack.Navigator screenOptions={{ headerTransparent: true, headerTitle: '' }}>
           {authState.isLoading ? (
             <Stack.Screen name="Splash" component={SplashScreen} />
           ) : (authState.userToken == null) ? (

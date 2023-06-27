@@ -16,6 +16,12 @@ class SpeciesDetail(generics.RetrieveAPIView):
     queryset = Species.objects.all()
     serializer_class = SpeciesSerializer
 
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
 
 class SpeciesObservationsList(generics.ListAPIView):
     serializer_class = ObservationSerializer

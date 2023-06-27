@@ -3,6 +3,10 @@ import { AuthContext } from '../authContext';
 import { View, Text, TouchableOpacity, Image, Button, ImageBackground, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
+import {
+    useFonts,
+    OldStandardTT_400Regular,
+} from '@expo-google-fonts/old-standard-tt';
 
 const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -17,64 +21,60 @@ const pickImageAsync = async () => {
     }
 };
 
-export default function HomeScreen({ navigation }) {
-    const { authMethods } = useContext(AuthContext);
-    navigation.setOptions({
-        headerShown: true,
-        headerTransparent: true,
-    });
+const CategoryButton = (props) => {
+    const opacity = props.disabled ? 0.3 : 1;
+    return (
+        <TouchableOpacity
+            style={[styles.categoryContainer, { 'opacity': opacity }]}
+            activeOpacity={0.5}
+            onPress={props.onPress}>
+            <Image style={styles.categoryImage}
+                source={props.imageSource}
+            />
+            <Text style={styles.categoryLabel}>{props.label}</Text>
+        </TouchableOpacity>
+    );
+}
 
+export default function HomeScreen({ navigation }) {
+
+    let [fontsLoaded] = useFonts({
+        OldStandardTT_400Regular,
+    });
+    // const { authMethods } = useContext(AuthContext);
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
                 <View style={{ marginTop: 60 }} >
                     <View style={styles.categoryRowContainer}>
                         <View style={{ flex: 1 }}></View>
-                        <TouchableOpacity
-                            style = {styles.categoryContainer}
-                            activeOpacity={0.5}
-                            onPress={() =>
-                                navigation.navigate('SpeciesList')
-                            }>
-                            <Image style={styles.categoryImage}
-                                source={require('../assets/images/botany.png')}
-                            />
-                            <Text style = {styles.categoryLabel}>BOTANY</Text>
-                        </TouchableOpacity>
+                        <CategoryButton 
+                            onPress={() => navigation.navigate('SpeciesList')}
+                            imageSource={require('../assets/images/botany.png')}
+                            label={'BOTANY'}
+                        />
                         <View style={{ flex: 1 }}></View>
                     </View>
                     <View style={styles.categoryRowContainer}>
-                        <TouchableOpacity
-                            style={[styles.categoryContainer, { 'opacity': 0.3 }]}
-                            activeOpacity={0.3}>
-                            <Image style={styles.categoryImage}
-                                source={require('../assets/images/entomology.png')}
-                            />
-                            <Text style={styles.categoryLabel}>ENTOMOLOGY</Text>
-                        </TouchableOpacity>
+                        <CategoryButton
+                            disabled
+                            imageSource={require('../assets/images/entomology.png')}
+                            label={'ENTOMOLOGY'}
+                        />
                         <View style={{ flex: 1 }}></View>
-                        <TouchableOpacity
-                            style={[styles.categoryContainer, {'opacity': 0.3}]}
-                            activeOpacity={0.3}>
-                            <Image style={styles.categoryImage}
-                                source={require('../assets/images/ornithology.png')}
-                            />
-                            <Text style={styles.categoryLabel}>ORNITHOLOGY</Text>
-                        </TouchableOpacity>
+                        <CategoryButton
+                            disabled
+                            imageSource={require('../assets/images/ornithology.png')}
+                            label={'ORNITHOLOGY'}
+                        />
                     </View>
                     <View style={styles.categoryRowContainer}>
                         <View style={{ flex: 1 }}></View>
-                        <TouchableOpacity
-                            style={styles.categoryContainer}
-                            activeOpacity={0.5}
-                            onPress={() =>
-                                navigation.navigate('SpeciesList')
-                            }>
-                            <Image style={styles.categoryImage}
-                                source={require('../assets/images/university.png')}
-                            />
-                            <Text style={styles.categoryLabel}>UNIVERSITY</Text>
-                        </TouchableOpacity>
+                        <CategoryButton
+                            disabled
+                            imageSource={require('../assets/images/university.png')}
+                            label={'UNIVERSITY'}
+                        />
                         <View style={{ flex: 1 }}></View>
                     </View>
                 </View>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
         height: 100,
     },
     categoryLabel: {
-        fontFamily: 'Old Standard TT',
+        fontFamily: 'OldStandardTT_400Regular',
         fontStyle: 'normal',
         fontWeight: 400,
         fontSize: 14.3846,

@@ -7,7 +7,6 @@ import { Platform } from 'react-native';
 
 async function getItemAsync(key) {
     if (Platform.OS !== 'web') {
-        console.log('mobile')
         return await SecureStore.getItemAsync(key);
     } else {
         return await AsyncStorage.getItem(key);
@@ -37,7 +36,7 @@ export const AuthContext = React.createContext();
 const authReducer = (prevState, action) => {
     switch (action.type) {
         case 'RESTORE_TOKEN':
-            console.log(action.token);
+            console.log('Found user token: ' + action.token);
             return {
                 ...prevState,
                 userToken: action.token,
@@ -80,7 +79,6 @@ export const useAuth = () => {
                 userToken = await getItemAsync('userToken');
                 if (userToken) {
                     axios.defaults.headers.common.Authorization = `Token ${userToken}`;
-                    console.log('get header auth', userToken)
                 }
             } catch (e) { console.error(e);}
             dispatch({ type: 'RESTORE_TOKEN', token: userToken });
@@ -97,7 +95,6 @@ export const useAuth = () => {
                     axios.defaults.headers.common.Authorization = `Token ${userToken}`;
                     try {
                         setItemAsync('userToken', userToken);
-                        console.log('set header auth', userToken)
                     } catch (e) { console.error(e); }
                     dispatch({ type: 'SIGN_IN', token: userToken });
                 }).catch(error => {
