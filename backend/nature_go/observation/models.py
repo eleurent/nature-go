@@ -20,7 +20,7 @@ class Observation(models.Model):
     image = models.ImageField(upload_to='media/observation_image')
     species = models.ForeignKey(Species, on_delete=models.CASCADE, blank=True, null=True)
     location = models.CharField(max_length=255)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
 
     def __str__(self):
         return f'{self.species} observed by {self.user}'
