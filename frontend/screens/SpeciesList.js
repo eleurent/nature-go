@@ -54,7 +54,7 @@ export default function SpeciesListScreen({ navigation, route }) {
             renderItem={({ item, index }) => {
                 return (
                     <SpeciesButton
-                        key={item.id} label={item.name} 
+                        key={item.id} label={item.display_name} 
                         onPress={() => navigation.navigate('SpeciesDetail', { id: item.id })}
                         imageSource={item.illustration_url}
                     />

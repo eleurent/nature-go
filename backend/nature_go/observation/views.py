@@ -60,7 +60,6 @@ class ObservationCreate(generics.CreateAPIView):
         observation = serializer.save(user=self.request.user)
         result = plantnet_identify(observation.image.path)
         species_data = result['results'][0]['species']
-        print(species_data)
         species, created = Species.objects.get_or_create(
             name=species_data['scientificNameWithoutAuthor'],
             commonNames=species_data['commonNames'],
@@ -68,7 +67,6 @@ class ObservationCreate(generics.CreateAPIView):
             genus=species_data['genus']['scientificNameWithoutAuthor'],
             family=species_data['family']['scientificNameWithoutAuthor'],
         )
-        print(species, created)
         observation.species = species
         observation.save()
         serializer = ObservationSerializer(instance=observation)

@@ -2,22 +2,38 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../authContext';
 import { View, Text, TouchableOpacity, Image, Button, ImageBackground, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
 
 import {
     useFonts,
     OldStandardTT_400Regular,
 } from '@expo-google-fonts/old-standard-tt';
 
-const pickImageAsync = async () => {
+const URL_CREATE_OBSERVATION = 'http://localhost:8000/api/species/observation/'
+
+const pickImageAsync = async (navigation) => {
     let result = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
         quality: 1,
     });
 
     if (!result.canceled) {
-        console.log(result.assets[0].uri);
+        let formData = new FormData();
+        formData.append('image', result.assets[0].uri);
+        formData.append('location', 'London');
+        formData.append('date', '2023-06-29');
+        formData.append('species', '');
+        axios.post(URL_CREATE_OBSERVATION, formData, {
+            headers: {'Content-Type': 'multipart/form-data'}
+        })
+        .then(response => {
+            console.log(response);
+            console.log(response.data.species);
+            navigation.navigate('SpeciesDetail', { id: response.data.species })
+        })
+        .catch(error => console.log(error));
     } else {
-        alert('You did not select any image.');
+        console.log('You did not select any image.');
     }
 };
 
@@ -85,7 +101,7 @@ export default function HomeScreen({ navigation }) {
                         <TouchableOpacity
                             style={styles.categoryContainer}
                             activeOpacity={0.5}
-                            onPress={pickImageAsync}>
+                            onPress={() => pickImageAsync(navigation)}>
                             <Image style={styles.categoryImage}
                                 source={require('../assets/images/binoculars.png')}
                             />

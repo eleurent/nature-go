@@ -44,7 +44,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                 />
                 <View style={styles.textContainer}>
                     <View style={styles.nameContainer}>
-                        <Text style={styles.speciesName}>{speciesDetails.name}</Text>
+                        <Text style={styles.speciesName}>{speciesDetails.display_name}</Text>
                         <Text style={styles.speciesScientificName}>{speciesDetails.scientificName}</Text>
                     </View>
                     <Text style={styles.descriptionText}>
