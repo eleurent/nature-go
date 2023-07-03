@@ -3,13 +3,15 @@ import { AuthContext } from '../authContext';
 import { View, Text, TouchableOpacity, Image, Button, ImageBackground, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
+import Constants from 'expo-constants'
 
 import {
     useFonts,
     OldStandardTT_400Regular,
 } from '@expo-google-fonts/old-standard-tt';
 
-const URL_CREATE_OBSERVATION = 'http://localhost:8000/api/species/observation/'
+const API_URL = Constants.expoConfig.extra.API_URL;
+const URL_CREATE_OBSERVATION = API_URL + 'api/species/observation/'
 
 const pickImageAsync = async (navigation) => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -61,7 +63,7 @@ export default function HomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
-                <View style={{ marginTop: 60 }} >
+                <View style={{ marginTop: 60, flexDirection: 'column' }} >
                     <View style={styles.categoryRowContainer}>
                         <View style={{ flex: 1 }}></View>
                         <CategoryButton 
@@ -146,14 +148,13 @@ const styles = StyleSheet.create({
         height: 100,
     },
     categoryLabel: {
-        fontFamily: 'OldStandardTT_400Regular',
-        fontStyle: 'normal',
-        fontWeight: 400,
+        // fontFamily: 'OldStandardTT_400Regular',
+        // fontStyle: 'normal',
         fontSize: 14.3846,
         lineHeight: 18,
         display: 'flex',
         alignItems: 'center',
         textAlign: 'center',
-        color: '000000',
+        color: '#000',
     },
 });

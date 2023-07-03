@@ -3,11 +3,12 @@ import { View, Text, Image, StyleSheet, ImageBackground } from 'react-native';
 import { useFonts, SpecialElite_400Regular } from '@expo-google-fonts/special-elite';
 import { Tinos_400Regular_Italic, Tinos_400Regular } from '@expo-google-fonts/tinos';
 import axios from 'axios';
-
+import Constants from 'expo-constants'
 import Carousel from '../components/Carousel';
 
-const SPECIES_DETAILS_URL = (id) => `http://localhost:8000/api/species/${id}/`
-const SPECIES_OBSERVATIONS_URL = (id) => `http://localhost:8000/api/species/${id}/observations/`
+const API_URL = Constants.expoConfig.extra.API_URL;
+const SPECIES_DETAILS_URL = (id) => API_URL + `api/species/${id}/`
+const SPECIES_OBSERVATIONS_URL = (id) => API_URL + `api/species/${id}/observations/`
 
 
 export default function SpeciesDetailScreen({ navigation, route }) {

@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
 import { useFonts, SpecialElite_400Regular } from '@expo-google-fonts/special-elite';
 import axios from 'axios';
+import Constants from 'expo-constants'
 
-const SPECIES_LIST_URL = 'http://localhost:8000/api/species/'
+
+const API_URL = Constants.expoConfig.extra.API_URL;
+const SPECIES_LIST_URL = API_URL + 'api/species/'
 
 
 
@@ -97,6 +100,6 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         display: 'flex',
         textAlign: 'center',
-        color: '000000',
+        color: '#000',
     },
 });

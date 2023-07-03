@@ -3,7 +3,13 @@ import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
+import Constants from 'expo-constants'
 
+
+const API_URL = Constants.expoConfig.extra.API_URL;
+const LOGIN_URL = API_URL + 'api/auth/login/'
+const LOGOUT_URL = API_URL + 'api/auth/logout/'
+const REGISTER_URL = API_URL + 'api/auth/register/'
 
 async function getItemAsync(key) {
     if (Platform.OS !== 'web') {
@@ -24,10 +30,6 @@ async function setItemAsync(key, value) {
         return AsyncStorage.setItem(key, value);
     }
 }
-
-const LOGIN_URL = 'http://localhost:8000/api/auth/login/'
-const LOGOUT_URL = 'http://localhost:8000/api/auth/logout/'
-const REGISTER_URL = 'http://localhost:8000/api/auth/register/'
 
 
 export const AuthContext = React.createContext();

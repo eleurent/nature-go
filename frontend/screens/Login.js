@@ -9,7 +9,7 @@ export default function SignInScreen() {
     const { authState, authMethods } = React.useContext(AuthContext);
 
     return (
-        <View>
+        <View style={{ "marginTop":120 }}>
             <TextInput
                 placeholder="Username"
                 value={username}
@@ -29,29 +29,3 @@ export default function SignInScreen() {
         </View>
     );
 }
-
-// const Login = () => {
-//     const [username, setUsername] = useState('');
-//     const [password, setPassword] = useState('');
-
-    
-
-//     const getObservations = () => {
-//         axios.get('http://localhost:8000/api/observations/', {
-
-//         }).then(response => {
-//             console.log(response);
-//         });
-//     }
-
-//     return (
-//         <View>
-//             <Text>Username:</Text>
-//             <TextInput value={username} onChangeText={setUsername} />
-//             <Text>Password:</Text>
-//             <TextInput value={password} onChangeText={setPassword} secureTextEntry={true} />
-//             <Button title="Login" onPress={handleLogin} />
-//             <Button title="Observations" onPress={getObservations} />
-//         </View>
-//     );
-// }
