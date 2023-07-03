@@ -129,6 +129,8 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -147,6 +149,7 @@ REST_FRAMEWORK = {
 # CORS
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:19006',
+    'https://eleurent-curly-space-umbrella-jrjrw4g7rvfqgq-8000.preview.app.github.dev/'
 ]
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:19006',
