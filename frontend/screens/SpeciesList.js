@@ -11,13 +11,15 @@ const SPECIES_LIST_URL = API_URL + 'api/species/'
 
 
 const SpeciesButton = (props) => {
+    let image_url = props.imageSource;
+    image_url = image_url.replace('http://localhost/', API_URL)
     return (
         <TouchableOpacity
             style={styles.categoryContainer}
             activeOpacity={0.5}
             onPress={props.onPress}>
             <Image style={styles.categoryImage}
-                source={props.imageSource}
+                source={{uri: image_url}}
             />
             <Text style={styles.categoryLabel}>{props.label}</Text>
         </TouchableOpacity>

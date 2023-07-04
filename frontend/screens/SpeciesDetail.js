@@ -37,11 +37,13 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         fetchSpeciesObservations();
     }, []);
 
+    let illustration_url = speciesDetails.illustration_url || "https://upload.wikimedia.org/wikipedia/commons/3/32/Archive-ugent-be-500C7CB6-DFDB-11E5-9D50-9943D43445F2_DS-266_%28cropped%29.jpg";
+    illustration_url = illustration_url.replace('http://localhost/', API_URL)
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
                 <Image style={styles.illustrationImage}
-                    source={speciesDetails.illustration_url}
+                    source={{uri: illustration_url}}
                 />
                 <View style={styles.textContainer}>
                     <View style={styles.nameContainer}>
@@ -52,7 +54,11 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse gravida magna non feugiat dapibus. Maecenas luctus lacus et tortor rutrum, in vulputate elit pharetra. Fusce rhoncus ipsum id neque ultrices, eu efficitur nisi luctus. Maecenas tristique justo at interdum pulvinar. Nunc non venenatis ipsum, sit amet venenatis ligula
                     </Text>
                 </View>
-                <Carousel images={ speciesObservations.map(o => o.image) }/>
+                <Carousel images={ speciesObservations.map(o => {
+                    url = o.image.replace('http://localhost/', API_URL);
+                    console.log(url);
+                    return url;
+                }) }/>
             </ImageBackground>
         </View>
     );
@@ -88,7 +94,7 @@ const styles = StyleSheet.create({
         opacity: 0.9
     },
     speciesScientificName: {
-        fontFamily: 'Tinos_400Regular_Italic',
+        // fontFamily: 'Tinos_400Regular_Italic',
         fontSize: 12,
         color: '#332200',
         opacity: 0.7
