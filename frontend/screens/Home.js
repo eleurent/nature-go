@@ -63,7 +63,7 @@ export default function HomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
-                <View style={{ marginTop: 60, flexDirection: 'column' }} >
+                <View style={styles.containerInsideImage} >
                     <View style={styles.categoryRowContainer}>
                         <View style={{ flex: 1 }}></View>
                         <CategoryButton 
@@ -128,11 +128,15 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         justifyContent: 'center',
     },
+    containerInsideImage: {
+        flex: 1, 
+        marginTop: 60,
+        flexDirection: 'column'
+    },
     categoryRowContainer: {
         height: 120,
-        flex: 1,
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     categoryContainer: {
         width: 110,
@@ -141,7 +145,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         textAlign: 'center',
-        justifyContent: 'center', 
+        justifyContent: 'center',
     },
     categoryImage: {
         width: 100,
