@@ -34,6 +34,19 @@ class SpeciesObservationsList(generics.ListAPIView):
         species_id = self.kwargs['pk']
         return Observation.objects.filter(user=user, species=species_id)
 
+def read_exif(image_path):
+    import PIL.Image
+    img = PIL.Image.open(image_path)
+    exif_data = img._getexif()
+    print(exif_data)
+    import PIL.ExifTags
+    exif = {
+        PIL.ExifTags.TAGS[k]: v
+        for k, v in img._getexif().items()
+        if k in PIL.ExifTags.TAGS
+    }
+    print(exif)
+
 def plantnet_identify(image_path):
     url = 'https://my-api.plantnet.org/v2/identify/all'
     image_data =  open(image_path, 'rb')
@@ -45,7 +58,7 @@ def plantnet_identify(image_path):
         'lang': 'en',
         'api-key': '2b10OHTHDcLlYXiJYoOA2bYeOO'
     }
-    data = {'organs': ['leaf']}
+    data = {'organs': ['flower']}
     response = requests.post(url, files=files, data=data, params=params)
     response.raise_for_status()
     result = response.json()
