@@ -46,10 +46,8 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                     source={{uri: illustration_url}}
                 />
                 <View style={styles.textContainer}>
-                    <View style={styles.nameContainer}>
-                        <Text style={styles.speciesName}>{speciesDetails.display_name}</Text>
-                        <Text style={styles.speciesScientificName}>{speciesDetails.scientificName}</Text>
-                    </View>
+                    <Text style={[styles.speciesName, styles.nameContainer]}>{speciesDetails.display_name}</Text>
+                    <Text style={[styles.speciesScientificName, styles.nameContainer]}>{speciesDetails.scientificName}</Text>
                     <Text style={styles.descriptionText}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse gravida magna non feugiat dapibus. Maecenas luctus lacus et tortor rutrum, in vulputate elit pharetra. Fusce rhoncus ipsum id neque ultrices, eu efficitur nisi luctus. Maecenas tristique justo at interdum pulvinar. Nunc non venenatis ipsum, sit amet venenatis ligula
                     </Text>
