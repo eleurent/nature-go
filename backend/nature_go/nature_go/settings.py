@@ -15,6 +15,8 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+BASE_URL = 'https://eleurent-curly-space-umbrella-jrjrw4g7rvfqgq-8000.preview.app.github.dev/'
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -149,7 +151,7 @@ REST_FRAMEWORK = {
 # CORS
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:19006',
-    'https://eleurent-curly-space-umbrella-jrjrw4g7rvfqgq-8000.preview.app.github.dev/'
+    BASE_URL,
 ]
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:19006',

@@ -159,3 +159,19 @@ Write the model and json views for:
     - Herbarium
       - Specie
         - Observations
+
+## Usage
+
+Set the server public url:
+- `BASE_URL` in `backend/nature_go/settings.py`
+- `API_URL` in `frontend/app.json`
+
+For instance, it should be `http://localhost/` for local development, and something like `https://eleurent-curly-space-umbrella-jrjrw4g7rvfqgq-8000.preview.app.github.dev/` when using a Github codespace.
+
+Then run
+
+```
+./launch.sh
+```
+
+Useful options: --web, and --tunnel for serving mobile on CodeSpace.

@@ -6,4 +6,4 @@ python manage.py runserver &
 
 # Start the Expo React Native frontend
 cd ../../frontend
-npx expo start --tunnel
+npx expo start "$@"
