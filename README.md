@@ -4,11 +4,12 @@ A generative AI project
 
 ## Summary
 
-Inspired by Pokemon go, this app is an augmented reality game about discovering observing wildlife.
-The universe / mood revolves around being a young naturalist in the 19th century, doing fieldwork in botany and zoology (ornithology specifically).
+Inspired by Pokemon Go, this app is an augmented reality game about discovering and observing wildlife.
+The universe / mood revolves around playing a young naturalist in the 19th century, doing fieldwork in botany, ornithology / zoology.
 
 - **Discovering species**: when hiking, the player photographs wildlife, and pictures are sent to an identification API (e.g. PlantNet, Merlin Bird ID).
 - **Collecting observations**: observations are gathered in an herbarium and an ornithology logbook.
+- **Studying/Researching**: collecting enough observations enables to *study* a species, by answering trivia questions or taking identification exams.
 
 ## Graphic style
 
@@ -17,13 +18,13 @@ The app should generally feel like a scientist's expedition log / notebook. Disc
 - **Resource**: the [Biodiversity Heritage Library](https://www.flickr.com/photos/biodivlibrary/)
 - Keywords: naturalist logbook, ornithology journal, botany, birdwatching, birder, botanist, Charles Darwin
 - Menus appearance: turning pages of the journal / diary / notebook
-- Species: each specie will have an illustration in [this style](https://www.flickr.com/photos/biodivlibrary/).
+- Species: each specie will have one or several illustrations in [this style](https://www.flickr.com/photos/biodivlibrary/).
 
 ## Gameplay
 
 ### 1. Fieldwork: observing species
 
-The base activity is to wander in Nature and take photos of species of two categories
+The base activity is to wander in nature and take photos of species of two categories
 
 - Flowers (Botany)
 - Birds (Ornithology)
@@ -40,20 +41,23 @@ Each observation is rewarded with XP, which allows to level up.
 
 ### 2. University: studying species
 
-Once enough observations of a species have been collected, this unlocks the ability to do an academic study.
+Once enough observations of any species have been collected, this unlocks the ability to do an academic study of this species.
+
 There can be several kind of studies:
 
-- answering a **knowledge exam** (quizz with multiple choice or open questions)
-  - a quizz is passed only by correctly answering 100% correctly, and we do not give feedback only the final score.
-  - the questions are sampled over discovered species
-  - a quizz can be passed again, but each question already answered has diminishing returns (incentivizes discovering new species to get new questions).
+1. answering a **knowledge exam** (quizz with multiple choice or open questions)
+  - a quizz is passed only by correctly answering 100% correctly (?)
+  - the questions are sampled from discovered species only
+  - a quizz can be taken again, but each question already answered has diminishing returns (incentivizes discovering new species to get new questions).
   - the difficulty of the quizz can be controlled through the difficulty of its questions, or the number of questions in the quizz
-- passing an **identification test**: given images of birds/plants that have been observed, find the correct specie
+2. taking an **identification test**: given images of birds/plants that have been observed, find the correct specie
+  - either select the correct image matching a given species label, or the correct species label matching a given image.
   - the difficulty will increase naturally as we discover more and more species
   - there will be a lot of repetition initially, but this is key to learning
-- possibly do active learning to adapt the tests content to the user's past attempts?
 
 Studying is also rewarded with XP, but not only.
+
+Could we do active learning to adapt the tests content to the user's past attempts?
 
 ### 3. Academia: writing publications?
 
@@ -63,19 +67,21 @@ After a few species have been studied, we can write a  (fake) publication based 
 Leurent, E., & Smith, J. (1823). A comparative study of the morphology and ecology of edelweiss, forget-me-not, and daffodils. Journal of Botany, 23(2), 45-56.
 ```
 
-This is mostly a cosmetic reward for completing studies, and also allows to upgrade our **title** and **appearance**
+This would mostly a cosmetic reward for completing studies, and also allows to upgrade our **title** and **appearance**?
 
 - Scout (1 publication needed to level up)
 - PhD student (+2 publications needed)
 - Postdoc / Research Fellow (+4 publications needed)
 - Professor
 
+Maybe remove this part if it's not useful.
+
 ### 4. Levelling and unlocking content
 
 Initially, the number of features is limited. The player can unlock new features by earning XP and levelling up.
 For each discipline, we track
 
-- Level 1 (2-3 observations required to level up)
+- Level 1 (2-3 species worth of XP required to level up)
 
     Only fieldwork is available, limited to 1 observation per specie.
 
@@ -85,7 +91,7 @@ For each discipline, we track
 
 - Level 3
 
-    Unlocks additional content (illustrations / summaries) after N=5 observations of a specie
+    Unlocks additional content (illustrations / summaries) after N=3? 5? observations of a specie
 
 - Level 4
 
@@ -108,9 +114,7 @@ For each discipline, we track
 - A map showing all the observations made by the player
 - For each specie, a heatmap of all observations in the dataset (like in Seek)
 
-# TO DO
-
-## ML
+# Content generation
 
 ### Generating species illustrations
 
@@ -134,31 +138,6 @@ Using LLMs, generate a list of questions on a (discovered) specie by
 - Fetching wikipedia or other content sources on the specie
 - Prompt tuning to extract questions, see e.g. [Karpathy's Anki flashcards example](https://twitter.com/karpathy/status/1663262981302681603?s=20).
 
-### Training a Bird ID classifier
-
-Unfortunately, unlike PlantNet, Merlin Bird ID doesn't have an open API.
-We can try to train our own model, but we need a dataset.
-
-## Software engineering
-
-### Backend with Django
-
-Write the model and json views for:
-
-- All supported species
-- User, XPs, level, title, etc.
-- Observations of the user (picture, time, location, api response, identified specie)
-- Quizz questions
-- User's quizz responses / scores
-- User's ID test responses / scores
-
-### Frontent with Expo and React Native
-
-- One component per django view
-  - Main menu
-    - Herbarium
-      - Specie
-        - Observations
 
 ## Usage
 
