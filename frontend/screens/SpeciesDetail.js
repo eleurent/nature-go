@@ -53,9 +53,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                     </Text>
                 </View>
                 <Carousel images={ speciesObservations.map(o => {
-                    url = o.image.replace('http://localhost/', API_URL);
-                    console.log(url);
-                    return url;
+                    return o.image.replace('http://localhost/', API_URL);
                 }) }/>
             </ImageBackground>
         </View>
