@@ -27,7 +27,9 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "API_URL": "https://eleurent-curly-space-umbrella-jrjrw4g7rvfqgq-8000.preview.app.github.dev/"
+      "REMOVE_API_URL": "https://eleurent-curly-space-umbrella-jrjrw4g7rvfqgq-8000.preview.app.github.dev/",
+      "LOCAL_API_URL": "http://localhost:8000/",
+      "API_URL": "http://localhost:8000/"
     }
   }
 }
