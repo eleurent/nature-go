@@ -24,8 +24,9 @@ urlpatterns = [
     path("accounts/login/", auth_views.LoginView.as_view(), name='login'),
     path('admin/', admin.site.urls),
     path('api/species/', include('observation.urls')),
+    path('api/university/', include('university.urls')),
     path('api/auth/', include('authentication.urls')),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls'))  # Is this needed?
 ] + (
     static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + 
     static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
