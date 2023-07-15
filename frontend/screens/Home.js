@@ -89,7 +89,7 @@ export default function HomeScreen({ navigation }) {
                     <View style={styles.categoryRowContainer}>
                         <View style={{ flex: 1 }}></View>
                         <CategoryButton
-                            disabled
+                            onPress={() => navigation.navigate('QuizDetail')}
                             imageSource={require('../assets/images/university.png')}
                             label={'UNIVERSITY'}
                         />
