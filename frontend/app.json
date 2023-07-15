@@ -12,6 +12,7 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
+      "assets/images/*",
       "**/*"
     ],
     "ios": {
