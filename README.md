@@ -13,6 +13,8 @@ The universe / mood revolves around playing a young naturalist in the 19th centu
 
 ## Graphic style
 
+- [Figma project](https://www.figma.com/file/iPjswR0CeXpBdz94pG0Bgh/Nature-Go?type=design&mode=design&t=kyAtjChl3VWXbrzz-1)
+
 The app should generally feel like a scientist's expedition log / notebook. Discovered species are illustrated like in an herbarium, or a natural zoology journal.
 
 - **Resource**: the [Biodiversity Heritage Library](https://www.flickr.com/photos/biodivlibrary/)
