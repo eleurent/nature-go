@@ -11,17 +11,26 @@ export const QuizContext = React.createContext();
 
 
 const quizReducer = (prevState, action) => {
+    let answers = prevState.answers
     switch (action.type) {
         case 'SET_QUIZ':
+            answers = [...Array(action.quiz.multiple_choice_questions.length).fill(null)];
             return {
                 ...prevState,
                 quiz: action.quiz,
+                answers: answers,
+            };
+        case 'SELECT_QUESTION':
+            answers[action.question_id] = action.answer_id;
+            return {
+                ...prevState,
+                answers: answers,
             };
     }
 };
 const initialState = {
     quiz: null,
-    answers: null
+    answers: {}
 };
 
 export const useQuiz = () => {
@@ -35,10 +44,15 @@ export const useQuiz = () => {
                     dispatch({ type: 'SET_QUIZ', quiz: response.data });
                 })
             },
+            isQuestionSelected: (quizState, question_id, answer_id) => {
+                return (quizState.answers[question_id] === answer_id)
+            },
+            selectQuestion: (question_id, answer_id) => {
+                dispatch({ type: 'SELECT_QUESTION', question_id, answer_id });
+            },
         }),
         []
     );
 
     return { quizState, quizMethods };
 };
-

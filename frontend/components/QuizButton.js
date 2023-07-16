@@ -1,31 +1,32 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Pressable, Text } from 'react-native';
+import { StyleSheet, View, Pressable, Text, TouchableHighlight } from 'react-native';
 
 
 
-export default function QuizButton({ label, theme, onPress }) {
-
-    const [selected, setSelected] = useState(false);
-
-    function onSelect() {
-        setSelected(!selected);
-        // onPress();
-    }
+export default function QuizButton({ label, theme, onPress, selected }) {
 
     if (theme === "question") {
         return (
             <View
                 style={[styles.buttonContainer, {}]}
             >
-                <Pressable
-                    style={({ pressed }) => [
+                <TouchableHighlight 
+                    style={[
                         styles.button,
                         styles.choiceButton,
-                        pressed ? styles.pressedButton : selected? styles.selectedButton : {}
-                    ]} onPress={onSelect}
+                        selected ? styles.selectedButton : {}
+                    ]}
+                    onPress={onPress}
+                    activeOpacity={0.85}
+                    underlayColor={'#7AB5D7'}
                 >
-                    <Text style={[styles.buttonLabel, { color: "#25292e" }]}>{label}</Text>
-                </Pressable>
+                    <Text 
+                        style={[
+                            styles.buttonLabel,
+                            styles.choiceButtonLabel,
+                            selected ? styles.selectedChoiceButtonLabel : {}]}
+                    >{label}</Text>
+                </TouchableHighlight>
             </View>
         );
     }
@@ -77,7 +78,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#539F38',
     },
     selectedButton: {
-        backgroundColor: '#00f',
+        backgroundColor: '#DEF1FE',
+        borderColor: '#8AD4FD'
     },
     buttonIcon: {
         paddingRight: 8,
@@ -85,5 +87,11 @@ const styles = StyleSheet.create({
     buttonLabel: {
         color: '#fff',
         fontSize: 22,
+    },
+    choiceButtonLabel: {
+        color: '#333',
+    },
+    selectedChoiceButtonLabel: {
+        color: '#359AD7',
     },
 });

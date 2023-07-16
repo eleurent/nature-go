@@ -18,7 +18,6 @@ export default function QuizDetailScreen({ navigation, route }) {
     const { quizState, quizMethods } = useContext(QuizContext);
     useEffect(() => {
         quizMethods.getOrCreateQuiz();
-        console.log(quizState.quiz)
     }, []);
 
     return (

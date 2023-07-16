@@ -10,7 +10,7 @@ import { QuizContext } from '../quizContext';
 
 function onPressContinue(id, quizState, navigation) {
     if (id < quizState.quiz.multiple_choice_questions.length - 1)
-        navigation.navigate('QuizQuestion', { id: id + 1 });
+        navigation.push('QuizQuestion', { id: id + 1 });
     else
         navigation.navigate('QuizDetail');
 }
@@ -31,7 +31,7 @@ export default function QuizQuestionScreen({ navigation, route }) {
                 <View style={styles.outline}>
                     <Text style={styles.prompt}>{question.prompt }</Text>
                     <FlatList
-                        style={{ marginTop: 60 }}
+                        style={{ marginTop: 40 }}
                         vertical
                         numColumns={1}
                         showsVerticalScrollIndicator={Platform.OS === 'web'}
@@ -40,7 +40,11 @@ export default function QuizQuestionScreen({ navigation, route }) {
                         renderItem={({ item, index }) => {
                             return (
                                 <QuizButton
-                                    key={index} label={item} theme="question"
+                                    key={index}
+                                    label={item}
+                                    theme="question"
+                                    selected={quizMethods.isQuestionSelected(quizState, route.params.id, index)}
+                                    onPress={() => {quizMethods.selectQuestion(route.params.id, index);}}
                                 />
                             );
                         }}
@@ -64,8 +68,8 @@ const styles = StyleSheet.create({
     },
     outline: {
         resizeMode: 'cover',
-        borderStyle: 'solid',
-        borderWidth: 1.5,
+        // borderStyle: 'solid',
+        // borderWidth: 1.5,
         flex: 1,
         margin: 30,
         padding: 10,
