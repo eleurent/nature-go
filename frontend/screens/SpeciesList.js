@@ -55,7 +55,7 @@ export default function SpeciesListScreen({ navigation, route }) {
             numColumns = { 2 }
             showsVerticalScrollIndicator={Platform.OS === 'web'}
             data={speciesList}
-            contentContainerStyle={styles.listContainer}
+            contentContainerStyle={{}}
             renderItem={({ item, index }) => {
                 return (
                     <SpeciesButton

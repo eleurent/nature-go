@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
 import QuizButton from '../components/QuizButton'
-import axios from 'axios';
-import Constants from 'expo-constants'
 import {
     useFonts,
     OldStandardTT_700Bold,
@@ -20,6 +18,7 @@ export default function QuizDetailScreen({ navigation, route }) {
     const { quizState, quizMethods } = useContext(QuizContext);
     useEffect(() => {
         quizMethods.getOrCreateQuiz();
+        console.log(quizState.quiz)
     }, []);
 
     return (
@@ -30,8 +29,7 @@ export default function QuizDetailScreen({ navigation, route }) {
                     <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                     <Text style={styles.subtitle}>EXAMINATION PAPERS</Text>
                     <Text style={[styles.subtitle, {fontSize: 13}]}>FOR THE YEAR 1823,</Text>
-                    <Text styles={{}}>{JSON.stringify(quizState.quiz)}</Text>
-                    <QuizButton label="Take the exam"/>
+                    <QuizButton label="Take the exam" onPress={() => {navigation.navigate('QuizQuestion', { id: 0 })}}/>
                 </View>
         </ImageBackground>
         </View>

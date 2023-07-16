@@ -4,12 +4,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth, AuthContext } from './authContext';
 import { useQuiz, QuizContext } from './quizContext';
+import { useLoadedAssets } from "./hooks/useLoadedAssets";
 import HomeScreen from './screens/Home'
 import SignInScreen from './screens/Login'
 import SpeciesListScreen from './screens/SpeciesList';
 import SpeciesDetailScreen from './screens/SpeciesDetail';
 import QuizDetailScreen from './screens/QuizDetail';
-import { useLoadedAssets } from "./hooks/useLoadedAssets";
+import QuizQuestionScreen from './screens/QuizQuestion';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +43,7 @@ export default function App() {
             <Stack.Screen name="SpeciesList" component={SpeciesListScreen} options={{ title: 'Botany' }} />
             <Stack.Screen name="SpeciesDetail" component={SpeciesDetailScreen} options={{ title: 'Species detail' }} />
             <Stack.Screen name="QuizDetail" component={QuizDetailScreen} options={{ title: 'Quiz detail' }} />
+            <Stack.Screen name="QuizQuestion" component={QuizQuestionScreen} options={{ title: 'Quiz question' }} />
             </>
           )}
         </Stack.Navigator>
