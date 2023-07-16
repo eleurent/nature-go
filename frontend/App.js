@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth, AuthContext } from './authContext';
+import { useQuiz, QuizContext } from './quizContext';
 import HomeScreen from './screens/Home'
 import SignInScreen from './screens/Login'
 import SpeciesListScreen from './screens/SpeciesList';
@@ -17,13 +18,14 @@ export default function App() {
 
   const isLoadingComplete = true; //useLoadedAssets();
   const { authState, authMethods } = useAuth();
+  const { quizState, quizMethods } = useQuiz();
 
   if (!isLoadingComplete || authState.isLoading)
     return null;
   return (
     <AuthContext.Provider value = {{ authState, authMethods }}>
+    <QuizContext.Provider value= {{quizState, quizMethods }}>
       <NavigationContainer>
-
         <Stack.Navigator screenOptions={{ headerTransparent: true, headerTitle: '' }}>
           {authState.userToken === null ? (
             // User isn't signed in
@@ -44,6 +46,7 @@ export default function App() {
           )}
         </Stack.Navigator>
       </NavigationContainer>
+    </QuizContext.Provider>
     </AuthContext.Provider>
   );
 }

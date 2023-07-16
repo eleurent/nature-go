@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
 import QuizButton from '../components/QuizButton'
 import axios from 'axios';
@@ -8,36 +8,19 @@ import {
     OldStandardTT_700Bold,
     OldStandardTT_400Regular,
 } from '@expo-google-fonts/old-standard-tt';
-
-
-const API_URL = Constants.expoConfig.extra.API_URL;
-const QUIZ_GET_URL = API_URL + 'api/university/quiz/get_or_create/'
-
-
+import { QuizContext } from '../quizContext';
 
 export default function QuizDetailScreen({ navigation, route }) {
-
-    const [quiz, setQuiz] = useState(null);
 
     let [fontsLoaded] = useFonts({
         OldStandardTT_700Bold,
         OldStandardTT_400Regular
     });
 
-
+    const { quizState, quizMethods } = useContext(QuizContext);
     useEffect(() => {
-        const fetchQuiz = async () => {
-            try {
-                const response = await axios.get(QUIZ_GET_URL);
-                setQuiz(response.data);
-            } catch (err) {
-                console.error('Could not get a quizz')
-            }
-        };
-
-        fetchQuiz();
+        quizMethods.getOrCreateQuiz();
     }, []);
-
 
     return (
         <View style={styles.container} >
@@ -47,7 +30,7 @@ export default function QuizDetailScreen({ navigation, route }) {
                     <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                     <Text style={styles.subtitle}>EXAMINATION PAPERS</Text>
                     <Text style={[styles.subtitle, {fontSize: 13}]}>FOR THE YEAR 1823,</Text>
-                    {/* <Text styles={{}}>{JSON.stringify(quiz)}</Text> */}
+                    <Text styles={{}}>{JSON.stringify(quizState.quiz)}</Text>
                     <QuizButton label="Take the exam"/>
                 </View>
         </ImageBackground>
