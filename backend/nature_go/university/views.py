@@ -2,6 +2,7 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from .models import MultipleChoiceQuestion, Quiz, MultipleChoiceUserAnswer
 from .serializers import MultipleChoiceQuestionSerializer, QuizSerializer, MultipleChoiceUserAnswerSerializer
+from .permissions import IsOwner
 import random
 from django.utils import timezone
 from datetime import timedelta
@@ -10,7 +11,7 @@ from django.shortcuts import redirect
 class QuizCreateView(generics.CreateAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
 
     def perform_create(self, serializer):
         questions = random.sample(list(MultipleChoiceQuestion.objects.all()), 2)
@@ -23,7 +24,7 @@ class QuizCreateView(generics.CreateAPIView):
 class QuizGetOrCreateView(generics.RetrieveAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
 
     def get_object(self):
         recent_quizzes = Quiz.objects.filter(
@@ -38,4 +39,4 @@ class QuizGetOrCreateView(generics.RetrieveAPIView):
 class QuizRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
