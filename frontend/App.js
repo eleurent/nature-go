@@ -11,6 +11,7 @@ import SpeciesListScreen from './screens/SpeciesList';
 import SpeciesDetailScreen from './screens/SpeciesDetail';
 import QuizDetailScreen from './screens/QuizDetail';
 import QuizQuestionScreen from './screens/QuizQuestion';
+import QuizResultScreen from './screens/QuizResult';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,11 +40,12 @@ export default function App() {
           ) : (
             // User is signed in
             <>
-            <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Contents' }}/>
-            <Stack.Screen name="SpeciesList" component={SpeciesListScreen} options={{ title: 'Botany' }} />
-            <Stack.Screen name="SpeciesDetail" component={SpeciesDetailScreen} options={{ title: 'Species detail' }} />
-            <Stack.Screen name="QuizDetail" component={QuizDetailScreen} options={{ title: 'Quiz detail' }} />
-            <Stack.Screen name="QuizQuestion" component={QuizQuestionScreen} options={{ title: 'Quiz question' }} />
+            <Stack.Screen name="Home" component={HomeScreen}/>
+            <Stack.Screen name="SpeciesList" component={SpeciesListScreen}/>
+            <Stack.Screen name="SpeciesDetail" component={SpeciesDetailScreen}/>
+            <Stack.Screen name="QuizDetail" component={QuizDetailScreen}/>
+            <Stack.Screen name="QuizQuestion" component={QuizQuestionScreen}/>
+            <Stack.Screen name="QuizResult" component={QuizResultScreen}/>
             </>
           )}
         </Stack.Navigator>

@@ -22,6 +22,11 @@ class Quiz(models.Model):
     class Meta:
         verbose_name_plural = 'Quizzes'
 
+    @property
+    def is_answered(self):
+        return (self.multiplechoiceuseranswer_set.count() ==
+                self.multiple_choice_questions.count())
+
 
 class MultipleChoiceUserAnswer(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)

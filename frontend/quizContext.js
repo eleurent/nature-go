@@ -4,7 +4,8 @@ import Constants from 'expo-constants'
 
 
 const API_URL = Constants.expoConfig.extra.API_URL;
-const QUIZ_GET_URL = API_URL + 'api/university/quiz/get_or_create/'
+const QUIZ_GET_URL = API_URL + 'api/university/quiz/get_or_create/';
+const QUIZ_UPDATE = (id) => API_URL + `api/university/quiz/${id}/`;
 
 
 export const QuizContext = React.createContext();
@@ -14,10 +15,14 @@ const quizReducer = (prevState, action) => {
     let answers = prevState.answers
     switch (action.type) {
         case 'SET_QUIZ':
-            answers = [...Array(action.quiz.multiple_choice_questions.length).fill(null)];
             return {
                 ...prevState,
                 quiz: action.quiz,
+            };
+        case 'RESET_ANSWERS':
+            answers = [...Array(prevState.quiz.multiple_choice_questions.length).fill(null)];
+            return {
+                ...prevState,
                 answers: answers,
             };
         case 'SELECT_QUESTION':
@@ -39,9 +44,10 @@ export const useQuiz = () => {
 
     const quizMethods = React.useMemo(
         () => ({
-            getOrCreateQuiz: async (data) => {
+            getOrCreateQuiz: async () => {
                 axios.get(QUIZ_GET_URL).then(response => {
                     dispatch({ type: 'SET_QUIZ', quiz: response.data });
+                    dispatch({ type: 'RESET_ANSWERS' });
                 })
             },
             isQuestionSelected: (quizState, question_id, answer_id) => {
@@ -49,6 +55,17 @@ export const useQuiz = () => {
             },
             selectQuestion: (question_id, answer_id) => {
                 dispatch({ type: 'SELECT_QUESTION', question_id, answer_id });
+            },
+            answerQuiz: async (quizState) => {
+                let quiz = quizState.quiz;
+                quiz['multiplechoiceuseranswer_set'] = quiz.multiple_choice_questions.map((question, index) => ({
+                    quiz: quiz.id,
+                    question: question.id,
+                    user_answer: quizState.answers[index]
+                }));
+                await axios.put(QUIZ_UPDATE(quiz.id), quiz).then(response => {
+                    dispatch({ type: 'SET_QUIZ', quiz: response.data });
+                })            
             },
         }),
         []

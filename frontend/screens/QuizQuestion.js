@@ -1,18 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
-import QuizButton from '../components/QuizButton'
+import { CommonActions } from '@react-navigation/native';
 import {
     useFonts,
     OldStandardTT_700Bold,
     OldStandardTT_400Regular,
 } from '@expo-google-fonts/old-standard-tt';
+
+import QuizButton from '../components/QuizButton'
 import { QuizContext } from '../quizContext';
 
-function onPressContinue(id, quizState, navigation) {
-    if (id < quizState.quiz.multiple_choice_questions.length - 1)
+async function onPressContinue(id, quizState, quizMethods, navigation) {
+    if (id < quizState.quiz.multiple_choice_questions.length - 1) {
         navigation.push('QuizQuestion', { id: id + 1 });
-    else
-        navigation.navigate('QuizDetail');
+    } else {
+        await quizMethods.answerQuiz(quizState);
+        navigation.navigate('QuizResult');
+    }
 }
 
 export default function QuizQuestionScreen({ navigation, route }) {
@@ -49,7 +53,9 @@ export default function QuizQuestionScreen({ navigation, route }) {
                             );
                         }}
                     />
-                    <QuizButton label="Continue" onPress={() => onPressContinue(route.params.id, quizState, navigation)} />
+                    <QuizButton label="Continue" onPress={
+                        () => onPressContinue(route.params.id, quizState, quizMethods, navigation)
+                        } />
                 </View>
             </ImageBackground>
         </View>

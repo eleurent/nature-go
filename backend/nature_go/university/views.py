@@ -30,7 +30,7 @@ class QuizGetOrCreateView(generics.RetrieveAPIView):
         recent_quizzes = Quiz.objects.filter(
             user=self.request.user, datetime__gte=timezone.now() - timedelta(hours=24))
         for quiz in recent_quizzes:
-            if not MultipleChoiceUserAnswer.objects.filter(quiz=quiz).exists():
+            if not quiz.is_answered:
                 return quiz
         data = QuizCreateView.as_view()(self.request._request).data
         return Quiz.objects.get(pk=data['id'])
