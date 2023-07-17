@@ -27,8 +27,11 @@ export default function QuizQuestionScreen({ navigation, route }) {
     });
 
     const { quizState, quizMethods } = useContext(QuizContext);
-    const question = quizState.quiz.multiple_choice_questions[route.params.id];
 
+    if (!fontsLoaded | ! quizState.quiz)
+        return null;
+
+    const question = quizState.quiz.multiple_choice_questions[route.params.id];
     return (
         <View style={styles.container} >
             <ImageBackground source={require('../assets/images/page-background-2.png')} style={styles.containerImage}>

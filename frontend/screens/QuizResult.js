@@ -44,14 +44,16 @@ export default function QuizResultScreen({ navigation, route }) {
                         }
                     </Text>
                     <FlatList
-                        style={{ marginVertical: 20 }}
+                        style={styles.resultsList}
                         horizontal
                         showsHorizontalScrollIndicator={Platform.OS === 'web'}
                         data={quizState.quiz.multiplechoiceuseranswer_set}
                         contentContainerStyle={{}}
                         renderItem={({ item, index }) => {
-                            return (
-                                <Text key={index}>{item.is_correct ? 'v' : 'x'}</Text>
+                            return item.is_correct ? (
+                                <Text key={index} style={[styles.result, {color: 'green'}]}>✓</Text>
+                            ) : (
+                                <Text key={index} style={[styles.result, { color: 'red' }]}>✗</Text>
                             );
                         }}
                     />
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
         paddingVertical : 20,
     },
     text: {
-        fontSize: 14,
+        fontSize: 17,
         fontFamily: 'OldStandardTT_400Regular',  // Special Elite
     },
     separator: {
@@ -102,5 +104,12 @@ const styles = StyleSheet.create({
         height: 5,
         marginHorizontal: 'auto',
         marginBottom: 20,
+    },
+    resultsList: {
+        marginVertical: 20, 
+        marginHorizontal: 'auto',
+    },
+    result: {
+        fontSize: 25,
     }
 });
