@@ -6,14 +6,25 @@ class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
         model = MultipleChoiceQuestion
         fields = ['id', 'species', 'prompt', 'answers']
 
-class QuizSerializer(serializers.ModelSerializer):
-    multiple_choice_questions = MultipleChoiceQuestionSerializer(many=True, read_only=True)
-    class Meta:
-        model = Quiz
-        fields = ['id', 'user', 'multiple_choice_questions', 'datetime']
-        read_only_fields = ('user', 'multiple_choice_questions', 'datetime')
 
 class MultipleChoiceUserAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = MultipleChoiceUserAnswer
         fields = ['id', 'quiz', 'question', 'user_answer']
+
+class QuizSerializer(serializers.ModelSerializer):
+    multiple_choice_questions = MultipleChoiceQuestionSerializer(many=True, read_only=True)
+    multiplechoiceuseranswer_set = MultipleChoiceUserAnswerSerializer(many=True, required=False)
+
+    class Meta:
+        model = Quiz
+        fields = ['id', 'user', 'multiple_choice_questions', 'datetime', 'multiplechoiceuseranswer_set']
+        read_only_fields = ('user', 'multiple_choice_questions', 'datetime')
+
+    def update(self, instance, validated_data):
+        # the serializer can only update the user answers
+        if validated_data.get('multiplechoiceuseranswer_set'):
+            instance.multiplechoiceuseranswer_set.all().delete()
+            [MultipleChoiceUserAnswer.objects.create(**answer)
+             for answer in validated_data.get('multiplechoiceuseranswer_set')]
+        return instance

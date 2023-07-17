@@ -1,17 +1,11 @@
 from rest_framework import generics, permissions
+from rest_framework.response import Response
 from .models import MultipleChoiceQuestion, Quiz, MultipleChoiceUserAnswer
 from .serializers import MultipleChoiceQuestionSerializer, QuizSerializer, MultipleChoiceUserAnswerSerializer
 import random
 from django.utils import timezone
 from datetime import timedelta
 from django.shortcuts import redirect
-
-
-class QuizRetrieveView(generics.RetrieveAPIView):
-    queryset = Quiz.objects.all()
-    serializer_class = QuizSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
 
 class QuizCreateView(generics.CreateAPIView):
     queryset = Quiz.objects.all()
@@ -39,4 +33,9 @@ class QuizGetOrCreateView(generics.RetrieveAPIView):
                 return quiz
         data = QuizCreateView.as_view()(self.request._request).data
         return Quiz.objects.get(pk=data['id'])
+    
 
+class QuizRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Quiz.objects.all()
+    serializer_class = QuizSerializer
+    permission_classes = [permissions.IsAuthenticated]

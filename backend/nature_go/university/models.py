@@ -27,4 +27,3 @@ class MultipleChoiceUserAnswer(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question = models.ForeignKey(MultipleChoiceQuestion, on_delete=models.CASCADE)
     user_answer = models.IntegerField()
-
