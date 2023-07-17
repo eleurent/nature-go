@@ -27,3 +27,7 @@ class MultipleChoiceUserAnswer(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question = models.ForeignKey(MultipleChoiceQuestion, on_delete=models.CASCADE)
     user_answer = models.IntegerField()
+
+    @property
+    def is_correct(self):
+        return self.user_answer == self.question.correct_answer
