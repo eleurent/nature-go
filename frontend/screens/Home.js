@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { AuthContext } from '../authContext';
+import React from 'react';
 import { View, Text, TouchableOpacity, Image, Button, ImageBackground, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
@@ -8,6 +7,7 @@ import Constants from 'expo-constants'
 import {
     useFonts,
     OldStandardTT_400Regular,
+    OldStandardTT_700Bold,
 } from '@expo-google-fonts/old-standard-tt';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
@@ -58,12 +58,14 @@ export default function HomeScreen({ navigation }) {
 
     let [fontsLoaded] = useFonts({
         OldStandardTT_400Regular,
+        OldStandardTT_700Bold,
     });
-    // const { authMethods } = useContext(AuthContext);
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
-                <View style={styles.containerInsideImage} >
+                <View style={styles.containerInsideImage}>
+                    <Text style={styles.title}>CONTENTS.</Text>
+                    <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                     <View style={styles.categoryRowContainer}>
                         <View style={{ flex: 1 }}></View>
                         <CategoryButton 
@@ -96,15 +98,24 @@ export default function HomeScreen({ navigation }) {
                         <View style={{ flex: 1 }}></View>
                     </View>
                 </View>
-                {/* <Button title="Sign out" onPress={authMethods.signOut} /> */}
+                <View style={styles.avatarContainer}>
+                    <TouchableOpacity
+                        style={styles.categoryContainer}
+                        activeOpacity={0.5}
+                        onPress={() => navigation.navigate('Profile')}>
+                        <Image style={styles.avatarImage}
+                            source={require('../assets/images/avatar_bubble.png')}
+                        />
+                    </TouchableOpacity>
+                </View>
                 <View style={{marginTop: 'auto'}}>
                     <View style={styles.categoryRowContainer}>
                         <View style={{ flex: 1 }}></View>
                         <TouchableOpacity
-                            style={styles.categoryContainer}
+                            style={styles.avatarTouchable}
                             activeOpacity={0.5}
                             onPress={() => pickImageAsync(navigation)}>
-                            <Image style={styles.categoryImage}
+                            <Image style={[styles.categoryImage, styles.cameraImage]}
                                 source={require('../assets/images/binoculars.png')}
                             />
                         </TouchableOpacity>
@@ -130,8 +141,22 @@ const styles = StyleSheet.create({
     },
     containerInsideImage: {
         flex: 1, 
-        marginTop: 60,
         flexDirection: 'column'
+    },
+    title: {
+        fontSize: 30,
+        marginTop: 5,
+        marginBottom: -5,
+        letterSpacing: 5.0,
+        textAlign: 'center',
+        fontFamily: 'OldStandardTT_400Regular',
+        paddingVertical: 20,
+    },
+    separator: {
+        width: 200,
+        height: 5,
+        marginHorizontal: 'auto',
+        marginBottom: 20,
     },
     categoryRowContainer: {
         height: 120,
@@ -151,6 +176,13 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
     },
+    cameraImage: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        borderColor: 'black',
+        borderWidth: 2,
+    },
     categoryLabel: {
         // fontFamily: 'OldStandardTT_400Regular',
         // fontStyle: 'normal',
@@ -161,4 +193,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#000',
     },
+    avatarContainer: {
+        position: 'absolute',
+        bottom: 5,
+        left: -10,
+        zIndex: 1
+    },
+    avatarTouchable: {
+    },
+    avatarImage: {
+        width: 70,
+        height: 75,
+    }
 });
