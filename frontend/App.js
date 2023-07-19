@@ -6,13 +6,14 @@ import { useAuth, AuthContext } from './authContext';
 import { useQuiz, QuizContext } from './quizContext';
 import { useLoadedAssets } from "./hooks/useLoadedAssets";
 import HomeScreen from './screens/Home'
-import SignInScreen from './screens/Login'
+import SignInScreen from './screens/SignIn'
 import SpeciesListScreen from './screens/SpeciesList';
 import SpeciesDetailScreen from './screens/SpeciesDetail';
 import QuizDetailScreen from './screens/QuizDetail';
 import QuizQuestionScreen from './screens/QuizQuestion';
 import QuizResultScreen from './screens/QuizResult';
 import ProfileScreen from './screens/Profile';
+import LandingScreen from './screens/Landing';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,12 +33,15 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerTransparent: true, headerTitle: '' }}>
           {authState.userToken === null ? (
             // User isn't signed in
+            <>
+            <Stack.Screen name="Landing" component={LandingScreen}/>
             <Stack.Screen name="SignIn" component={SignInScreen}
               options={{
                 title: 'Sign in',
                 animationTypeForReplace: authState.isSignout ? 'pop' : 'push',
               }}
             />
+            </>
           ) : (
             // User is signed in
             <>

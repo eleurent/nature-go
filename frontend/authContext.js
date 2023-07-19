@@ -106,7 +106,7 @@ export const useAuth = () => {
                 })
             },
             signOut: () => {
-                axios.post(LOGOUT_URL).catch(() => {})
+                axios.get(LOGOUT_URL).catch(() => {})
                 axios.defaults.headers.common.Authorization = null;
                 try {
                     setItemAsync('userToken', null);
