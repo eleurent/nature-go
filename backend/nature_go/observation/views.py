@@ -36,16 +36,17 @@ class SpeciesObservationsList(generics.ListAPIView):
 
 def read_exif(image_path):
     import PIL.Image
-    img = PIL.Image.open(image_path)
-    exif_data = img._getexif()
-    print(exif_data)
     import PIL.ExifTags
-    exif = {
-        PIL.ExifTags.TAGS[k]: v
-        for k, v in img._getexif().items()
-        if k in PIL.ExifTags.TAGS
-    }
-    print(exif)
+    import datetime
+    img = PIL.Image.open(image_path)
+    exif = {PIL.ExifTags.TAGS[k]: v
+            for k, v in img._getexif().items() if k in PIL.ExifTags.TAGS}
+    location = {PIL.ExifTags.GPSTAGS.get(key,key): str(exif['GPSInfo'][key])
+                for key in exif.get('GPSInfo', {})}
+    datetime_ = exif.get('DateTime', '')
+    if datetime_:
+        datetime_ = datetime.datetime.strptime(datetime_, '%Y:%m:%d %H:%M:%S')
+    return location, datetime_
 
 def plantnet_identify(image_path):
     url = 'https://my-api.plantnet.org/v2/identify/all'
@@ -81,6 +82,9 @@ class ObservationCreate(generics.CreateAPIView):
             family=species_data['family']['scientificNameWithoutAuthor'],
         )
         observation.species = species
+        location, datetime_ = read_exif(observation.image.path)
+        observation.location = location
+        observation.datetime = datetime_
         observation.save()
         serializer = ObservationSerializer(instance=observation)
         return Response(serializer.data)

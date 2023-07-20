@@ -22,9 +22,6 @@ const pickImageAsync = async (navigation) => {
     if (!result.canceled) {
         let formData = new FormData();
         formData.append('image', result.assets[0].uri);
-        formData.append('location', 'London');
-        formData.append('date', '2023-06-29');
-        formData.append('species', '');
         axios.post(URL_CREATE_OBSERVATION, formData, {
             headers: {'Content-Type': 'multipart/form-data'}
         })

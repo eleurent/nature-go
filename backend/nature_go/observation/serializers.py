@@ -10,7 +10,7 @@ class ObservationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Observation
-        fields = ['id', 'user', 'image', 'species', 'location', 'date']
+        fields = ['id', 'user', 'image', 'species', 'location', 'datetime']
 
 class SpeciesSerializer(serializers.ModelSerializer):
     illustration_url = serializers.SerializerMethodField()
