@@ -144,7 +144,7 @@ Using LLMs, generate a list of questions on a (discovered) specie by
 ## Usage
 
 Set the server public url:
-- `BASE_URL` in `backend/nature_go/settings.py`
+- `BASE_URL` in `backend/nature_go/nature_go/settings.py`
 - `API_URL` in `frontend/app.json`
 
 For instance, it should be `http://localhost/` for local development, and something like `https://eleurent-curly-space-umbrella-jrjrw4g7rvfqgq-8000.preview.app.github.dev/` when using a Github codespace.
