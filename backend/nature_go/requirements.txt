@@ -2,3 +2,5 @@ django
 django-cors-headers
 djangorestframework
 drf-extra-fields
+requests
+Pillow
