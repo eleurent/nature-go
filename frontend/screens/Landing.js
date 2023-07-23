@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ImageBackground, Pressable } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, TextInput, Button, StyleSheet, ImageBackground, Pressable, TouchableOpacity } from 'react-native';
 
 export default function LandingScreen({ navigation, route }) {
 
