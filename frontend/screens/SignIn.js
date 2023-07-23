@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     },
     textField: {
         textAlign: 'center',
-        fontsize: 32,
+        fontSize: 32,
     },
     separator: {
         width: 220,
