@@ -114,8 +114,27 @@ export const useAuth = () => {
                 dispatch({ type: 'SIGN_OUT' });
             },
             signUp: async (data) => {
-                dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+                axios.post(REGISTER_URL, {
+                    username: data.username, 
+                    password: data.password,
+                    first_name: data.first_name,
+                    last_name: data.last_name
+                })
+                .then(response => {
+                    const userToken = response.data.token;
+                    axios.defaults.headers.common.Authorization = `Token ${userToken}`;
+                    try {
+                        setItemAsync('userToken', userToken);
+                    } catch (e) { console.error(e); }
+                    dispatch({ type: 'SIGN_IN', token: userToken });
+                })
+                .catch(error => {
+                    console.error('Registration error', error);
+                    let message = error.message;
+                    dispatch({ type: 'SIGN_IN_ERROR', message: message });
+                })
             },
+            
         }),
         []
     );

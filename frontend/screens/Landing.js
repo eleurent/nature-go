@@ -8,7 +8,7 @@ export default function LandingScreen({ navigation, route }) {
             <ImageBackground source={require('../assets/images/launch.png')} style={styles.containerImage}>
                 <View style={{ flex: 1 }}></View>
             <View style={styles.buttonsContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => { }}>
+                <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('SignUp') }}>
                     <Text style={styles.text}>Sign up</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('SignIn') }}>

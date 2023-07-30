@@ -7,6 +7,7 @@ import { useQuiz, QuizContext } from './quizContext';
 import { useLoadedAssets } from "./hooks/useLoadedAssets";
 import HomeScreen from './screens/Home'
 import SignInScreen from './screens/SignIn'
+import SignUpScreen from './screens/SignUp'
 import SpeciesListScreen from './screens/SpeciesList';
 import SpeciesDetailScreen from './screens/SpeciesDetail';
 import QuizDetailScreen from './screens/QuizDetail';
@@ -34,13 +35,23 @@ export default function App() {
           {authState.userToken === null ? (
             // User isn't signed in
             <>
-            <Stack.Screen name="Landing" component={LandingScreen}/>
-            <Stack.Screen name="SignIn" component={SignInScreen}
-              options={{
-                title: 'Sign in',
-                animationTypeForReplace: authState.isSignout ? 'pop' : 'push',
-              }}
-            />
+              <Stack.Screen name="Landing" component={LandingScreen}/>
+              <Stack.Screen 
+                name="SignIn" 
+                component={SignInScreen}
+                options={{
+                  title: 'Sign in',
+                  animationTypeForReplace: authState.isSignout ? 'pop' : 'push',
+                }}
+              />
+              <Stack.Screen 
+                name="SignUp" 
+                component={SignUpScreen}
+                options={{
+                  title: 'Sign up',
+                  animationTypeForReplace: authState.isSignout ? 'pop' : 'push',
+                }}
+              />
             </>
           ) : (
             // User is signed in
