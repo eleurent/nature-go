@@ -16,7 +16,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # BASE_URL = 'https://eleurent-curly-space-umbrella-jrjrw4g7rvfqgq-8000.preview.app.github.dev'
-BASE_URL = 'http://localhost/'
+# BASE_URL = 'http://localhost/'
+BASE_URL = 'https://nature-go-234686133b92.herokuapp.com '
 
 
 # Quick-start development settings - unsuitable for production
