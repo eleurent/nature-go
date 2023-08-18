@@ -159,3 +159,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:19006',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
+
+
+
+import django_heroku
+django_heroku.settings(locals())
