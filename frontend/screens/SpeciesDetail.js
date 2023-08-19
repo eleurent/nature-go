@@ -37,7 +37,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         fetchSpeciesObservations();
     }, []);
 
-    let illustration_url = speciesDetails.illustration_url || "https://upload.wikimedia.org/wikipedia/commons/3/32/Archive-ugent-be-500C7CB6-DFDB-11E5-9D50-9943D43445F2_DS-266_%28cropped%29.jpg";
+    let illustration_url = speciesDetails.illustration_url || "";
     illustration_url = illustration_url.replace('http://localhost/', API_URL)
     return (
         <View style={styles.container}>
