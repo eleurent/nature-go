@@ -37,8 +37,8 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         fetchSpeciesObservations();
     }, []);
 
-    let illustration_url = speciesDetails.illustration_url || "";
-    illustration_url = illustration_url.replace('http://localhost/', API_URL)
+    let illustration_url = ("illustration_url" in speciesDetails) ? 
+                           speciesDetails.illustration_url.replace('http://localhost/', API_URL) : null;
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
