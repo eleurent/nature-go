@@ -84,21 +84,23 @@ class ObservationCreate(generics.CreateAPIView):
         serializer = ObservationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         observation = serializer.save(user=self.request.user)
-        result = plantnet_identify(observation.image.path)
-        species_data = result['results'][0]['species']
-        # TODO: Get based on scientificName(pk), other fields set as default for creation only
-        species, created = Species.objects.get_or_create(
-            name=species_data['scientificNameWithoutAuthor'],
-            commonNames=species_data['commonNames'],
-            scientificName=species_data['scientificNameWithoutAuthor'],
-            genus=species_data['genus']['scientificNameWithoutAuthor'],
-            family=species_data['family']['scientificNameWithoutAuthor'],
-        )
+        # result = plantnet_identify(observation.image.path)
+        # species_data = result['results'][0]['species']
+        # # TODO: Get based on scientificName(pk), other fields set as default for creation only
+        # species, created = Species.objects.get_or_create(
+        #     name=species_data['scientificNameWithoutAuthor'],
+        #     commonNames=species_data['commonNames'],
+        #     scientificName=species_data['scientificNameWithoutAuthor'],
+        #     genus=species_data['genus']['scientificNameWithoutAuthor'],
+        #     family=species_data['family']['scientificNameWithoutAuthor'],
+        # )
+        # observation.species = species
+        # location, datetime_ = read_exif(observation.image.path)
+        # observation.location = location
+        # observation.datetime = datetime_
+        # observation.save()
+        species = Species.objects.get_or_create(scientificName='Papaver umbonatum')
         observation.species = species
-        location, datetime_ = read_exif(observation.image.path)
-        observation.location = location
-        observation.datetime = datetime_
-        observation.save()
         serializer = ObservationSerializer(instance=observation)
         return Response(serializer.data)
 
