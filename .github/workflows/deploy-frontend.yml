@@ -20,18 +20,21 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-          cache: yarn
-        working-directory: frontend
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Setup EAS
         uses: expo/expo-github-action@v8
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-        working-directory: frontend
 
       - name: Install dependencies
-        run: yarn install
+        run: npm install
+        working-directory: frontend
+
+      - name: Run tests
+        run: npm test
         working-directory: frontend
 
       - name: Publish update
