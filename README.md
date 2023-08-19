@@ -1,5 +1,7 @@
 # Nature go
 
+[![Deploy backend](https://github.com/eleurent/nature-go/actions/workflows/deploy-backend.yml/badge.svg)](https://github.com/eleurent/nature-go/actions/workflows/deploy-backend.yml)
+
 A generative AI project
 
 ## Summary
