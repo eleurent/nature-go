@@ -81,9 +81,9 @@ class ObservationCreate(generics.CreateAPIView):
     serializer_class = ObservationSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = ObservationSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        observation = serializer.save(user=self.request.user)
+        # serializer = ObservationSerializer(data=request.data)
+        # serializer.is_valid(raise_exception=True)
+        # observation = serializer.save(user=self.request.user)
         # result = plantnet_identify(observation.image.path)
         # species_data = result['results'][0]['species']
         # # TODO: Get based on scientificName(pk), other fields set as default for creation only
@@ -99,8 +99,8 @@ class ObservationCreate(generics.CreateAPIView):
         # observation.location = location
         # observation.datetime = datetime_
         # observation.save()
-        species, _ = Species.objects.get_or_create(scientificName='Papaver umbonatum')
-        observation.species = species
-        serializer = ObservationSerializer(instance=observation)
-        return Response(serializer.data)
-
+        # species, _ = Species.objects.get_or_create(scientificName='Papaver umbonatum')
+        # observation.species = species
+        # serializer = ObservationSerializer(instance=observation)
+        # return Response(serializer.data)
+        return Response(request.data)
