@@ -15,13 +15,14 @@ const URL_CREATE_OBSERVATION = API_URL + 'api/species/observation/'
 
 const pickImageAsync = async (navigation) => {
     let result = await ImagePicker.launchImageLibraryAsync({
+        base64: true,
         allowsEditing: true,
         quality: 1,
     });
 
     if (!result.canceled) {
         let formData = new FormData();
-        formData.append('image', result.assets[0].uri);
+        formData.append('image', result.assets[0].base64);
         axios.post(URL_CREATE_OBSERVATION, formData, {
             headers: {'Content-Type': 'multipart/form-data'}
         })
