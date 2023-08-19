@@ -3,6 +3,7 @@ import requests
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
+from rest_framework import serializers
 
 from observation.models import Species, Observation
 from observation.serializers import ObservationSerializer, SpeciesSerializer
@@ -81,8 +82,13 @@ class ObservationCreate(generics.CreateAPIView):
     serializer_class = ObservationSerializer
 
     def create(self, request, *args, **kwargs):
-        # serializer = ObservationSerializer(data=request.data)
-        # serializer.is_valid(raise_exception=True)
+        logger.error(request.data)
+        serializer = ObservationSerializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except serializers.ValidationError as e:
+            logger.error(e)
+            logger.error(e.detail)
         # observation = serializer.save(user=self.request.user)
         # result = plantnet_identify(observation.image.path)
         # species_data = result['results'][0]['species']
