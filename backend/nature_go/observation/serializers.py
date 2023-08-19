@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from drf_extra_fields.fields import Base64ImageField
+from django.contrib.staticfiles import finders
 
 from observation.models import Observation, Species
 
@@ -20,9 +21,15 @@ class SpeciesSerializer(serializers.ModelSerializer):
         model = Species
         fields = ['id', 'name', 'display_name', 'commonNames', 'scientificName', 'genus', 'family', 'illustration_url']
 
+    def has_illustration(self, obj):
+        return finders.find(f'species/{obj.scientificName}/illustration_transparent.png') is not None
+    
     def get_illustration_url(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(f'/static/species/{obj.name}/illustration_transparent.png')
+        if self.has_illustration(obj):
+            return request.build_absolute_uri(f'/static/species/{obj.scientificName}/illustration_transparent.png')
+        else:
+            return request.build_absolute_uri(f'/static/species/unknown/illustration_transparent.png')
     
     def get_display_name(self, obj):
         return obj.commonNames[0] if obj.commonNames else obj.scientificName
