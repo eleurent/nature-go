@@ -43,6 +43,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
                 <Image style={styles.illustrationImage}
+                    resizeMode='contain'
                     source={{uri: illustration_url}}
                 />
                 <View style={styles.textContainer}>

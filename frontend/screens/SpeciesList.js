@@ -19,6 +19,7 @@ const SpeciesButton = (props) => {
             activeOpacity={0.5}
             onPress={props.onPress}>
             <Image style={styles.categoryImage}
+                resizeMode='contain'
                 source={{uri: image_url}}
             />
             <Text style={styles.categoryLabel}>{props.label}</Text>

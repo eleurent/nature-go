@@ -47,7 +47,9 @@ export default function QuizButton({ label, theme, onPress, selected }) {
 const styles = StyleSheet.create({
     buttonContainer: {
         width: 283,
-        marginHorizontal: 'auto',
+        // marginHorizontal: 'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 3,
@@ -61,11 +63,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
         backgroundColor: '#64C242',
-        shadowColor: 'black',
-        shadowOffset: {
-            height: 5
-        },
-        shadowOpacity: 1,
+
         overflow: 'visible',
     },
     choiceButton: {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, Button, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Button, ImageBackground, StyleSheet, SafeAreaView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import Constants from 'expo-constants'
@@ -60,6 +60,8 @@ export default function HomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
+                <SafeAreaView style={{flex: 1}}>
+                
                 <View style={styles.containerInsideImage}>
                     <Text style={styles.title}>CONTENTS.</Text>
                     <Image source={require('../assets/images/separator.png')} style={styles.separator} />
@@ -119,6 +121,7 @@ export default function HomeScreen({ navigation }) {
                         <View style={{ flex: 1 }}></View>
                     </View>
                 </View>
+                </SafeAreaView>
             </ImageBackground>
         </View>
     );
@@ -152,7 +155,8 @@ const styles = StyleSheet.create({
     separator: {
         width: 200,
         height: 5,
-        marginHorizontal: 'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
         marginBottom: 20,
     },
     categoryRowContainer: {
