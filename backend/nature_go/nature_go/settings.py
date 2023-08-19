@@ -29,7 +29,7 @@ BASE_URL = 'https://nature-go-234686133b92.herokuapp.com'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', 'nature-go-234686133b92.herokuapp.com']
 
 
 # Application definition
