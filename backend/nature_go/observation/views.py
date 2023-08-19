@@ -99,7 +99,7 @@ class ObservationCreate(generics.CreateAPIView):
         # observation.location = location
         # observation.datetime = datetime_
         # observation.save()
-        species = Species.objects.get_or_create(scientificName='Papaver umbonatum')
+        species, _ = Species.objects.get_or_create(scientificName='Papaver umbonatum')
         observation.species = species
         serializer = ObservationSerializer(instance=observation)
         return Response(serializer.data)
