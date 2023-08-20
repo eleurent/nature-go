@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, StyleSheet, ImageBackground, Button } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthContext } from '../authContext';
 
 export default function ProfileScreen({ navigation, route }) {
@@ -8,10 +9,9 @@ export default function ProfileScreen({ navigation, route }) {
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
-                <View style={styles.containerInsideImage}>
-
-                <Button title="Sign out" onPress={authMethods.signOut}/>
-                </View>
+                <SafeAreaView style={styles.containerInsideImage}>
+                    <Button title="Sign out" onPress={authMethods.signOut} />
+                </SafeAreaView>
             </ImageBackground>
         </View>
     );
