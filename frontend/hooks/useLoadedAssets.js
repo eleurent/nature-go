@@ -1,4 +1,11 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+
+import {
+    OldStandardTT_400Regular,
+    OldStandardTT_700Bold,
+} from '@expo-google-fonts/old-standard-tt';
+import { SpecialElite_400Regular } from '@expo-google-fonts/special-elite';
+import { Tinos_400Regular_Italic, Tinos_400Regular } from '@expo-google-fonts/tinos';
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import React from "react";
@@ -34,7 +41,15 @@ export function useLoadedAssets() {
                     require('../assets/images/page-background.png'),
                     require('../assets/images/page-background-2.png'),
                 ]);
-                const fontAssets = cacheFonts([Ionicons.font]);
+
+                const fontAssets = cacheFonts([
+                    Ionicons.font,
+                    { OldStandardTT_400Regular },
+                    { OldStandardTT_700Bold },
+                    { SpecialElite_400Regular },
+                    { Tinos_400Regular_Italic },
+                    { Tinos_400Regular },
+                ]);
 
                 await Promise.all([...imageAssets, ...fontAssets]);
             } catch (e) {

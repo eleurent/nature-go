@@ -1,14 +1,9 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, Button, ImageBackground, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Button, ImageBackground, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import Constants from 'expo-constants'
-
-import {
-    useFonts,
-    OldStandardTT_400Regular,
-    OldStandardTT_700Bold,
-} from '@expo-google-fonts/old-standard-tt';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const URL_CREATE_OBSERVATION = API_URL + 'api/species/observation/'
@@ -53,11 +48,6 @@ const CategoryButton = (props) => {
 }
 
 export default function HomeScreen({ navigation }) {
-
-    let [fontsLoaded] = useFonts({
-        OldStandardTT_400Regular,
-        OldStandardTT_700Bold,
-    });
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
@@ -186,8 +176,8 @@ const styles = StyleSheet.create({
         borderWidth: 2,
     },
     categoryLabel: {
-        // fontFamily: 'OldStandardTT_400Regular',
-        // fontStyle: 'normal',
+        fontFamily: 'OldStandardTT_400Regular',
+        fontStyle: 'normal',
         fontSize: 14.3846,
         lineHeight: 18,
         display: 'flex',

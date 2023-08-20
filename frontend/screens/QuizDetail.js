@@ -1,19 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
 import QuizButton from '../components/QuizButton'
-import {
-    useFonts,
-    OldStandardTT_700Bold,
-    OldStandardTT_400Regular,
-} from '@expo-google-fonts/old-standard-tt';
 import { QuizContext } from '../quizContext';
 
 export default function QuizDetailScreen({ navigation, route }) {
-
-    let [fontsLoaded] = useFonts({
-        OldStandardTT_700Bold,
-        OldStandardTT_400Regular
-    });
 
     const { quizState, quizMethods } = useContext(QuizContext);
     useEffect(() => {

@@ -1,19 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/elements';
-import {
-    useFonts,
-    OldStandardTT_700Bold,
-    OldStandardTT_400Regular,
-} from '@expo-google-fonts/old-standard-tt';
 import { QuizContext } from '../quizContext';
 
 export default function QuizResultScreen({ navigation, route }) {
-
-    let [fontsLoaded] = useFonts({
-        OldStandardTT_700Bold,
-        OldStandardTT_400Regular
-    });
 
     useEffect(() => {
         navigation.setOptions({

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, ImageBackground } from 'react-native';
-import { useFonts, SpecialElite_400Regular } from '@expo-google-fonts/special-elite';
-import { Tinos_400Regular_Italic, Tinos_400Regular } from '@expo-google-fonts/tinos';
 import axios from 'axios';
 import Constants from 'expo-constants'
 import Carousel from '../components/Carousel';
@@ -15,11 +13,6 @@ export default function SpeciesDetailScreen({ navigation, route }) {
 
     const [speciesDetails, setSpeciesDetails] = useState({});
     const [speciesObservations, setSpeciesObservations] = useState([]);
-    let [fontsLoaded] = useFonts({
-        SpecialElite_400Regular,
-        Tinos_400Regular_Italic,
-        Tinos_400Regular,
-    });
 
     useEffect(() => {
         const fetchSpeciesDetails = async () => {

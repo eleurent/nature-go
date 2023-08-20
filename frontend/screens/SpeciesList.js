@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
-import { useFonts, SpecialElite_400Regular } from '@expo-google-fonts/special-elite';
 import axios from 'axios';
 import Constants from 'expo-constants'
 
@@ -31,11 +30,6 @@ const SpeciesButton = (props) => {
 export default function SpeciesListScreen({ navigation, route }) {
 
     const [speciesList, setSpeciesList] = useState([]);
-
-    let [fontsLoaded] = useFonts({
-        SpecialElite_400Regular,
-    });
-
 
     useEffect(() => {
         const fetchSpeciesList = async () => {
