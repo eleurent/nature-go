@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Image } from 'react-native';
 import { AuthContext } from '../authContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function SignInScreen() {
     const [username, setUsername] = React.useState('');
@@ -11,6 +13,11 @@ export default function SignInScreen() {
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background-2.png')} style={styles.containerImage}>
+                <SafeAreaView style={{ flex: 1 }}>
+                <KeyboardAwareScrollView
+                        contentContainerStyle={{ flex: 1, justifyContent: 'center', }}
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                >
                 <Text style={styles.title}>THIS JOURNAL BELONGS TO</Text>
                 <TextInput
                     placeholder="Username"
@@ -18,6 +25,7 @@ export default function SignInScreen() {
                     style = {styles.textField}
                     value={username}
                     onChangeText={setUsername}
+                    autoCapitalize="none"
                 />
                 <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                 <Text style={styles.subtitle}>CREDENTIALS</Text>
@@ -28,6 +36,7 @@ export default function SignInScreen() {
                     style={styles.textField}
                     value={password}
                     onChangeText={setPassword}
+                    autoCapitalize="none"
                     secureTextEntry
                 />
                 <Image source={require('../assets/images/separator.png')} style={styles.separator} />
@@ -38,6 +47,8 @@ export default function SignInScreen() {
                     }}>
                     <Text style={styles.text}>Sign in</Text>
                 </TouchableOpacity>
+                </KeyboardAwareScrollView>
+                </SafeAreaView>
             </ImageBackground>
         </View>
 
@@ -54,14 +65,14 @@ const styles = StyleSheet.create({
     containerImage: {
         flex: 1,
         resizeMode: 'cover',
-        justifyContent: 'center',
     },
     title: {
         fontSize: 20,
         letterSpacing: 1.5,
         textAlign: 'center',
         fontFamily: 'OldStandardTT_700Bold',
-        paddingVertical: 20,
+        marginBottom: 20,
+        marginTop: 60,
     },
     subtitle: {
         fontSize: 17,
@@ -72,12 +83,14 @@ const styles = StyleSheet.create({
     },
     textField: {
         textAlign: 'center',
-        fontSize: 32,
+        fontSize: 24,
     },
     separator: {
         width: 220,
         height: 5,
-        marginHorizontal: 'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginTop: 5,
         marginBottom: 100,
     },
     buttonsContainer: {

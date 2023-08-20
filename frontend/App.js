@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth, AuthContext } from './authContext';
 import { useQuiz, QuizContext } from './quizContext';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLoadedAssets } from "./hooks/useLoadedAssets";
 import HomeScreen from './screens/Home'
 import SignInScreen from './screens/SignIn'
@@ -21,7 +22,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const isLoadingComplete = true; //useLoadedAssets();
+  const isLoadingComplete = useLoadedAssets();
   const { authState, authMethods } = useAuth();
   const { quizState, quizMethods } = useQuiz();
 
@@ -30,6 +31,7 @@ export default function App() {
   return (
     <AuthContext.Provider value = {{ authState, authMethods }}>
     <QuizContext.Provider value= {{quizState, quizMethods }}>
+    <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerTransparent: true, headerTitle: '' }}>
           {authState.userToken === null ? (
@@ -67,6 +69,7 @@ export default function App() {
           )}
         </Stack.Navigator>
       </NavigationContainer>
+    </SafeAreaProvider>
     </QuizContext.Provider>
     </AuthContext.Provider>
   );

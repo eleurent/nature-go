@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Image } from 'react-native';
 import { AuthContext } from '../authContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function SignUpScreen() {
     const [username, setUsername] = React.useState('');
@@ -13,25 +15,33 @@ export default function SignUpScreen() {
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background-2.png')} style={styles.containerImage}>
+                <SafeAreaView style={{ flex: 1 }}>
+                <KeyboardAwareScrollView
+                    contentContainerStyle={{ flex: 1, justifyContent: 'center', }}
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                >
                 <Text style={styles.title}>CREATE YOUR ACCOUNT</Text>
                 <View style={styles.sectionContainer}>
                     <Text style={styles.subtitle}>Personal Information</Text>
                     <TextInput
                         placeholder="First Name"
                         placeholderTextColor={'#dcb'}
-                        style = {styles.textField}
+                        style={styles.textField}
                         value={firstName}
                         onChangeText={setFirstName}
+                        multiline={true} /* See https://github.com/facebook/react-native/issues/28794#issuecomment-1152167549 */
                     />
+                    <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                     <TextInput
                         placeholder="Last Name"
                         placeholderTextColor={'#dcb'}
-                        style = {styles.textField}
+                        style={styles.textField}
                         value={lastName}
                         onChangeText={setLastName}
+                        multiline={true} /* See https://github.com/facebook/react-native/issues/28794#issuecomment-1152167549 */
                     />
+                    <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                 </View>
-                <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                 <View style={styles.sectionContainer}>
                     <Text style={styles.subtitle}>Credentials</Text>
                     <TextInput
@@ -40,17 +50,24 @@ export default function SignUpScreen() {
                         style = {styles.textField}
                         value={username}
                         onChangeText={setUsername}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        multiline={true} /* See https://github.com/facebook/react-native/issues/28794#issuecomment-1152167549 */
                     />
+                    <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                     <TextInput
                         placeholder="Password"
                         placeholderTextColor={'#dcb'}
                         style={styles.textField}
                         value={password}
                         onChangeText={setPassword}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        multiline={true} /* See https://github.com/facebook/react-native/issues/28794#issuecomment-1152167549 */
                         secureTextEntry
                     />
+                    <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                 </View>
-                <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                 {authState.signUpErrorMessage && <Text style={{ color: 'red' }}>{authState.signUpErrorMessage}</Text>}
                 <TouchableOpacity style={styles.button} onPress={() => { 
                     authMethods.signUp({ username, password, first_name: firstName, last_name: lastName })
@@ -58,6 +75,8 @@ export default function SignUpScreen() {
                     }}>
                     <Text style={styles.text}>Sign Up</Text>
                 </TouchableOpacity>
+                </KeyboardAwareScrollView>
+                </SafeAreaView>
             </ImageBackground>
         </View>
     );
@@ -90,13 +109,15 @@ const styles = StyleSheet.create({
     },
     textField: {
         textAlign: 'center',
-        fontSize: 32,
+        fontSize: 24,
     },
     separator: {
         width: 220,
         height: 5,
-        marginHorizontal: 'auto',
-        marginBottom: 100,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginBottom: 10,
+        opacity: 0.3,
     },
     buttonsContainer: {
         flexDirection: 'row',
@@ -104,11 +125,12 @@ const styles = StyleSheet.create({
         marginBottom: 30
     },
     button: {
-        marginHorizontal: 20
+        marginLeft: 20,
+        marginRight: 20,
     },
     text: {
         fontSize: 24,
-        textAlign: 'center'
+        textAlign: 'center',
     },
     sectionContainer: {
         marginBottom: 20,
