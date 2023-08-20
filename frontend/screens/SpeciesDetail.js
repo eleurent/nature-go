@@ -35,13 +35,15 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
-                <Image style={styles.illustrationImage}
+                <Image
+                    style={styles.illustrationImage}
                     resizeMode='contain'
-                    source={{uri: illustration_url}}
+                    source={{ uri: illustration_url }}
+                    placeholder='empty'
                 />
                 <View style={styles.textContainer}>
-                    <Text style={[styles.speciesName, styles.nameContainer]}>{speciesDetails.display_name}</Text>
-                    <Text style={[styles.speciesScientificName, styles.nameContainer]}>{speciesDetails.scientificName}</Text>
+                    <Text style={[styles.speciesName, styles.nameContainer]}>{speciesDetails.display_name ? speciesDetails.display_name : "Name"}</Text>
+                    <Text style={[styles.speciesScientificName, styles.nameContainer]}>{speciesDetails.scientificName ? speciesDetails.scientificName : "Scientific name"}</Text>
                     <Text style={styles.descriptionText}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse gravida magna non feugiat dapibus. Maecenas luctus lacus et tortor rutrum, in vulputate elit pharetra. Fusce rhoncus ipsum id neque ultrices, eu efficitur nisi luctus. Maecenas tristique justo at interdum pulvinar. Nunc non venenatis ipsum, sit amet venenatis ligula
                     </Text>
@@ -51,7 +53,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                 }) }/>
             </ImageBackground>
         </View>
-    );
+    )
 };
 
 

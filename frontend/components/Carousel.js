@@ -13,7 +13,7 @@ export default function Carousel( {images} ) {
                     showsHorizontalScrollIndicator={true}
                 >
                     {images.map((image, i) => (
-                        <Image style={styles.image} source={image} key={i}/>
+                        <Image style={styles.image} source={{uri: image}} key={i}/>
                     ))}
                 </ScrollView>
             </View>
