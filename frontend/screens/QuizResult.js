@@ -47,7 +47,7 @@ export default function QuizResultScreen({ navigation, route }) {
                             );
                         }}
                     />
-                    <Text style={styles.text}>
+                    <Text style={[styles.text, {textAlign: 'center'}]}>
                         {
                             success ? 'Your performance was excellent.' 
                                     : 'Your performance was not satisfactory.'
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 30,
         padding: 10,
-        marginTop: 60,
+        marginTop: 100,
     },
     title: {
         fontSize: 20,
@@ -92,14 +92,17 @@ const styles = StyleSheet.create({
     separator: {
         width: 220,
         height: 5,
-        marginHorizontal: 'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
         marginBottom: 20,
     },
     resultsList: {
         marginVertical: 20, 
-        marginHorizontal: 'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
     result: {
         fontSize: 25,
+        fontFamily: 'OldStandardTT_400Regular',  // Special Elite
     }
 });

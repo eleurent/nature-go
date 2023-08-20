@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Pressable, Text, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, Pressable, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
 
 
 
@@ -11,21 +11,22 @@ export default function QuizButton({ label, theme, onPress, selected }) {
                 style={[styles.buttonContainer, {}]}
             >
                 <TouchableHighlight 
-                    style={[
-                        styles.button,
-                        styles.choiceButton,
-                        selected ? styles.selectedButton : {}
-                    ]}
+                    style={[styles.buttonTouchable, styles.choiceButtonTouchable, selected ? styles.selectedButtonTouchable : {}]}
                     onPress={onPress}
                     activeOpacity={0.85}
                     underlayColor={'#7AB5D7'}
                 >
-                    <Text 
-                        style={[
-                            styles.buttonLabel,
-                            styles.choiceButtonLabel,
-                            selected ? styles.selectedChoiceButtonLabel : {}]}
-                    >{label}</Text>
+                    <View style={[
+                        styles.button,
+                        styles.choiceButton,
+                    ]}>
+                        <Text 
+                            style={[
+                                styles.buttonLabel,
+                                styles.choiceButtonLabel,
+                                selected ? styles.selectedChoiceButtonLabel : {}]}
+                        >{label}</Text>
+                    </View>
                 </TouchableHighlight>
             </View>
         );
@@ -35,6 +36,7 @@ export default function QuizButton({ label, theme, onPress, selected }) {
             <Pressable 
                 style={({ pressed }) => [
                     styles.button,
+                    styles.buttonTouchable,
                     pressed ? styles.pressedButton : {}
                 ]} 
                 onPress={onPress}>
@@ -47,35 +49,37 @@ export default function QuizButton({ label, theme, onPress, selected }) {
 const styles = StyleSheet.create({
     buttonContainer: {
         width: 283,
-        // marginHorizontal: 'auto',
         marginLeft: 'auto',
         marginRight: 'auto',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 3,
     },
-    button: {
+    buttonTouchable: {
         borderRadius: 10,
         width: '100%',
         paddingVertical: 5,
         paddingHorizontal: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        backgroundColor: '#64C242',
-
-        overflow: 'visible',
     },
-    choiceButton: {
-        backgroundColor: "none", 
+    choiceButtonTouchable: {
         borderWidth: 1,
         borderColor: "#ababab",
         borderRadius: 18,
     },
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        backgroundColor: '#64C242',
+        overflow: 'visible',
+    },
+    choiceButton: {
+        backgroundColor: "none", 
+    },
     pressedButton: {
         backgroundColor: '#539F38',
     },
-    selectedButton: {
+    selectedButtonTouchable: {
         backgroundColor: '#DEF1FE',
         borderColor: '#8AD4FD'
     },
