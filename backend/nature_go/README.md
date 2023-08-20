@@ -1,12 +1,16 @@
 # Nature go
 
-Run with
+Run:
 
 ```heroku local```
 or
 
 ```heroku local windows```
 
-or
+See logs:
+
+```heroku logs --tail```
+
+Run django directly:
 
 ```python manage.py runserver```
