@@ -11,6 +11,7 @@ import SignInScreen from './screens/SignIn'
 import SignUpScreen from './screens/SignUp'
 import SpeciesListScreen from './screens/SpeciesList';
 import SpeciesDetailScreen from './screens/SpeciesDetail';
+import ObservationConfirmScreen from './screens/ObservationConfirm';
 import QuizDetailScreen from './screens/QuizDetail';
 import QuizQuestionScreen from './screens/QuizQuestion';
 import QuizResultScreen from './screens/QuizResult';
@@ -61,6 +62,7 @@ export default function App() {
             <Stack.Screen name="Home" component={HomeScreen}/>
             <Stack.Screen name="SpeciesList" component={SpeciesListScreen}/>
             <Stack.Screen name="SpeciesDetail" component={SpeciesDetailScreen}/>
+            <Stack.Screen name="ObservationConfirm" component={ObservationConfirmScreen}/>
             <Stack.Screen name="QuizDetail" component={QuizDetailScreen}/>
             <Stack.Screen name="QuizQuestion" component={QuizQuestionScreen}/>
             <Stack.Screen name="QuizResult" component={QuizResultScreen}/>

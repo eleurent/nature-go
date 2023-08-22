@@ -23,8 +23,8 @@ const pickImageAsync = async (navigation) => {
         })
         .then(response => {
             console.log(response);
-            console.log(response.data.species);
-            navigation.navigate('SpeciesDetail', { id: response.data.species })
+            // console.log(response.data.species);
+            navigation.navigate('ObservationConfirm', { id: response.data.id })
         })
         .catch(error => console.log(error));
     } else {

@@ -66,7 +66,7 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        idx = request.data['species']  # index of the correct species in the identification response, not species pk
+        idx = int(request.data['species'])  # index of the correct species in the identification response, not species pk
         species_data = instance.identification_response['results'][idx]['species']
         species, created = Species.objects.get_or_create(
             scientificName=species_data['scientificNameWithoutAuthor'],
