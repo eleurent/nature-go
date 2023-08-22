@@ -7,11 +7,12 @@ from observation.models import Observation, Species
 
 class ObservationSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
+    identification_response = serializers.ReadOnlyField()
     image = Base64ImageField(required=True)
 
     class Meta:
         model = Observation
-        fields = ['id', 'user', 'image', 'species', 'location', 'datetime']
+        fields = ['id', 'user', 'image', 'species', 'location', 'datetime', 'identification_response']
 
 class SpeciesSerializer(serializers.ModelSerializer):
     illustration_url = serializers.SerializerMethodField()

@@ -1,12 +1,12 @@
 import logging
-import requests
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser
 from rest_framework import serializers
 
 from observation.models import Species, Observation
 from observation.serializers import ObservationSerializer, SpeciesSerializer
+from observation.permissions import IsOwner
+from observation import identification
 
 logger = logging.getLogger(__name__)
 
@@ -38,45 +38,6 @@ class SpeciesObservationsList(generics.ListAPIView):
         species_id = self.kwargs['pk']
         return Observation.objects.filter(user=user, species=species_id)
 
-def read_exif(image_path):
-    import PIL.Image
-    import PIL.ExifTags
-    import datetime
-    location = {}
-    datetime_ = ''
-    img = PIL.Image.open(image_path)
-    exif = img._getexif()
-    if not exif:
-        logger.error('No exif found.')
-    else:
-        exif = {PIL.ExifTags.TAGS[k]: v
-                for k, v in exif.items() if k in PIL.ExifTags.TAGS}
-        location = {PIL.ExifTags.GPSTAGS.get(key,key): str(exif['GPSInfo'][key])
-                    for key in exif.get('GPSInfo', {})}
-        datetime_ = exif.get('DateTime', '')
-    if datetime_:
-        datetime_ = datetime.datetime.strptime(datetime_, '%Y:%m:%d %H:%M:%S')
-    else:
-        logger.error('Found no datetime, setting it to now.')
-        datetime_ = datetime.datetime.now()
-    return location, datetime_
-
-def plantnet_identify(image_path):
-    url = 'https://my-api.plantnet.org/v2/identify/all'
-    image_data =  open(image_path, 'rb')
-    files = [
-        ('images', (image_path, image_data))
-    ]
-    params = {
-        'include-related-images': True,
-        'lang': 'en',
-        'api-key': '2b10OHTHDcLlYXiJYoOA2bYeOO'
-    }
-    data = {'organs': ['flower']}
-    response = requests.post(url, files=files, data=data, params=params)
-    response.raise_for_status()
-    result = response.json()
-    return result
 
 class ObservationCreate(generics.CreateAPIView):
     serializer_class = ObservationSerializer
@@ -88,21 +49,34 @@ class ObservationCreate(generics.CreateAPIView):
         except serializers.ValidationError as e:
             logger.error(e)
             raise e
+        # Save the serializer first so we can access the image
         observation = serializer.save(user=self.request.user)
-        result = plantnet_identify(observation.image.path)
-        species_data = result['results'][0]['species']
-        # TODO: Get based on scientificName(pk), other fields set as default for creation only
-        species, created = Species.objects.get_or_create(
-            name=species_data['scientificNameWithoutAuthor'],
-            commonNames=species_data['commonNames'],
-            scientificName=species_data['scientificNameWithoutAuthor'],
-            genus=species_data['genus']['scientificNameWithoutAuthor'],
-            family=species_data['family']['scientificNameWithoutAuthor'],
-        )
-        observation.species = species
-        location, datetime_ = read_exif(observation.image.path)
-        observation.location = location
-        observation.datetime = datetime_
+        observation.identification_response = identification.plantnet_identify(observation.image.path)
+        observation.location, observation.datetime = identification.read_exif(observation.image.path)
         observation.save()
         serializer = ObservationSerializer(instance=observation)
         return Response(serializer.data)
+
+
+class ObservationUpdate(generics.RetrieveUpdateAPIView):
+
+    serializer_class = ObservationSerializer
+    queryset = Observation.objects.all()
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        idx = request.data['species']  # index of the correct species in the identification response, not species pk
+        species_data = instance.identification_response['results'][idx]['species']
+        species, created = Species.objects.get_or_create(
+            scientificName=species_data['scientificNameWithoutAuthor'],
+            defaults=dict(
+                name=species_data['scientificNameWithoutAuthor'],
+                commonNames=species_data['commonNames'],
+                genus=species_data['genus']['scientificNameWithoutAuthor'],
+                family=species_data['family']['scientificNameWithoutAuthor'],
+            )
+        )
+        instance.species = species
+        instance.save()
+        return Response(self.get_serializer(instance).data)

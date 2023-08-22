@@ -8,4 +8,5 @@ urlpatterns = format_suffix_patterns([
     path('<int:pk>/', views.SpeciesDetail.as_view(), name='species-detail'),
     path('<int:pk>/observations/', views.SpeciesObservationsList.as_view(), name='species-observations-list'),
     path('observation/', views.ObservationCreate.as_view(), name='observations-create'),
+    path('observation/<int:pk>/', views.ObservationUpdate.as_view(), name='observations-update'),
 ])

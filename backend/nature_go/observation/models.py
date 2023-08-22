@@ -23,6 +23,7 @@ class Observation(models.Model):
     image = models.ImageField(upload_to='media/observation_image')
     species = models.ForeignKey(Species, on_delete=models.CASCADE, blank=True, null=True)
     location = models.JSONField(default=dict, blank=True)
+    identification_response = models.JSONField(default=dict, blank=True)
     datetime = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
