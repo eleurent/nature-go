@@ -5,6 +5,10 @@
 
 A generative AI project
 
+<a href="https://expo.dev/@eleurent/nature-go?serviceType=eas&distribution=expo-go&scheme=exp%2Bnature-go&channel=main">
+  <img src="https://qr.expo.dev/eas-update?appScheme=exp&projectId=1b735d98-b598-406c-9235-ab43e10a0755&channel=main&runtimeVersion=exposdk%3A48.0.0&host=u.expo.dev" width="200" height="200">
+</a>
+
 ## Summary
 
 Inspired by Pokemon Go, this app is an augmented reality game about discovering and observing wildlife.
