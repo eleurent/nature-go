@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, ImageBackground } from 'react-native';
+import { HeaderBackButton } from '@react-navigation/elements'
 import axios from 'axios';
 import Constants from 'expo-constants'
 import Carousel from '../components/Carousel';
@@ -29,6 +30,19 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         fetchSpeciesDetails();
         fetchSpeciesObservations();
     }, []);
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+          headerLeft: (props) => (
+            <HeaderBackButton
+              {...props}
+              onPress={() => {
+                navigation.navigate('SpeciesList');
+              }}
+            />
+          ),
+        });
+      }, [navigation]);
 
     let illustration_url = ("illustration_url" in speciesDetails) ? 
                            speciesDetails.illustration_url.replace('http://localhost/', API_URL) : null;
