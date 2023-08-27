@@ -6,7 +6,6 @@ import axios from 'axios';
 import Constants from 'expo-constants'
 
 const API_URL = Constants.expoConfig.extra.API_URL;
-const URL_CREATE_OBSERVATION = API_URL + 'api/species/observation/'
 
 const pickImageAsync = async (navigation) => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -16,17 +15,7 @@ const pickImageAsync = async (navigation) => {
     });
 
     if (!result.canceled) {
-        let formData = new FormData();
-        formData.append('image', result.assets[0].base64);
-        axios.post(URL_CREATE_OBSERVATION, formData, {
-            headers: {'Content-Type': 'multipart/form-data'}
-        })
-        .then(response => {
-            console.log(response);
-            // console.log(response.data.species);
-            navigation.navigate('ObservationConfirm', { id: response.data.id })
-        })
-        .catch(error => console.log(error));
+        navigation.navigate('ObservationConfirm', { imageBase64: result.assets[0].base64, isLoading: true });
     } else {
         console.log('You did not select any image.');
     }
