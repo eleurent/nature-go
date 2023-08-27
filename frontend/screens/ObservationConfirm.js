@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, Platform, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground, Platform, TouchableOpacity , ActivityIndicator} from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants'
 import { FlatList } from 'react-native-gesture-handler';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
+const URL_CREATE_OBSERVATION = API_URL + 'api/species/observation/'
 const OBSERVATION_URL = (id) => API_URL + `api/species/observation/${id}/`
 const NUM_CANDIDATES = 3; // Number of candidates to display
 const PROBABILITY_THRESHOLD = 0.25; // Minimum probability to display a candidate
@@ -47,18 +48,35 @@ export default function ObservationConfirmScreen({ navigation, route }) {
 
     const [observation, setObservation] = useState(null);
     const [imageURL, setImageURL] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [observationID, setObservationID] = useState(null);
+    const [imageBase64, setImageBase64] = useState(route.params.imageBase64);
+
+
 
     useEffect(() => {
-        const fetchObservation = async () => {
-            const response = await axios.get(OBSERVATION_URL(route.params.id));
-            console.log(response.data);
-            console.log(response.data.image);
-            setObservation(response.data);
-            setImageURL(response.data.image);
+        const postImageAndFetchObservation = async () => {
+            if (imageBase64 && !observationID) {
+                let formData = new FormData();
+                formData.append('image', imageBase64);
+                
+                const response = await axios.post(URL_CREATE_OBSERVATION, formData, {
+                    headers: {'Content-Type': 'multipart/form-data'}
+                });
+                
+                setObservationID(response.data.id);
+            }
+
+            if (observationID) {
+                const response = await axios.get(OBSERVATION_URL(observationID));
+                setObservation(response.data);
+                setImageURL(response.data.image);
+                setIsLoading(false);
+            }
         };
 
-        fetchObservation();
-    }, []);
+        postImageAndFetchObservation();
+    }, [observationID]);
 
     let has_results = observation && observation.identification_response && observation.identification_response.results;
     let topNResults = has_results 
@@ -70,30 +88,40 @@ export default function ObservationConfirmScreen({ navigation, route }) {
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
-                {imageURL && (
+                {imageBase64 ? (
                     <Image
                         style={styles.coverImage}
-                        source={{ uri: imageURL }}
+                        source={{ uri: `data:image/png;base64,${imageBase64}` }}
                     />
-                )}
-                {has_results ? <FlatList
-                    style={{ marginTop: 60 }}
-                    vertical
-                    numColumns={1}
-                    showsVerticalScrollIndicator={Platform.OS === 'web'}
-                    data={topNResults}
-                    contentContainerStyle={{}}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <SpeciesCandidate
-                                key={index} item={item} onPress={() => confirmSpeciesAsync(observation.id, index, navigation)}
-                            />
-                        );
-                    }}
-                />: null}
+                ) : null}
+                { isLoading ? (
+                    <View style={styles.loadingContainer}>
+                        <ActivityIndicator size={80} color="#00ff00" />
+                        <Text>Identifying the plant...</Text>
+                    </View>
+                ) :
+                (has_results ? 
+                    <FlatList
+                        style={{ marginTop: 60 }}
+                        vertical
+                        numColumns={1}
+                        showsVerticalScrollIndicator={Platform.OS === 'web'}
+                        data={topNResults}
+                        contentContainerStyle={{}}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <SpeciesCandidate
+                                    key={index}
+                                    item={item}
+                                    onPress={() => confirmSpeciesAsync(observation.id, index, navigation)}
+                                />
+                            );
+                        }}
+                    /> 
+                : null)}
             </ImageBackground>
         </View>
-    )
+    );
 };
 
 
@@ -115,7 +143,13 @@ const styles = StyleSheet.create({
     textContainer: {
         flex: 1,
         marginLeft: 8,
-        justifyContent: 'space-between' // Added this to distribute vertical space
+        justifyContent: 'space-between'
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontFamily: 'SpecialElite_400Regular'
     },
     candidateImage: { 
         width: 100, 
