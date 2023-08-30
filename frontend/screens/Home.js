@@ -1,25 +1,6 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Image, Button, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ImageBackground, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as ImagePicker from 'expo-image-picker';
-import axios from 'axios';
-import Constants from 'expo-constants'
 
-const API_URL = Constants.expoConfig.extra.API_URL;
-
-const pickImageAsync = async (navigation) => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-        base64: true,
-        allowsEditing: true,
-        quality: 1,
-    });
-
-    if (!result.canceled) {
-        navigation.navigate('ObservationConfirm', { imageBase64: result.assets[0].base64, isLoading: true });
-    } else {
-        console.log('You did not select any image.');
-    }
-};
 
 const CategoryButton = (props) => {
     const opacity = props.disabled ? 0.3 : 1;
@@ -41,7 +22,6 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
                 <SafeAreaView style={{flex: 1}}>
-                
                 <View style={styles.containerInsideImage}>
                     <Text style={styles.title}>CONTENTS.</Text>
                     <Image source={require('../assets/images/separator.png')} style={styles.separator} />
@@ -93,7 +73,7 @@ export default function HomeScreen({ navigation }) {
                         <TouchableOpacity
                             style={styles.avatarTouchable}
                             activeOpacity={0.5}
-                            onPress={() => pickImageAsync(navigation)}>
+                                onPress={() => navigation.navigate('Camera')}>
                             <Image style={[styles.categoryImage, styles.cameraImage]}
                                 source={require('../assets/images/binoculars.png')}
                             />
