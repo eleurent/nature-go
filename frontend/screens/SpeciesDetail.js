@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground, FlatList, Platform } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/elements'
 import axios from 'axios';
 import Constants from 'expo-constants'
@@ -58,9 +58,21 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                 <View style={styles.textContainer}>
                     <Text style={[styles.speciesName, styles.nameContainer]}>{speciesDetails.display_name ? speciesDetails.display_name : "Name"}</Text>
                     <Text style={[styles.speciesScientificName, styles.nameContainer]}>{speciesDetails.scientificName ? speciesDetails.scientificName : "Scientific name"}</Text>
-                    <Text style={styles.descriptionText}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse gravida magna non feugiat dapibus. Maecenas luctus lacus et tortor rutrum, in vulputate elit pharetra. Fusce rhoncus ipsum id neque ultrices, eu efficitur nisi luctus. Maecenas tristique justo at interdum pulvinar. Nunc non venenatis ipsum, sit amet venenatis ligula
-                    </Text>
+                    <FlatList
+                        style={{ marginTop: 60 }}
+                        vertical
+                        numColumns={2}
+                        showsVerticalScrollIndicator={Platform.OS === 'web'}
+                        data={speciesDetails.descriptions}
+                        contentContainerStyle={{}}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <Text key={index} style={styles.descriptionText}>
+                                    { item }
+                                </Text>
+                            );
+                        }}
+                    />
                 </View>
                 <Carousel images={ speciesObservations.map(o => {
                     return o.image.replace('http://localhost/', API_URL);
