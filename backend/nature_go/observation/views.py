@@ -19,6 +19,12 @@ class SpeciesList(generics.ListAPIView):
         return Species.objects.filter(observation__user=user).distinct()
 
 
+class SpeciesAllList(generics.ListCreateAPIView):
+    serializer_class = SpeciesSerializer
+    queryset = Species.objects.all()
+    permission_classes = [permissions.IsAdminUser]
+
+
 class SpeciesDetail(generics.RetrieveUpdateAPIView):
     queryset = Species.objects.all()
     serializer_class = SpeciesSerializer
