@@ -6,6 +6,12 @@ class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
         model = MultipleChoiceQuestion
         fields = ['id', 'species', 'question', 'choices']
 
+class AdminMultipleChoiceQuestionSerializer(MultipleChoiceQuestionSerializer):
+    # Same with added correct_choice field
+    class Meta:
+        model = MultipleChoiceQuestion
+        fields = ['id', 'species', 'question', 'choices', 'correct_choice']
+
 
 class MultipleChoiceUserAnswerSerializer(serializers.ModelSerializer):
     is_correct = serializers.ReadOnlyField()

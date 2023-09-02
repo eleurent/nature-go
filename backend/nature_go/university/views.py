@@ -1,12 +1,18 @@
 from rest_framework import generics, permissions
-from rest_framework.response import Response
 from .models import MultipleChoiceQuestion, Quiz
-from .serializers import QuizSerializer
+from .serializers import QuizSerializer, AdminMultipleChoiceQuestionSerializer
 from .permissions import IsOwner
 import random
 from django.utils import timezone
 from datetime import timedelta
 from django.shortcuts import redirect
+
+
+class MultipleChoiceQuestionListCreate(generics.ListCreateAPIView):
+    queryset = MultipleChoiceQuestion.objects.all()
+    serializer_class = AdminMultipleChoiceQuestionSerializer
+    permission_classes = [permissions.IsAdminUser]
+
 
 class QuizCreateView(generics.CreateAPIView):
     queryset = Quiz.objects.all()
