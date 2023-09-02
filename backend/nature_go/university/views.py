@@ -14,6 +14,12 @@ class MultipleChoiceQuestionListCreate(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAdminUser]
 
 
+class MultipleChoiceQuestionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = MultipleChoiceQuestion.objects.all()
+    serializer_class = AdminMultipleChoiceQuestionSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
 class QuizCreateView(generics.CreateAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
