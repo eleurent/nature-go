@@ -6,9 +6,9 @@ import observation
 
 class MultipleChoiceQuestion(models.Model):
     species = models.ForeignKey(observation.models.Species, on_delete=models.CASCADE)
-    prompt = models.TextField()
-    answers = models.JSONField(default=list)
-    correct_answer = models.IntegerField()  # don't serialize ;)
+    question = models.TextField()
+    choices = models.JSONField(default=list)
+    correct_choice = models.IntegerField()  # don't serialize ;)
 
     def __str__(self):
         return f'{self.species.name} - {self.prompt}'
@@ -35,4 +35,4 @@ class MultipleChoiceUserAnswer(models.Model):
 
     @property
     def is_correct(self):
-        return self.user_answer == self.question.correct_answer
+        return self.user_answer == self.question.correct_choice

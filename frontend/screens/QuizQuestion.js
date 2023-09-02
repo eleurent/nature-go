@@ -36,13 +36,13 @@ export default function QuizQuestionScreen({ navigation, route }) {
         <View style={styles.container} >
             <ImageBackground source={require('../assets/images/page-background-2.png')} style={styles.containerImage}>
                 <View style={styles.outline}>
-                    <Text style={styles.prompt}>{question.prompt }</Text>
+                    <Text style={styles.question}>{question.question }</Text>
                     <FlatList
                         style={{ marginTop: 40 }}
                         vertical
                         numColumns={1}
                         showsVerticalScrollIndicator={Platform.OS === 'web'}
-                        data={question.answers}
+                        data={question.choices}
                         contentContainerStyle={{}}
                         renderItem={({ item, index }) => {
                             return (
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         padding: 10,
         marginTop: 60,
     },
-    prompt: {
+    question: {
         fontSize: 29,
         letterSpacing: 1.5,
         textAlign: 'center',

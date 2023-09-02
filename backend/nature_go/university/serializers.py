@@ -4,7 +4,7 @@ from .models import MultipleChoiceQuestion, Quiz, MultipleChoiceUserAnswer
 class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = MultipleChoiceQuestion
-        fields = ['id', 'species', 'prompt', 'answers']
+        fields = ['id', 'species', 'question', 'choices']
 
 
 class MultipleChoiceUserAnswerSerializer(serializers.ModelSerializer):

@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from .models import MultipleChoiceQuestion, Quiz, MultipleChoiceUserAnswer
-from .serializers import MultipleChoiceQuestionSerializer, QuizSerializer, MultipleChoiceUserAnswerSerializer
+from .models import MultipleChoiceQuestion, Quiz
+from .serializers import QuizSerializer
 from .permissions import IsOwner
 import random
 from django.utils import timezone
