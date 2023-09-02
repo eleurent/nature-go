@@ -12,6 +12,12 @@ class Species(models.Model):
     genus = models.CharField(max_length=255)
     family = models.CharField(max_length=255)
 
+    descriptions = models.JSONField(default=list)
+
+    illustration = models.ImageField(upload_to='media/illustration', blank=True)
+    illustration_transparent = models.ImageField(upload_to='media/illustration_transparent', blank=True)
+    wikipedia_image_url = models.URLField(max_length=255, blank=True)
+
     def __str__(self):
         return self.name
 

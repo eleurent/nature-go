@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from observation.models import Species, Observation
 from observation.serializers import ObservationSerializer, SpeciesSerializer
-from observation.permissions import IsOwner
+from observation.permissions import IsOwner, IsAdminOrReadOnly
 from observation import identification
 
 logger = logging.getLogger(__name__)
@@ -19,11 +19,11 @@ class SpeciesList(generics.ListAPIView):
         return Species.objects.filter(observation__user=user).distinct()
 
 
-class SpeciesDetail(generics.RetrieveAPIView):
+class SpeciesDetail(generics.RetrieveUpdateAPIView):
     queryset = Species.objects.all()
     serializer_class = SpeciesSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
-    
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context.update({"request": self.request})

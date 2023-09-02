@@ -1,6 +1,16 @@
 from rest_framework import permissions
 
 
+class IsAdminOrReadOnly(permissions.IsAdminUser):
+    """
+    The request is authenticated as a user, or is a read-only request.
+    """
+    SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS']
+
+    def has_permission(self, request, view):
+        return super().has_permission(request, view) or request.method in self.SAFE_METHODS
+
+
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to edit it.
