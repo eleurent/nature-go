@@ -24,10 +24,13 @@ jobs:
 
       - name: deploy new source on server
         uses: appleboy/ssh-action@master
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
+          allenvs: true
           script: |
             cd /srv/nature-go/
             python3 -m venv venv
