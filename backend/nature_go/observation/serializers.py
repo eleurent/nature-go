@@ -22,7 +22,7 @@ class SpeciesSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Species
-        fields = ['id', 'name', 'commonNames', 'scientificName', 'genus', 'family', 'descriptions', 'illustration', 'illustration_transparent', 'wikipedia_image_url', 'illustration_url', 'display_name',]
+        fields = ['id', 'commonNames', 'scientificName', 'scientificNameWithoutAuthor', 'genus', 'family', 'descriptions', 'illustration', 'illustration_transparent', 'wikipedia_image_url', 'illustration_url', 'display_name',]
 
     def get_illustration_url(self, obj):
         request = self.context.get('request')
