@@ -15,10 +15,9 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# BASE_URL = 'https://eleurent-curly-space-umbrella-jrjrw4g7rvfqgq-8000.preview.app.github.dev'
+# BASE_URL = 'https://nature-go-234686133b92.herokuapp.com'
 # BASE_URL = 'http://localhost/'
-BASE_URL = 'https://nature-go-234686133b92.herokuapp.com'
-
+BASE_URL = 'http://nature-go.edouardleurent.com'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/

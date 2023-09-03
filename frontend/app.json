@@ -28,9 +28,9 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "REMOTE_API_URL": "https://nature-go-234686133b92.herokuapp.com/",
+      "REMOTE_API_URL": "http://nature-go.edouardleurent.com/",
       "LOCAL_API_URL": "http://localhost:8000/",
-      "API_URL": "https://nature-go-234686133b92.herokuapp.com/",
+      "API_URL": "http://nature-go.edouardleurent.com/",
       "eas": {
         "projectId": "1b735d98-b598-406c-9235-ab43e10a0755"
       }
