@@ -6,13 +6,13 @@ from django.contrib.auth.models import User
 from django.contrib.staticfiles import finders
 
 class Species(models.Model):
-    commonNames = models.JSONField(default=list)
+    commonNames = models.JSONField(default=list, blank=True)
     scientificName = models.CharField(max_length=255)
     scientificNameWithoutAuthor = models.CharField(max_length=255)
     genus = models.CharField(max_length=255)
     family = models.CharField(max_length=255)
 
-    descriptions = models.JSONField(default=list)
+    descriptions = models.JSONField(default=list, blank=True)
 
     illustration = models.ImageField(upload_to='species/illustration', blank=True)
     illustration_transparent = models.ImageField(upload_to='species/illustration_transparent', blank=True)
