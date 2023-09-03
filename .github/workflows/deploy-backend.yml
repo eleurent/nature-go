@@ -34,7 +34,7 @@ jobs:
             source venv/bin/activate
             cd /srv/nature-go/nature_go/
             pip install -r requirements.txt
-            python manage.py migrate
-            python manage.py collectstatic --no-input
+            python manage.py migrate --settings=nature_go.settings.production
+            python manage.py collectstatic --no-input --settings=nature_go.settings.production
             systemctl restart gunicorn
             systemctl reload apache2
