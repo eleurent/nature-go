@@ -18,8 +18,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           source: "backend/nature_go/*"
-          target: "/srv/nature-go"
-          strip_components: 2
+          target: "/srv/nature-go/nature_go"
+          strip_components: 1
           rm: true
 
       - name: deploy new source on server
@@ -32,6 +32,7 @@ jobs:
             cd /srv/nature-go/
             python -m venv venv
             source venv/bin/activate
+            cd /srv/nature-go/nature_go/
             pip install -r requirements.txt
             python manage.py migrate
             python manage.py collectstatic --no-input
