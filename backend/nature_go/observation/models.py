@@ -14,8 +14,8 @@ class Species(models.Model):
 
     descriptions = models.JSONField(default=list)
 
-    illustration = models.ImageField(upload_to='media/illustration', blank=True)
-    illustration_transparent = models.ImageField(upload_to='media/illustration_transparent', blank=True)
+    illustration = models.ImageField(upload_to='species/illustration', blank=True)
+    illustration_transparent = models.ImageField(upload_to='species/illustration_transparent', blank=True)
     wikipedia_image_url = models.URLField(max_length=255, blank=True)
 
     def __str__(self):
@@ -26,7 +26,7 @@ class Species(models.Model):
 
 class Observation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='media/observation_image')
+    image = models.ImageField(upload_to='observation/image')
     species = models.ForeignKey(Species, on_delete=models.CASCADE, blank=True, null=True)
     location = models.JSONField(default=dict, blank=True)
     identification_response = models.JSONField(default=dict, blank=True)
