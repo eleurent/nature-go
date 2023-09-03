@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # BASE_URL = 'https://eleurent-curly-space-umbrella-jrjrw4g7rvfqgq-8000.preview.app.github.dev'
 # BASE_URL = 'http://localhost/'
@@ -22,15 +22,6 @@ BASE_URL = 'https://nature-go-234686133b92.herokuapp.com'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-1j-2oj3cz9z_2wyib-bc*p)gx_+k3-90@n1&)knyzy3%s^hwj0'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -80,17 +71,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'nature_go.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 
 # Password validation
@@ -163,5 +143,5 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 
 
-import django_heroku
-django_heroku.settings(locals())
+# import django_heroku
+# django_heroku.settings(locals())
