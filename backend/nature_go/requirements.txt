@@ -4,4 +4,4 @@ djangorestframework
 drf-extra-fields
 requests
 Pillow
-gnunicorn
+gunicorn
