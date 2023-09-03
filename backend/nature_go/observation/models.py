@@ -6,9 +6,9 @@ from django.contrib.auth.models import User
 from django.contrib.staticfiles import finders
 
 class Species(models.Model):
-    name = models.CharField(max_length=255)
     commonNames = models.JSONField(default=list)
     scientificName = models.CharField(max_length=255)
+    scientificNameWithoutAuthor = models.CharField(max_length=255)
     genus = models.CharField(max_length=255)
     family = models.CharField(max_length=255)
 

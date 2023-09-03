@@ -75,9 +75,9 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
         idx = int(request.data['species'])  # index of the correct species in the identification response, not species pk
         species_data = instance.identification_response['results'][idx]['species']
         species, created = Species.objects.get_or_create(
-            scientificName=species_data['scientificNameWithoutAuthor'],
+            scientificName=species_data['scientificName'],
             defaults=dict(
-                name=species_data['scientificNameWithoutAuthor'],
+                scientificNameWithoutAuthor=species_data['scientificNameWithoutAuthor'],
                 commonNames=species_data['commonNames'],
                 genus=species_data['genus']['scientificNameWithoutAuthor'],
                 family=species_data['family']['scientificNameWithoutAuthor'],
