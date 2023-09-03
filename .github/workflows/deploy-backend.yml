@@ -27,7 +27,8 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          key:  ${{ secrets.SSH_KEY }}
+          passphrase:  ${{ secrets.SSH_KEY_PASSPHRASE }}
           script: |
             cd /srv/nature-go/
             python3 -m venv venv
@@ -37,5 +38,5 @@ jobs:
             export SECRET_KEY=${{ secrets.SECRET_KEY }}
             python manage.py migrate --settings=nature_go.settings.production
             python manage.py collectstatic --no-input --settings=nature_go.settings.production
-            systemctl restart gunicorn
-            systemctl reload apache2
+            sudo systemctl restart gunicorn
+            sudo systemctl reload apache2
