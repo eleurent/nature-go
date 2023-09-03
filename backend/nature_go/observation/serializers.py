@@ -24,15 +24,14 @@ class SpeciesSerializer(serializers.ModelSerializer):
         model = Species
         fields = ['id', 'name', 'commonNames', 'scientificName', 'genus', 'family', 'descriptions', 'illustration', 'illustration_transparent', 'wikipedia_image_url', 'illustration_url', 'display_name',]
 
-    def has_illustration(self, obj):
-        return finders.find(f'species/{obj.scientificName}/illustration_transparent.png') is not None
-    
     def get_illustration_url(self, obj):
         request = self.context.get('request')
-        if self.has_illustration(obj):
-            return request.build_absolute_uri(f'/static/species/{obj.scientificName}/illustration_transparent.png')
+        if obj.illustration_transparent:
+            return obj.illustration_transparent
+        elif obj.illustration_transparent:
+            return obj.illustration_transparent
         else:
-            return request.build_absolute_uri(f'/static/species/unknown/illustration_transparent.png')
+            return request.build_absolute_uri('/static/img/unkown_species_illustration_transparent.png')
     
     def get_display_name(self, obj):
         return obj.commonNames[0] if obj.commonNames else obj.scientificName
