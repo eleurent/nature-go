@@ -16,8 +16,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.PORT }}
+          password: ${{ secrets.SSH_PASSWORD }}
           source: "backend/nature_go/*"
           target: "/srv/nature-go"
           strip_components: 2
@@ -28,7 +27,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PASSWORD }}
+          password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd /srv/nature-go/
             python -m venv venv
