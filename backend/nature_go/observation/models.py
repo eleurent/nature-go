@@ -19,7 +19,7 @@ class Species(models.Model):
     wikipedia_image_url = models.URLField(max_length=255, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.scientificNameWithoutAuthor
 
     class Meta:
         verbose_name_plural = 'Species'

@@ -11,7 +11,7 @@ class MultipleChoiceQuestion(models.Model):
     correct_choice = models.IntegerField()  # don't serialize ;)
 
     def __str__(self):
-        return f'{self.species.name} - {self.prompt}'
+        return f'{self.species.scientificNameWithoutAuthor} - {self.prompt}'
 
 
 class Quiz(models.Model):
