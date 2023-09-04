@@ -57,7 +57,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                 />
                 <View style={styles.textContainer}>
                     <Text style={[styles.speciesName, styles.nameContainer]}>{speciesDetails.display_name ? speciesDetails.display_name : "Name"}</Text>
-                    <Text style={[styles.speciesScientificName, styles.nameContainer]}>{speciesDetails.scientificName ? speciesDetails.scientificName : "Scientific name"}</Text>
+                    <Text style={[styles.speciesScientificName, styles.nameContainer]}>{speciesDetails.scientificNameWithoutAuthor ? speciesDetails.scientificNameWithoutAuthor : "Scientific name"}</Text>
                     <FlatList
                         style={{ marginTop: 60 }}
                         vertical
