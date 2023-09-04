@@ -15,10 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# BASE_URL = 'https://nature-go-234686133b92.herokuapp.com'
-# BASE_URL = 'http://localhost/'
-BASE_URL = 'http://nature-go.edouardleurent.com'
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -113,6 +109,8 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+MEDIA_URL = '/media/'
+
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10*5242880
 
 # Default primary key field type
@@ -129,18 +127,3 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated'
     ]
 }
-
-# CORS
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:19006',
-    BASE_URL,
-]
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:19006',
-]
-CORS_ALLOW_ALL_ORIGINS = True
-
-
-
-# import django_heroku
-# django_heroku.settings(locals())
