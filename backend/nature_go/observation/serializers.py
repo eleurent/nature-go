@@ -26,10 +26,10 @@ class SpeciesSerializer(serializers.ModelSerializer):
 
     def get_illustration_url(self, obj):
         request = self.context.get('request')
-        if obj.illustration_transparent:
-            return obj.illustration_transparent
-        elif obj.illustration_transparent:
-            return obj.illustration_transparent
+        if bool(obj.illustration_transparent):
+            return request.build_absolute_uri(obj.illustration_transparent.url)
+        elif bool(obj.illustration):
+            return request.build_absolute_uri(obj.illustration.url)
         else:
             return request.build_absolute_uri('/static/img/unkown_species_illustration_transparent.png')
     
