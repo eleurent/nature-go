@@ -5,7 +5,7 @@ export default function LandingScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <ImageBackground source={require('../assets/images/launch.png')} style={styles.containerImage}>
+            <ImageBackground source={require('../assets/splash.png')} style={styles.containerImage}>
                 <View style={{ flex: 1 }}></View>
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('SignUp') }}>
@@ -34,13 +34,14 @@ const styles = StyleSheet.create({
     buttonsContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginBottom: 30
+        marginBottom: 60,
     },
     button: {
         marginHorizontal: 20
     },
     text: {
         fontSize: 24,
-        color: 'white'
+        color: 'white',
+        fontFamily: 'Tinos_400Regular',
     }
 })

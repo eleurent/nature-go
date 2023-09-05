@@ -5,7 +5,6 @@ import * as ImagePicker from 'expo-image-picker';
 import IconButton from '../components/IconButton'
 
 
-
 const pickImageAsync = async (navigation) => {
     let result = await ImagePicker.launchImageLibraryAsync({
         base64: true,
@@ -38,30 +37,31 @@ export default function CameraScreen({ navigation }) {
         const cameraPerm = await Camera.requestCameraPermissionsAsync();
         setCameraPermission(cameraPerm.status === 'granted');
         if (cameraPermission === false)
-            alert('Permission for camera access needed.');
+            console.log('Permission for camera access needed.');
 
         const galleryPerm = await ImagePicker.getMediaLibraryPermissionsAsync();
         setGalleryPermission(galleryPerm.status === 'granted');
         if (galleryPermission === false)
-            alert('Permission for galley access needed.');
+            console.log('Permission for galley access needed.');
     };
 
     useEffect(() => {
         permissionFunction();
     }, []);
 
-        return (
+    return (
         <View style={styles.container}>
-            <View style={styles.cameraContainer}>
-                <Camera
-                    ref={(ref) => setCamera(ref)}
-                    style={styles.fixedRatio}
-                    type={type}
-                    ratio={'1:1'}
-                />
-                    <View style={styles.pictureButton}><IconButton icon="camera" size={64} color="#fff" onPress={() => takePictureAsync(camera, navigation)}/></View>
-                    <View style={styles.galleryButton}><IconButton icon="image" size={32} color="#fff" onPress={() => pickImageAsync(navigation)}/></View>
-            </View>
+            <Camera
+                ref={(ref) => setCamera(ref)}
+                style={styles.cameraContainer}
+                type={type}
+                ratio={'16:9'}
+            >
+                <View style={styles.cameraView}>
+                    <IconButton icon="image" size={32} color="#fff" onPress={() => takePictureAsync(camera, navigation)} extra_style={styles.galleryButtonContainer} />
+                    <IconButton icon="camera" size={70} color="#fff" onPress={() => { }} extra_style={styles.captureButton}/>
+                </View>
+            </Camera>
         </View>
     );
 }
@@ -72,23 +72,22 @@ const styles = StyleSheet.create({
     },
     cameraContainer: {
         flex: 1,
-        flexDirection: 'row',
     },
-    fixedRatio: {
+    cameraView: {
         flex: 1,
-        // aspectRatio: 1,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "flex-end",
+        backgroundColor: "transparent",
     },
-    pictureButton: {
-        position: 'absolute',
-        alignContent: 'center',
-        bottom: 40,
-        left: 0,
-        right: 0,
-        height: 50,
+    captureButton: {
+        width: 70,
+        height: 70,
+        marginBottom: 50,
     },
-    galleryButton: {
-        position: 'absolute',
-        bottom: 20,
+    galleryButtonContainer: {
+        position: "absolute",
         left: 20,
+        bottom: 30,
     },
 });

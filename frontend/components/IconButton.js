@@ -1,12 +1,12 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-export default function IconButton({ icon, label, onPress, size, color }) {
+export default function IconButton({ icon, label, onPress, size, color, extra_style }) {
     return (
-        <Pressable style={[styles.iconButton]} onPress={onPress}>
+        <TouchableOpacity style={[styles.iconButton, extra_style]} onPress={onPress}>
             <MaterialIcons name={icon} size={size} color={color} />
             <Text style={styles.iconButtonLabel}>{label}</Text>
-        </Pressable>
+        </TouchableOpacity>
     );
 }
 

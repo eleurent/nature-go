@@ -35,7 +35,7 @@ export default function App() {
     <QuizContext.Provider value= {{quizState, quizMethods }}>
     <SafeAreaProvider>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerTransparent: true, headerTitle: '' }}>
+            <Stack.Navigator screenOptions={{ headerTransparent: true, headerTitle: '', headerTintColor: 'black' }}>
           {authState.userToken === null ? (
             // User isn't signed in
             <>
@@ -63,7 +63,7 @@ export default function App() {
             <Stack.Screen name="Home" component={HomeScreen}/>
             <Stack.Screen name="SpeciesList" component={SpeciesListScreen}/>
             <Stack.Screen name="SpeciesDetail" component={SpeciesDetailScreen}/>
-            <Stack.Screen name="Camera" component={CameraScreen}/>
+            <Stack.Screen name="Camera" component={CameraScreen} options={{ headerTintColor: 'white' }}/>
             <Stack.Screen name="ObservationConfirm" component={ObservationConfirmScreen}/>
             <Stack.Screen name="QuizDetail" component={QuizDetailScreen}/>
             <Stack.Screen name="QuizQuestion" component={QuizQuestionScreen}/>

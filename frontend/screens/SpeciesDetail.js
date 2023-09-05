@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, ImageBackground, FlatList, Platform } fr
 import { HeaderBackButton } from '@react-navigation/elements'
 import axios from 'axios';
 import Constants from 'expo-constants'
-import Carousel from '../components/Carousel';
+import ObservationCarousel from '../components/ObservationCarousel';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const SPECIES_DETAILS_URL = (id) => API_URL + `api/species/${id}/`
@@ -14,6 +14,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
 
     const [speciesDetails, setSpeciesDetails] = useState({});
     const [speciesObservations, setSpeciesObservations] = useState([]);
+    const [imageModalVisible, setImageModalVisible] = useState(false);
 
     useEffect(() => {
         const fetchSpeciesDetails = async () => {
@@ -57,7 +58,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                 />
                 <View style={styles.textContainer}>
                     <Text style={[styles.speciesName, styles.nameContainer]}>{speciesDetails.display_name ? speciesDetails.display_name : "Name"}</Text>
-                    <Text style={[styles.speciesScientificName, styles.nameContainer]}>{speciesDetails.scientificName ? speciesDetails.scientificName : "Scientific name"}</Text>
+                    <Text style={[styles.speciesScientificName, styles.nameContainer]}>{speciesDetails.scientificNameWithoutAuthor ? speciesDetails.scientificNameWithoutAuthor : "Scientific name"}</Text>
                     <FlatList
                         style={{ marginTop: 60 }}
                         vertical
@@ -74,9 +75,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                         }}
                     />
                 </View>
-                <Carousel images={ speciesObservations.map(o => {
-                    return o.image.replace('http://localhost/', API_URL);
-                }) }/>
+                <ObservationCarousel observations={ speciesObservations }/>
             </ImageBackground>
         </View>
     )
