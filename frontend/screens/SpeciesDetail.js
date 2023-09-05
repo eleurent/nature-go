@@ -4,6 +4,7 @@ import { HeaderBackButton } from '@react-navigation/elements'
 import axios from 'axios';
 import Constants from 'expo-constants'
 import ObservationCarousel from '../components/ObservationCarousel';
+import ObservationImageModal from '../components/ObservationImageModal';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const SPECIES_DETAILS_URL = (id) => API_URL + `api/species/${id}/`
@@ -14,7 +15,9 @@ export default function SpeciesDetailScreen({ navigation, route }) {
 
     const [speciesDetails, setSpeciesDetails] = useState({});
     const [speciesObservations, setSpeciesObservations] = useState([]);
-    const [imageModalVisible, setImageModalVisible] = useState(false);
+    const [modalImage, setModalImage] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+
 
     useEffect(() => {
         const fetchSpeciesDetails = async () => {
@@ -75,7 +78,8 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                         }}
                     />
                 </View>
-                <ObservationCarousel observations={ speciesObservations }/>
+                <ObservationImageModal modalVisible={modalVisible} setModalVisible={setModalVisible} modalImage={modalImage}/>
+                <ObservationCarousel observations={speciesObservations} onImagePress={(image) => {setModalImage(image); setModalVisible(true);}}/>
             </ImageBackground>
         </View>
     )

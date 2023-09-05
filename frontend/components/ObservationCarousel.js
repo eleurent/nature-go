@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, ScrollView, Image, StyleSheet, Text } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Pressable } from 'react-native';
+import { Image } from 'expo-image';
 import MapView from 'react-native-maps';
 
-export default function ObservationCarousel( {observations} ) {
+export default function ObservationCarousel( {observations, onImagePress} ) {
     if (observations) {
         return (
             <View
@@ -16,7 +17,9 @@ export default function ObservationCarousel( {observations} ) {
                     {observations.map((obs, i) => (
                     <View style={styles.carouselCell} key={i}>
                         <View style = {styles.imageContainer}>
-                            <Image style={styles.image} source={{uri: obs.image}}/>
+                                <Pressable style={styles.image}  onPress={() => onImagePress(obs.image)}>
+                                    <Image style={styles.image} source={{ uri: obs.image }} cachePolicy='memory' />
+                                </Pressable>
                             <MapView style={styles.map} />
                         </View>
                         <Text style={styles.dateText}>18th of June 1823.</Text>
@@ -38,7 +41,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 160,
         width: 312,
-        marginLeft: 10,
+        marginLeft: 30,
         padding: 10,
         borderRadius: '15px',
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
