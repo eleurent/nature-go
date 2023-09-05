@@ -11,6 +11,7 @@ BASE_URL = 'http://nature-go.edouardleurent.com'
 LOGIN_URL = BASE_URL + '/api/auth/login/'
 SPECIES_LIST_URL = BASE_URL + '/api/species/all/'
 SPECIES_DETAIL_URL = BASE_URL + '/api/species/{species_id}/'
+QUESTION_CREATE_URL = BASE_URL + '/api/university/quiz/questions/'
 
 @dataclasses.dataclass
 class NatureGoClient:
@@ -51,3 +52,18 @@ class NatureGoClient:
             logger.info(f'Updated illustration for species {species_id}')
         else:
             raise ValueError(f'{SPECIES_DETAIL_URL} failed with status  {response.status_code} and response {response.content}')
+        
+    def post_species_questions(self, species_id: int, questions: list):
+        if self.token is None:
+            raise ValueError('Client is not logged in')
+        
+        for question in questions:
+            response = requests.patch(QUESTION_CREATE_URL,
+                                    headers={'Authorization': f'Token {self.token}'},
+                                    json={
+                                        'species': species_id,
+                                        **question})
+            if response.status_code in [200, 201]:
+                logger.info(f'Posted questions for species {species_id}')
+        else:
+            raise ValueError(f'{QUESTION_CREATE_URL} failed with status  {response.status_code} and response {response.content}')
