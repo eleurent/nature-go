@@ -19,6 +19,7 @@ web-build/
 
 # keys
 frontend/assets/api-key.json
+backend/generation/.env
 
 # django
 backend/nature_go/media

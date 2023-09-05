@@ -53,12 +53,24 @@ class NatureGoClient:
         else:
             raise ValueError(f'{SPECIES_DETAIL_URL} failed with status  {response.status_code} and response {response.content}')
         
+    def get_all_questions(self) -> list:
+        if self.token is None:
+            raise ValueError('Client is not logged in')
+        response = requests.get(QUESTION_CREATE_URL, headers={'Authorization': f'Token {self.token}'})
+        if response.status_code == 200:
+            result = response.json()
+            logger.info(f'Fetched {len(result)} species')
+            return result
+        else:
+            raise ValueError(f'{QUESTION_CREATE_URL} failed with status  {response.status_code} and response {response.json()}')
+
+        
     def post_species_questions(self, species_id: int, questions: list):
         if self.token is None:
             raise ValueError('Client is not logged in')
         
         for question in questions:
-            response = requests.patch(QUESTION_CREATE_URL,
+            response = requests.post(QUESTION_CREATE_URL,
                                     headers={'Authorization': f'Token {self.token}'},
                                     json={
                                         'species': species_id,

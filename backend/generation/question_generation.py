@@ -1,17 +1,16 @@
 import wikipedia
 import openai
 import re
+from question_prompt import *
 
-from backend.generation.gpt_utils import try_except_decorator, get_config, filter_and_get_within_context
+from gpt_utils import try_except_decorator, get_config, filter_and_get_within_context
 
-def parse_questions(questions):
+def parse_questions(questions: str):
     question_set_regex = r"Question (\d+):\n(.+?)\n((?:[A-D]: .+?\n)+)Answer: (\w)"
     question_sets= re.findall(question_set_regex, questions, re.DOTALL)
     output = []
     # Loop through each question set to extract details
     for idx, (q_num, question_text, q_choices, q_answer) in enumerate(question_sets):
-        # Extract choices
-        print(q_choices)
         choices = re.findall(r"\w: (.+)", q_choices)
 
         # Convert letter-based answer to zero-based index
@@ -30,7 +29,7 @@ def parse_questions(questions):
 
 
 @try_except_decorator
-def generate_questions(plant_name, prompt="question_prompt_few_shot", num_try=0):
+def generate_questions(plant_name: str, prompt: str="question_prompt_few_shot", num_try: int=0):
 
     gpt_config = get_config("question_generation")
 
