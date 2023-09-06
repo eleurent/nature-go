@@ -58,8 +58,8 @@ export default function CameraScreen({ navigation }) {
                 ratio={'16:9'}
             >
                 <View style={styles.cameraView}>
-                    <IconButton icon="image" size={32} color="#fff" onPress={() => takePictureAsync(camera, navigation)} extra_style={styles.galleryButtonContainer} />
-                    <IconButton icon="camera" size={70} color="#fff" onPress={() => { }} extra_style={styles.captureButton}/>
+                    <IconButton icon="image" size={32} color="#fff" onPress={() => pickImageAsync(camera, navigation)} extra_style={styles.galleryButtonContainer} />
+                    <IconButton icon="camera" size={70} color="#fff" onPress={() => takePictureAsync(camera, navigation)} extra_style={styles.captureButton}/>
                 </View>
             </Camera>
         </View>
