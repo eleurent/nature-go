@@ -37,17 +37,20 @@ export default function CameraScreen({ navigation }) {
         const cameraPerm = await Camera.requestCameraPermissionsAsync();
         setCameraPermission(cameraPerm.status === 'granted');
         if (cameraPermission === false)
-            console.log('Permission for camera access needed.');
+            alert('Permission for camera access needed. Status: ' + cameraPerm.status);
 
         const galleryPerm = await ImagePicker.getMediaLibraryPermissionsAsync();
         setGalleryPermission(galleryPerm.status === 'granted');
         if (galleryPermission === false)
-            console.log('Permission for galley access needed.');
+            alert('Permission for galley access needed. Status: ' + galleryPerm.status);
     };
 
     useEffect(() => {
         permissionFunction();
     }, []);
+
+    galleryColor = galleryPermission ? "#fff" : "#f00";
+    cameraColor = cameraPermission ? "#fff" : "#f00";
 
     return (
         <View style={styles.container}>
@@ -58,8 +61,8 @@ export default function CameraScreen({ navigation }) {
                 ratio={'16:9'}
             >
                 <View style={styles.cameraView}>
-                    <IconButton icon="image" size={32} color="#fff" onPress={() => pickImageAsync(camera, navigation)} extra_style={styles.galleryButtonContainer} />
-                    <IconButton icon="camera" size={70} color="#fff" onPress={() => takePictureAsync(camera, navigation)} extra_style={styles.captureButton}/>
+                    <IconButton icon="image" size={32} color={galleryColor} onPress={() => pickImageAsync(navigation)} extra_style={styles.galleryButtonContainer} />
+                    <IconButton icon="camera" size={70} color={cameraColor} onPress={() => takePictureAsync(camera, navigation)} extra_style={styles.captureButton}/>
                 </View>
             </Camera>
         </View>
