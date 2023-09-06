@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         width: 312,
         marginLeft: 30,
         padding: 10,
-        borderRadius: '15px',
+        borderRadius: 15,
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
     },
     imageContainer: {
