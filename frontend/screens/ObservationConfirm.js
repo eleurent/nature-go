@@ -35,7 +35,14 @@ const SpeciesCandidate = (props) => {
 const confirmSpeciesAsync = async (observation_id, species_index, navigation) => {
     let formData = new FormData();
     formData.append('species', species_index);
-    axios.patch(OBSERVATION_URL(observation_id), formData)
+    console.log(formData);
+    const config = {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        timeout: 10000 // 10 seconds
+    };
+    axios.patch(OBSERVATION_URL(observation_id), formData, config)
         .then(response => {
             console.log(response);
             navigation.navigate('SpeciesDetail', { id: response.data.species })
