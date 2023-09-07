@@ -1,7 +1,9 @@
 import logging
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, pagination, filters
 from rest_framework.response import Response
 from rest_framework import serializers
+from django.db.models import Q
+import ast
 
 from observation.models import Species, Observation
 from observation.serializers import ObservationSerializer, SpeciesSerializer
@@ -20,10 +22,28 @@ class SpeciesList(generics.ListAPIView):
 
 
 class SpeciesAllList(generics.ListCreateAPIView):
+    """
+        This view should return a list of all the species in the database.
+        It can be filtered, ordered, and paginated.
+        For instance, to get the top-100 species with no illustration
+        and highest number of occurences, use
+        /path/to/view/?illustration__exact=''&ordering=-occurences_cdf&limit=100
+    """
     serializer_class = SpeciesSerializer
-    queryset = Species.objects.all()
     permission_classes = [permissions.IsAdminUser]
+    filter_backends = [filters.OrderingFilter]
+    pagination_class = pagination.LimitOffsetPagination
+    ordering_fields = ['occurences_cdf']
 
+    def get_queryset(self):
+        queryset = Species.objects.all()
+        filters = Q()
+        for param, value in self.request.query_params.items():
+            if param not in [f.name for f in Species._meta.get_fields()]:
+                continue
+            filters &= Q(**{param: ast.literal_eval(value)})
+        queryset = queryset.filter(filters)
+        return queryset
 
 class SpeciesDetail(generics.RetrieveUpdateAPIView):
     queryset = Species.objects.all()

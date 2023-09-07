@@ -1,5 +1,6 @@
 django
 django-cors-headers
+django-filter
 djangorestframework
 drf-extra-fields
 requests
