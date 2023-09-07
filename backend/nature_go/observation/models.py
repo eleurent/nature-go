@@ -7,8 +7,8 @@ from django.contrib.staticfiles import finders
 
 class Species(models.Model):
     commonNames = models.JSONField(default=list, blank=True)
-    scientificName = models.CharField(max_length=255)
-    scientificNameWithoutAuthor = models.CharField(max_length=255, unique=True)
+    scientificName = models.CharField(max_length=255, unique=True)
+    scientificNameWithoutAuthor = models.CharField(max_length=255)
     genus = models.CharField(max_length=255)
     family = models.CharField(max_length=255)
     occurences_cdf = models.FloatField(null=True, blank=True)
