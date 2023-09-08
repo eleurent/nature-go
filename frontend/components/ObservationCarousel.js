@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet, Text, Pressable } from 'react-native';
 import { Image } from 'expo-image';
-import MapView from 'react-native-maps';
+import MapView from './CustomMapView';
 
 export default function ObservationCarousel( {observations, onImagePress} ) {
     if (observations) {
