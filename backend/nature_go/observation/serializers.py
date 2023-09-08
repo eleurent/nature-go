@@ -8,11 +8,19 @@ from observation.models import Observation, Species
 class ObservationSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
     identification_response = serializers.ReadOnlyField()
-    image = Base64ImageField(required=True)
+    image = Base64ImageField(required=False)
 
     class Meta:
         model = Observation
         fields = ['id', 'user', 'image', 'species', 'location', 'datetime', 'identification_response']
+
+    def update(self, instance, validated_data):
+        print('CUSTOM Observation Update')
+        super().update(instance, validated_data)
+        if not instance.xp and instance.species:
+            instance.xp = instance.compute_xp()
+            instance.save()
+        return instance
 
 class SpeciesSerializer(serializers.ModelSerializer):
     illustration = Base64ImageField()

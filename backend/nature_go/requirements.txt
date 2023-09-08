@@ -3,6 +3,7 @@ django-cors-headers
 django-filter
 djangorestframework
 drf-extra-fields
+numpy
 requests
 Pillow
 gunicorn

@@ -37,4 +37,7 @@ class QuizSerializer(serializers.ModelSerializer):
             instance.multiplechoiceuseranswer_set.all().delete()
             [MultipleChoiceUserAnswer.objects.create(**answer)
              for answer in validated_data.get('multiplechoiceuseranswer_set')]
+        if not instance.xp and instance.multiplechoiceuseranswer_set.exists():
+            instance.xp = instance.compute_xp()
+            instance.save()
         return instance
