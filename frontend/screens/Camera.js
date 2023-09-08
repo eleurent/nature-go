@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, Platform } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import IconButton from '../components/IconButton'
@@ -49,10 +49,10 @@ export default function CameraScreen({ navigation }) {
         permissionFunction();
     }, []);
 
-    galleryColor = galleryPermission ? "#fff" : "#f00";
-    cameraColor = cameraPermission ? "#fff" : "#f00";
+    let galleryColor = galleryPermission ? "#fff" : "#f00";
+    let cameraColor = cameraPermission ? "#fff" : "#f00";
 
-    return (
+    return (Platform.OS !== 'web') ? (
         <View style={styles.container}>
             <Camera
                 ref={(ref) => setCamera(ref)}
@@ -65,6 +65,15 @@ export default function CameraScreen({ navigation }) {
                     <IconButton icon="camera" size={70} color={cameraColor} onPress={() => takePictureAsync(camera, navigation)} extra_style={styles.captureButton}/>
                 </View>
             </Camera>
+        </View>
+    ) : (
+        <View style={styles.container}>
+            {/* TODO Camera is not working on web, getting Uncaught Error: Invalid hook call. */}
+            <View style={styles.cameraView}>
+                <IconButton icon="image" size={32} color={galleryColor} onPress={() => pickImageAsync(navigation)} extra_style={styles.galleryButtonContainer} />
+                <IconButton icon="camera" size={70} color={cameraColor} onPress={() => takePictureAsync(camera, navigation)} extra_style={styles.captureButton} />
+            </View>
+            <Text>Web</Text>
         </View>
     );
 }
