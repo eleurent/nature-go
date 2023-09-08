@@ -101,14 +101,9 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
             genus=species_data['genus']['scientificNameWithoutAuthor'],
             family=species_data['family']['scientificNameWithoutAuthor'],
         )
-
-        species = Species.objects.filter(scientificName=species_data['scientificName']).first()
-        if not species:
-            Species.objects.create(scientificName=species_data['scientificName'], **species_data)
-        else:
-            Species.objects.filter(scientificName=species_data['scientificName']).update(**species_data)
-
-
+        species, created = Species.objects.update_or_create(
+            scientificName=species_data['scientificName'],
+            defaults=species_data)
         instance.species = species
         instance.save()
         return Response(self.get_serializer(instance).data)
