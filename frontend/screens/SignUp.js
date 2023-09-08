@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Image, Platform } from 'react-native';
-import { AuthContext } from '../authContext';
+import { AuthContext } from '../contexts/authContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 

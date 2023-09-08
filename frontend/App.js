@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useAuth, AuthContext } from './authContext';
-import { useQuiz, QuizContext } from './quizContext';
+import { useAuth, AuthContext } from './contexts/authContext';
+import { useQuiz, QuizContext } from './contexts/quizContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLoadedAssets } from "./hooks/useLoadedAssets";
 import HomeScreen from './screens/Home'

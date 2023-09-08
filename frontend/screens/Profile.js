@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, StyleSheet, ImageBackground, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AuthContext } from '../authContext';
+import { AuthContext } from '../contexts/authContext';
 
 export default function ProfileScreen({ navigation, route }) {
     const { authMethods } = useContext(AuthContext);

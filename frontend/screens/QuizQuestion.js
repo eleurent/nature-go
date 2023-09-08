@@ -8,7 +8,7 @@ import {
 } from '@expo-google-fonts/old-standard-tt';
 
 import QuizButton from '../components/QuizButton'
-import { QuizContext } from '../quizContext';
+import { QuizContext } from '../contexts/quizContext';
 
 async function onPressContinue(id, quizState, quizMethods, navigation) {
     if (id < quizState.quiz.multiple_choice_questions.length - 1) {
