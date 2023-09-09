@@ -104,14 +104,8 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
         species, created = Species.objects.update_or_create(
             scientificName=species_data['scientificName'],
             defaults=species_data)
-        print('SPECIES', species, created)
         
-        print('instance', instance)
         serializer = ObservationSerializer(instance, data=dict(species=species.id))
-        print('si', serializer.instance)
-        if serializer.is_valid():
-            print('siv', serializer.instance)
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
-        else:
-            print('siinv', serializer.errors)
         return Response(serializer.data)
