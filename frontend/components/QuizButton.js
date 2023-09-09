@@ -3,7 +3,7 @@ import { StyleSheet, View, Pressable, Text, TouchableHighlight, TouchableOpacity
 
 
 
-export default function QuizButton({ label, theme, onPress, selected }) {
+export default function QuizButton({ label, theme, onPress, selected, styleOverride }) {
 
     if (theme === "question") {
         return (
@@ -32,7 +32,7 @@ export default function QuizButton({ label, theme, onPress, selected }) {
         );
     }
     return (
-        <View style={styles.buttonContainer}>
+        <View style={[styles.buttonContainer, styleOverride]}>
             <Pressable 
                 style={({ pressed }) => [
                     styles.button,

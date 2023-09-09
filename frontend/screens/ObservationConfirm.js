@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, ImageBackground, Platform, TouchableOpac
 import axios from 'axios';
 import Constants from 'expo-constants'
 import { FlatList } from 'react-native-gesture-handler';
+import XPModal from '../components/XPModal';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const URL_CREATE_OBSERVATION = API_URL + 'api/species/observation/'
@@ -32,10 +33,22 @@ const SpeciesCandidate = (props) => {
     );
 }
 
-const confirmSpeciesAsync = async (observation_id, species_index, navigation) => {
+const postObservationImageAsync = async (imageBase64, observation, setObservation, setIsLoading) => {
+    if (imageBase64 && !observation) {
+        let formData = new FormData();
+        formData.append('image', imageBase64);
+        const response = await axios.post(URL_CREATE_OBSERVATION, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        setObservation(response.data);
+        setIsLoading(false);
+    }
+};
+
+const confirmSpeciesAsync = async (observation_id, species_index, onConfirmResponse) => {
     let formData = new FormData();
     formData.append('species', species_index);
-    console.log(formData);
     const config = {
         headers: {
             'Content-Type': 'multipart/form-data'
@@ -44,54 +57,29 @@ const confirmSpeciesAsync = async (observation_id, species_index, navigation) =>
     };
     axios.patch(OBSERVATION_URL(observation_id), formData, config)
         .then(response => {
-            console.log(response);
-            navigation.navigate('SpeciesDetail', { id: response.data.species })
+            onConfirmResponse(response);
         })
         .catch(error => console.log(error));
 };
 
 
+
 export default function ObservationConfirmScreen({ navigation, route }) {
 
     const [observation, setObservation] = useState(null);
-    const [imageURL, setImageURL] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [observationID, setObservationID] = useState(null);
-    const [imageBase64, setImageBase64] = useState(route.params.imageBase64);
-
-
+    const [xpModalVisible, setXPModalVisible] = useState(false);
+    const imageBase64 = route.params.imageBase64;
 
     useEffect(() => {
-        const postImageAndFetchObservation = async () => {
-            if (imageBase64 && !observationID) {
-                let formData = new FormData();
-                formData.append('image', imageBase64);
-                
-                const response = await axios.post(URL_CREATE_OBSERVATION, formData, {
-                    headers: {'Content-Type': 'multipart/form-data'}
-                });
-                
-                setObservationID(response.data.id);
-            }
-
-            if (observationID) {
-                const response = await axios.get(OBSERVATION_URL(observationID));
-                setObservation(response.data);
-                setImageURL(response.data.image);
-                setIsLoading(false);
-            }
-        };
-
-        postImageAndFetchObservation();
-    }, [observationID]);
+        postObservationImageAsync(imageBase64, observation, setObservation, setIsLoading);
+    }, []);
 
     let has_results = observation && observation.identification_response && observation.identification_response.results;
-    let topNResults = has_results 
-    ? observation.identification_response.results
-        .filter(candidate => candidate.score >= PROBABILITY_THRESHOLD)
-        .slice(0, NUM_CANDIDATES) 
-    : [];
-    console.log(topNResults);
+    let topNResults = has_results ? observation.identification_response.results.filter(candidate => candidate.score >= PROBABILITY_THRESHOLD).slice(0, NUM_CANDIDATES) : [];
+    const onConfirmResponse = (response) => { setObservation(response.data); setXPModalVisible(true); };
+    const onXPModalClose = () => { setXPModalVisible(false); navigation.navigate('SpeciesDetail', { id: observation.species }) };
+
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
@@ -120,12 +108,13 @@ export default function ObservationConfirmScreen({ navigation, route }) {
                                 <SpeciesCandidate
                                     key={index}
                                     item={item}
-                                    onPress={() => confirmSpeciesAsync(observation.id, index, navigation)}
+                                    onPress={() => confirmSpeciesAsync(observation.id, index, onConfirmResponse)}
                                 />
                             );
                         }}
-                    /> 
+                    />
                 : null)}
+                <XPModal isVisible={xpModalVisible} xpData={observation?.xp} onClose={onXPModalClose}/>
             </ImageBackground>
         </View>
     );
