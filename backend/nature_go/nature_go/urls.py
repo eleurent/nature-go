@@ -26,6 +26,7 @@ urlpatterns = [
     path('api/species/', include('observation.urls')),
     path('api/university/', include('university.urls')),
     path('api/auth/', include('authentication.urls')),
+    path('api/profile/', include('user_profile.urls')),
     path('api-auth/', include('rest_framework.urls'))  # Is this needed?
 ]
 

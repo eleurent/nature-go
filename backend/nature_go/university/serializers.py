@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import MultipleChoiceQuestion, Quiz, MultipleChoiceUserAnswer
+from user_profile.signals import xp_gained
 
 class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,6 +39,5 @@ class QuizSerializer(serializers.ModelSerializer):
             [MultipleChoiceUserAnswer.objects.create(**answer)
              for answer in validated_data.get('multiplechoiceuseranswer_set')]
         if not instance.xp and instance.multiplechoiceuseranswer_set.exists():
-            instance.xp = instance.compute_xp()
-            instance.save()
+            xp_gained.send(sender=instance.__class__, instance=instance)
         return instance

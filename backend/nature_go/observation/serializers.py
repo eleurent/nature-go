@@ -3,7 +3,7 @@ from drf_extra_fields.fields import Base64ImageField
 from django.contrib.staticfiles import finders
 
 from observation.models import Observation, Species
-
+from user_profile.signals import xp_gained
 
 class ObservationSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
@@ -15,11 +15,9 @@ class ObservationSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'image', 'species', 'location', 'datetime', 'identification_response']
 
     def update(self, instance, validated_data):
-        print('CUSTOM Observation Update')
         super().update(instance, validated_data)
         if not instance.xp and instance.species:
-            instance.xp = instance.compute_xp()
-            instance.save()
+            xp_gained.send(sender=instance.__class__, instance=instance)
         return instance
 
 class SpeciesSerializer(serializers.ModelSerializer):

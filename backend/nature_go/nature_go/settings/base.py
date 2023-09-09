@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'authentication',
     'observation',
     'university',
+    'user_profile',
 ]
 
 MIDDLEWARE = [
