@@ -1,3 +1,4 @@
+import json
 import logging
 import requests
 import PIL.Image
@@ -7,7 +8,9 @@ import datetime
 logger = logging.getLogger(__name__)
 
 
-def plantnet_identify(image_path):
+def plantnet_identify(image_path, mock: bool = False):
+    if mock:
+        return plantnet_identify_mock()
     url = 'https://my-api.plantnet.org/v2/identify/all'
     image_data =  open(image_path, 'rb')
     files = [
@@ -23,6 +26,10 @@ def plantnet_identify(image_path):
     response.raise_for_status()
     result = response.json()
     return result
+
+
+def plantnet_identify_mock():
+    return json.load(open('observation/mock_plantnet_response.json'))
 
 
 def read_exif(image_path):

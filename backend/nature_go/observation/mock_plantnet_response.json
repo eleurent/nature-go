@@ -1,0 +1,1881 @@
+{
+    "query": {
+        "project": "all",
+        "images": [
+            "cecc2796eae34d82a5918ef0ea8875ba"
+        ],
+        "organs": [
+            "flower"
+        ],
+        "includeRelatedImages": true
+    },
+    "language": "en",
+    "preferedReferential": "the-plant-list",
+    "bestMatch": "Campanula rotundifolia L.",
+    "results": [
+        {
+            "score": 0.58452,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula rotundifolia",
+                "scientificNameAuthorship": "L.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [
+                    "Harebell",
+                    "Meadowbell",
+                    "Bluebell"
+                ],
+                "scientificName": "Campanula rotundifolia L."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Henk Van Lottum",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1573152432727,
+                        "string": "November 7, 2019"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/6130041ea1c381ac7623848e4fefcfeeb6fe4c19",
+                        "m": "https://bs.plantnet.org/image/m/6130041ea1c381ac7623848e4fefcfeeb6fe4c19",
+                        "s": "https://bs.plantnet.org/image/s/6130041ea1c381ac7623848e4fefcfeeb6fe4c19"
+                    },
+                    "citation": "Henk Van Lottum / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Sander van Andel",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1595872900948,
+                        "string": "July 27, 2020"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/c3f0eabe9b4caefab645626818e76499ac64a687",
+                        "m": "https://bs.plantnet.org/image/m/c3f0eabe9b4caefab645626818e76499ac64a687",
+                        "s": "https://bs.plantnet.org/image/s/c3f0eabe9b4caefab645626818e76499ac64a687"
+                    },
+                    "citation": "Sander van Andel / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Heiner Ollendorf",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1601061808676,
+                        "string": "September 25, 2020"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/a61f2c29adbe8431e0f4d1d7b727e6647a25ba2d",
+                        "m": "https://bs.plantnet.org/image/m/a61f2c29adbe8431e0f4d1d7b727e6647a25ba2d",
+                        "s": "https://bs.plantnet.org/image/s/a61f2c29adbe8431e0f4d1d7b727e6647a25ba2d"
+                    },
+                    "citation": "Heiner Ollendorf / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Tela Botanica − Sylvain PIRY",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1530690581000,
+                        "string": "July 4, 2018"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/a2705efd9df854b019903b027702a4b053438682",
+                        "m": "https://bs.plantnet.org/image/m/a2705efd9df854b019903b027702a4b053438682",
+                        "s": "https://bs.plantnet.org/image/s/a2705efd9df854b019903b027702a4b053438682"
+                    },
+                    "citation": "Tela Botanica − Sylvain PIRY / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Heiner Ollendorf",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1599399283170,
+                        "string": "September 6, 2020"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/e1563acdd4c77b53760bddf8b7d69bb509dd6396",
+                        "m": "https://bs.plantnet.org/image/m/e1563acdd4c77b53760bddf8b7d69bb509dd6396",
+                        "s": "https://bs.plantnet.org/image/s/e1563acdd4c77b53760bddf8b7d69bb509dd6396"
+                    },
+                    "citation": "Heiner Ollendorf / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Henk Van Lottum",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1516634010000,
+                        "string": "January 22, 2018"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/28398794a2cd61b4bdbe9c1d45da9aefaf70b36d",
+                        "m": "https://bs.plantnet.org/image/m/28398794a2cd61b4bdbe9c1d45da9aefaf70b36d",
+                        "s": "https://bs.plantnet.org/image/s/28398794a2cd61b4bdbe9c1d45da9aefaf70b36d"
+                    },
+                    "citation": "Henk Van Lottum / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5410907"
+            },
+            "powo": {
+                "id": "30036649-2"
+            }
+        },
+        {
+            "score": 0.12549,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula scheuchzeri",
+                "scientificNameAuthorship": "Vill.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [
+                    "Scheuchzer's Bellflower",
+                    "Campanella olandese"
+                ],
+                "scientificName": "Campanula scheuchzeri Vill."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Renaud Brochiero",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1534863056000,
+                        "string": "August 21, 2018"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/fe3efd5919bc34154eee88c604b0bfc343f4a929",
+                        "m": "https://bs.plantnet.org/image/m/fe3efd5919bc34154eee88c604b0bfc343f4a929",
+                        "s": "https://bs.plantnet.org/image/s/fe3efd5919bc34154eee88c604b0bfc343f4a929"
+                    },
+                    "citation": "Renaud Brochiero / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "margarida vila",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1658611755035,
+                        "string": "July 23, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/c745f0ed55e2cff9f4feb05eac4441616e050310",
+                        "m": "https://bs.plantnet.org/image/m/c745f0ed55e2cff9f4feb05eac4441616e050310",
+                        "s": "https://bs.plantnet.org/image/s/c745f0ed55e2cff9f4feb05eac4441616e050310"
+                    },
+                    "citation": "margarida vila / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "henk henk",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1665601629758,
+                        "string": "October 12, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/83ef847cc4054a8f81e47c53ff719049a0fabdc5",
+                        "m": "https://bs.plantnet.org/image/m/83ef847cc4054a8f81e47c53ff719049a0fabdc5",
+                        "s": "https://bs.plantnet.org/image/s/83ef847cc4054a8f81e47c53ff719049a0fabdc5"
+                    },
+                    "citation": "henk henk / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Fiori di campo",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1597485264956,
+                        "string": "August 15, 2020"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/ca458b96d4c6fd3891046b791df24d736a81bc35",
+                        "m": "https://bs.plantnet.org/image/m/ca458b96d4c6fd3891046b791df24d736a81bc35",
+                        "s": "https://bs.plantnet.org/image/s/ca458b96d4c6fd3891046b791df24d736a81bc35"
+                    },
+                    "citation": "Fiori di campo / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Tela Botanica − Catherine MAHYEUX",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1328724108000,
+                        "string": "February 8, 2012"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/cad76a5aa0a8b869dbaa79897ac73a1cef90d9cb",
+                        "m": "https://bs.plantnet.org/image/m/cad76a5aa0a8b869dbaa79897ac73a1cef90d9cb",
+                        "s": "https://bs.plantnet.org/image/s/cad76a5aa0a8b869dbaa79897ac73a1cef90d9cb"
+                    },
+                    "citation": "Tela Botanica − Catherine MAHYEUX / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Jacques Zuber",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1628805372216,
+                        "string": "August 12, 2021"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/e2e1f25c20ff6fcd5b5742d4483943233e65b597",
+                        "m": "https://bs.plantnet.org/image/m/e2e1f25c20ff6fcd5b5742d4483943233e65b597",
+                        "s": "https://bs.plantnet.org/image/s/e2e1f25c20ff6fcd5b5742d4483943233e65b597"
+                    },
+                    "citation": "Jacques Zuber / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5410226"
+            },
+            "powo": {
+                "id": "141057-1"
+            }
+        },
+        {
+            "score": 0.05074,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula rhomboidalis",
+                "scientificNameAuthorship": "L.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [
+                    "Broadleaf harebell",
+                    "Broad-leaved Harebell",
+                    "Rhomboid-leaved Bellflower"
+                ],
+                "scientificName": "Campanula rhomboidalis L."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "DuPrintemps",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1628193280464,
+                        "string": "August 5, 2021"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/3e222a11d59ab832cf8387221542ad99de24e5a9",
+                        "m": "https://bs.plantnet.org/image/m/3e222a11d59ab832cf8387221542ad99de24e5a9",
+                        "s": "https://bs.plantnet.org/image/s/3e222a11d59ab832cf8387221542ad99de24e5a9"
+                    },
+                    "citation": "DuPrintemps / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "carrol terleth",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1663240546782,
+                        "string": "September 15, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/4da46b9ca19ae432c33c2f16b57fc9558e8bb535",
+                        "m": "https://bs.plantnet.org/image/m/4da46b9ca19ae432c33c2f16b57fc9558e8bb535",
+                        "s": "https://bs.plantnet.org/image/s/4da46b9ca19ae432c33c2f16b57fc9558e8bb535"
+                    },
+                    "citation": "carrol terleth / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Franck Theo",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1626175543684,
+                        "string": "July 13, 2021"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/654a5b9ac34b25e22da16c0280b026d7fa0e688a",
+                        "m": "https://bs.plantnet.org/image/m/654a5b9ac34b25e22da16c0280b026d7fa0e688a",
+                        "s": "https://bs.plantnet.org/image/s/654a5b9ac34b25e22da16c0280b026d7fa0e688a"
+                    },
+                    "citation": "Franck Theo / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Denis Bastianelli",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1533103968000,
+                        "string": "August 1, 2018"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/d6bdf8c50bca2cbe25f5daa96cc7877b449fb2fe",
+                        "m": "https://bs.plantnet.org/image/m/d6bdf8c50bca2cbe25f5daa96cc7877b449fb2fe",
+                        "s": "https://bs.plantnet.org/image/s/d6bdf8c50bca2cbe25f5daa96cc7877b449fb2fe"
+                    },
+                    "citation": "Denis Bastianelli / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Géraldine Delatouche",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1626370994936,
+                        "string": "July 15, 2021"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/8f0dd062945164ae40fc907b12e5da23325e2c87",
+                        "m": "https://bs.plantnet.org/image/m/8f0dd062945164ae40fc907b12e5da23325e2c87",
+                        "s": "https://bs.plantnet.org/image/s/8f0dd062945164ae40fc907b12e5da23325e2c87"
+                    },
+                    "citation": "Géraldine Delatouche / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Tela Botanica − Liliane Roubaudi",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1403010814000,
+                        "string": "June 17, 2014"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/05f9e0ba4e882a716fe59fe9ebce476e863dcd98",
+                        "m": "https://bs.plantnet.org/image/m/05f9e0ba4e882a716fe59fe9ebce476e863dcd98",
+                        "s": "https://bs.plantnet.org/image/s/05f9e0ba4e882a716fe59fe9ebce476e863dcd98"
+                    },
+                    "citation": "Tela Botanica − Liliane Roubaudi / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5410480"
+            },
+            "powo": {
+                "id": "140981-1"
+            }
+        },
+        {
+            "score": 0.04179,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula witasekiana",
+                "scientificNameAuthorship": "Vierh.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [],
+                "scientificName": "Campanula witasekiana Vierh."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Jani Zadrgal",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1662663105938,
+                        "string": "September 8, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/72e1bc380588535c66954f7523b1b1cf8ec5888b",
+                        "m": "https://bs.plantnet.org/image/m/72e1bc380588535c66954f7523b1b1cf8ec5888b",
+                        "s": "https://bs.plantnet.org/image/s/72e1bc380588535c66954f7523b1b1cf8ec5888b"
+                    },
+                    "citation": "Jani Zadrgal / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Jani Zadrgal",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1658080618844,
+                        "string": "July 17, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/c621053eec5724cdcabe86e18de4a49d2d72cf15",
+                        "m": "https://bs.plantnet.org/image/m/c621053eec5724cdcabe86e18de4a49d2d72cf15",
+                        "s": "https://bs.plantnet.org/image/s/c621053eec5724cdcabe86e18de4a49d2d72cf15"
+                    },
+                    "citation": "Jani Zadrgal / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Jani Zadrgal",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1662663105938,
+                        "string": "September 8, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/00080f131230c4891e161ef9bd820163afd7c7cc",
+                        "m": "https://bs.plantnet.org/image/m/00080f131230c4891e161ef9bd820163afd7c7cc",
+                        "s": "https://bs.plantnet.org/image/s/00080f131230c4891e161ef9bd820163afd7c7cc"
+                    },
+                    "citation": "Jani Zadrgal / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Jani Zadrgal",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1658080618844,
+                        "string": "July 17, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/08c40f1ff6066314ac5113cd53c2e9de35462720",
+                        "m": "https://bs.plantnet.org/image/m/08c40f1ff6066314ac5113cd53c2e9de35462720",
+                        "s": "https://bs.plantnet.org/image/s/08c40f1ff6066314ac5113cd53c2e9de35462720"
+                    },
+                    "citation": "Jani Zadrgal / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5411960"
+            },
+            "powo": {
+                "id": "141332-1"
+            }
+        },
+        {
+            "score": 0.03709,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula cochleariifolia",
+                "scientificNameAuthorship": "Lam.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [
+                    "Fairies'-thimbles",
+                    "Earleaf bellflower",
+                    "Fairy's-thimble"
+                ],
+                "scientificName": "Campanula cochleariifolia Lam."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Francois Mansour",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1631453426720,
+                        "string": "September 12, 2021"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/e3ae7e66fbc8da5a857197f5105f939efdf88b44",
+                        "m": "https://bs.plantnet.org/image/m/e3ae7e66fbc8da5a857197f5105f939efdf88b44",
+                        "s": "https://bs.plantnet.org/image/s/e3ae7e66fbc8da5a857197f5105f939efdf88b44"
+                    },
+                    "citation": "Francois Mansour / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Tela Botanica − Yoan MARTIN",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1448900665000,
+                        "string": "November 30, 2015"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/a9d7ab9d0a33209bfa710f1871031855e8994010",
+                        "m": "https://bs.plantnet.org/image/m/a9d7ab9d0a33209bfa710f1871031855e8994010",
+                        "s": "https://bs.plantnet.org/image/s/a9d7ab9d0a33209bfa710f1871031855e8994010"
+                    },
+                    "citation": "Tela Botanica − Yoan MARTIN / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Pieter Verbrugghe",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1659595207611,
+                        "string": "August 4, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/a5b9efcd23bd3b14380c2fcb1a767451ac2dbbdd",
+                        "m": "https://bs.plantnet.org/image/m/a5b9efcd23bd3b14380c2fcb1a767451ac2dbbdd",
+                        "s": "https://bs.plantnet.org/image/s/a5b9efcd23bd3b14380c2fcb1a767451ac2dbbdd"
+                    },
+                    "citation": "Pieter Verbrugghe / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "shark421",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1627056211369,
+                        "string": "July 23, 2021"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/eec4fb793eae22a0107b21462dc37b1ca022733d",
+                        "m": "https://bs.plantnet.org/image/m/eec4fb793eae22a0107b21462dc37b1ca022733d",
+                        "s": "https://bs.plantnet.org/image/s/eec4fb793eae22a0107b21462dc37b1ca022733d"
+                    },
+                    "citation": "shark421 / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Pieter Verbrugghe",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1659595207611,
+                        "string": "August 4, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/3dbf97dfb40b42dbab1b61b25df15d7a82b72df3",
+                        "m": "https://bs.plantnet.org/image/m/3dbf97dfb40b42dbab1b61b25df15d7a82b72df3",
+                        "s": "https://bs.plantnet.org/image/s/3dbf97dfb40b42dbab1b61b25df15d7a82b72df3"
+                    },
+                    "citation": "Pieter Verbrugghe / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "alba deledda",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1650562275050,
+                        "string": "April 21, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/b5e8f3a7743c19447fb0023f30042e14a7cb5db9",
+                        "m": "https://bs.plantnet.org/image/m/b5e8f3a7743c19447fb0023f30042e14a7cb5db9",
+                        "s": "https://bs.plantnet.org/image/s/b5e8f3a7743c19447fb0023f30042e14a7cb5db9"
+                    },
+                    "citation": "alba deledda / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5410194"
+            },
+            "powo": {
+                "id": "140127-1"
+            }
+        },
+        {
+            "score": 0.0294,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula bertolae",
+                "scientificNameAuthorship": "Colla",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [],
+                "scientificName": "Campanula bertolae Colla"
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Tela Botanica − Yoan MARTIN",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1448922530000,
+                        "string": "November 30, 2015"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/77c5393372c5056f2109802dcd4466e531b09e54",
+                        "m": "https://bs.plantnet.org/image/m/77c5393372c5056f2109802dcd4466e531b09e54",
+                        "s": "https://bs.plantnet.org/image/s/77c5393372c5056f2109802dcd4466e531b09e54"
+                    },
+                    "citation": "Tela Botanica − Yoan MARTIN / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5409888"
+            },
+            "powo": {
+                "id": "139982-1"
+            }
+        },
+        {
+            "score": 0.02641,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula precatoria",
+                "scientificNameAuthorship": "Timb.-Lagr.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [],
+                "scientificName": "Campanula precatoria Timb.-Lagr."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Sylvain Piry",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1659984917980,
+                        "string": "August 8, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/340d0a3191dd7a39fb849cbc8f73fa7cd47dd197",
+                        "m": "https://bs.plantnet.org/image/m/340d0a3191dd7a39fb849cbc8f73fa7cd47dd197",
+                        "s": "https://bs.plantnet.org/image/s/340d0a3191dd7a39fb849cbc8f73fa7cd47dd197"
+                    },
+                    "citation": "Sylvain Piry / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Tela Botanica − Mathieu MENAND",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1329226203000,
+                        "string": "February 14, 2012"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/90ab297cb1efedd25a1d7c2d4e021368e15ecd9b",
+                        "m": "https://bs.plantnet.org/image/m/90ab297cb1efedd25a1d7c2d4e021368e15ecd9b",
+                        "s": "https://bs.plantnet.org/image/s/90ab297cb1efedd25a1d7c2d4e021368e15ecd9b"
+                    },
+                    "citation": "Tela Botanica − Mathieu MENAND / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Sylvain Piry",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1659984917980,
+                        "string": "August 8, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/a28970710408053535e2e335da260dcf5893de23",
+                        "m": "https://bs.plantnet.org/image/m/a28970710408053535e2e335da260dcf5893de23",
+                        "s": "https://bs.plantnet.org/image/s/a28970710408053535e2e335da260dcf5893de23"
+                    },
+                    "citation": "Sylvain Piry / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Céline Barbieri",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1658486817874,
+                        "string": "July 22, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/6538015584409c6c30bdb9f818ebeedd02ece768",
+                        "m": "https://bs.plantnet.org/image/m/6538015584409c6c30bdb9f818ebeedd02ece768",
+                        "s": "https://bs.plantnet.org/image/s/6538015584409c6c30bdb9f818ebeedd02ece768"
+                    },
+                    "citation": "Céline Barbieri / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5411964"
+            },
+            "powo": {
+                "id": "140877-1"
+            }
+        },
+        {
+            "score": 0.01132,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula persicifolia",
+                "scientificNameAuthorship": "L.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [
+                    "Paper Bellflower",
+                    "Peach-bells",
+                    "Peach-leaf bellflower"
+                ],
+                "scientificName": "Campanula persicifolia L."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Tela Botanica − Alain BIGOU",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1443562388000,
+                        "string": "September 29, 2015"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/ac18b23e687548e6c6def62b9ca2a47fcf353122",
+                        "m": "https://bs.plantnet.org/image/m/ac18b23e687548e6c6def62b9ca2a47fcf353122",
+                        "s": "https://bs.plantnet.org/image/s/ac18b23e687548e6c6def62b9ca2a47fcf353122"
+                    },
+                    "citation": "Tela Botanica − Alain BIGOU / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Henk Van Lottum",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1573151882478,
+                        "string": "November 7, 2019"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/46a758c3b0b373e12fdcf993884f86eadc70c956",
+                        "m": "https://bs.plantnet.org/image/m/46a758c3b0b373e12fdcf993884f86eadc70c956",
+                        "s": "https://bs.plantnet.org/image/s/46a758c3b0b373e12fdcf993884f86eadc70c956"
+                    },
+                    "citation": "Henk Van Lottum / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Tela Botanica − Michel Pansiot",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1545729162000,
+                        "string": "December 25, 2018"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/66620958fcc0f7945ccd23bf6e138c144e37ed14",
+                        "m": "https://bs.plantnet.org/image/m/66620958fcc0f7945ccd23bf6e138c144e37ed14",
+                        "s": "https://bs.plantnet.org/image/s/66620958fcc0f7945ccd23bf6e138c144e37ed14"
+                    },
+                    "citation": "Tela Botanica − Michel Pansiot / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Tela Botanica − Catherine LEBLANC",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1489756030000,
+                        "string": "March 17, 2017"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/ca10cad1dc93123695b2beef906e2b43938e6f33",
+                        "m": "https://bs.plantnet.org/image/m/ca10cad1dc93123695b2beef906e2b43938e6f33",
+                        "s": "https://bs.plantnet.org/image/s/ca10cad1dc93123695b2beef906e2b43938e6f33"
+                    },
+                    "citation": "Tela Botanica − Catherine LEBLANC / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Tela Botanica − Alain BIGOU",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1362521751000,
+                        "string": "March 5, 2013"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/a9d6b83c4abe71d34f13305e17ac09c624b9635c",
+                        "m": "https://bs.plantnet.org/image/m/a9d6b83c4abe71d34f13305e17ac09c624b9635c",
+                        "s": "https://bs.plantnet.org/image/s/a9d6b83c4abe71d34f13305e17ac09c624b9635c"
+                    },
+                    "citation": "Tela Botanica − Alain BIGOU / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Tela Botanica − Michel Pansiot",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1545729162000,
+                        "string": "December 25, 2018"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/41582fe79823752e2adc225112168e89d7ae2f7b",
+                        "m": "https://bs.plantnet.org/image/m/41582fe79823752e2adc225112168e89d7ae2f7b",
+                        "s": "https://bs.plantnet.org/image/s/41582fe79823752e2adc225112168e89d7ae2f7b"
+                    },
+                    "citation": "Tela Botanica − Michel Pansiot / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5411475"
+            },
+            "powo": {
+                "id": "140828-1"
+            }
+        },
+        {
+            "score": 0.01026,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula baumgartenii",
+                "scientificNameAuthorship": "Becker",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [],
+                "scientificName": "Campanula baumgartenii Becker"
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Tela Botanica − Hugues TINGUY",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1441743223000,
+                        "string": "September 8, 2015"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/9f06ec026c9d157a44e098c4b47c3abfbbe79aab",
+                        "m": "https://bs.plantnet.org/image/m/9f06ec026c9d157a44e098c4b47c3abfbbe79aab",
+                        "s": "https://bs.plantnet.org/image/s/9f06ec026c9d157a44e098c4b47c3abfbbe79aab"
+                    },
+                    "citation": "Tela Botanica − Hugues TINGUY / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5411278"
+            },
+            "powo": {
+                "id": "139970-1"
+            }
+        },
+        {
+            "score": 0.00707,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula herminii",
+                "scientificNameAuthorship": "Hoffmanns. & Link",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [],
+                "scientificName": "Campanula herminii Hoffmanns. & Link"
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Diego Alex",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1657008306550,
+                        "string": "July 5, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/485c18846eda50b02245acd974cbd22803e907aa",
+                        "m": "https://bs.plantnet.org/image/m/485c18846eda50b02245acd974cbd22803e907aa",
+                        "s": "https://bs.plantnet.org/image/s/485c18846eda50b02245acd974cbd22803e907aa"
+                    },
+                    "citation": "Diego Alex / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Diego Alex",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1632826447594,
+                        "string": "September 28, 2021"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/89aacad7bada42f05eebbbf7c32f3e34a6c1d3c5",
+                        "m": "https://bs.plantnet.org/image/m/89aacad7bada42f05eebbbf7c32f3e34a6c1d3c5",
+                        "s": "https://bs.plantnet.org/image/s/89aacad7bada42f05eebbbf7c32f3e34a6c1d3c5"
+                    },
+                    "citation": "Diego Alex / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Diego Alex",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1632826447594,
+                        "string": "September 28, 2021"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/e4b4fb56b00c3881c035156d390a732289be4570",
+                        "m": "https://bs.plantnet.org/image/m/e4b4fb56b00c3881c035156d390a732289be4570",
+                        "s": "https://bs.plantnet.org/image/s/e4b4fb56b00c3881c035156d390a732289be4570"
+                    },
+                    "citation": "Diego Alex / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5410544"
+            },
+            "powo": {
+                "id": "140416-1"
+            }
+        },
+        {
+            "score": 0.00674,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula fritschii",
+                "scientificNameAuthorship": "Witasek",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [],
+                "scientificName": "Campanula fritschii Witasek"
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Photoflora - Benoit BOCK",
+                    "license": "©",
+                    "date": {
+                        "timestamp": 1607596842735,
+                        "string": "December 10, 2020"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/a667eea5d3bd896cc5b62dcd98ddcc6cf98f5045",
+                        "m": "https://bs.plantnet.org/image/m/a667eea5d3bd896cc5b62dcd98ddcc6cf98f5045",
+                        "s": "https://bs.plantnet.org/image/s/a667eea5d3bd896cc5b62dcd98ddcc6cf98f5045"
+                    },
+                    "citation": "Photoflora - Benoit BOCK / Pl@ntNet, ©"
+                }
+            ],
+            "gbif": {
+                "id": "5411957"
+            },
+            "powo": {
+                "id": "140334-1"
+            }
+        },
+        {
+            "score": 0.00621,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula sibirica",
+                "scientificNameAuthorship": "L.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [
+                    "Sibirian kalabanda"
+                ],
+                "scientificName": "Campanula sibirica L."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Krampl Tomáš",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1653240335048,
+                        "string": "May 22, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/7e6a2f77f8c4e56e99f85eb532b3fd1b4f619273",
+                        "m": "https://bs.plantnet.org/image/m/7e6a2f77f8c4e56e99f85eb532b3fd1b4f619273",
+                        "s": "https://bs.plantnet.org/image/s/7e6a2f77f8c4e56e99f85eb532b3fd1b4f619273"
+                    },
+                    "citation": "Krampl Tomáš / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "habit",
+                    "author": "Krampl Tomáš",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1653240335048,
+                        "string": "May 22, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/3e4f7a73ed413e3d60d129c3ff7b86e9aa1ac074",
+                        "m": "https://bs.plantnet.org/image/m/3e4f7a73ed413e3d60d129c3ff7b86e9aa1ac074",
+                        "s": "https://bs.plantnet.org/image/s/3e4f7a73ed413e3d60d129c3ff7b86e9aa1ac074"
+                    },
+                    "citation": "Krampl Tomáš / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5410717"
+            },
+            "powo": {
+                "id": "141096-1"
+            }
+        },
+        {
+            "score": 0.00564,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula carnica",
+                "scientificNameAuthorship": "Schiede ex Mert. & W.D.J.Koch",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [],
+                "scientificName": "Campanula carnica Schiede ex Mert. & W.D.J.Koch"
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Miguel A. C.",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1665264989237,
+                        "string": "October 8, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/5c04709d7d25e4aab44e2df90514febc23d8827f",
+                        "m": "https://bs.plantnet.org/image/m/5c04709d7d25e4aab44e2df90514febc23d8827f",
+                        "s": "https://bs.plantnet.org/image/s/5c04709d7d25e4aab44e2df90514febc23d8827f"
+                    },
+                    "citation": "Miguel A. C. / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Martin Bishop",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1654154189266,
+                        "string": "June 2, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/5e5d8bb7b1148b13b5ad869e53c45effa8f2b3f7",
+                        "m": "https://bs.plantnet.org/image/m/5e5d8bb7b1148b13b5ad869e53c45effa8f2b3f7",
+                        "s": "https://bs.plantnet.org/image/s/5e5d8bb7b1148b13b5ad869e53c45effa8f2b3f7"
+                    },
+                    "citation": "Martin Bishop / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "jack",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1648024387952,
+                        "string": "March 23, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/365305ca7f7ba15a2735d2565352d52de84e9fd2",
+                        "m": "https://bs.plantnet.org/image/m/365305ca7f7ba15a2735d2565352d52de84e9fd2",
+                        "s": "https://bs.plantnet.org/image/s/365305ca7f7ba15a2735d2565352d52de84e9fd2"
+                    },
+                    "citation": "jack / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "jack",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1648024387952,
+                        "string": "March 23, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/de44f8e563140bb04a66cb3b69a38f55865a0f77",
+                        "m": "https://bs.plantnet.org/image/m/de44f8e563140bb04a66cb3b69a38f55865a0f77",
+                        "s": "https://bs.plantnet.org/image/s/de44f8e563140bb04a66cb3b69a38f55865a0f77"
+                    },
+                    "citation": "jack / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5411303"
+            },
+            "powo": {
+                "id": "140064-1"
+            }
+        },
+        {
+            "score": 0.00373,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula stenocodon",
+                "scientificNameAuthorship": "Boiss. & Reut.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [],
+                "scientificName": "Campanula stenocodon Boiss. & Reut."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Zheng Huang",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1601935152554,
+                        "string": "October 5, 2020"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/c27a3ca47349cddadd754d842afb5775b822ff6f",
+                        "m": "https://bs.plantnet.org/image/m/c27a3ca47349cddadd754d842afb5775b822ff6f",
+                        "s": "https://bs.plantnet.org/image/s/c27a3ca47349cddadd754d842afb5775b822ff6f"
+                    },
+                    "citation": "Zheng Huang / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Plantae Lucorum",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1660635796012,
+                        "string": "August 16, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/23d390f71a2e2dd24285597bacc3b7e1c5ceb400",
+                        "m": "https://bs.plantnet.org/image/m/23d390f71a2e2dd24285597bacc3b7e1c5ceb400",
+                        "s": "https://bs.plantnet.org/image/s/23d390f71a2e2dd24285597bacc3b7e1c5ceb400"
+                    },
+                    "citation": "Plantae Lucorum / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "martine candel",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1628158654843,
+                        "string": "August 5, 2021"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/e42ed1278cedfdfa63427da8d6d880b5aea50015",
+                        "m": "https://bs.plantnet.org/image/m/e42ed1278cedfdfa63427da8d6d880b5aea50015",
+                        "s": "https://bs.plantnet.org/image/s/e42ed1278cedfdfa63427da8d6d880b5aea50015"
+                    },
+                    "citation": "martine candel / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5411164"
+            },
+            "powo": {
+                "id": "141147-1"
+            }
+        },
+        {
+            "score": 0.00261,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula excisa",
+                "scientificNameAuthorship": "Schleich. ex Murith",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [
+                    "Incised Bellflower"
+                ],
+                "scientificName": "Campanula excisa Schleich. ex Murith"
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Martin Bishop",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1654154438391,
+                        "string": "June 2, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/2fab78c837b34b51d1cfec3d13a83c96da7cf8a4",
+                        "m": "https://bs.plantnet.org/image/m/2fab78c837b34b51d1cfec3d13a83c96da7cf8a4",
+                        "s": "https://bs.plantnet.org/image/s/2fab78c837b34b51d1cfec3d13a83c96da7cf8a4"
+                    },
+                    "citation": "Martin Bishop / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Martin Bishop",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1654154438391,
+                        "string": "June 2, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/ac080ac650e3ce8cd708e16c7cab8ad4f7326a43",
+                        "m": "https://bs.plantnet.org/image/m/ac080ac650e3ce8cd708e16c7cab8ad4f7326a43",
+                        "s": "https://bs.plantnet.org/image/s/ac080ac650e3ce8cd708e16c7cab8ad4f7326a43"
+                    },
+                    "citation": "Martin Bishop / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Isabelle Lograda",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1657799029967,
+                        "string": "July 14, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/909416b17bcb9564e4f1b5f699a5d097c6eb672e",
+                        "m": "https://bs.plantnet.org/image/m/909416b17bcb9564e4f1b5f699a5d097c6eb672e",
+                        "s": "https://bs.plantnet.org/image/s/909416b17bcb9564e4f1b5f699a5d097c6eb672e"
+                    },
+                    "citation": "Isabelle Lograda / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Belloni Paolo",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1657475262416,
+                        "string": "July 10, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/6294cae57dbaa959c2a595e51b9657c7f6ac8943",
+                        "m": "https://bs.plantnet.org/image/m/6294cae57dbaa959c2a595e51b9657c7f6ac8943",
+                        "s": "https://bs.plantnet.org/image/s/6294cae57dbaa959c2a595e51b9657c7f6ac8943"
+                    },
+                    "citation": "Belloni Paolo / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5411179"
+            },
+            "powo": {
+                "id": "140283-1"
+            }
+        },
+        {
+            "score": 0.00231,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula barbata",
+                "scientificNameAuthorship": "L.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [
+                    "Bearded bellflower"
+                ],
+                "scientificName": "Campanula barbata L."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Christoph Stoll",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1656006740566,
+                        "string": "June 23, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/9d3bd9c934343d4b61c59aa6c1f421f6dea74875",
+                        "m": "https://bs.plantnet.org/image/m/9d3bd9c934343d4b61c59aa6c1f421f6dea74875",
+                        "s": "https://bs.plantnet.org/image/s/9d3bd9c934343d4b61c59aa6c1f421f6dea74875"
+                    },
+                    "citation": "Christoph Stoll / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "herve rey",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1533562464000,
+                        "string": "August 6, 2018"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/4bd8bdaa2e271b7c2929a26155aea1147f7bb79f",
+                        "m": "https://bs.plantnet.org/image/m/4bd8bdaa2e271b7c2929a26155aea1147f7bb79f",
+                        "s": "https://bs.plantnet.org/image/s/4bd8bdaa2e271b7c2929a26155aea1147f7bb79f"
+                    },
+                    "citation": "herve rey / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Greif Stefan",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1655107149536,
+                        "string": "June 13, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/f54211cb63888db355859ab118c542302c69d0e8",
+                        "m": "https://bs.plantnet.org/image/m/f54211cb63888db355859ab118c542302c69d0e8",
+                        "s": "https://bs.plantnet.org/image/s/f54211cb63888db355859ab118c542302c69d0e8"
+                    },
+                    "citation": "Greif Stefan / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Werner Rom",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1595099466524,
+                        "string": "July 18, 2020"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/632e1c8c1177e75be04168dea0068a4d967ad2c2",
+                        "m": "https://bs.plantnet.org/image/m/632e1c8c1177e75be04168dea0068a4d967ad2c2",
+                        "s": "https://bs.plantnet.org/image/s/632e1c8c1177e75be04168dea0068a4d967ad2c2"
+                    },
+                    "citation": "Werner Rom / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "herve rey",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1533562464000,
+                        "string": "August 6, 2018"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/91aca940a5ee1dbadffb9bd8a6f6dc090bfca467",
+                        "m": "https://bs.plantnet.org/image/m/91aca940a5ee1dbadffb9bd8a6f6dc090bfca467",
+                        "s": "https://bs.plantnet.org/image/s/91aca940a5ee1dbadffb9bd8a6f6dc090bfca467"
+                    },
+                    "citation": "herve rey / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "simobuffa simobuffa",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1595968185759,
+                        "string": "July 28, 2020"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/3df0a8d0ea515f3e61b92ffaddf67f45582ef087",
+                        "m": "https://bs.plantnet.org/image/m/3df0a8d0ea515f3e61b92ffaddf67f45582ef087",
+                        "s": "https://bs.plantnet.org/image/s/3df0a8d0ea515f3e61b92ffaddf67f45582ef087"
+                    },
+                    "citation": "simobuffa simobuffa / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5409958"
+            },
+            "powo": {
+                "id": "324837-2"
+            }
+        },
+        {
+            "score": 0.00173,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula rapunculus",
+                "scientificNameAuthorship": "L.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [
+                    "Rampion",
+                    "Rampion bellflower"
+                ],
+                "scientificName": "Campanula rapunculus L."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Steve Vincent",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1589274895421,
+                        "string": "May 12, 2020"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/8dc526ec1a943bee6c3dabbf405db4a26da39f06",
+                        "m": "https://bs.plantnet.org/image/m/8dc526ec1a943bee6c3dabbf405db4a26da39f06",
+                        "s": "https://bs.plantnet.org/image/s/8dc526ec1a943bee6c3dabbf405db4a26da39f06"
+                    },
+                    "citation": "Steve Vincent / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Tela Botanica − Francis VAYEUR",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1467830547000,
+                        "string": "July 6, 2016"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/53fa8947ca824e8312ca46a46d506536d02921a1",
+                        "m": "https://bs.plantnet.org/image/m/53fa8947ca824e8312ca46a46d506536d02921a1",
+                        "s": "https://bs.plantnet.org/image/s/53fa8947ca824e8312ca46a46d506536d02921a1"
+                    },
+                    "citation": "Tela Botanica − Francis VAYEUR / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Jean-François Baudin",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1641548939615,
+                        "string": "January 7, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/55ef67935c5d5f547432f9740d5ef52869f2f378",
+                        "m": "https://bs.plantnet.org/image/m/55ef67935c5d5f547432f9740d5ef52869f2f378",
+                        "s": "https://bs.plantnet.org/image/s/55ef67935c5d5f547432f9740d5ef52869f2f378"
+                    },
+                    "citation": "Jean-François Baudin / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Solenn Jacquez",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1591197267200,
+                        "string": "June 3, 2020"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/76dd42c3bd299f94dcdb540bc82ec35d3122f7be",
+                        "m": "https://bs.plantnet.org/image/m/76dd42c3bd299f94dcdb540bc82ec35d3122f7be",
+                        "s": "https://bs.plantnet.org/image/s/76dd42c3bd299f94dcdb540bc82ec35d3122f7be"
+                    },
+                    "citation": "Solenn Jacquez / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Alain Haye",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1559025680601,
+                        "string": "May 28, 2019"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/31f8c11f1bfdf97188548d7e5e9d6d444c6ec832",
+                        "m": "https://bs.plantnet.org/image/m/31f8c11f1bfdf97188548d7e5e9d6d444c6ec832",
+                        "s": "https://bs.plantnet.org/image/s/31f8c11f1bfdf97188548d7e5e9d6d444c6ec832"
+                    },
+                    "citation": "Alain Haye / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Пухова Галина",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1625233376562,
+                        "string": "July 2, 2021"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/79151941ebdc2b1be256886b1db4420e60ddab94",
+                        "m": "https://bs.plantnet.org/image/m/79151941ebdc2b1be256886b1db4420e60ddab94",
+                        "s": "https://bs.plantnet.org/image/s/79151941ebdc2b1be256886b1db4420e60ddab94"
+                    },
+                    "citation": "Пухова Галина / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5411920"
+            },
+            "powo": {
+                "id": "140952-1"
+            }
+        },
+        {
+            "score": 0.00154,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula uniflora",
+                "scientificNameAuthorship": "L.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [
+                    "Arctic campanula",
+                    "Arctic harebell",
+                    "Arctic Bellflower"
+                ],
+                "scientificName": "Campanula uniflora L."
+            },
+            "images": [
+                {
+                    "organ": "habit",
+                    "author": "EOL − Niehaus, T.F.",
+                    "license": "cc-by-nc-sa",
+                    "date": {
+                        "timestamp": 1482322141193,
+                        "string": "December 21, 2016"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/358f30b43d4abfa25536084fbe5481f49ff97ae5",
+                        "m": "https://bs.plantnet.org/image/m/358f30b43d4abfa25536084fbe5481f49ff97ae5",
+                        "s": "https://bs.plantnet.org/image/s/358f30b43d4abfa25536084fbe5481f49ff97ae5"
+                    },
+                    "citation": "EOL − Niehaus, T.F. / Pl@ntNet, cc-by-nc-sa"
+                },
+                {
+                    "organ": "habit",
+                    "author": "EOL − Niehaus, T.F.",
+                    "license": "cc-by-nc-sa",
+                    "date": {
+                        "timestamp": 1482322141193,
+                        "string": "December 21, 2016"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/1b482afe0b4a60cfbca0e7c778a83cdcba11096f",
+                        "m": "https://bs.plantnet.org/image/m/1b482afe0b4a60cfbca0e7c778a83cdcba11096f",
+                        "s": "https://bs.plantnet.org/image/s/1b482afe0b4a60cfbca0e7c778a83cdcba11096f"
+                    },
+                    "citation": "EOL − Niehaus, T.F. / Pl@ntNet, cc-by-nc-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5411919"
+            }
+        },
+        {
+            "score": 0.0015,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula serrata",
+                "scientificNameAuthorship": "(Kit. ex Schult.) Hendrych",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [],
+                "scientificName": "Campanula serrata (Kit. ex Schult.) Hendrych"
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Fra Francesca",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1588981272239,
+                        "string": "May 8, 2020"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/20b0610c0a89d5d74295834da0ac2fc07e451ce3",
+                        "m": "https://bs.plantnet.org/image/m/20b0610c0a89d5d74295834da0ac2fc07e451ce3",
+                        "s": "https://bs.plantnet.org/image/s/20b0610c0a89d5d74295834da0ac2fc07e451ce3"
+                    },
+                    "citation": "Fra Francesca / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "TIBIRNAC Marcel",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1571519992443,
+                        "string": "October 19, 2019"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/d268a09c3655d0661f1a6a7212c952f832bdb8b1",
+                        "m": "https://bs.plantnet.org/image/m/d268a09c3655d0661f1a6a7212c952f832bdb8b1",
+                        "s": "https://bs.plantnet.org/image/s/d268a09c3655d0661f1a6a7212c952f832bdb8b1"
+                    },
+                    "citation": "TIBIRNAC Marcel / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "TIBIRNAC Marcel",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1571518996938,
+                        "string": "October 19, 2019"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/fe5f87d5ea737f30536fed2cc94975cfec29d8a8",
+                        "m": "https://bs.plantnet.org/image/m/fe5f87d5ea737f30536fed2cc94975cfec29d8a8",
+                        "s": "https://bs.plantnet.org/image/s/fe5f87d5ea737f30536fed2cc94975cfec29d8a8"
+                    },
+                    "citation": "TIBIRNAC Marcel / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5411208"
+            },
+            "powo": {
+                "id": "141081-1"
+            },
+            "iucn": {
+                "id": "161866",
+                "category": "LC"
+            }
+        },
+        {
+            "score": 0.0014,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula alpina",
+                "scientificNameAuthorship": "Jacq.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [
+                    "Alpine Bellflower"
+                ],
+                "scientificName": "Campanula alpina Jacq."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Michal Svit",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1657896916281,
+                        "string": "July 15, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/069bf28178652e33f5fe47bb5dd31eacddca9c11",
+                        "m": "https://bs.plantnet.org/image/m/069bf28178652e33f5fe47bb5dd31eacddca9c11",
+                        "s": "https://bs.plantnet.org/image/s/069bf28178652e33f5fe47bb5dd31eacddca9c11"
+                    },
+                    "citation": "Michal Svit / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Michal Svit",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1657389255318,
+                        "string": "July 9, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/b0b462af63d9feaa867a5e1a8dbf0fd9a422920f",
+                        "m": "https://bs.plantnet.org/image/m/b0b462af63d9feaa867a5e1a8dbf0fd9a422920f",
+                        "s": "https://bs.plantnet.org/image/s/b0b462af63d9feaa867a5e1a8dbf0fd9a422920f"
+                    },
+                    "citation": "Michal Svit / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Wendelin Tattermusch",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1655036145705,
+                        "string": "June 12, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/9e5e84b6236ec6f19e88f203d880bcbbcb893f1c",
+                        "m": "https://bs.plantnet.org/image/m/9e5e84b6236ec6f19e88f203d880bcbbcb893f1c",
+                        "s": "https://bs.plantnet.org/image/s/9e5e84b6236ec6f19e88f203d880bcbbcb893f1c"
+                    },
+                    "citation": "Wendelin Tattermusch / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "flower",
+                    "author": "Wendelin Tattermusch",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1655035828404,
+                        "string": "June 12, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/2b5776feaa61daef6af33e1a29ff81ef85f3c77f",
+                        "m": "https://bs.plantnet.org/image/m/2b5776feaa61daef6af33e1a29ff81ef85f3c77f",
+                        "s": "https://bs.plantnet.org/image/s/2b5776feaa61daef6af33e1a29ff81ef85f3c77f"
+                    },
+                    "citation": "Wendelin Tattermusch / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5409877"
+            },
+            "powo": {
+                "id": "139881-1"
+            }
+        },
+        {
+            "score": 0.00122,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula giesekiana",
+                "scientificNameAuthorship": "Vest ex Schult.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [],
+                "scientificName": "Campanula giesekiana Vest ex Schult."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Vladimír Valach",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1659723797811,
+                        "string": "August 5, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/7e9ce4100c0577e429aac9d35f7b33efb0922824",
+                        "m": "https://bs.plantnet.org/image/m/7e9ce4100c0577e429aac9d35f7b33efb0922824",
+                        "s": "https://bs.plantnet.org/image/s/7e9ce4100c0577e429aac9d35f7b33efb0922824"
+                    },
+                    "citation": "Vladimír Valach / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "leaf",
+                    "author": "Vladimír Valach",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1659723797811,
+                        "string": "August 5, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/138e8551be3a0a22e3edc2159322a7f19b9fc4ce",
+                        "m": "https://bs.plantnet.org/image/m/138e8551be3a0a22e3edc2159322a7f19b9fc4ce",
+                        "s": "https://bs.plantnet.org/image/s/138e8551be3a0a22e3edc2159322a7f19b9fc4ce"
+                    },
+                    "citation": "Vladimír Valach / Pl@ntNet, cc-by-sa"
+                },
+                {
+                    "organ": "habit",
+                    "author": "Vladimír Valach",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1659723797811,
+                        "string": "August 5, 2022"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/df1157a9d878b8d119d1abcd41f6e2c9dddf5a04",
+                        "m": "https://bs.plantnet.org/image/m/df1157a9d878b8d119d1abcd41f6e2c9dddf5a04",
+                        "s": "https://bs.plantnet.org/image/s/df1157a9d878b8d119d1abcd41f6e2c9dddf5a04"
+                    },
+                    "citation": "Vladimír Valach / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5410804"
+            },
+            "powo": {
+                "id": "43943-2"
+            }
+        },
+        {
+            "score": 0.001,
+            "species": {
+                "scientificNameWithoutAuthor": "Campanula bononiensis",
+                "scientificNameAuthorship": "L.",
+                "genus": {
+                    "scientificNameWithoutAuthor": "Campanula",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanula"
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": "Campanulaceae",
+                    "scientificNameAuthorship": "",
+                    "scientificName": "Campanulaceae"
+                },
+                "commonNames": [
+                    "Pale bellflower",
+                    "European bellflower"
+                ],
+                "scientificName": "Campanula bononiensis L."
+            },
+            "images": [
+                {
+                    "organ": "flower",
+                    "author": "Laurie Rtrr",
+                    "license": "cc-by-sa",
+                    "date": {
+                        "timestamp": 1595311237750,
+                        "string": "July 21, 2020"
+                    },
+                    "url": {
+                        "o": "https://bs.plantnet.org/image/o/76df75c2334538a8e565c3393a6bb1a7d7f948b7",
+                        "m": "https://bs.plantnet.org/image/m/76df75c2334538a8e565c3393a6bb1a7d7f948b7",
+                        "s": "https://bs.plantnet.org/image/s/76df75c2334538a8e565c3393a6bb1a7d7f948b7"
+                    },
+                    "citation": "Laurie Rtrr / Pl@ntNet, cc-by-sa"
+                }
+            ],
+            "gbif": {
+                "id": "5410250"
+            },
+            "powo": {
+                "id": "140006-1"
+            }
+        }
+    ],
+    "version": "2022-10-24 (7.1)",
+    "remainingIdentificationRequests": 494
+}
