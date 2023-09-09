@@ -4,6 +4,7 @@ django-filter
 djangorestframework
 drf-extra-fields
 numpy
+pandas
 requests
 Pillow
 gunicorn
