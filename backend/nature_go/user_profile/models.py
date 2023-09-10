@@ -105,8 +105,14 @@ def compute_user_answer_xp(user_answer) -> dict:
         'value': np.exp((1-n_correct_answers) / 3),
         'reason': {'Familiarity ratio': familiarity_reason}
     }
-    total = difficulty_xp['value'] * familiarity_xp['value']
+
+    correctness_xp = {
+        'value': user_answer.is_correct,
+        'reason': {'Correctness': user_answer.is_correct}
+    }
+    
+    total = difficulty_xp['value'] * familiarity_xp['value'] * correctness_xp['value']
     return {
         'total': total,
-        'breakdown': [difficulty_xp, familiarity_xp]
+        'breakdown': [difficulty_xp, familiarity_xp, correctness_xp]
     }
