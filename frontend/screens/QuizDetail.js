@@ -18,7 +18,7 @@ export default function QuizDetailScreen({ navigation, route }) {
                 <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                 <Text style={styles.subtitle}>EXAMINATION PAPERS</Text>
                 <Text style={[styles.subtitle, {fontSize: 13}]}>FOR THE YEAR 1823,</Text>
-                <QuizButton label="Take the exam" onPress={() => {navigation.navigate('QuizQuestion', { id: 0 })}}/>
+                <QuizButton label="Take the exam" onPress={() => {navigation.replace('QuizQuestion', { id: 0 })}}/>
             </View>
         </ImageBackground>
         </View>

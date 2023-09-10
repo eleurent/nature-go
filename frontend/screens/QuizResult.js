@@ -12,7 +12,7 @@ export default function QuizResultScreen({ navigation, route }) {
                     {...props}
                     onPress={() => {
                         navigation.popToTop();
-                        navigation.navigate('QuizDetail');
+                        navigation.replace('QuizDetail');
                     }}
                 />
             )

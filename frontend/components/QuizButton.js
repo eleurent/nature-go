@@ -3,7 +3,7 @@ import { StyleSheet, View, Pressable, Text, TouchableHighlight, TouchableOpacity
 
 
 
-export default function QuizButton({ label, theme, onPress, selected, styleOverride }) {
+export default function QuizButton({ label, theme, onPress, selected, disabled, styleOverride }) {
 
     if (theme === "question") {
         return (
@@ -12,6 +12,7 @@ export default function QuizButton({ label, theme, onPress, selected, styleOverr
             >
                 <TouchableHighlight 
                     style={[styles.buttonTouchable, styles.choiceButtonTouchable, selected ? styles.selectedButtonTouchable : {}]}
+                    disabled={disabled}
                     onPress={onPress}
                     activeOpacity={0.85}
                     underlayColor={'#7AB5D7'}
@@ -28,6 +29,38 @@ export default function QuizButton({ label, theme, onPress, selected, styleOverr
                         >{label}</Text>
                     </View>
                 </TouchableHighlight>
+            </View>
+        );
+    }
+    else if (theme === "disabled") {
+        return (
+            <View style={[styles.buttonContainer, styleOverride]}>
+                <Pressable
+                    disabled={disabled}
+                    style={({ pressed }) => [
+                        styles.button,
+                        styles.buttonTouchable,
+                        styles.disabledButton,
+                    ]}
+                    onPress={onPress}>
+                    <Text style={[styles.buttonLabel, styles.disabledButtonLabel]}>{label}</Text>
+                </Pressable>
+            </View>
+        );
+    }
+    else if (theme === "failure") {
+        return (
+            <View style={[styles.buttonContainer, styleOverride]}>
+                <Pressable
+                    disabled={disabled}
+                    style={({ pressed }) => [
+                        styles.button,
+                        styles.buttonTouchable,
+                        styles.failureButton,
+                    ]}
+                    onPress={onPress}>
+                    <Text style={[styles.buttonLabel, styles.failureButtonLabel]}>{label}</Text>
+                </Pressable>
             </View>
         );
     }
@@ -48,7 +81,7 @@ export default function QuizButton({ label, theme, onPress, selected, styleOverr
 
 const styles = StyleSheet.create({
     buttonContainer: {
-        width: 283,
+        width: '100%',
         marginLeft: 'auto',
         marginRight: 'auto',
         alignItems: 'center',
@@ -75,6 +108,12 @@ const styles = StyleSheet.create({
     },
     choiceButton: {
         backgroundColor: "none", 
+    },
+    disabledButton: {
+        backgroundColor: '#dce2e6',
+    },
+    failureButton: {
+        backgroundColor: '#e00',
     },
     pressedButton: {
         backgroundColor: '#539F38',
