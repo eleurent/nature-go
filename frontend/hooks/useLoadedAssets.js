@@ -40,6 +40,7 @@ export function useLoadedAssets() {
                 const imageAssets = cacheImages([
                     require('../assets/images/page-background.png'),
                     require('../assets/images/page-background-2.png'),
+                    require('../assets/images/avatar_full.png'),
                 ]);
 
                 const fontAssets = cacheFonts([
