@@ -20,7 +20,7 @@ const SpeciesButton = (props) => {
             <Animated.Image style={styles.categoryImage}
                 resizeMode='contain'
                 source={{uri: image_url}}
-                sharedTransitionTag={image_url}
+                sharedTransitionTag={"species" + props.index}
             />
             <Text style={styles.categoryLabel}>{props.label}</Text>
         </TouchableOpacity>
@@ -58,6 +58,7 @@ export default function SpeciesListScreen({ navigation, route }) {
                         key={item.id} label={item.display_name} 
                         onPress={() => navigation.navigate('SpeciesDetail', { id: item.id })}
                         imageSource={item.illustration_url}
+                        index={item.id}
                     />
                 );
             }}

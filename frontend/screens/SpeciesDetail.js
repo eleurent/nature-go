@@ -59,7 +59,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                     resizeMode='contain'
                     source={{ uri: illustration_url }}
                     placeholder='empty'
-                    sharedTransitionTag={illustration_url}
+                    sharedTransitionTag={"species" + route.params.id}
                 />
                 <View style={styles.textContainer}>
                     <Text style={[styles.speciesName, styles.nameContainer]}>{speciesDetails.display_name ? speciesDetails.display_name : "Name"}</Text>
