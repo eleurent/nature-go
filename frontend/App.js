@@ -40,22 +40,8 @@ export default function App() {
             // User isn't signed in
             <>
               <Stack.Screen name="Landing" component={LandingScreen}/>
-              <Stack.Screen 
-                name="SignIn" 
-                component={SignInScreen}
-                options={{
-                  title: 'Sign in',
-                  animationTypeForReplace: authState.isSignout ? 'pop' : 'push',
-                }}
-              />
-              <Stack.Screen 
-                name="SignUp" 
-                component={SignUpScreen}
-                options={{
-                  title: 'Sign up',
-                  animationTypeForReplace: authState.isSignout ? 'pop' : 'push',
-                }}
-              />
+              <Stack.Screen name="SignIn" component={SignInScreen}/>
+              <Stack.Screen  name="SignUp" component={SignUpScreen}/>
             </>
           ) : (
             // User is signed in

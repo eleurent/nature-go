@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import axios from 'axios';
+import Constants from 'expo-constants'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthContext } from '../contexts/authContext';
+
+const API_URL = Constants.expoConfig.extra.API_URL;
+const PROFILE_URL = API_URL + 'api/profile/'
 
 const XPBar = (props) => {
     return (
@@ -13,6 +18,16 @@ const XPBar = (props) => {
 
 export default function ProfileScreen({ navigation, route }) {
     const { authMethods } = useContext(AuthContext);
+    const [profileData, setProfileData] = useState(null);
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            const response = await axios.get(PROFILE_URL);
+            setProfileData(response.data);
+        };
+
+        fetchProfile();
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -23,8 +38,8 @@ export default function ProfileScreen({ navigation, route }) {
                         <View style={styles.statsContainer}>
                             <Text style={styles.title}>Undergraduate</Text>
                             <XPBar/>
-                            <Text style={styles.xpText}>165 / 200 XP</Text>
-                            <Text style={styles.level}>2</Text>
+                            <Text style={styles.xpText}>{profileData ? (profileData.xp - profileData.current_level_xp) : 0} / {profileData ? (profileData.next_level_xp - profileData.current_level_xp) : 0} XP</Text>
+                            <Text style={styles.level}>{profileData ? profileData.level : 0}</Text>
                             <Text style={styles.levelText}>LEVEL</Text>
                             <View style={styles.statsTable}>
                                 <View style={styles.statsRow}>
