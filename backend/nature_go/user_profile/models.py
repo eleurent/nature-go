@@ -14,6 +14,9 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+    def level_xp(self, level):
+        return 10 * level ** 3 - 10
 
     def gain_xp_from(self, instance):
         if hasattr(instance, 'xp') and instance.xp: return
@@ -25,6 +28,8 @@ class Profile(models.Model):
             raise ValueError(f'Unkown XP source: {instance}')
         instance.save()
         self.xp += instance.xp['total']
+        if self.xp > self.level_xp(self.level + 1):
+            self.level += 1
         self.save()
 
 
