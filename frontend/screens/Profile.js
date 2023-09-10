@@ -8,10 +8,13 @@ import { AuthContext } from '../contexts/authContext';
 const API_URL = Constants.expoConfig.extra.API_URL;
 const PROFILE_URL = API_URL + 'api/profile/'
 
-const XPBar = (props) => {
+const XPBar = ({data}) => {
+    const maxWidth = styles.xpBarBackground.width - 2;
+    let width = data ? (data.xp - data.current_level_xp) / (data.next_level_xp - data.current_level_xp) * maxWidth : 0;
+
     return (
         <View style={styles.xpBarBackground}>
-            <View style={styles.xpBarForeground}></View>
+            <View style={[styles.xpBarForeground, {width}]}></View>
         </View>
     )
 }
@@ -36,7 +39,7 @@ export default function ProfileScreen({ navigation, route }) {
                         <Image source={require('../assets/images/avatar_full.png')} style={styles.avatar}/>
                         <View style={styles.statsContainer}>
                             <Text style={styles.title}>Undergraduate</Text>
-                            <XPBar/>
+                            <XPBar data={profileData} />
                             <Text style={styles.xpText}>{profileData ? (profileData.xp - profileData.current_level_xp) : 0} / {profileData ? (profileData.next_level_xp - profileData.current_level_xp) : 0} XP</Text>
                             <Text style={styles.level}>{profileData ? profileData.level : 0}</Text>
                             <Text style={styles.levelText}>LEVEL</Text>
