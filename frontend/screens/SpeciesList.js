@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants'
-
+import Animated from 'react-native-reanimated';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const SPECIES_LIST_URL = API_URL + 'api/species/'
@@ -17,9 +17,10 @@ const SpeciesButton = (props) => {
             style={styles.categoryContainer}
             activeOpacity={0.5}
             onPress={props.onPress}>
-            <Image style={styles.categoryImage}
+            <Animated.Image style={styles.categoryImage}
                 resizeMode='contain'
                 source={{uri: image_url}}
+                sharedTransitionTag={image_url}
             />
             <Text style={styles.categoryLabel}>{props.label}</Text>
         </TouchableOpacity>

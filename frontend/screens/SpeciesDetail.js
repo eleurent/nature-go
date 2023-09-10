@@ -5,6 +5,7 @@ import axios from 'axios';
 import Constants from 'expo-constants'
 import ObservationCarousel from '../components/ObservationCarousel';
 import ObservationImageModal from '../components/ObservationImageModal';
+import Animated from 'react-native-reanimated';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const SPECIES_DETAILS_URL = (id) => API_URL + `api/species/${id}/`
@@ -53,11 +54,12 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
-                <Image
+                <Animated.Image
                     style={styles.illustrationImage}
                     resizeMode='contain'
                     source={{ uri: illustration_url }}
                     placeholder='empty'
+                    sharedTransitionTag={illustration_url}
                 />
                 <View style={styles.textContainer}>
                     <Text style={[styles.speciesName, styles.nameContainer]}>{speciesDetails.display_name ? speciesDetails.display_name : "Name"}</Text>
