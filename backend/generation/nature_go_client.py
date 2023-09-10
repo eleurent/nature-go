@@ -28,14 +28,15 @@ class NatureGoClient:
         else:
             raise ValueError(f'Login failed with status  {response.status_code} and response {response.json()}')
 
-    def get_all_species(self) -> list:
+    def get_all_species(self, limit=100, offset=0, ordering='-occurences_cdf') -> list:
         if self.token is None:
             raise ValueError('Client is not logged in')
-        response = requests.get(SPECIES_LIST_URL, headers={'Authorization': f'Token {self.token}'})
+        params = {'limit': limit, 'offset': offset, 'ordering': ordering}
+        response = requests.get(SPECIES_LIST_URL, headers={'Authorization': f'Token {self.token}'}, params=params)
         if response.status_code == 200:
             result = response.json()
             logger.info(f'Fetched {len(result)} species')
-            return result
+            return result['results']
         else:
             raise ValueError(f'{SPECIES_LIST_URL} failed with status  {response.status_code} and response {response.json()}')
 
@@ -79,3 +80,22 @@ class NatureGoClient:
                 logger.info(f'Posted questions for species {species_id}')
         else:
             raise ValueError(f'{QUESTION_CREATE_URL} failed with status  {response.status_code} and response {response.content}')
+        
+    def post_species_descriptions(self, species_id: int, descriptions: dict):
+        if self.token is None:
+            raise ValueError('Client is not logged in')
+        
+        summaries = [
+            descriptions['short_summary'],
+            descriptions['medium_summary'],
+            descriptions['long_summary']
+        ]
+
+        response = requests.patch(SPECIES_DETAIL_URL.format(species_id=species_id),
+                                headers={'Authorization': f'Token {self.token}'},
+                                json={"descriptions": summaries})
+        
+        if response.status_code == 200:
+            logger.info(f'Updated description for species {species_id}')
+        else:
+            raise ValueError(f'{SPECIES_DETAIL_URL} failed with status  {response.status_code} and response {response.content}')  

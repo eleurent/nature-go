@@ -1,4 +1,4 @@
-short_summary_v1 = """
+summary_v1 = """
 Here is some seed material about {plant_name}: 
 {material}
 
@@ -12,7 +12,7 @@ Medium summary: {{medium_summary}}
 Short summary: {{short_summary}}
 """
 
-short_summary_v2 = """
+summary_v2 = """
 Here is some seed material about {plant_name}: 
 {material}
 
@@ -26,7 +26,7 @@ Medium summary: {{medium_summary}}
 Short summary: {{short_summary}}
 """
 
-short_summary_v3 = """
+summary_v3 = """
 Here is some seed material about {plant_name}: 
 {material}
 
@@ -47,7 +47,7 @@ Medium summary: {{medium_summary}}
 Short summary: {{short_summary}}
 """
 
-short_summary_v4 = """
+summary_v4 = """
 Here is some seed material about {plant_name}: 
 {material}
 
@@ -61,7 +61,7 @@ Medium summary: {{medium_summary}}
 Short summary: {{short_summary}}
 """
 
-short_summary_v5 = """
+summary_v5 = """
 Here is some seed material about {plant_name}: 
 {material}
 

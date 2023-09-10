@@ -71,3 +71,18 @@ def try_except_decorator(func: Callable) -> Callable:
                 else:
                     trials_counter += 1
     return func_wrapper
+
+def parse_summary(input_text):
+    parsed_summaries = {}
+
+    # Define the labels to look for in the input text
+    labels = ['Long summary:', 'Medium summary:', 'Short summary:']
+
+    start_index = 0
+    for i, label in enumerate(labels):
+        start_index = input_text.find(label, start_index)
+        end_index = input_text.find(labels[i + 1], start_index) if i + 1 < len(labels) else len(input_text)
+        summary_text = input_text[start_index + len(label):end_index].strip()
+        parsed_summaries[label[:-1].lower().replace(' ', '_')] = summary_text
+
+    return parsed_summaries
