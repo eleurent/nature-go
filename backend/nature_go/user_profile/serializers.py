@@ -37,7 +37,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         return len(set(obs.species for obs in instance.user.observation_set.all()))
 
     def get_observations_count(self, instance):
-        return instance.user.observation_set.count()
+        return instance.user.observation_set.exclude(species=None).count()
     
     def get_quiz_count(self, instance):
         return instance.user.quiz_set.count()

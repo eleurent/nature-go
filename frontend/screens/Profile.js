@@ -50,7 +50,7 @@ export default function ProfileScreen({ navigation, route }) {
                                 </View>
                                 <View style={styles.statsRow}>
                                     <Text style={styles.statsKey}>Observations made</Text>
-                                    <Text style={styles.statsValue}>12</Text>
+                                    <Text style={styles.statsValue}>{profileData ? profileData.observations_count : 0}</Text>
                                 </View>
                                 <View style={styles.statsRow}>
                                     <Text style={styles.statsKey}>Species discovered</Text>
