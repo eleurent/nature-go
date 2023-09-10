@@ -22,8 +22,7 @@ export default function ProfileScreen({ navigation, route }) {
 
     useEffect(() => {
         const fetchProfile = async () => {
-            const response = await axios.get(PROFILE_URL);
-            setProfileData(response.data);
+            axios.get(PROFILE_URL).then(response => setProfileData(response.data));
         };
 
         fetchProfile();
@@ -47,16 +46,20 @@ export default function ProfileScreen({ navigation, route }) {
                                     <Text style={styles.statsValue}>Botany</Text>
                                 </View>
                                 <View style={styles.statsRow}>
-                                    <Text style={styles.statsKey}>Species discovered</Text>
-                                    <Text style={styles.statsValue}>8</Text>
+                                    <Text style={styles.statsKey}>Observations made</Text>
+                                    <Text style={styles.statsValue}>12</Text>
                                 </View>
                                 <View style={styles.statsRow}>
-                                    <Text style={styles.statsKey}>Exams passed</Text>
+                                    <Text style={styles.statsKey}>Species discovered</Text>
+                                    <Text style={styles.statsValue}>{profileData ? profileData.species_count : 0}</Text>
+                                </View>
+                                <View style={styles.statsRow}>
+                                    <Text style={styles.statsKey}>Exams taken</Text>
                                     <Text style={styles.statsValue}>2</Text>
                                 </View>
                                 <View style={styles.statsRow}>
-                                    <Text style={styles.statsKey}>Exams failed</Text>
-                                    <Text style={styles.statsValue}>6</Text>
+                                    <Text style={styles.statsKey}>Mean exam score</Text>
+                                    <Text style={styles.statsValue}>37%</Text>
                                 </View>
                             </View>
                         </View>

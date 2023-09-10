@@ -1,4 +1,5 @@
-
+from django.db import models
+from django.db.models import Avg, Case, When, Sum, F
 from rest_framework import serializers
 from .models import Profile
 
@@ -8,6 +9,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     next_level_xp = serializers.SerializerMethodField()
     species_count = serializers.SerializerMethodField()
     observations_count = serializers.SerializerMethodField()
+    quiz_count = serializers.SerializerMethodField()
+    quiz_mean_score = serializers.SerializerMethodField()
     class Meta:
         model = Profile
         fields = [
@@ -19,6 +22,8 @@ class ProfileSerializer(serializers.ModelSerializer):
              'next_level_xp',
              'species_count',
              'observations_count',
+             'quiz_count',
+             'quiz_mean_score',
         ]
         lookup_field = 'username'
 
@@ -33,3 +38,20 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_observations_count(self, instance):
         return instance.user.observation_set.count()
+    
+    def get_quiz_count(self, instance):
+        return instance.user.quiz_set.count()
+
+    def get_quiz_mean_score(self, instance):
+        quizzes = instance.user.quiz_set.all()
+
+        # Annotate each quiz with the number of correct answers
+        quizzes = quizzes.annotate(correct_answers=Sum(Case(
+            When(multiplechoiceuseranswer__user_answer=F('multiplechoiceuseranswer__question__correct_choice'), then=1),
+            default=0,
+            output_field=models.IntegerField()
+        )))
+
+        # Aggregate the average number of correct answers across all quizzes
+        average_correct_answers = quizzes.aggregate(Avg('correct_answers'))['correct_answers__avg']
+        return average_correct_answers
