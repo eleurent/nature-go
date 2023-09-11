@@ -36,19 +36,6 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         fetchSpeciesObservations();
     }, []);
 
-    React.useLayoutEffect(() => {
-        navigation.setOptions({
-          headerLeft: (props) => (
-            <HeaderBackButton
-              {...props}
-              onPress={() => {
-                navigation.navigate('SpeciesList');
-              }}
-            />
-          ),
-        });
-      }, [navigation]);
-
     let illustration_url = ("illustration_url" in speciesDetails) ? 
                            speciesDetails.illustration_url.replace('http://localhost/', API_URL) : null;
     return (
