@@ -38,6 +38,6 @@ class QuizSerializer(serializers.ModelSerializer):
             instance.multiplechoiceuseranswer_set.all().delete()
             [MultipleChoiceUserAnswer.objects.create(**answer)
              for answer in validated_data.get('multiplechoiceuseranswer_set')]
-        if not instance.xp and instance.multiplechoiceuseranswer_set.exists():
+        if not instance.xp and instance.is_answered:
             xp_gained.send(sender=instance.__class__, instance=instance)
         return instance

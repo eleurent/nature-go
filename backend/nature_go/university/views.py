@@ -26,7 +26,7 @@ class QuizCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
     def perform_create(self, serializer):
-        questions = random.sample(list(MultipleChoiceQuestion.objects.all()), 2)
+        questions = random.sample(list(MultipleChoiceQuestion.objects.all()), 5)
         serializer.save(user=self.request.user, multiple_choice_questions=questions)
         
     def get(self, request, *args, **kwargs):

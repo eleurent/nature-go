@@ -21,6 +21,12 @@ const quizReducer = (prevState, action) => {
             };
         case 'RESET_ANSWERS':
             answers = [...Array(prevState.quiz.multiple_choice_questions.length).fill(null)];
+            prevState.quiz.multiple_choice_questions.forEach((question, index) => {
+                userAnswer = prevState.quiz.multiplechoiceuseranswer_set.find(
+                    userAnswer => userAnswer.question === question.id
+                );
+                answers[index] = userAnswer ? userAnswer.user_answer : null
+            });
             return {
                 ...prevState,
                 answers: answers,
@@ -42,6 +48,14 @@ export const useQuiz = () => {
 
     const [quizState, dispatch] = useReducer(quizReducer, initialState);
 
+
+    const isQuestionAnswered = (quizState, question_id) => {
+        const questionId = quizState.quiz.multiple_choice_questions[question_id].id
+        return quizState.quiz.multiplechoiceuseranswer_set.some(
+            userAnswer => userAnswer.question === questionId
+        );
+    }
+
     const quizMethods = React.useMemo(
         () => ({
             getOrCreateQuiz: async () => {
@@ -53,6 +67,14 @@ export const useQuiz = () => {
             isQuestionSelected: (quizState, question_id, answer_id) => {
                 return (quizState.answers[question_id] === answer_id)
             },
+            isQuestionAnswered,
+            isAnswerCorrect: (quizState, question_id) => {
+                if (!isQuestionAnswered(quizState, question_id)) return false;
+                const questionId = quizState.quiz.multiple_choice_questions[question_id].id
+                return quizState.quiz.multiplechoiceuseranswer_set.find(
+                    userAnswer => userAnswer.question === questionId
+                ).is_correct;
+            },
             selectQuestion: (question_id, answer_id) => {
                 dispatch({ type: 'SELECT_QUESTION', question_id, answer_id });
             },
@@ -62,7 +84,7 @@ export const useQuiz = () => {
                     quiz: quiz.id,
                     question: question.id,
                     user_answer: quizState.answers[index]
-                }));
+                })).filter(answer => answer.user_answer !== null);
                 await axios.put(QUIZ_UPDATE(quiz.id), quiz).then(response => {
                     dispatch({ type: 'SET_QUIZ', quiz: response.data });
                 })            
