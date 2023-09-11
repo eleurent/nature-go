@@ -30,8 +30,6 @@ const parseReason = (reason) => {
 
 function XPModal({ isVisible, xpData, onClose }) {
     
-    // create a ref object for the animated value
-    // const fadeAnim = useRef().current;
     const fadeAnim = new Animated.Value(0);
     const [totalXP, setTotalXP] = useState(0);
 

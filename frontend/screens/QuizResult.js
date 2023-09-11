@@ -1,26 +1,50 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image, Animated, Easing } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/elements';
 import { QuizContext } from '../contexts/quizContext';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function QuizResultScreen({ navigation, route }) {
+
+    const fadeAnim = new Animated.Value(0);
+    const [totalXP, setTotalXP] = useState(0);
+    const { quizState, quizMethods } = useContext(QuizContext);
+    const success = quizState.quiz.multiplechoiceuseranswer_set.every((item) => item.is_correct);
+    const isQuestionCorrect = (item) => item.breakdown.find((reason) => 'Correctness' in reason.reason).value
+    const questionDifficulty = (item) => item.breakdown.find((reason) => 'Difficulty' in reason.reason).reason.Difficulty
+
+
+    useEffect(() => {
+        if (quizState.quiz.xp) {
+            fadeAnim.addListener(({ value }) => setTotalXP(Math.round(value)));
+            Animated.timing(fadeAnim, {
+                toValue: quizState.quiz.xp.total,
+                duration: 2000,
+                easing: Easing.linear,
+                useNativeDriver: true,
+            }).start();
+        }
+    }, [quizState.quiz]);
+
 
     useEffect(() => {
         navigation.setOptions({
             headerLeft: (props) => (
                 <HeaderBackButton
                     {...props}
+                    backImage={() => (
+                        <Ionicons name='close' size={24} color='#000' />
+                    )}
                     onPress={() => {
-                        navigation.popToTop();
                         navigation.replace('QuizDetail');
                     }}
                 />
             )
         });
     });
-    
-    const { quizState, quizMethods } = useContext(QuizContext);
-    const success = quizState.quiz.multiplechoiceuseranswer_set.every((item) => item.is_correct);
+
+
+
     return (
         <View style={styles.container} >
         <ImageBackground source={require('../assets/images/page-background-2.png')} style={styles.containerImage}>
@@ -34,19 +58,33 @@ export default function QuizResultScreen({ navigation, route }) {
                         }
                     </Text>
                     <FlatList
-                        style={styles.resultsList}
-                        horizontal
-                        showsHorizontalScrollIndicator={Platform.OS === 'web'}
-                        data={quizState.quiz.multiplechoiceuseranswer_set}
+                        style={{ marginTop: 10, marginBottom: 10 }}
+                        vertical
+                        numColumns={1}
+                        showsVerticalScrollIndicator={Platform.OS === 'web'}
+                        data={quizState.quiz.xp.breakdown}
                         contentContainerStyle={{}}
                         renderItem={({ item, index }) => {
-                            return item.is_correct ? (
-                                <Text key={index} style={[styles.result, {color: 'green'}]}>✓</Text>
-                            ) : (
-                                <Text key={index} style={[styles.result, { color: 'red' }]}>✗</Text>
+                            return (
+                                <View key={index} style={styles.breakdownContainer}>
+                                    {
+                                        isQuestionCorrect(item) ? 
+                                        <Ionicons name='md-checkmark-circle' size={30} color='#659900' style={{marginTop: -3}}/> : 
+                                        <Ionicons name='md-close-circle' size={30} color='#d00' style={{ marginTop: -3 }} />
+                                    }
+                                    <Text style={styles.breakdownReason}>{questionDifficulty(item)}</Text>
+                                    <Text style={styles.breakdownValue}>{Math.round(item.total)} XP</Text>
+                                </View>
                             );
                         }}
                     />
+                    <Image source={require('../assets/images/separator.png')} style={styles.separator} />
+                    <View style={styles.totalContainer}>
+                        <Text style={styles.total}>TOTAL</Text>
+                        <Animated.Text style={[styles.total, styles.totalValue]}>{totalXP} XP</Animated.Text>
+                    </View>
+
+
                     <Text style={[styles.text, {textAlign: 'center'}]}>
                         {
                             success ? 'Your performance was excellent.' 
@@ -104,5 +142,39 @@ const styles = StyleSheet.create({
     result: {
         fontSize: 25,
         fontFamily: 'OldStandardTT_400Regular',  // Special Elite
-    }
+    },
+    breakdownContainer: {
+        flexDirection: "row",
+        marginBottom: 10,
+        marginTop: 5,
+    },
+    totalContainer: {
+        flexDirection: "row",
+        marginBottom: 10,
+        marginTop: 5,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    },
+    total: {
+        // fontFamily: "Tinos_400Regular",
+        fontSize: 24,
+        color: "#444",
+    },
+    totalValue: {
+        color: "#F35",
+        marginLeft: 5
+    },
+    breakdownReason: {
+        fontSize: 18,
+        color: "#444",
+        marginRight: 10,
+        marginLeft: 10,
+        fontFamily: 'OldStandardTT_400Regular',  // Special Elite
+    },
+    breakdownValue: {
+        marginLeft: 'auto',
+        fontSize: 16,
+        color: "#F35",
+    },
+
 });

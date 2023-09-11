@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
+import { HeaderBackButton } from '@react-navigation/elements';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import {
@@ -15,10 +16,10 @@ async function onPressContinue(id, quizState, quizMethods, navigation) {
     if (!quizMethods.isQuestionAnswered(quizState, id)) {
         quizMethods.answerQuiz(quizState);
     } else if (id < quizState.quiz.multiple_choice_questions.length - 1) {
-        navigation.push('QuizQuestion', { id: id + 1 });
+        navigation.replace('QuizQuestion', { id: id + 1 });
     } else {
         await quizMethods.answerQuiz(quizState);
-        navigation.navigate('QuizResult');
+        navigation.replace('QuizResult');
     }
 }
 
@@ -28,8 +29,23 @@ export default function QuizQuestionScreen({ navigation, route }) {
         OldStandardTT_700Bold,
         OldStandardTT_400Regular
     });
-
     const { quizState, quizMethods } = useContext(QuizContext);
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerLeft: (props) => (
+                <HeaderBackButton
+                    {...props}
+                    backImage={() => (
+                        <Ionicons name='close' size={24} color='#000' />
+                    )}
+                    onPress={() => {
+                        navigation.replace('QuizDetail');
+                    }}
+                />
+            )
+        });
+    });
 
     if (!fontsLoaded | ! quizState.quiz)
         return null;
@@ -43,12 +59,12 @@ export default function QuizQuestionScreen({ navigation, route }) {
             <ImageBackground source={require('../assets/images/page-background-2.png')} style={styles.containerImage}>
                 {hasAnswered && isCorrect ? 
                 <View style={styles.successContainer}>
-                    <Ionicons name='md-checkmark-circle' size={30} color='#659900' /><Text style={styles.succesText}>Amazing!</Text>
+                    <Ionicons name='md-checkmark-circle' size={30} color='#659900'/><Text style={styles.succesText}>Amazing!</Text>
                 </View>: 
-                    hasAnswered && !isCorrect ?
-                        <View style={[styles.successContainer, styles.failureContainer]}>
-                            <Ionicons name='md-close-circle' size={30} color='#d00' /><Text style={[styles.succesText, styles.failureText]}>Incorrect</Text>
-                        </View> :
+                hasAnswered && !isCorrect ?
+                <View style={[styles.successContainer, styles.failureContainer]}>
+                    <Ionicons name='md-close-circle' size={30} color='#d00'/><Text style={[styles.succesText, styles.failureText]}>Incorrect</Text>
+                </View> :
                 null}
                 <View style={styles.outline}>
                     <Text style={styles.question}>{question.question }</Text>
