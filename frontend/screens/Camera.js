@@ -34,15 +34,23 @@ export default function CameraScreen({ navigation }) {
     const [type, setType] = useState(Camera.Constants.Type.back);
 
     const permissionFunction = async () => {
-        const cameraPerm = await Camera.requestCameraPermissionsAsync();
+        let cameraPerm = await Camera.requestCameraPermissionsAsync();
         setCameraPermission(cameraPerm.status === 'granted');
-        if (cameraPermission === false)
-            alert('Permission for camera access needed. Status: ' + cameraPerm.status);
+        if (cameraPerm.status !== 'granted') {
+            console.log('Permission for camera access needed. Status: ' + cameraPerm.status);
+            await ImagePicker.requestCameraPermissionsAsync();
+            cameraPerm = await Camera.requestCameraPermissionsAsync();
+            setCameraPermission(cameraPerm.status === 'granted');
+        }
 
-        const galleryPerm = await ImagePicker.getMediaLibraryPermissionsAsync();
+        let galleryPerm = await ImagePicker.getMediaLibraryPermissionsAsync();
         setGalleryPermission(galleryPerm.status === 'granted');
-        if (galleryPermission === false)
-            alert('Permission for galley access needed. Status: ' + galleryPerm.status);
+        if (galleryPerm.status !== 'granted') {
+            console.log('Permission for galley access needed. Status: ' + galleryPerm);
+            await ImagePicker.requestMediaLibraryPermissionsAsync();
+            galleryPerm = await ImagePicker.getMediaLibraryPermissionsAsync();
+            setGalleryPermission(galleryPerm.status === 'granted');
+        }
     };
 
     useEffect(() => {
