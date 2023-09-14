@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Pressable } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthContext } from '../contexts/authContext';
+import ImageModal from '../components/ImageModal';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const PROFILE_URL = API_URL + 'api/profile/'
@@ -22,6 +23,7 @@ const XPBar = ({data}) => {
 export default function ProfileScreen({ navigation, route }) {
     const { authMethods } = useContext(AuthContext);
     const [profileData, setProfileData] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -36,7 +38,9 @@ export default function ProfileScreen({ navigation, route }) {
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
                 <SafeAreaView style={styles.containerInsideImage}>
                     <View style={styles.header}>
-                        <Image source={require('../assets/images/avatar_full.png')} style={styles.avatar}/>
+                        <Pressable style={styles.avatarContainer} onPress={() => setModalVisible(true)}>
+                            <Image source={global.avatar.full} style={styles.avatar} />
+                        </Pressable>
                         <View style={styles.statsContainer}>
                             <Text style={styles.title}>Undergraduate</Text>
                             <XPBar data={profileData} />
@@ -68,10 +72,10 @@ export default function ProfileScreen({ navigation, route }) {
                         </View>
                     </View>
                     <Image source={require('../assets/images/separator.png')} style={styles.separator} />
-                    {/* <Button title="Sign out" onPress={authMethods.signOut} /> */}
                     <TouchableOpacity style={styles.button} onPress={authMethods.signOut}>
                         <Text style={styles.buttonText}>Sign out</Text>
                     </TouchableOpacity>
+                    <ImageModal modalVisible={modalVisible} setModalVisible={setModalVisible} modalImage={global.avatar.full} backgroundColor='rgba(230,200,150,0.5)'/>
                 </SafeAreaView>
             </ImageBackground>
         </View>
@@ -96,14 +100,20 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
     },
+    avatarContainer: {
+        flex: 1,
+        marginLeft: 10,
+        height: 320,
+    },
     avatar: {
-        width: 140,
-        height: 'auto',
-        marginLeft: 20,
-        aspectRatio: 9/20,
+        width: "100%",
+        height: "100%",
+        resizeMode: "contain",
     },
     statsContainer: {
-        marginLeft: 20,
+        flex: 1.2,
+        marginLeft: 10,
+        marginRight: 10,
     },
     title: {
         fontSize: 25,
@@ -113,6 +123,8 @@ const styles = StyleSheet.create({
         marginRight: 'auto',
     },
     xpBarBackground: {
+        marginRight: 'auto',
+        marginLeft: 'auto',
         marginTop: 10,
         marginBottom: 10,
         backgroundColor: '#999',

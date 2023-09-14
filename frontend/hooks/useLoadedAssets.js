@@ -28,6 +28,26 @@ function cacheFonts(fonts) {
     return fonts.map(font => Font.loadAsync(font));
 }
 
+
+const AVATAR_PATHS = [
+    { full: require(`../assets/images/avatars/girl_1_full.png`), bubble: require(`../assets/images/avatars/girl_1_bubble.png`) },
+    { full: require(`../assets/images/avatars/girl_2_full.png`), bubble: require(`../assets/images/avatars/girl_2_bubble.png`) },
+    { full: require(`../assets/images/avatars/girl_3_full.png`), bubble: require(`../assets/images/avatars/girl_3_bubble.png`) },
+    { full: require(`../assets/images/avatars/boy_1_full.png`), bubble: require(`../assets/images/avatars/boy_1_bubble.png`) },
+    { full: require(`../assets/images/avatars/boy_2_full.png`), bubble: require(`../assets/images/avatars/boy_2_bubble.png`) },
+    { full: require(`../assets/images/avatars/boy_3_full.png`), bubble: require(`../assets/images/avatars/boy_3_bubble.png`) },
+    { full: require(`../assets/images/avatars/woman_1_full.png`), bubble: require(`../assets/images/avatars/woman_1_bubble.png`) },
+    { full: require(`../assets/images/avatars/woman_2_full.png`), bubble: require(`../assets/images/avatars/woman_2_bubble.png`) },
+    { full: require(`../assets/images/avatars/woman_3_full.png`), bubble: require(`../assets/images/avatars/woman_3_bubble.png`) },
+    { full: require(`../assets/images/avatars/man_1_full.png`), bubble: require(`../assets/images/avatars/man_1_bubble.png`) },
+    { full: require(`../assets/images/avatars/man_2_full.png`), bubble: require(`../assets/images/avatars/man_2_bubble.png`) },
+    { full: require(`../assets/images/avatars/man_3_full.png`), bubble: require(`../assets/images/avatars/man_3_bubble.png`) },
+]
+
+Array.prototype.sample = function () {
+    return this[Math.floor(Math.random() * this.length)];
+}
+
 export function useLoadedAssets() {
     const [isLoadingComplete, setLoadingComplete] = React.useState(false);
 
@@ -37,10 +57,14 @@ export function useLoadedAssets() {
             try {
                 SplashScreen.preventAutoHideAsync();
 
+                // Avatar selected randomly --> This should be obtained from API /api/profile/
+                global.avatar = AVATAR_PATHS.sample()
+                console.log(global.avatar)
+
                 const imageAssets = cacheImages([
                     require('../assets/images/page-background.png'),
                     require('../assets/images/page-background-2.png'),
-                    require('../assets/images/avatar_full.png'),
+                    global.avatar.full,
                 ]);
 
                 const fontAssets = cacheFonts([
@@ -53,6 +77,7 @@ export function useLoadedAssets() {
                 ]);
 
                 await Promise.all([...imageAssets, ...fontAssets]);
+                // await new Promise(r => setTimeout(r, 1000));
             } catch (e) {
                 // We might want to provide this error information to an error reporting service
                 console.warn(e);

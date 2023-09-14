@@ -63,7 +63,7 @@ export default function HomeScreen({ navigation }) {
                         activeOpacity={0.5}
                         onPress={() => navigation.navigate('Profile')}>
                         <Image style={styles.avatarImage}
-                            source={require('../assets/images/avatar_bubble.png')}
+                            source={global.avatar.bubble}
                         />
                     </TouchableOpacity>
                 </View>
@@ -163,7 +163,8 @@ const styles = StyleSheet.create({
     avatarTouchable: {
     },
     avatarImage: {
-        width: 70,
-        height: 75,
+        width: 85,
+        height: 85,
+        resizeMode: "contain",
     }
 });
