@@ -2,15 +2,38 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/elements';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
-import {
-    useFonts,
-    OldStandardTT_700Bold,
-    OldStandardTT_400Regular,
-} from '@expo-google-fonts/old-standard-tt';
-
 import QuizButton from '../components/QuizButton'
 import { QuizContext } from '../contexts/quizContext';
+
+const POSITIVE_FEEDBACK = [
+    "Splendid! You've displayed remarkable knowledge!",
+    "Capital! You're quite the scholar, I must say.",
+    "Bravo! A most commendable response.",
+    "Excellent, my dear. You are most astute.",
+    "Astonishing! Your erudition shines brightly.",
+    "Jolly good! You are most proficient.",
+    "Superb! You are truly a scholar of great promise.",
+    "A most laudable performance, indeed.",
+    "Your acumen shines like a beacon of wisdom",
+    "Brilliant! You've shown the highest erudition."
+]
+const NEGATIVE_FEEDBACK = [
+    "I regret to inform you, that is not quite correct.",
+    "Alas, your answer is wide of the mark, I'm afraid.",
+    "Oh, dear. That answer does not meet the mark.",
+    "I must correct you, my dear. That is erroneous.",
+    "I'm afraid your response falls short of our expectations.",
+    "Regrettably, your answer is not quite what we seek.",
+    "I must express my disappointment; that answer is askew.",
+    "Your response does not quite meet our high standards.",
+    "Let's strive for improvement, shall we?",
+    "Good Lord! Get a grip, poor fellow.",
+    "Blimey! That answer is rather lacking, I'm afraid.",
+]
+
+Array.prototype.sample = function () {
+    return this[Math.floor(Math.random() * this.length)];
+}
 
 async function onPressContinue(id, quizState, quizMethods, navigation) {
     if (!quizMethods.isQuestionAnswered(quizState, id)) {
@@ -25,10 +48,6 @@ async function onPressContinue(id, quizState, quizMethods, navigation) {
 
 export default function QuizQuestionScreen({ navigation, route }) {
 
-    let [fontsLoaded] = useFonts({
-        OldStandardTT_700Bold,
-        OldStandardTT_400Regular
-    });
     const { quizState, quizMethods } = useContext(QuizContext);
 
     useEffect(() => {
@@ -47,7 +66,7 @@ export default function QuizQuestionScreen({ navigation, route }) {
         });
     });
 
-    if (!fontsLoaded | ! quizState.quiz)
+    if (!quizState.quiz)
         return null;
 
     const question = quizState.quiz.multiple_choice_questions[route.params.id];
@@ -59,11 +78,11 @@ export default function QuizQuestionScreen({ navigation, route }) {
             <ImageBackground source={require('../assets/images/page-background-2.png')} style={styles.containerImage}>
                 {hasAnswered && isCorrect ? 
                 <View style={styles.successContainer}>
-                    <Ionicons name='md-checkmark-circle' size={30} color='#659900'/><Text style={styles.succesText}>Amazing!</Text>
+                    <Ionicons name='md-checkmark-circle' size={30} color='#659900'/><Text style={styles.succesText}>{POSITIVE_FEEDBACK.sample()}</Text>
                 </View>: 
                 hasAnswered && !isCorrect ?
                 <View style={[styles.successContainer, styles.failureContainer]}>
-                    <Ionicons name='md-close-circle' size={30} color='#d00'/><Text style={[styles.succesText, styles.failureText]}>Incorrect</Text>
+                    <Ionicons name='md-close-circle' size={30} color='#d00' /><Text style={[styles.succesText, styles.failureText]}>{NEGATIVE_FEEDBACK.sample()}</Text>
                 </View> :
                 null}
                 <View style={styles.outline}>
@@ -126,7 +145,7 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
     },
     successContainer: {
-        height: 140,
+        height: 170,
         backgroundColor: '#efffb6',
         width: '100%',
         position: 'absolute',
@@ -142,6 +161,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#659900',
         marginLeft: 10,
+        marginRight: 20,
     },
     failureText: {
         color: '#d00',
