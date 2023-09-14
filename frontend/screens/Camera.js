@@ -2,17 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, Image, Platform } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
+// import * as MediaLibrary from 'expo-media-library';
 import IconButton from '../components/IconButton'
 
 
 const pickImageAsync = async (navigation) => {
     let result = await ImagePicker.launchImageLibraryAsync({
         base64: true,
-        allowsEditing: true,
+        allowsEditing: false,  // See https://docs.expo.dev/versions/latest/sdk/imagepicker/#known-issues
+        exif: true,
         quality: 1,
     });
 
     if (!result.canceled) {
+        // // Get location
+        // // Getting location from exif data works on iOS (when the image has location), but not on Android
+        // // See https://github.com/expo/expo/issues/17399
+        // console.log(result.assets[0].exif)
+        // // This additional step should make it work on Android, but it fails because of a new issue
+        // // See https://github.com/expo/expo/issues/24172
+        // let info = await MediaLibrary.getAssetInfoAsync(result.assets[0].assetId)
+        // console.log(info.location)
         navigation.navigate('ObservationConfirm', { imageBase64: result.assets[0].base64, isLoading: true });
     } else {
         console.log('You did not select any image.');
