@@ -4,6 +4,7 @@ import axios from 'axios';
 import Constants from 'expo-constants'
 import { FlatList } from 'react-native-gesture-handler';
 import XPModal from '../components/XPModal';
+import { CommonActions } from '@react-navigation/native';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const URL_CREATE_OBSERVATION = API_URL + 'api/species/observation/'
@@ -63,6 +64,22 @@ const confirmSpeciesAsync = async (observation_id, species_index, onConfirmRespo
 };
 
 
+const goToSpeciesDetails = (navigation, observation) => {
+    navigation.dispatch((state) => {
+        //update navigation state as you want.
+        const routes = [
+            { name: 'Home' },
+            { name: 'SpeciesList' },
+            { name: 'SpeciesDetail', params: { id: observation.species } }, //you can also add params 
+        ];
+
+        return CommonActions.reset({
+            ...state,
+            routes,
+            index: routes.length - 1,
+        });
+    });
+}
 
 export default function ObservationConfirmScreen({ navigation, route }) {
 
@@ -78,7 +95,15 @@ export default function ObservationConfirmScreen({ navigation, route }) {
     let has_results = observation && observation.identification_response && observation.identification_response.results;
     let topNResults = has_results ? observation.identification_response.results.filter(candidate => candidate.score >= PROBABILITY_THRESHOLD).slice(0, NUM_CANDIDATES) : [];
     const onConfirmResponse = (response) => { setObservation(response.data); setXPModalVisible(true); };
-    const onXPModalClose = () => { setXPModalVisible(false); navigation.navigate('SpeciesDetail', { id: observation.species }) };
+
+    const onXPModalClose = () => {
+        setXPModalVisible(false);
+
+        // Timeout needed to prevent iOS crash, presumably from chaining modal and navigation transitions?
+        // see https://github.com/react-navigation/react-navigation/issues/11259
+        setTimeout(() => { goToSpeciesDetails(navigation, observation); }, 100);
+
+    };
 
     return (
         <View style={styles.container}>
