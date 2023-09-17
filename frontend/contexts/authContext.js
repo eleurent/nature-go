@@ -10,6 +10,7 @@ const API_URL = Constants.expoConfig.extra.API_URL;
 const LOGIN_URL = API_URL + 'api/auth/login/'
 const LOGOUT_URL = API_URL + 'api/auth/logout/'
 const REGISTER_URL = API_URL + 'api/auth/register/'
+const PROFILE_URL = API_URL + 'api/profile/'  // For testing token
 
 async function getItemAsync(key) {
     if (Platform.OS !== 'web') {
@@ -38,7 +39,6 @@ export const AuthContext = React.createContext();
 const authReducer = (prevState, action) => {
     switch (action.type) {
         case 'RESTORE_TOKEN':
-            console.log('Found user token: ' + action.token);
             return {
                 ...prevState,
                 userToken: action.token,
@@ -47,7 +47,6 @@ const authReducer = (prevState, action) => {
         case 'SIGN_IN':
             return {
                 ...prevState,
-                isSignout: false,
                 userToken: action.token,
             };
         case 'SIGN_IN_ERROR':
@@ -58,14 +57,12 @@ const authReducer = (prevState, action) => {
         case 'SIGN_OUT':
             return {
                 ...prevState,
-                isSignout: true,
                 userToken: null,
             };
     }
 };
 const initialState = {
     isLoading: true,
-    isSignout: false,
     userToken: null,
     signInErrorMessage: null
 };
@@ -73,20 +70,6 @@ const initialState = {
 export const useAuth = () => {
 
     const [authState, dispatch] = useReducer(authReducer, initialState);
-
-    React.useEffect(() => {
-        const bootstrapAsync = async () => {
-            let userToken;
-            try {
-                userToken = await getItemAsync('userToken');
-                if (userToken) {
-                    axios.defaults.headers.common.Authorization = `Token ${userToken}`;
-                }
-            } catch (e) { console.error(e);}
-            dispatch({ type: 'RESTORE_TOKEN', token: userToken });
-        };
-        bootstrapAsync();
-    }, []);
 
     const authMethods = React.useMemo(
         () => ({
@@ -138,6 +121,31 @@ export const useAuth = () => {
         }),
         []
     );
+
+    React.useEffect(() => {
+        const restoreTokenAsync = async () => {
+            let userToken;
+            try {
+                userToken = await getItemAsync('userToken');
+            } catch (e) { console.error(e); }
+            if (userToken) {
+                console.log('Found user token: ' + userToken);
+                // Check token validity
+                axios.get(PROFILE_URL, { headers: { Authorization: `Token ${userToken}` } }).then(() => {
+                    axios.defaults.headers.common.Authorization = `Token ${userToken}`;
+                    dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+                }).catch(error => {
+                    console.log("Invalid token, response status: " + error.response.status)
+                    axios.defaults.headers.common.Authorization = null;
+                    try {
+                        setItemAsync('userToken', null);
+                    } catch (e) { console.error(e); }
+                    dispatch({ type: 'RESTORE_TOKEN', token: null });
+                });
+            }
+        };
+        restoreTokenAsync();
+    }, []);
 
     return { authState, authMethods };
 };
