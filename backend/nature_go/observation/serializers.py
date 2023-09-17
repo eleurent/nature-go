@@ -54,4 +54,4 @@ class SpeciesSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri('/static/img/unkown_species_illustration_transparent.png')
     
     def get_display_name(self, obj):
-        return obj.commonNames[0] if obj.commonNames else obj.scientificName
+        return str(obj)

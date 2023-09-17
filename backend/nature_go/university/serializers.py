@@ -1,8 +1,11 @@
 from rest_framework import serializers
 from .models import MultipleChoiceQuestion, Quiz, MultipleChoiceUserAnswer
+from observation.serializers import SpeciesSerializer
 from user_profile.signals import xp_gained
 
 class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
+    species = serializers.StringRelatedField(many=False, read_only=True)
+    
     class Meta:
         model = MultipleChoiceQuestion
         fields = ['id', 'species', 'question', 'choices']

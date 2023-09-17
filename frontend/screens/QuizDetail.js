@@ -8,7 +8,10 @@ export default function QuizDetailScreen({ navigation, route }) {
     const { quizState, quizMethods } = useContext(QuizContext);
     useEffect(() => {
         quizMethods.getOrCreateQuiz();
+        console.log(quizState.quiz)
     }, []);
+
+    const uniqueSpecies = [...new Set(quizState.quiz?.multiple_choice_questions?.map(question => question.species))];
 
     return (
         <View style={styles.container} >
@@ -18,6 +21,24 @@ export default function QuizDetailScreen({ navigation, route }) {
                 <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                 <Text style={styles.subtitle}>EXAMINATION PAPERS</Text>
                 <Text style={[styles.subtitle, {fontSize: 13}]}>FOR THE YEAR 1823,</Text>
+                <Image source={require('../assets/images/separator.png')} style={styles.separator} />
+                <Text style={[styles.subtitle, { fontSize: 25 }]}>Syllabus</Text>
+                <FlatList
+                    style={{ marginTop: 10, marginBottom: 10 }}
+                    vertical
+                    scrollEnabled={false}
+                    numColumns={1}
+                    showsVerticalScrollIndicator={Platform.OS === 'web'}
+                    data={uniqueSpecies}
+                    contentContainerStyle={{}}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <View key={index} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+                                <Text style={{ fontFamily: 'OldStandardTT_400Regular', fontSize: 20, marginBottom: 10}}>{item}</Text>
+                            </View>
+                        );
+                    }}
+                />
                 <QuizButton label="Take the exam" onPress={() => {navigation.replace('QuizQuestion', { id: 0 })}}/>
             </View>
         </ImageBackground>
