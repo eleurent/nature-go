@@ -18,7 +18,7 @@ class Species(models.Model):
     wikipedia_image_url = models.URLField(max_length=255, blank=True)
 
     def __str__(self):
-        return self.scientificNameWithoutAuthor
+        return self.commonNames[0] if self.commonNames else self.scientificNameWithoutAuthor
 
     class Meta:
         verbose_name_plural = 'Species'
