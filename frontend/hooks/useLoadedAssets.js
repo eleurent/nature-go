@@ -59,7 +59,6 @@ export function useLoadedAssets() {
 
                 // Avatar selected randomly --> This should be obtained from API /api/profile/
                 global.avatar = AVATAR_PATHS.sample()
-                console.log(global.avatar)
 
                 const imageAssets = cacheImages([
                     require('../assets/images/page-background.png'),
