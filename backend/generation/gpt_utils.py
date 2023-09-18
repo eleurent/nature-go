@@ -61,6 +61,7 @@ def try_except_decorator(func: Callable) -> Callable:
                     openai.error.Timeout,
                     openai.error.APIConnectionError,
                     openai.error.InvalidRequestError,
+                    ValueError,
             ) as e:
                 print("API error occurred:", str(e), ". Retrying in 1 second...")
 
