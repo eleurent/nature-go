@@ -82,7 +82,7 @@ class SpeciesLabeledList(generics.ListCreateAPIView):
             queryset = queryset.filter(Q(multiplechoicequestion__isnull=not has_questions))
         queryset = queryset.annotate(
            observation_count=Count('observation')
-        ).order_by('-observation_count', 'occurences_cdf')
+        ).order_by('-observation_count', '-occurences_cdf')
         
         return queryset
 
