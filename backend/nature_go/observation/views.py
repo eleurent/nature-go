@@ -2,7 +2,7 @@ import logging
 from rest_framework import generics, permissions, pagination, filters
 from rest_framework.response import Response
 from rest_framework import serializers
-from django.db.models import Q
+from django.db.models import Q, Count
 import ast
 
 from observation.models import Species, Observation
@@ -43,6 +43,47 @@ class SpeciesAllList(generics.ListCreateAPIView):
                 continue
             filters &= Q(**{param: ast.literal_eval(value)})
         queryset = queryset.filter(filters)
+        return queryset
+
+
+class SpeciesLabeledList(generics.ListCreateAPIView):
+    """
+        This view should return a list of labeled/unlabeled species in the database.
+        ordered by number of observations and occurences.
+        Filter by either illustration, descriptions, or multiplechoicequestions = True/False.
+        Paginate with limit=100.
+    """
+    serializer_class = SpeciesSerializer
+    permission_classes = [permissions.IsAdminUser]
+    pagination_class = pagination.LimitOffsetPagination
+
+    def get_queryset(self):
+        queryset = Species.objects.all()
+        if 'illustration' in self.request.query_params:
+            filter = Q(illustration__isnull=True) | Q(illustration__exact='')
+            if self.request.query_params['illustration'] == 'True':
+                queryset = queryset.exclude(filter)
+            else:
+                queryset = queryset.filter(filter)
+        if 'illustration_transparent' in self.request.query_params:
+            filter = Q(illustration_transparent__isnull=True) | Q(illustration_transparent__exact='')
+            if self.request.query_params['illustration_transparent'] == 'True':
+                queryset = queryset.exclude(filter)
+            else:
+                queryset = queryset.filter(filter)
+        if 'descriptions' in self.request.query_params:
+            filter = Q(descriptions__isnull=True) | Q(descriptions__exact=[])
+            if self.request.query_params['descriptions'] == 'True':
+                queryset = queryset.exclude(filter)
+            else:
+                queryset = queryset.filter(filter) 
+        if 'multiplechoicequestions' in self.request.query_params:
+            has_questions = self.request.query_params['multiplechoicequestions'] == 'True'
+            queryset = queryset.filter(Q(multiplechoicequestion__isnull=not has_questions))
+        queryset = queryset.annotate(
+           observation_count=Count('observation')
+        ).order_by('-observation_count', '-occurences_cdf')
+        
         return queryset
 
 class SpeciesDetail(generics.RetrieveUpdateAPIView):

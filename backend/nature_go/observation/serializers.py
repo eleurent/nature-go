@@ -25,6 +25,7 @@ class SpeciesSerializer(serializers.ModelSerializer):
     illustration_transparent = Base64ImageField()
     illustration_url = serializers.SerializerMethodField()
     display_name = serializers.SerializerMethodField()
+    total_observations = serializers.SerializerMethodField()
     
     class Meta:
         model = Species
@@ -42,6 +43,7 @@ class SpeciesSerializer(serializers.ModelSerializer):
             'wikipedia_image_url',
             'illustration_url',
             'display_name',
+            'total_observations'
         ]
 
     def get_illustration_url(self, obj):
@@ -55,3 +57,6 @@ class SpeciesSerializer(serializers.ModelSerializer):
     
     def get_display_name(self, obj):
         return str(obj)
+    
+    def get_total_observations(self, obj):
+        return obj.observation_set.count()
