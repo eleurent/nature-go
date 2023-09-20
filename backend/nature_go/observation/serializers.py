@@ -32,7 +32,6 @@ class SpeciesSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'commonNames',
-            'scientificName',
             'scientificNameWithoutAuthor',
             'genus',
             'family',
@@ -40,7 +39,7 @@ class SpeciesSerializer(serializers.ModelSerializer):
             'descriptions',
             'illustration',
             'illustration_transparent',
-            'wikipedia_image_url',
+            'reference_image_url',
             'illustration_url',
             'display_name',
             'total_observations'
