@@ -137,13 +137,13 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
         species_data = instance.identification_response['results'][idx]['species']
         species_data = dict(
             scientificNameWithoutAuthor=species_data['scientificNameWithoutAuthor'],
-            scientificName=species_data['scientificName'],
+            scientificNameAuthorship=species_data['scientificNameAuthorship'],
             commonNames=species_data['commonNames'],
             genus=species_data['genus']['scientificNameWithoutAuthor'],
             family=species_data['family']['scientificNameWithoutAuthor'],
         )
         species, created = Species.objects.update_or_create(
-            scientificName=species_data['scientificName'],
+            scientificNameWithoutAuthor=species_data['scientificNameWithoutAuthor'],
             defaults=species_data)
         
         serializer = ObservationSerializer(instance, data=dict(species=species.id))
