@@ -22,7 +22,7 @@ const quizReducer = (prevState, action) => {
         case 'RESET_ANSWERS':
             answers = [...Array(prevState.quiz.multiple_choice_questions.length).fill(null)];
             prevState.quiz.multiple_choice_questions.forEach((question, index) => {
-                userAnswer = prevState.quiz.multiplechoiceuseranswer_set.find(
+                const userAnswer = prevState.quiz.multiplechoiceuseranswer_set.find(
                     userAnswer => userAnswer.question === question.id
                 );
                 answers[index] = userAnswer ? userAnswer.user_answer : null
