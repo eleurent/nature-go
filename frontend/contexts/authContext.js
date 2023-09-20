@@ -142,6 +142,8 @@ export const useAuth = () => {
                     } catch (e) { console.error(e); }
                     dispatch({ type: 'RESTORE_TOKEN', token: null });
                 });
+            } else {
+                dispatch({ type: 'RESTORE_TOKEN', token: null });
             }
         };
         restoreTokenAsync();
