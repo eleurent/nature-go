@@ -1,4 +1,5 @@
 import pandas as pd
+import json
 from django.core.management import BaseCommand
 from observation.models import Species
 
@@ -26,7 +27,7 @@ class Command(BaseCommand):
             species = Species(
                 scientificNameWithoutAuthor=row.scientificNameWithoutAuthor,
                 scientificNameAuthorship=row.scientificNameAuthorship,
-                commonNames=row.commonNames,
+                commonNames=json.loads(row.commonNames),
                 genus=row.genus,
                 family=row.family,
                 gbif_id=row.gbifId,
