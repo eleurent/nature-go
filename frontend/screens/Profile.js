@@ -62,11 +62,11 @@ export default function ProfileScreen({ navigation, route }) {
                                 </View>
                                 <View style={styles.statsRow}>
                                     <Text style={styles.statsKey}>Exams taken</Text>
-                                    <Text style={styles.statsValue}>2</Text>
+                                    <Text style={styles.statsValue}>-</Text>
                                 </View>
                                 <View style={styles.statsRow}>
                                     <Text style={styles.statsKey}>Mean exam score</Text>
-                                    <Text style={styles.statsValue}>37%</Text>
+                                    <Text style={styles.statsValue}>-%</Text>
                                 </View>
                             </View>
                         </View>
