@@ -6,16 +6,23 @@ from django.contrib.auth.models import User
 from django.contrib.staticfiles import finders
 
 class Species(models.Model):
+    scientificNameWithoutAuthor = models.CharField(max_length=255, unique=True)
+    scientificNameAuthorship = models.CharField(max_length=255, default='')
     commonNames = models.JSONField(default=list, blank=True)
-    scientificName = models.CharField(max_length=255, unique=True)
-    scientificNameWithoutAuthor = models.CharField(max_length=255)
     genus = models.CharField(max_length=255)
     family = models.CharField(max_length=255)
+    gbif_id = models.CharField(max_length=20, default='')
+    powo_id = models.CharField(max_length=20, default='')
+    wikipedia_word_count = models.IntegerField(null=True, blank=True)
+    number_of_occurrences = models.IntegerField(null=True, blank=True)
     occurences_cdf = models.FloatField(null=True, blank=True)
+    rarity_gpt = models.FloatField(null=True, blank=True)
     descriptions = models.JSONField(default=list, blank=True)
     illustration = models.ImageField(upload_to='species/illustration', blank=True)
     illustration_transparent = models.ImageField(upload_to='species/illustration_transparent', blank=True)
-    wikipedia_image_url = models.URLField(max_length=255, blank=True)
+    illustration_reference = models.ImageField(upload_to='species/illustration_reference', blank=True)
+    illustration_reference_transparent = models.ImageField(upload_to='species/illustration_reference_transparent', blank=True)
+    reference_image_url = models.URLField(max_length=255, blank=True)
 
     def __str__(self):
         return self.commonNames[0] if self.commonNames else self.scientificNameWithoutAuthor
