@@ -25,24 +25,31 @@ class SpeciesSerializer(serializers.ModelSerializer):
     illustration_transparent = Base64ImageField()
     illustration_url = serializers.SerializerMethodField()
     display_name = serializers.SerializerMethodField()
-    total_observations = serializers.SerializerMethodField()
+    num_observations_total = serializers.SerializerMethodField()
+    num_questions_total = serializers.SerializerMethodField()
     
     class Meta:
         model = Species
         fields = [
             'id',
-            'commonNames',
             'scientificNameWithoutAuthor',
+            'commonNames',
             'genus',
             'family',
+            'gbif_id',
+            'powo_id',
+            'wikipedia_word_count',
+            'number_of_occurrences',
             'occurences_cdf',
+            'rarity_gpt',
             'descriptions',
             'illustration',
             'illustration_transparent',
             'reference_image_url',
             'illustration_url',
             'display_name',
-            'total_observations'
+            'num_observations_total',
+            'num_questions_total',
         ]
 
     def get_illustration_url(self, obj):
@@ -57,5 +64,8 @@ class SpeciesSerializer(serializers.ModelSerializer):
     def get_display_name(self, obj):
         return str(obj)
     
-    def get_total_observations(self, obj):
+    def get_num_observations_total(self, obj):
         return obj.observation_set.count()
+
+    def get_num_questions_total(self, obj):
+        return obj.multiplechoicequestion_set.count()
