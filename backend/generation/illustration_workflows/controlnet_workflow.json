@@ -1,0 +1,179 @@
+{
+  "1": {
+    "inputs": {
+      "seed": 865624307862046,
+      "steps": 20,
+      "cfg": 8,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "2",
+        0
+      ],
+      "positive": [
+        "10",
+        0
+      ],
+      "negative": [
+        "10",
+        1
+      ],
+      "latent_image": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "KSampler"
+  },
+  "2": {
+    "inputs": {
+      "ckpt_name": "sd_xl_base_1.0.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple"
+  },
+  "4": {
+    "inputs": {
+      "text": "herbarium illustration of Linaria alpina, 19th century",
+      "clip": [
+        "2",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode"
+  },
+  "5": {
+    "inputs": {
+      "text": "black and white",
+      "clip": [
+        "2",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode"
+  },
+  "6": {
+    "inputs": {
+      "samples": [
+        "1",
+        0
+      ],
+      "vae": [
+        "2",
+        2
+      ]
+    },
+    "class_type": "VAEDecode"
+  },
+  "7": {
+    "inputs": {
+      "image": "Linaria.alpina.web.jpg",
+      "choose file to upload": "image"
+    },
+    "class_type": "LoadImage"
+  },
+  "8": {
+    "inputs": {
+      "filename_prefix": "controlnet_illustration",
+      "images": [
+        "6",
+        0
+      ]
+    },
+    "class_type": "SaveImage"
+  },
+  "9": {
+    "inputs": {
+      "control_net_name": "control-lora-canny-rank256.safetensors"
+    },
+    "class_type": "ControlNetLoader"
+  },
+  "10": {
+    "inputs": {
+      "strength": 1,
+      "start_percent": 0,
+      "end_percent": 1,
+      "positive": [
+        "4",
+        0
+      ],
+      "negative": [
+        "5",
+        0
+      ],
+      "control_net": [
+        "9",
+        0
+      ],
+      "image": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "ControlNetApplyAdvanced"
+  },
+  "11": {
+    "inputs": {
+      "pixels": [
+        "21",
+        0
+      ],
+      "vae": [
+        "2",
+        2
+      ]
+    },
+    "class_type": "VAEEncode"
+  },
+  "21": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "megapixels": 1,
+      "image": [
+        "7",
+        0
+      ]
+    },
+    "class_type": "ImageScaleToTotalPixels"
+  },
+  "23": {
+    "inputs": {
+      "low_threshold": 100,
+      "high_threshold": 200,
+      "image": [
+        "21",
+        0
+      ]
+    },
+    "class_type": "CannyEdgePreprocessor"
+  },
+  "24": {
+    "inputs": {
+      "image": [
+        "6",
+        0
+      ]
+    },
+    "class_type": "Image Remove Background (rembg)"
+  },
+  "25": {
+    "inputs": {
+      "filename_prefix": "controlnet_illustration_rembg",
+      "images": [
+        "24",
+        0
+      ]
+    },
+    "class_type": "SaveImage"
+  },
+  "26": {
+    "inputs": {
+      "filename_prefix": "controlnet_mask",
+      "images": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "SaveImage"
+  }
+}
