@@ -84,7 +84,20 @@ class NatureGoClient:
             logger.info(f'Updated illustration for species {species_id}')
         else:
             raise ValueError(f'{SPECIES_DETAIL_URL} failed with status  {response.status_code} and response {response.content}')
+
         
+    def update_species_field(self, species_id: int, key: str, value):
+        self.assert_logged_in()
+
+        response = requests.patch(SPECIES_DETAIL_URL.format(species_id=species_id),
+                                headers={'Authorization': f'Token {self.token}'},
+                                json={key: value})
+        
+        if response.status_code == 200:
+            logger.info(f'Updated {key} for species {species_id}')
+        else:
+            raise ValueError(f'{SPECIES_DETAIL_URL} failed with status  {response.status_code} and response {response.content}')  
+    
     def get_all_questions(self) -> list:
         self.assert_logged_in()
         response = requests.get(QUESTION_CREATE_URL, headers={'Authorization': f'Token {self.token}'})
@@ -111,19 +124,10 @@ class NatureGoClient:
             raise ValueError(f'{QUESTION_CREATE_URL} failed with status  {response.status_code} and response {response.content}')
         
     def post_species_descriptions(self, species_id: int, descriptions: dict):
-        self.assert_logged_in()
-        
-        summaries = [
-            descriptions['short_summary'],
-            descriptions['medium_summary'],
-            descriptions['long_summary']
-        ]
-
-        response = requests.patch(SPECIES_DETAIL_URL.format(species_id=species_id),
-                                headers={'Authorization': f'Token {self.token}'},
-                                json={"descriptions": summaries})
-        
-        if response.status_code == 200:
-            logger.info(f'Updated description for species {species_id}')
-        else:
-            raise ValueError(f'{SPECIES_DETAIL_URL} failed with status  {response.status_code} and response {response.content}')  
+        self.update_species_field(species_id, 'descriptions', 
+            [
+                descriptions['short_summary'],
+                descriptions['medium_summary'],
+                descriptions['long_summary']
+            ]
+        )
