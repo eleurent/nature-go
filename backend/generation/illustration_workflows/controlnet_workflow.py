@@ -176,9 +176,9 @@ def main(positive_prompt: str, negative_prompt: str, control_image: str):
             )
 
             controlnetapplyadvanced_10 = controlnetapplyadvanced.apply_controlnet(
-                strength=1,
+                strength=0.9,
                 start_percent=0,
-                end_percent=1,
+                end_percent=0.8,
                 positive=get_value_at_index(cliptextencode_4, 0),
                 negative=get_value_at_index(cliptextencode_5, 0),
                 control_net=get_value_at_index(controlnetloader_9, 0),

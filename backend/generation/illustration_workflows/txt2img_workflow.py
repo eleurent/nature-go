@@ -118,50 +118,47 @@ from nodes import (
 )
 
 
-def main(positive_prompt: str, negative_prompt: str):
+def main(positive_prompts: list[str], negative_prompts: list[str],):
     import_custom_nodes()
     with torch.inference_mode():
         checkpointloadersimple = CheckpointLoaderSimple()
         checkpointloadersimple_4 = checkpointloadersimple.load_checkpoint(
             ckpt_name="sd_xl_base_1.0.safetensors"
         )
-
+        checkpointloadersimple_12 = checkpointloadersimple.load_checkpoint(
+            ckpt_name="sd_xl_refiner_1.0.safetensors"
+        )
         emptylatentimage = EmptyLatentImage()
         emptylatentimage_5 = emptylatentimage.generate(
             width=1024, height=1024, batch_size=1
         )
-
         cliptextencode = CLIPTextEncode()
-        cliptextencode_6 = cliptextencode.encode(
-            text=positive_prompt,
-            clip=get_value_at_index(checkpointloadersimple_4, 1),
-        )
-
-        cliptextencode_7 = cliptextencode.encode(
-            text="", clip=get_value_at_index(checkpointloadersimple_4, 1)
-        )
-
-        checkpointloadersimple_12 = checkpointloadersimple.load_checkpoint(
-            ckpt_name="sd_xl_refiner_1.0.safetensors"
-        )
-
-        cliptextencode_15 = cliptextencode.encode(
-            text=positive_prompt,
-            clip=get_value_at_index(checkpointloadersimple_12, 1),
-        )
-
-        cliptextencode_16 = cliptextencode.encode(
-            text=negative_prompt, clip=get_value_at_index(checkpointloadersimple_12, 1)
-        )
-
         ksampleradvanced = KSamplerAdvanced()
         vaedecode = VAEDecode()
         saveimage = SaveImage()
-        image_remove_background_rembg = NODE_CLASS_MAPPINGS[
-            "Image Remove Background (rembg)"
-        ]()
+        # image_remove_background_rembg = NODE_CLASS_MAPPINGS[
+        #     "Image Remove Background (rembg)"
+        # ]()
 
-        for q in range(1):
+        for positive_prompt, negative_prompt in zip(positive_prompts, negative_prompts):
+            cliptextencode_6 = cliptextencode.encode(
+                text=positive_prompt,
+                clip=get_value_at_index(checkpointloadersimple_4, 1),
+            )
+
+            cliptextencode_7 = cliptextencode.encode(
+                text=negative_prompt, clip=get_value_at_index(checkpointloadersimple_4, 1)
+            )
+
+            cliptextencode_15 = cliptextencode.encode(
+                text=positive_prompt,
+                clip=get_value_at_index(checkpointloadersimple_12, 1),
+            )
+
+            cliptextencode_16 = cliptextencode.encode(
+                text=negative_prompt, clip=get_value_at_index(checkpointloadersimple_12, 1)
+            )
+
             ksampleradvanced_10 = ksampleradvanced.sample(
                 add_noise="enable",
                 noise_seed=random.randint(1, 2**64),
@@ -215,7 +212,7 @@ def main(positive_prompt: str, negative_prompt: str):
             #     images=get_value_at_index(image_remove_background_rembg_49, 0),
             # )
 
-            return {
+            yield {
                 # "illustration_transparent": saveimage_50,
                 "illustration": saveimage_19,
             }
