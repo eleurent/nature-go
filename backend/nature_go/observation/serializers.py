@@ -23,6 +23,8 @@ class ObservationSerializer(serializers.ModelSerializer):
 class SpeciesSerializer(serializers.ModelSerializer):
     illustration = Base64ImageField()
     illustration_transparent = Base64ImageField()
+    illustration_reference = Base64ImageField()
+    illustration_reference_transparent = Base64ImageField()
     illustration_url = serializers.SerializerMethodField()
     display_name = serializers.SerializerMethodField()
     num_observations_total = serializers.SerializerMethodField()
@@ -45,6 +47,8 @@ class SpeciesSerializer(serializers.ModelSerializer):
             'descriptions',
             'illustration',
             'illustration_transparent',
+            'illustration_reference',
+            'illustration_reference_transparent',
             'reference_image_url',
             'illustration_url',
             'display_name',
