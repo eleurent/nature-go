@@ -2,6 +2,38 @@ import React from 'react';
 import { View, ScrollView, StyleSheet, Text, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import MapView from './CustomMapView';
+import { Marker } from 'react-native-maps';
+
+const CarouselCell = ({ obs, onImagePress }) => {
+
+    let initialRegion = coordinate = undefined;
+    if (obs.location?.latitude) {
+        initialRegion = {
+            latitude: obs.location?.latitude,
+            longitude: obs.location?.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+        };
+        coordinate = obs.location;
+    }
+    return (
+        <View style={styles.carouselCell}>
+            <View style={styles.imageContainer}>
+                <Pressable style={styles.image} onPress={() => onImagePress(obs.image)}>
+                    <Image style={styles.image} source={{ uri: obs.image }} cachePolicy='memory' />
+                </Pressable>
+                <MapView
+                    style={styles.map}
+                    initialRegion={initialRegion}
+                >
+                    {coordinate ? <Marker coordinate={coordinate}/> : null}
+                </MapView>
+            </View>
+            <Text style={styles.dateText}>{formatDate(obs.datetime)}</Text>
+        </View>
+    )
+}
+
 
 export default function ObservationCarousel( {observations, onImagePress} ) {
     if (!observations)
@@ -26,9 +58,7 @@ export default function ObservationCarousel( {observations, onImagePress} ) {
             }
         };
         return `${day}${nthNumber(day)} of ${month} ${year - 200}.`;
-    }
-        
-    
+    }   
     return (
         <View
             style={styles.scrollContainer}
@@ -38,16 +68,8 @@ export default function ObservationCarousel( {observations, onImagePress} ) {
                 // pagingEnabled
                 showsHorizontalScrollIndicator={true}
             >
-                {observations.map((obs, i) => (
-                <View style={styles.carouselCell} key={i}>
-                    <View style = {styles.imageContainer}>
-                            <Pressable style={styles.image}  onPress={() => onImagePress(obs.image)}>
-                                <Image style={styles.image} source={{ uri: obs.image }} cachePolicy='memory' />
-                            </Pressable>
-                        <MapView style={styles.map} />
-                    </View>
-                    <Text style={styles.dateText}>{formatDate(obs.datetime)}</Text>
-                </View>
+                {observations.map((obs) => (
+                    <CarouselCell obs={obs} key={obs.id} onImagePress={onImagePress} />
                 ))}
             </ScrollView>
         </View>
