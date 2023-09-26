@@ -10,7 +10,7 @@ const API_URL = Constants.expoConfig.extra.API_URL;
 const URL_CREATE_OBSERVATION = API_URL + 'api/species/observation/'
 const OBSERVATION_URL = (id) => API_URL + `api/species/observation/${id}/`
 const NUM_CANDIDATES = 3; // Number of candidates to display
-const PROBABILITY_THRESHOLD = 0.25; // Minimum probability to display a candidate
+const PROBABILITY_THRESHOLD = 0.10; // Minimum probability to display a candidate
 
 
 const SpeciesCandidate = (props) => {
