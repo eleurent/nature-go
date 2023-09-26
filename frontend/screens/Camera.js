@@ -18,7 +18,8 @@ const pickImageAsync = async (navigation) => {
         // Get location
         // Getting location from exif data works on iOS (when the image has location), but not on Android
         // See https://github.com/expo/expo/issues/17399
-        const datetime = result.assets[0].exif.DateTime;
+        console.log('Image exif: ' + JSON.stringify(result.assets[0].exif))
+        const datetime = result.assets[0].exif.DateTimeDigitized;
         let gpsLocation = {
             latitude: result.assets[0].exif.GPSLatitude,
             longitude: result.assets[0].exif.GPSLongitude,

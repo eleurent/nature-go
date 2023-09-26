@@ -37,8 +37,8 @@ const SpeciesCandidate = (props) => {
 const postObservationImageAsync = async (imageBase64, gpsLocation, datetime, observation, setObservation, setIsLoading) => {
     if (imageBase64 && !observation) {
         let formData = new FormData();
-        console.log(gpsLocation);
-        console.log(datetime);
+        console.log('posting observation with gpsLocation ' + JSON.stringify(gpsLocation));
+        console.log('posting observation with datetime ' + JSON.stringify(datetime));
         formData.append('image', imageBase64);
         formData.append('location', JSON.stringify(gpsLocation));
         formData.append('datetime', datetime);
