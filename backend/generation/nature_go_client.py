@@ -52,6 +52,7 @@ class NatureGoClient:
             illustration_transparent: bool | None = None,
             descriptions: bool | None = None,
             multiplechoicequestions: bool | None = None,
+            ordering: str | list[str] | None = None,
         ) -> list:
         self.assert_logged_in()
         params = {
@@ -61,6 +62,7 @@ class NatureGoClient:
             'illustration_transparent': illustration_transparent,
             'descriptions': descriptions,
             'multiplechoicequestions': multiplechoicequestions,
+            'ordering': ordering,
         }
         params = {k: v for k, v in params.items() if v is not None}
         response = requests.get(SPECIES_LABELED_URL, headers={'Authorization': f'Token {self.token}'}, params=params)
@@ -70,6 +72,7 @@ class NatureGoClient:
             return result['results']
         else:
             raise ValueError(f'{SPECIES_LABELED_URL} failed with status  {response.status_code} and response {response.json()}')
+
 
 
     def update_species_image(self, species_id: int, image: Image, image_name: str = 'illustration'):
