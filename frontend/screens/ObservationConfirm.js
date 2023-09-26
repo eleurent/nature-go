@@ -21,7 +21,7 @@ const SpeciesCandidate = (props) => {
                 source={{ uri: props.item.images[0].url.s }}
             />
             <View style={styles.textContainer}>
-                <Text style={styles.speciesName}>{props.item.species.commonNames[0]}</Text>
+                <Text style={styles.speciesName}>{props.item.species.commonNames.size ? props.item.species.commonNames[0] : props.item.species.scientificNameWithoutAuthor}</Text>
                 <Text style={styles.speciesScientificName}>{props.item.species.scientificNameWithoutAuthor}</Text>
             </View>
             <TouchableOpacity
