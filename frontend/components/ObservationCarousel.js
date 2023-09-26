@@ -4,32 +4,55 @@ import { Image } from 'expo-image';
 import MapView from './CustomMapView';
 
 export default function ObservationCarousel( {observations, onImagePress} ) {
-    if (observations) {
-        return (
-            <View
-                style={styles.scrollContainer}
-            >
-                <ScrollView
-                    horizontal
-                    // pagingEnabled
-                    showsHorizontalScrollIndicator={true}
-                >
-                    {observations.map((obs, i) => (
-                    <View style={styles.carouselCell} key={i}>
-                        <View style = {styles.imageContainer}>
-                                <Pressable style={styles.image}  onPress={() => onImagePress(obs.image)}>
-                                    <Image style={styles.image} source={{ uri: obs.image }} cachePolicy='memory' />
-                                </Pressable>
-                            <MapView style={styles.map} />
-                        </View>
-                        <Text style={styles.dateText}>18th of June 1823.</Text>
-                    </View>
-                    ))}
-                </ScrollView>
-            </View>
-        );
+    if (!observations)
+        return null;
+
+    formatDate = (datetime) => {
+        const dateObj = new Date(datetime);
+        const day = dateObj.getDate();
+        const month = dateObj.toLocaleString("default", { month: "long" });
+        const year = dateObj.getFullYear();
+        const nthNumber = (number) => {
+            if (number > 3 && number < 21) return "th";
+            switch (number % 10) {
+                case 1:
+                    return "st";
+                case 2:
+                    return "nd";
+                case 3:
+                    return "rd";
+                default:
+                    return "th";
+            }
+        };
+        return `${day}${nthNumber(day)} of ${month} ${year - 200}.`;
     }
-    return null;
+        
+    
+    return (
+        <View
+            style={styles.scrollContainer}
+        >
+            <ScrollView
+                horizontal
+                // pagingEnabled
+                showsHorizontalScrollIndicator={true}
+            >
+                {observations.map((obs, i) => (
+                <View style={styles.carouselCell} key={i}>
+                    <View style = {styles.imageContainer}>
+                            <Pressable style={styles.image}  onPress={() => onImagePress(obs.image)}>
+                                <Image style={styles.image} source={{ uri: obs.image }} cachePolicy='memory' />
+                            </Pressable>
+                        <MapView style={styles.map} />
+                    </View>
+                    <Text style={styles.dateText}>{formatDate(obs.datetime)}</Text>
+                </View>
+                ))}
+            </ScrollView>
+        </View>
+    );
+
 }
 
 const styles = StyleSheet.create({
