@@ -50,6 +50,7 @@ class SpeciesLabeledList(generics.ListCreateAPIView):
     """
         This view should return a list of labeled/unlabeled species in the database.
         ordered by number of observations and occurences.
+        Change ordering by e.g. ?ordering=observation_count&ordering=-rarity_gpt
         Filter by either illustration, descriptions, or multiplechoicequestions = True/False.
         Paginate with limit=100.
     """
@@ -80,9 +81,11 @@ class SpeciesLabeledList(generics.ListCreateAPIView):
         if 'multiplechoicequestions' in self.request.query_params:
             has_questions = self.request.query_params['multiplechoicequestions'] == 'True'
             queryset = queryset.filter(Q(multiplechoicequestion__isnull=not has_questions))
-        queryset = queryset.annotate(
-           observation_count=Count('observation')
-        ).order_by('-observation_count', '-occurences_cdf')
+        
+        ordering = self.request.query_params.get('ordering', ['-observation_count', '-occurences_cdf'])
+        if isinstance(ordering, str):
+            ordering = [ordering]
+        queryset = queryset.annotate(observation_count=Count('observation')).order_by(*ordering)
         
         return queryset
 
@@ -126,7 +129,6 @@ class ObservationCreate(generics.CreateAPIView):
 
 
 class ObservationUpdate(generics.RetrieveUpdateAPIView):
-
     serializer_class = ObservationSerializer
     queryset = Observation.objects.all()
     permission_classes = [permissions.IsAuthenticated, IsOwner]
