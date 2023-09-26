@@ -133,6 +133,8 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
     def update(self, request, *args, **kwargs):
+        if 'species' not in request.data:
+            super().update(request, *args, **kwargs)
         instance = self.get_object()
         idx = int(request.data['species'])  # index of the correct species in the identification response, not species pk
         species_data = instance.identification_response['results'][idx]['species']
