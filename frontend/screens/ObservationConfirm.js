@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     containerImage: { flex: 1, resizeMode: 'cover' },
     coverImage: {
         width: '100%',
-        height: 200,
+        height: 250,
         resizeMode: 'cover'
     },
     candidateContainer: { 
