@@ -47,7 +47,7 @@ class NatureGoClient:
     def get_labeled_species(
             self,
             limit: int = 100, 
-            offset: int = 0, 
+            offset: int = 0,
             illustration: bool | None = None,
             illustration_transparent: bool | None = None,
             descriptions: bool | None = None,
