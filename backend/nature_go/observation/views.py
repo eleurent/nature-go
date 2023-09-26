@@ -121,7 +121,7 @@ class ObservationCreate(generics.CreateAPIView):
         # Save the serializer first so we can access the image
         observation = serializer.save(user=self.request.user)
         observation.identification_response = identification.plantnet_identify(observation.image.path)
-        observation.location, observation.datetime = identification.read_exif(observation.image.path)
+        # observation.location, observation.datetime = identification.read_exif(observation.image.path)
         observation.save()
         serializer = ObservationSerializer(instance=observation)
         return Response(serializer.data)
