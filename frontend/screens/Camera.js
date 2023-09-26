@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, Image, Platform } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
-// import * as MediaLibrary from 'expo-media-library';
+import * as MediaLibrary from 'expo-media-library';
 import IconButton from '../components/IconButton'
 
 
@@ -15,15 +15,23 @@ const pickImageAsync = async (navigation) => {
     });
 
     if (!result.canceled) {
-        // // Get location
-        // // Getting location from exif data works on iOS (when the image has location), but not on Android
-        // // See https://github.com/expo/expo/issues/17399
-        // console.log(result.assets[0].exif)
-        // // This additional step should make it work on Android, but it fails because of a new issue
-        // // See https://github.com/expo/expo/issues/24172
-        // let info = await MediaLibrary.getAssetInfoAsync(result.assets[0].assetId)
-        // console.log(info.location)
-        navigation.navigate('ObservationConfirm', { imageBase64: result.assets[0].base64, isLoading: true });
+        // Get location
+        // Getting location from exif data works on iOS (when the image has location), but not on Android
+        // See https://github.com/expo/expo/issues/17399
+        const datetime = result.assets[0].exif.DateTime;
+        let gpsLocation = {
+            latitude: result.assets[0].exif.GPSLatitude,
+            longitude: result.assets[0].exif.GPSLongitude,
+        }
+        if (!(gpsLocation.latitude && gpsLocation.longitude)) {
+            // This additional step should make it work on Android, but it fails because of a new issue
+            // See https://github.com/expo/expo/issues/24172
+            console.log(result.assets[0].assetId)
+            // let info = await MediaLibrary.getAssetInfoAsync(result.assets[0].assetId)
+            // console.log(info.location)
+        }
+        
+        navigation.navigate('ObservationConfirm', { imageBase64: result.assets[0].base64, isLoading: true, gpsLocation, datetime });
     } else {
         console.log('You did not select any image.');
     }
@@ -32,7 +40,12 @@ const pickImageAsync = async (navigation) => {
 const takePictureAsync = async (camera, navigation) => {
     if (camera) {
         const data = await camera.takePictureAsync({ base64: true, exif: true, quality: 0. });
-        navigation.navigate('ObservationConfirm', { imageBase64: data.base64, isLoading: true });
+        gpsLocation = {
+            "latitude": 0,
+            "longitude": 0,
+        } // TODO: use expo-location
+        datetime = null; // Auto-now in backend
+        navigation.navigate('ObservationConfirm', { imageBase64: data.base64, isLoading: true, gpsLocation, datetime });
     }
 };
 

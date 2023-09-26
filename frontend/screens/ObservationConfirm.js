@@ -34,16 +34,23 @@ const SpeciesCandidate = (props) => {
     );
 }
 
-const postObservationImageAsync = async (imageBase64, observation, setObservation, setIsLoading) => {
+const postObservationImageAsync = async (imageBase64, gpsLocation, datetime, observation, setObservation, setIsLoading) => {
     if (imageBase64 && !observation) {
         let formData = new FormData();
+        console.log(gpsLocation);
+        console.log(datetime);
         formData.append('image', imageBase64);
-        const response = await axios.post(URL_CREATE_OBSERVATION, formData, {
+        formData.append('location', JSON.stringify(gpsLocation));
+        formData.append('datetime', datetime);
+        axios.post(URL_CREATE_OBSERVATION, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
-        });
-
-        setObservation(response.data);
-        setIsLoading(false);
+        }).then(response => {
+            setObservation(response.data);
+            setIsLoading(false);
+        }).catch(error => {
+            console.log(error.message);
+            setIsLoading(false);
+        })
     }
 };
 
@@ -87,9 +94,11 @@ export default function ObservationConfirmScreen({ navigation, route }) {
     const [isLoading, setIsLoading] = useState(true);
     const [xpModalVisible, setXPModalVisible] = useState(false);
     const imageBase64 = route.params.imageBase64;
+    const gpsLocation = route.params.gpsLocation;
+    const datetime = route.params.datetime;
 
     useEffect(() => {
-        postObservationImageAsync(imageBase64, observation, setObservation, setIsLoading);
+        postObservationImageAsync(imageBase64, gpsLocation, datetime, observation, setObservation, setIsLoading);
     }, []);
 
     let has_results = observation && observation.identification_response && observation.identification_response.results;
