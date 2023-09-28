@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = 'Load a species csv file into the database'
 
     def add_arguments(self, parser):
-        parser.add_argument('--path', type=str, default='../generation/data/species.csv')
+        parser.add_argument('--path', type=str, default='../../generation/data/species.csv')
 
     def handle(self, *args, **kwargs):
         df = pd.read_csv(kwargs['path'])
