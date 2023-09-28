@@ -44,7 +44,7 @@ def get_wiki_word_count(plant_name):
 
 
 # Add a new column to the DataFrame with Wikipedia word counts
-df = pd.read_csv('data/species.csv')
+df = pd.read_csv('species.csv')
 
 chunk_size = 100  # Number of rows to process before saving
 n_chunks = len(df) // chunk_size + (1 if len(df) % chunk_size else 0)
@@ -62,4 +62,4 @@ for i in tqdm(range(n_chunks)):
     df.loc[start_idx:end_idx-1, 'WikipediaWordCount'] = parallel_get_wiki_word_count(start_idx, end_idx)
     
     # Save the DataFrame to the same file
-    df.to_csv('data/species_with_word_count.csv', index=False)
+    df.to_csv('species_with_word_count.csv', index=False)
