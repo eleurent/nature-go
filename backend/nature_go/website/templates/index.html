@@ -22,13 +22,13 @@
         .background {
             margin-left: auto;
             margin-right: auto;
-            width: 60%;
             height: 100%;
-            background: url("{% static 'img/splash.png'%}") no-repeat center center fixed;
+            background: url("{% static 'img/splash.png'%}") no-repeat center;
+            background-size: auto 130%;
         }
 
         .overlay {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.55);
             position: absolute;
             top: 0;
             left: 0;
@@ -39,7 +39,7 @@
         .container {
             text-align: center;
             position: absolute;
-            top: 40%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 1;
@@ -59,6 +59,47 @@
         .qr-code {
             max-width: 300px;
             margin-top: 20px;
+        }
+
+        /* Smaller screens (e.g., mobile phones) */
+        @media (max-width: 768px) or (max-height: 999px) {
+            .container {
+                width: 300px;
+            }
+            .background {
+                width: 100%;
+                background-size: auto 100%;
+            }
+            h1 {
+                font-size: 40px;
+            }
+            .logo {
+                height: 36px;
+                margin-right: 5px;
+            }
+            .qr-code {
+                max-width: 200px;
+                /* margin-bottom: 100px; */
+            }
+        }
+
+        /* Medium to large screens (e.g., tablets and desktops) */
+        @media (min-width: 769px) and (min-height: 1000px)  {
+            .background {
+            }
+            .container {
+                width: 800px;
+            }
+            h1 {
+                font-size: 80px;
+            }
+            .logo {
+                height: 72px;
+            }
+            .qr-code {
+                max-width: 300px;
+                margin-bottom: 300px;
+            }
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
