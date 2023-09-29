@@ -19,7 +19,6 @@ from django.urls import include
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic.base import TemplateView
 
 urlpatterns = [
     path("accounts/login/", auth_views.LoginView.as_view(), name='login'),
@@ -29,8 +28,7 @@ urlpatterns = [
     path('api/auth/', include('authentication.urls')),
     path('api/profile/', include('user_profile.urls')),
     path('api-auth/', include('rest_framework.urls')),  # Is this needed?
-    path('', TemplateView.as_view(template_name='static_pages/index.html'),
-        name='home'),
+    path('', include('website.urls')),
 ]
 
 
