@@ -36,7 +36,7 @@ class Observation(models.Model):
     species = models.ForeignKey(Species, on_delete=models.CASCADE, blank=True, null=True)
     location = models.JSONField(default=dict, blank=True, null=True)
     identification_response = models.JSONField(default=dict, blank=True, null=True)
-    datetime = models.DateTimeField(auto_now_add=True)
+    datetime = models.DateTimeField()
     xp = models.JSONField(default=dict, blank=True, null=True)
 
     def __str__(self):
