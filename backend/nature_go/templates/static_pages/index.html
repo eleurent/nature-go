@@ -1,0 +1,80 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nature go</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: black;
+            max-width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background {
+            margin-left: auto;
+            margin-right: auto;
+            width: 60%;
+            height: 100%;
+            background: url("{% static 'img/splash.png'%}") no-repeat center center fixed;
+        }
+
+        .overlay {
+            background: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .container {
+            text-align: center;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+        .logo {
+            height: 88px;
+            margin-right: 20px;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 100px;
+            color: #E9E3CF;
+        }
+
+        .qr-code {
+            max-width: 300px;
+            margin-top: 20px;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background"></div>
+    <div class="overlay"></div>
+    <div class="container">
+        <h1><img src="{% static 'img/logo_light.svg'%}" alt="Logo" class="logo">NATURE GO</h1>
+        <a href="https://expo.dev/@eleurent/nature-go?serviceType=eas&distribution=expo-go&scheme=exp%2Bnature-go&channel=main">
+            <img src="https://qr.expo.dev/eas-update?appScheme=exp&projectId=1b735d98-b598-406c-9235-ab43e10a0755&channel=main&runtimeVersion=exposdk%3A48.0.0&host=u.expo.dev" class="qr-code">
+        </a>
+    </div>
+</body>
+
+</html>
