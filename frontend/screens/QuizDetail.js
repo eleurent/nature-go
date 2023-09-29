@@ -12,6 +12,7 @@ export default function QuizDetailScreen({ navigation, route }) {
     }, []);
 
     const uniqueSpecies = [...new Set(quizState.quiz?.multiple_choice_questions?.map(question => question.species))];
+    const hasQuiz = uniqueSpecies.size > 0;
 
     return (
         <View style={styles.container} >
@@ -23,6 +24,7 @@ export default function QuizDetailScreen({ navigation, route }) {
                 <Text style={[styles.subtitle, {fontSize: 13}]}>FOR THE YEAR 1823,</Text>
                 <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                 <Text style={[styles.subtitle, { fontSize: 25 }]}>Syllabus</Text>
+                {hasQuiz ?
                 <FlatList
                     style={{ marginTop: 10, marginBottom: 10 }}
                     vertical
@@ -38,8 +40,11 @@ export default function QuizDetailScreen({ navigation, route }) {
                             </View>
                         );
                     }}
-                />
-                <QuizButton label="Take the exam" onPress={() => {navigation.replace('QuizQuestion', { id: 0 })}}/>
+                /> : <Text style={styles.emptyQuizText}>
+                    Before exam season starts, I should take a field trip and gather observations.
+                    </Text>
+                }
+                    <QuizButton label="Take the exam" theme={hasQuiz ? "" : "disabled"} disabled={!hasQuiz} onPress={() => {navigation.replace('QuizQuestion', { id: 0 })}}/>
             </View>
         </ImageBackground>
         </View>
@@ -85,5 +90,16 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         marginRight: 'auto',
         marginBottom: 20,
+    },
+    emptyQuizText: {
+        marginBottom: 'auto',
+        marginTop: 150,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        paddingLeft: 10,
+        paddingRight: 10,
+        fontSize: 20,
+        fontFamily: 'Tinos_400Regular',
+        textAlign: 'center'
     }
 });
