@@ -1,7 +1,8 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, serializers, status
 from .models import MultipleChoiceQuestion, Quiz
 from .serializers import QuizSerializer, AdminMultipleChoiceQuestionSerializer
 from .permissions import IsOwner
+from observation.models import Observation
 import random
 from django.utils import timezone
 from datetime import timedelta
@@ -26,8 +27,13 @@ class QuizCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
     def perform_create(self, serializer):
-        num_questions = min(5, MultipleChoiceQuestion.objects.count())
-        questions = random.sample(list(MultipleChoiceQuestion.objects.all()), num_questions)
+        user = self.request.user
+        observed_species = Observation.objects.filter(user=user).values_list('species__id', flat=True)
+        questions = MultipleChoiceQuestion.objects.filter(species__id__in=observed_species)
+        num_questions = min(5, questions.count())
+        questions = random.sample(list(questions), num_questions)
+        if not len(questions) > 0:
+            raise serializers.ValidationError('Cannot create a quiz because no species with questions have been observed.')
         serializer.save(user=self.request.user, multiple_choice_questions=questions)
         
     def get(self, request, *args, **kwargs):
@@ -45,8 +51,11 @@ class QuizGetOrCreateView(generics.RetrieveAPIView):
         for quiz in recent_quizzes:
             if not quiz.is_answered:
                 return quiz
-        data = QuizCreateView.as_view()(self.request._request).data
-        return Quiz.objects.get(pk=data['id'])
+        response = QuizCreateView.as_view()(self.request._request)
+        if response.status_code == status.HTTP_200_OK:
+            return Quiz.objects.get(pk=response.data['id'])
+        else:
+            raise serializers.ValidationError('The quiz could not be found or created.')
     
 
 class QuizRetrieveUpdateView(generics.RetrieveUpdateAPIView):

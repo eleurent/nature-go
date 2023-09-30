@@ -1,9 +1,5 @@
-
-import os
-from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.staticfiles import finders
 
 class Species(models.Model):
     scientificNameWithoutAuthor = models.CharField(max_length=255, unique=True)
