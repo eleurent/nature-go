@@ -20,6 +20,7 @@ const quizReducer = (prevState, action) => {
                 quiz: action.quiz,
             };
         case 'RESET_ANSWERS':
+            if (prevState.quiz === null) return initialState;
             answers = [...Array(prevState.quiz.multiple_choice_questions.length).fill(null)];
             prevState.quiz.multiple_choice_questions.forEach((question, index) => {
                 const userAnswer = prevState.quiz.multiplechoiceuseranswer_set.find(
@@ -63,7 +64,8 @@ export const useQuiz = () => {
                     dispatch({ type: 'SET_QUIZ', quiz: response.data });
                     dispatch({ type: 'RESET_ANSWERS' });
                 }).catch(error => {
-                    console.log(error);
+                    dispatch({ type: 'SET_QUIZ', quiz: null });
+                    dispatch({ type: 'RESET_ANSWERS' });
                 })
             },
             isQuestionSelected: (quizState, question_id, answer_id) => {
