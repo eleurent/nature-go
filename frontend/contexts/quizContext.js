@@ -62,6 +62,8 @@ export const useQuiz = () => {
                 axios.get(QUIZ_GET_URL).then(response => {
                     dispatch({ type: 'SET_QUIZ', quiz: response.data });
                     dispatch({ type: 'RESET_ANSWERS' });
+                }).catch(error => {
+                    console.log(error);
                 })
             },
             isQuestionSelected: (quizState, question_id, answer_id) => {

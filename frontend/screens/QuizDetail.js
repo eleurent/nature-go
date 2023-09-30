@@ -3,6 +3,29 @@ import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, Fl
 import QuizButton from '../components/QuizButton'
 import { QuizContext } from '../contexts/quizContext';
 
+const toRomanNumeral = num => {
+    const lookup = [
+        ['M', 1000],
+        ['CM', 900],
+        ['D', 500],
+        ['CD', 400],
+        ['C', 100],
+        ['XC', 90],
+        ['L', 50],
+        ['XL', 40],
+        ['X', 10],
+        ['IX', 9],
+        ['V', 5],
+        ['IV', 4],
+        ['I', 1],
+    ];
+    return lookup.reduce((acc, [k, v]) => {
+        acc += k.repeat(Math.floor(num / v));
+        num = num % v;
+        return acc;
+    }, '');
+};
+
 export default function QuizDetailScreen({ navigation, route }) {
 
     const { quizState, quizMethods } = useContext(QuizContext);
@@ -12,7 +35,7 @@ export default function QuizDetailScreen({ navigation, route }) {
     }, []);
 
     const uniqueSpecies = [...new Set(quizState.quiz?.multiple_choice_questions?.map(question => question.species))];
-    const hasQuiz = uniqueSpecies.size > 0;
+    const hasQuiz = uniqueSpecies.length > 0;
 
     return (
         <View style={styles.container} >
@@ -26,7 +49,7 @@ export default function QuizDetailScreen({ navigation, route }) {
                 <Text style={[styles.subtitle, { fontSize: 25 }]}>Syllabus</Text>
                 {hasQuiz ?
                 <FlatList
-                    style={{ marginTop: 10, marginBottom: 10 }}
+                            style={{ marginTop: 30, marginBottom: 10, marginLeft: 'auto', marginRight: 'auto' }}
                     vertical
                     scrollEnabled={false}
                     numColumns={1}
@@ -35,8 +58,8 @@ export default function QuizDetailScreen({ navigation, route }) {
                     contentContainerStyle={{}}
                     renderItem={({ item, index }) => {
                         return (
-                            <View key={index} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-                                <Text style={{ fontFamily: 'OldStandardTT_400Regular', fontSize: 20, marginBottom: 10}}>{item}</Text>
+                            <View key={index} >
+                                <Text style={{ fontFamily: 'OldStandardTT_400Regular', fontSize: 20, marginBottom: 50 }}>{toRomanNumeral(index+1)}. {item}</Text>
                             </View>
                         );
                     }}
