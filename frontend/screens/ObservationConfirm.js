@@ -98,11 +98,14 @@ export default function ObservationConfirmScreen({ navigation, route }) {
     const datetime = route.params.datetime;
 
     useEffect(() => {
-        postObservationImageAsync(imageBase64, gpsLocation, datetime, observation, setObservation, setIsLoading);
+        if (!observation)
+            postObservationImageAsync(imageBase64, gpsLocation, datetime, observation, setObservation, setIsLoading);
     }, []);
 
     let has_results = observation && observation.identification_response && observation.identification_response.results;
     let topNResults = has_results ? observation.identification_response.results.filter(candidate => candidate.score >= PROBABILITY_THRESHOLD).slice(0, NUM_CANDIDATES) : [];
+    let emptyResults = has_results && topNResults.length === 0;
+
     const onConfirmResponse = (response) => { setObservation(response.data); setXPModalVisible(true); };
 
     const onXPModalClose = () => {
@@ -129,7 +132,8 @@ export default function ObservationConfirmScreen({ navigation, route }) {
                         <Text>Identifying the plant...</Text>
                     </View>
                 ) :
-                (has_results ? 
+                (has_results ?
+                    (!emptyResults ?  
                     <FlatList
                         style={{ marginTop: 60 }}
                         vertical
@@ -147,6 +151,7 @@ export default function ObservationConfirmScreen({ navigation, route }) {
                             );
                         }}
                     />
+                    : <Text style={styles.emptyResults}>I don't recognize this specimen. Maybe I should get closer?</Text>)
                 : null)}
                 <XPModal isVisible={xpModalVisible} xpData={observation?.xp} onClose={onXPModalClose}/>
             </ImageBackground>
@@ -208,5 +213,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#4CAF50', 
         alignItems: 'center' 
     },
-    categoryLabel: { color: 'white' }
+    categoryLabel: { color: 'white' },
+    emptyResults: {
+        fontSize: 24,
+        textAlign: 'center',
+        paddingLeft: 10,
+        paddingRight: 10,
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        fontFamily: 'Tinos_400Regular'
+    },
 });
