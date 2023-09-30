@@ -10,7 +10,7 @@ class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
         model = MultipleChoiceQuestion
         fields = ['id', 'species', 'question', 'choices']
 
-class AdminMultipleChoiceQuestionSerializer(MultipleChoiceQuestionSerializer):
+class AdminMultipleChoiceQuestionSerializer(serializers.ModelSerializer):
     # Same with added correct_choice field
     class Meta:
         model = MultipleChoiceQuestion
