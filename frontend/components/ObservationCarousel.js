@@ -1,12 +1,32 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet, Text, Pressable } from 'react-native';
 import { Image } from 'expo-image';
-import MapView from './CustomMapView';
-import { Marker } from 'react-native-maps';
+import MapView, { Marker } from './CustomMapView';
+
+const formatDate = (datetime) => {
+    const dateObj = new Date(datetime);
+    const day = dateObj.getDate();
+    const month = dateObj.toLocaleString("default", { month: "long" });
+    const year = dateObj.getFullYear();
+    const nthNumber = (number) => {
+        if (number > 3 && number < 21) return "th";
+        switch (number % 10) {
+            case 1:
+                return "st";
+            case 2:
+                return "nd";
+            case 3:
+                return "rd";
+            default:
+                return "th";
+        }
+    };
+    return `${day}${nthNumber(day)} of ${month} ${year - 200}.`;
+}
 
 const CarouselCell = ({ obs, onImagePress }) => {
-
-    let initialRegion = coordinate = undefined;
+    let initialRegion = undefined;
+    let coordinate = undefined;
     if (obs.location?.latitude) {
         initialRegion = {
             latitude: obs.location?.latitude,
@@ -39,26 +59,6 @@ export default function ObservationCarousel( {observations, onImagePress} ) {
     if (!observations)
         return null;
 
-    formatDate = (datetime) => {
-        const dateObj = new Date(datetime);
-        const day = dateObj.getDate();
-        const month = dateObj.toLocaleString("default", { month: "long" });
-        const year = dateObj.getFullYear();
-        const nthNumber = (number) => {
-            if (number > 3 && number < 21) return "th";
-            switch (number % 10) {
-                case 1:
-                    return "st";
-                case 2:
-                    return "nd";
-                case 3:
-                    return "rd";
-                default:
-                    return "th";
-            }
-        };
-        return `${day}${nthNumber(day)} of ${month} ${year - 200}.`;
-    }   
     return (
         <View
             style={styles.scrollContainer}
