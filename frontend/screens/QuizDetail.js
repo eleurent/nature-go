@@ -34,7 +34,9 @@ export default function QuizDetailScreen({ navigation, route }) {
         console.log(quizState.quiz)
     }, []);
 
-    const uniqueSpecies = [...new Set(quizState.quiz?.multiple_choice_questions?.map(question => question.species))];
+    const getSpecies = ({ species, species_name }) => ({ species, species_name });
+    const quizSpecies = quizState.quiz?.multiple_choice_questions?.map(getSpecies);
+    const uniqueSpecies = [...new Set(quizSpecies)];
     const hasQuiz = uniqueSpecies.length > 0;
 
     return (
@@ -49,7 +51,7 @@ export default function QuizDetailScreen({ navigation, route }) {
                 <Text style={[styles.subtitle, { fontSize: 25 }]}>Syllabus</Text>
                 {hasQuiz ?
                 <FlatList
-                            style={{ marginTop: 30, marginBottom: 10, marginLeft: 'auto', marginRight: 'auto' }}
+                            style={{ marginTop: 30, marginBottom: 10, marginLeft: 20, marginRight: 20 }}
                     vertical
                     scrollEnabled={false}
                     numColumns={1}
@@ -58,9 +60,9 @@ export default function QuizDetailScreen({ navigation, route }) {
                     contentContainerStyle={{}}
                     renderItem={({ item, index }) => {
                         return (
-                            <View key={index} >
-                                <Text style={{ fontFamily: 'OldStandardTT_400Regular', fontSize: 20, marginBottom: 50 }}>{toRomanNumeral(index+1)}. {item}</Text>
-                            </View>
+                            <TouchableOpacity key={index} onPress={() => navigation.navigate('SpeciesDetail', { 'id': item.species })} >
+                                <Text style={styles.syllabusSpeciesName}>{toRomanNumeral(index+1)}. {item.species_name}</Text>
+                            </TouchableOpacity>
                         );
                     }}
                 /> : <Text style={styles.emptyQuizText}>
@@ -124,5 +126,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: 'Tinos_400Regular',
         textAlign: 'center'
+    },
+    syllabusSpeciesName: {
+        fontFamily: 'OldStandardTT_400Regular',
+        fontSize: 20,
+        marginBottom: 50,
+        textDecorationLine: 'underline'
     }
 });
