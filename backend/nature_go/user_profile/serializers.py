@@ -15,6 +15,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = [
              'username', 
+             'avatar',
              'xp', 
              'level', 
              'content_unlocked', 
