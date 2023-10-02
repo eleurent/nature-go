@@ -7,7 +7,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     xp = serializers.IntegerField(read_only=True)
     level = serializers.IntegerField(read_only=True)
-    content_unlocked = serializers.SerializerMethodField()
+    content_unlocked = serializers.JSONField(read_only=True)
     current_level_xp = serializers.SerializerMethodField()
     next_level_xp = serializers.SerializerMethodField()
     species_count = serializers.SerializerMethodField()
