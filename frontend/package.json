@@ -9,8 +9,10 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/dancing-script": "^0.2.3",
     "@expo-google-fonts/dev": "^0.2.3",
     "@expo-google-fonts/old-standard-tt": "^0.2.3",
+    "@expo-google-fonts/parisienne": "^0.2.3",
     "@expo-google-fonts/special-elite": "^0.2.3",
     "@expo-google-fonts/tinos": "^0.2.3",
     "@expo/vector-icons": "^13.0.0",
@@ -42,6 +44,7 @@
     "react-native-reanimated": "~2.14.4",
     "react-native-safe-area-context": "4.5.0",
     "react-native-screens": "~3.20.0",
+    "react-native-swiper": "^1.6.0",
     "react-native-web": "~0.18.10"
   },
   "devDependencies": {

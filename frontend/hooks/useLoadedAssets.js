@@ -1,11 +1,17 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-
 import {
     OldStandardTT_400Regular,
     OldStandardTT_700Bold,
 } from '@expo-google-fonts/old-standard-tt';
 import { SpecialElite_400Regular } from '@expo-google-fonts/special-elite';
 import { Tinos_400Regular_Italic, Tinos_400Regular } from '@expo-google-fonts/tinos';
+import {
+    DancingScript_400Regular,
+    DancingScript_500Medium,
+    DancingScript_600SemiBold,
+    DancingScript_700Bold,
+} from '@expo-google-fonts/dancing-script';
+import { Parisienne_400Regular } from '@expo-google-fonts/parisienne';
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import React from "react";
@@ -73,6 +79,8 @@ export function useLoadedAssets() {
                     { SpecialElite_400Regular },
                     { Tinos_400Regular_Italic },
                     { Tinos_400Regular },
+                    { DancingScript_400Regular },
+                    { Parisienne_400Regular },
                 ]);
 
                 await Promise.all([...imageAssets, ...fontAssets]);

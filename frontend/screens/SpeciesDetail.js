@@ -114,7 +114,9 @@ const styles = StyleSheet.create({
     },
     descriptionText: {
         fontFamily: 'SpecialElite_400Regular',
-        fontSize: 14,
+        fontSize: 15,
+        // fontFamily: 'Parisienne_400Regular',
+        // fontSize: 20,
         color:  '#332200',
         opacity: 0.7,
         marginTop: 30,
