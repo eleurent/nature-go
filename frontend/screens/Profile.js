@@ -4,10 +4,10 @@ import axios from 'axios';
 import Constants from 'expo-constants'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthContext } from '../contexts/AuthContext';
+import { UserProfileContext } from '../contexts/UserProfileContext';
 import ImageModal from '../components/ImageModal';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
-const PROFILE_URL = API_URL + 'api/profile/'
 
 const XPBar = ({data}) => {
     const maxWidth = styles.xpBarBackground.width - 2;
@@ -22,15 +22,12 @@ const XPBar = ({data}) => {
 
 export default function ProfileScreen({ navigation, route }) {
     const { authMethods } = useContext(AuthContext);
-    const [profileData, setProfileData] = useState(null);
+    const { profileState, profileMethods } = useContext(UserProfileContext);
     const [modalVisible, setModalVisible] = useState(false);
+    const profileData = profileState.profile;
 
     useEffect(() => {
-        const fetchProfile = async () => {
-            axios.get(PROFILE_URL).then(response => setProfileData(response.data));
-        };
-
-        fetchProfile();
+        profileMethods.fetchProfile();
     }, []);
 
     return (
@@ -39,7 +36,7 @@ export default function ProfileScreen({ navigation, route }) {
                 <SafeAreaView style={styles.containerInsideImage}>
                     <View style={styles.header}>
                         <Pressable style={styles.avatarContainer} onPress={() => setModalVisible(true)}>
-                            <Image source={global.avatar.full} style={styles.avatar} />
+                            <Image source={profileState.avatar?.full} style={styles.avatar} />
                         </Pressable>
                         <View style={styles.statsContainer}>
                             <Text style={styles.title}>Undergraduate</Text>
@@ -75,7 +72,7 @@ export default function ProfileScreen({ navigation, route }) {
                     <TouchableOpacity style={styles.button} onPress={authMethods.signOut}>
                         <Text style={styles.buttonText}>Sign out</Text>
                     </TouchableOpacity>
-                    <ImageModal modalVisible={modalVisible} setModalVisible={setModalVisible} modalImage={global.avatar.full} backgroundColor='rgba(230,200,150,0.5)'/>
+                    <ImageModal modalVisible={modalVisible} setModalVisible={setModalVisible} modalImage={profileState.avatar?.full} backgroundColor='rgba(230,200,150,0.5)'/>
                 </SafeAreaView>
             </ImageBackground>
         </View>
