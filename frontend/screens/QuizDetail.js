@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
 import QuizButton from '../components/QuizButton'
-import { QuizContext } from '../contexts/quizContext';
+import { QuizContext } from '../contexts/QuizContext';
 
 const toRomanNumeral = num => {
     const lookup = [

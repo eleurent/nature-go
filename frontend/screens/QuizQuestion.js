@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, Fl
 import { HeaderBackButton } from '@react-navigation/elements';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import QuizButton from '../components/QuizButton'
-import { QuizContext } from '../contexts/quizContext';
+import { QuizContext } from '../contexts/QuizContext';
 
 const POSITIVE_FEEDBACK = [
     "Splendid! You've displayed remarkable knowledge!",

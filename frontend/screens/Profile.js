@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Press
 import axios from 'axios';
 import Constants from 'expo-constants'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AuthContext } from '../contexts/authContext';
+import { AuthContext } from '../contexts/AuthContext';
 import ImageModal from '../components/ImageModal';
 
 const API_URL = Constants.expoConfig.extra.API_URL;

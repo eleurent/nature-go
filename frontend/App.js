@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useAuth, AuthContext } from './contexts/authContext';
-import { useQuiz, QuizContext } from './contexts/quizContext';
+import { useAuth, AuthContext } from './contexts/AuthContext';
+import { useQuiz, QuizContext } from './contexts/QuizContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLoadedAssets } from "./hooks/useLoadedAssets";
 import HomeScreen from './screens/Home'
@@ -32,7 +32,7 @@ export default function App() {
     return null;
   return (
     <AuthContext.Provider value = {{ authState, authMethods }}>
-    <QuizContext.Provider value= {{quizState, quizMethods }}>
+    <QuizContext.Provider value= {{ quizState, quizMethods }}>
     <SafeAreaProvider>
       <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerTransparent: true, headerTitle: '', headerTintColor: 'black' }}>
