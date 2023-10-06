@@ -6,6 +6,13 @@ from summary_prompt import *
 
 from gpt_utils import try_except_decorator, get_config, filter_and_get_within_context, parse_summary
 
+def replace_today(summary):
+    words = summary.split(" ", 1)
+    if words[0] == "Today,":
+        return "[DATE], " + words[1]
+    else:
+        return summary
+
 @try_except_decorator
 def generate_summaries(plant_name, prompt="summary_v", num_try=0):
 
@@ -27,4 +34,5 @@ def generate_summaries(plant_name, prompt="summary_v", num_try=0):
     )
     response = response["choices"][0]["message"]["content"]
     summaries = parse_summary(response)
-    return summaries
+    updated_summaries = {key: replace_today(value) for key, value in summaries.items()}
+    return updated_summaries
