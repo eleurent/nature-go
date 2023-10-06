@@ -8,6 +8,7 @@ from observation.models import Observation
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    avatar = models.CharField(max_length=20, default='', blank=True)
     xp = models.IntegerField(default=0)
     level = models.IntegerField(default=1)
     content_unlocked = models.JSONField(default=dict)

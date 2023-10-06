@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useAuth, AuthContext } from './contexts/authContext';
-import { useQuiz, QuizContext } from './contexts/quizContext';
+import { useAuth, AuthContext } from './contexts/AuthContext';
+import { useQuiz, QuizContext } from './contexts/QuizContext';
+import { useUserProfile, UserProfileContext } from './contexts/UserProfileContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLoadedAssets } from "./hooks/useLoadedAssets";
 import HomeScreen from './screens/Home'
 import SignInScreen from './screens/SignIn'
 import SignUpScreen from './screens/SignUp'
+import CharacterSelectionScreen from './screens/CharacterSelection';
 import SpeciesListScreen from './screens/SpeciesList';
 import SpeciesDetailScreen from './screens/SpeciesDetail';
 import CameraScreen from './screens/Camera';
@@ -26,13 +28,21 @@ export default function App() {
 
   const isLoadingComplete = useLoadedAssets();
   const { authState, authMethods } = useAuth();
+  const { profileState, profileMethods } = useUserProfile(authState);
   const { quizState, quizMethods } = useQuiz();
+
+  useEffect(() => {
+    if (authState.userToken) {
+      profileMethods.fetchProfile();
+    }
+  }, [authState.userToken, profileMethods]);
 
   if (!isLoadingComplete || authState.isLoading)
     return null;
   return (
     <AuthContext.Provider value = {{ authState, authMethods }}>
-    <QuizContext.Provider value= {{quizState, quizMethods }}>
+    <UserProfileContext.Provider value={{ profileState, profileMethods }}>
+    <QuizContext.Provider value= {{ quizState, quizMethods }}>
     <SafeAreaProvider>
       <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerTransparent: true, headerTitle: '', headerTintColor: 'black' }}>
@@ -55,12 +65,14 @@ export default function App() {
             <Stack.Screen name="QuizQuestion" component={QuizQuestionScreen}/>
             <Stack.Screen name="QuizResult" component={QuizResultScreen}/>
             <Stack.Screen name="Profile" component={ProfileScreen}/>
+            <Stack.Screen name="CharacterSelection" component={CharacterSelectionScreen}/>
             </>
           )}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
     </QuizContext.Provider>
+    </UserProfileContext.Provider>
     </AuthContext.Provider>
   );
 }

@@ -5,6 +5,9 @@ from .models import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
+    xp = serializers.IntegerField(read_only=True)
+    level = serializers.IntegerField(read_only=True)
+    content_unlocked = serializers.JSONField(read_only=True)
     current_level_xp = serializers.SerializerMethodField()
     next_level_xp = serializers.SerializerMethodField()
     species_count = serializers.SerializerMethodField()
@@ -15,6 +18,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = [
              'username', 
+             'avatar',
              'xp', 
              'level', 
              'content_unlocked', 
@@ -34,7 +38,7 @@ class ProfileSerializer(serializers.ModelSerializer):
          return instance.level_xp(instance.level + 1)
     
     def get_species_count(self, instance):
-        return len(set(obs.species for obs in instance.user.observation_set.all()))
+        return len(set(obs.species for obs in instance.user.observation_set.all() if obs.species is not None))
 
     def get_observations_count(self, instance):
         return instance.user.observation_set.exclude(species=None).count()

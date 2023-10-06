@@ -1,9 +1,9 @@
 
+import argparse
 import requests
 from PIL import Image
 import io
 import base64
-from IPython.display import display
 import pandas as pd
 from pathlib import Path
 import wikipedia
@@ -15,15 +15,10 @@ import sys
 import rembg
 from illustration_workflows import txt2img_workflow
 from illustration_workflows import controlnet_workflow
-    
 
-# Nature Go parameters
-print('Nature go username?')
-NG_USERNAME = input()
-print('Nature go password?')
-NG_PASSWORD = input()
 
 # Stable Diffusion parameters
+comfyui_path = txt2img_workflow.find_path("ComfyUI")
 SD_HOST = 'http://nature-go.edouardleurent.com'
 PROMPT = "herbarium illustration of {commonNames} {scientificNameWithoutAuthor}, 19th century, transactions of the Botanical Society of London"
 BATCH_SIZE = 100
@@ -31,8 +26,9 @@ BATCH_SIZE = 100
 # ## Retrieve species with missing images through Nature go API
 
 
-def get_species(batch_size=5):
-    species_list = client.get_labeled_species(illustration=False, limit=batch_size)
+def get_species(client, batch_size=5, ordering=None):
+    ordering = ordering or ordering.split(',')
+    species_list = client.get_labeled_species(illustration=False, limit=batch_size, ordering=ordering)
     print(f'Found {len(species_list)} species')
     return pd.DataFrame(species_list)
     
@@ -53,7 +49,7 @@ def display_images(*images):
         axes.flat[i].imshow(image)
         axes.flat[i].axis('off')
 
-def run_txt2img_worflow(positive_prompts, negative_prompts):
+def run_txt2img_worflow(positive_prompts, negative_prompts, rembg_session):
     import random
     random.seed(len(positive_prompts[0]))
     for result in txt2img_workflow.main(positive_prompts=positive_prompts, negative_prompts=negative_prompts):
@@ -62,7 +58,7 @@ def run_txt2img_worflow(positive_prompts, negative_prompts):
         yield illustration, illustration_transparent
 
 
-def run_controlnet_worflow(positive_prompt, negative_prompt, reference_image_name):
+def run_controlnet_worflow(positive_prompt, negative_prompt, reference_image_name, rembg_session):
     import random
     random.seed(len(positive_prompt))
     result = controlnet_workflow.main(positive_prompt=positive_prompt, negative_prompt=negative_prompt, control_image=reference_image_name)
@@ -71,16 +67,16 @@ def run_controlnet_worflow(positive_prompt, negative_prompt, reference_image_nam
     illustration_transparent = rembg.remove(illustration, session=rembg_session)
     return illustration, illustration_transparent, mask
 
-def single_controlnet_workflow(species):
+def single_controlnet_workflow(species, positive_prompt):
     reference_image_url = fetch_wikipedia_images(species.scientificNameWithoutAuthor)[0]
     reference_image = download_image(reference_image_url)
     reference_image_name = f"reference_{species.scientificNameWithoutAuthor}.png"
     reference_image.save(Path(comfyui_path) / "input" / reference_image_name)
-    reference_illustration, reference_illustration_transparent, mask = run_controlnet_worflow(positive_prompt=prompt, negative_prompt='black and white', reference_image_name=reference_image_name)
+    reference_illustration, reference_illustration_transparent, mask = run_controlnet_worflow(positive_prompt=positive_prompt, negative_prompt='black and white', reference_image_name=reference_image_name)
     print('Generated controlnet illustration.')
     return reference_illustration, reference_illustration_transparent, mask
 
-def send_results(illustration, illustration_transparent, reference_illustration, reference_illustration_transparent, reference_image_url):
+def send_results(client, species, illustration, illustration_transparent, reference_illustration, reference_illustration_transparent, reference_image_url):
     if illustration:
         client.update_species_image(species_id=species.id, image=illustration, image_name='illustration')
     if illustration_transparent:
@@ -92,26 +88,36 @@ def send_results(illustration, illustration_transparent, reference_illustration,
     if reference_image_url and len(reference_image_url) < 255:
         client.update_species_field(species_id=species.id, key='reference_image_url', value=reference_image_url) 
 
+def main(args):
+    print('Nature go username?')
+    username = input()
+    print('Nature go password?')
+    password = input()
+    client = nature_go_client.NatureGoClient(username=username, password=password)
+    client.login()
+    rembg_session = rembg.new_session(model_name="isnet-general-use")
 
-client = nature_go_client.NatureGoClient(username=NG_USERNAME, password=NG_PASSWORD)
-client.login()
-comfyui_path = txt2img_workflow.find_path("ComfyUI")
-rembg_session = rembg.new_session(model_name="isnet-general-use")
-
-while True:
-    species_batch = get_species(batch_size=BATCH_SIZE)
-    print('#############################')
-    positive_prompts = [
-        PROMPT.format(commonNames=', '.join(species.commonNames[:3]), scientificNameWithoutAuthor=species.scientificNameWithoutAuthor)
-        for _, species in species_batch.iterrows()
-    ]
-    negative_prompts = [''] * len(positive_prompts)
-    for (illustration, illustration_transparent), (_, species) in zip(
-        run_txt2img_worflow(positive_prompts=positive_prompts, negative_prompts=negative_prompts),
-        species_batch.iterrows()
-    ):
-        print(f'Generated txt2img illustration of {species.scientificNameWithoutAuthor}.')
-        send_results(illustration, illustration_transparent, None, None, None)
-        print('Uploaded results.')
+    while True:
+        species_batch = get_species(client, batch_size=args.batch_size, ordering=args.ordering)
+        print('#############################')
+        positive_prompts = [
+            args.prompt.format(commonNames=', '.join(species.commonNames[:3]), scientificNameWithoutAuthor=species.scientificNameWithoutAuthor)
+            for _, species in species_batch.iterrows()
+        ]
+        negative_prompts = [''] * len(positive_prompts)
+        for (illustration, illustration_transparent), (_, species) in zip(
+            run_txt2img_worflow(positive_prompts=positive_prompts, negative_prompts=negative_prompts, rembg_session=rembg_session),
+            species_batch.iterrows()
+        ):
+            print(f'Generated txt2img illustration of {species.scientificNameWithoutAuthor}.')
+            send_results(client, species, illustration, illustration_transparent, None, None, None)
+            print('Uploaded results.')
 
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ordering", help="species ordering", type=str, default='-observation_count,rarity_gpt,-occurences_cdf')
+    parser.add_argument("--batch_size", help="batch size", type=int, default=100)
+    parser.add_argument("--prompt", help="prompt", type=str, default=PROMPT)
+    args = parser.parse_args()
+    main(args)

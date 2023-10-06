@@ -4,17 +4,20 @@ from observation.serializers import SpeciesSerializer
 from user_profile.signals import xp_gained
 
 class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
-    species = serializers.StringRelatedField(many=False, read_only=True)
+    species_name = serializers.SerializerMethodField()
     
     class Meta:
         model = MultipleChoiceQuestion
-        fields = ['id', 'species', 'question', 'choices']
+        fields = ['id', 'species', 'question', 'choices', 'species_name']
+
+    def get_species_name(self, obj):
+        return str(obj.species)
 
 class AdminMultipleChoiceQuestionSerializer(MultipleChoiceQuestionSerializer):
     # Same with added correct_choice field
     class Meta:
         model = MultipleChoiceQuestion
-        fields = ['id', 'species', 'question', 'choices', 'correct_choice']
+        fields = ['id', 'species', 'question', 'choices', 'species_name', 'correct_choice']
 
 
 class MultipleChoiceUserAnswerSerializer(serializers.ModelSerializer):

@@ -23,7 +23,7 @@ class NatureGoClient:
 
     def login(self):
         response = requests.post(LOGIN_URL, json={'username': self.username, 'password': self.password})
-        if response.status_code == 200:
+        if response.ok:
             logger.info('Login successful')
             self.token = response.json()['token']
         else:
@@ -37,7 +37,7 @@ class NatureGoClient:
         self.assert_logged_in()
         params = {'limit': limit, 'offset': offset, 'ordering': ordering}
         response = requests.get(SPECIES_LIST_URL, headers={'Authorization': f'Token {self.token}'}, params=params)
-        if response.status_code == 200:
+        if response.ok:
             result = response.json()
             logger.info(f'Fetched {len(result)} species')
             return result['results']
@@ -47,7 +47,7 @@ class NatureGoClient:
     def get_labeled_species(
             self,
             limit: int = 100, 
-            offset: int = 0, 
+            offset: int = 0,
             illustration: bool | None = None,
             illustration_transparent: bool | None = None,
             descriptions: bool | None = None,
@@ -66,7 +66,7 @@ class NatureGoClient:
         }
         params = {k: v for k, v in params.items() if v is not None}
         response = requests.get(SPECIES_LABELED_URL, headers={'Authorization': f'Token {self.token}'}, params=params)
-        if response.status_code == 200:
+        if response.ok:
             result = response.json()
             logger.info(f'Fetched {len(result)} species')
             return result['results']
@@ -83,7 +83,7 @@ class NatureGoClient:
         response = requests.patch(SPECIES_DETAIL_URL.format(species_id=species_id),
                                   headers={'Authorization': f'Token {self.token}'},
                                   data={image_name: image_base64})
-        if response.status_code == 200:
+        if response.ok:
             logger.info(f'Updated illustration for species {species_id}')
         else:
             raise ValueError(f'{SPECIES_DETAIL_URL} failed with status  {response.status_code} and response {response.content}')
@@ -96,7 +96,7 @@ class NatureGoClient:
                                 headers={'Authorization': f'Token {self.token}'},
                                 json={key: value})
         
-        if response.status_code == 200:
+        if response.ok:
             logger.info(f'Updated {key} for species {species_id}')
         else:
             raise ValueError(f'{SPECIES_DETAIL_URL} failed with status  {response.status_code} and response {response.content}')  
@@ -104,7 +104,7 @@ class NatureGoClient:
     def get_all_questions(self) -> list:
         self.assert_logged_in()
         response = requests.get(QUESTION_CREATE_URL, headers={'Authorization': f'Token {self.token}'})
-        if response.status_code == 200:
+        if response.ok:
             result = response.json()
             logger.info(f'Fetched {len(result)} species')
             return result
@@ -121,10 +121,10 @@ class NatureGoClient:
                                     json={
                                         'species': species_id,
                                         **question})
-            if response.status_code in [200, 201]:
+            if response.ok:
                 logger.info(f'Posted questions for species {species_id}')
-        else:
-            raise ValueError(f'{QUESTION_CREATE_URL} failed with status  {response.status_code} and response {response.content}')
+            else:
+                raise ValueError(f'{QUESTION_CREATE_URL} failed with status  {response.status_code} and response {response.content}')
         
     def post_species_descriptions(self, species_id: int, descriptions: dict):
         self.update_species_field(species_id, 'descriptions', 

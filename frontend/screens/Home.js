@@ -1,6 +1,7 @@
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, Image, ImageBackground, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { UserProfileContext } from '../contexts/UserProfileContext';
 
 const CategoryButton = (props) => {
     const opacity = props.disabled ? 0.3 : 1;
@@ -18,6 +19,11 @@ const CategoryButton = (props) => {
 }
 
 export default function HomeScreen({ navigation }) {
+    const { profileState, profileMethods } = useContext(UserProfileContext);
+    useEffect(() => {   
+        profileMethods.maybeSelectCharacter(profileState, navigation);
+    }, [profileState]);
+
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
@@ -63,7 +69,7 @@ export default function HomeScreen({ navigation }) {
                         activeOpacity={0.5}
                         onPress={() => navigation.navigate('Profile')}>
                         <Image style={styles.avatarImage}
-                            source={global.avatar.bubble}
+                                source={profileState.avatar.bubble}
                         />
                     </TouchableOpacity>
                 </View>

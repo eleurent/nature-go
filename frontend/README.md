@@ -1,4 +1,4 @@
-# Nature go
+# Nature GO
 
 ## Run
 

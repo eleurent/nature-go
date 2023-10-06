@@ -1,9 +1,9 @@
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveUpdateAPIView
 from .models import Profile
 from .serializers import ProfileSerializer
 from rest_framework import permissions
 
-class ProfileView(RetrieveAPIView):
+class ProfileView(RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
     pagination_class = None
     queryset = Profile.objects.all()

@@ -1,12 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Image, Platform } from 'react-native';
+import { StyleSheet, Text, View, Platform, ActivityIndicator } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
-// import * as MediaLibrary from 'expo-media-library';
+import * as Location from 'expo-location';
+import * as MediaLibrary from 'expo-media-library';
 import IconButton from '../components/IconButton'
 
 
-const pickImageAsync = async (navigation) => {
+function parseDate(dateString) {
+    // The date format is YYYY:MM:DD HH:MM:SS
+    let datePattern = /^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+
+    if (datePattern.test(dateString)) {
+        let parts = dateString.split(' ');
+        let dateParts = parts[0].split(':');
+        let timeParts = parts[1].split(':');
+        let year = parseInt(dateParts[0]);
+        let month = parseInt(dateParts[1]) - 1;
+        let day = parseInt(dateParts[2]);
+        let hours = parseInt(timeParts[0]);
+        let minutes = parseInt(timeParts[1]);
+        let seconds = parseInt(timeParts[2]);
+        return new Date(year, month, day, hours, minutes, seconds).toISOString();
+    } else {
+        return new Date().toISOString();
+    }
+}
+
+const pickImageAsync = async (navigation, setStatusMessage) => {
     let result = await ImagePicker.launchImageLibraryAsync({
         base64: true,
         allowsEditing: false,  // See https://docs.expo.dev/versions/latest/sdk/imagepicker/#known-issues
@@ -15,24 +36,44 @@ const pickImageAsync = async (navigation) => {
     });
 
     if (!result.canceled) {
-        // // Get location
-        // // Getting location from exif data works on iOS (when the image has location), but not on Android
-        // // See https://github.com/expo/expo/issues/17399
-        // console.log(result.assets[0].exif)
-        // // This additional step should make it work on Android, but it fails because of a new issue
-        // // See https://github.com/expo/expo/issues/24172
-        // let info = await MediaLibrary.getAssetInfoAsync(result.assets[0].assetId)
-        // console.log(info.location)
-        navigation.navigate('ObservationConfirm', { imageBase64: result.assets[0].base64, isLoading: true });
+        // Get location
+        // Getting location from exif data works on iOS (when the image has location), but not on Android
+        // See https://github.com/expo/expo/issues/17399
+        setStatusMessage('Checking map and compass...');
+        console.log('Image exif: ' + JSON.stringify(result.assets[0].exif))
+        const datetime = parseDate(result.assets[0].exif.DateTimeDigitized);
+        let gpsLocation = {
+            latitude: result.assets[0].exif.GPSLatitude,
+            longitude: result.assets[0].exif.GPSLongitude,
+        }
+        if (!(gpsLocation.latitude && gpsLocation.longitude)) {
+            // This additional step should make it work on Android, but it fails because of a new issue
+            // See https://github.com/expo/expo/issues/24172
+            console.log(result.assets[0].assetId)
+            let info = await MediaLibrary.getAssetInfoAsync(result.assets[0].assetId)
+            console.log(info)
+        }
+        setStatusMessage(null);
+        navigation.navigate('ObservationConfirm', { imageBase64: result.assets[0].base64, isLoading: true, gpsLocation, datetime });
     } else {
         console.log('You did not select any image.');
     }
 };
 
-const takePictureAsync = async (camera, navigation) => {
+const takePictureAsync = async (camera, navigation, setStatusMessage) => {
     if (camera) {
+        setStatusMessage('Taking a closer look...');
         const data = await camera.takePictureAsync({ base64: true, exif: true, quality: 0. });
-        navigation.navigate('ObservationConfirm', { imageBase64: data.base64, isLoading: true });
+        setStatusMessage('Checking map and compass...');
+        const location = await Location.getCurrentPositionAsync({});
+        const gpsLocation = {
+            "latitude": location.coords.latitude,
+            "longitude": location.coords.longitude,
+        };
+        console.log(gpsLocation);
+        setStatusMessage(null);
+        datetime = new Date().toISOString();
+        navigation.navigate('ObservationConfirm', { imageBase64: data.base64, isLoading: true, gpsLocation, datetime });
     }
 };
 
@@ -42,6 +83,8 @@ export default function CameraScreen({ navigation }) {
 
     const [camera, setCamera] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
+
+    const [statusMessage, setStatusMessage] = useState(null);
 
     const permissionFunction = async () => {
         let cameraPerm = await Camera.requestCameraPermissionsAsync();
@@ -61,6 +104,14 @@ export default function CameraScreen({ navigation }) {
             galleryPerm = await ImagePicker.getMediaLibraryPermissionsAsync();
             setGalleryPermission(galleryPerm.status === 'granted');
         }
+
+        let locationStatus = await Location.requestForegroundPermissionsAsync();
+        await Location.enableNetworkProviderAsync();
+        if (locationStatus.status !== 'granted') {
+            console.log('Permission to access location was denied: ' + JSON.stringify(locationStatus));
+            await Location.requestForegroundPermissionsAsync();
+            await Location.enableNetworkProviderAsync();
+        }
     };
 
     useEffect(() => {
@@ -79,17 +130,31 @@ export default function CameraScreen({ navigation }) {
                 ratio={'16:9'}
             >
                 <View style={styles.cameraView}>
-                    <IconButton icon="image" size={32} color={galleryColor} onPress={() => pickImageAsync(navigation)} extra_style={styles.galleryButtonContainer} />
-                    <IconButton icon="camera" size={70} color={cameraColor} onPress={() => takePictureAsync(camera, navigation)} extra_style={styles.captureButton}/>
+
+                    {statusMessage ? (
+                        <View style={styles.statusMessageContainer}>
+                            <ActivityIndicator size={80} color="#fff" />
+                            <Text style={styles.statusMessage}>{statusMessage}</Text>
+                        </View>
+                    ): null}
+
+                    <IconButton icon="image" size={32} color={galleryColor} onPress={() => pickImageAsync(navigation, setStatusMessage)} extra_style={styles.galleryButtonContainer} />
+                    <IconButton icon="camera" size={70} color={cameraColor} onPress={() => takePictureAsync(camera, navigation, setStatusMessage)} extra_style={styles.captureButton}/>
                 </View>
             </Camera>
         </View>
     ) : (
         <View style={styles.container}>
             {/* TODO Camera is not working on web, getting Uncaught Error: Invalid hook call. */}
+            {statusMessage ? (
+                <View style={styles.statusMessageContainer}>
+                    <ActivityIndicator size={80} color="#fff" />
+                    <Text style={styles.statusMessage}>{statusMessage}</Text>
+                </View>
+            ) : null}
             <View style={styles.cameraView}>
-                <IconButton icon="image" size={32} color={galleryColor} onPress={() => pickImageAsync(navigation)} extra_style={styles.galleryButtonContainer} />
-                <IconButton icon="camera" size={70} color={cameraColor} onPress={() => takePictureAsync(camera, navigation)} extra_style={styles.captureButton} />
+                <IconButton icon="image" size={32} color={galleryColor} onPress={() => pickImageAsync(navigation, setStatusMessage)} extra_style={styles.galleryButtonContainer} />
+                <IconButton icon="camera" size={70} color={cameraColor} onPress={() => takePictureAsync(camera, navigation, setStatusMessage)} extra_style={styles.captureButton} />
             </View>
             <Text>Web</Text>
         </View>
@@ -119,5 +184,16 @@ const styles = StyleSheet.create({
         position: "absolute",
         left: 20,
         bottom: 30,
+    },
+    statusMessageContainer: {
+        position: "absolute",
+        top: '40%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    },
+    statusMessage: {
+        fontSize: 24,
+        fontFamily: 'Tinos_400Regular',
+        color: 'white',
     },
 });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, FlatList, Platform } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground, FlatList, Platform, ScrollView } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/elements'
 import axios from 'axios';
 import Constants from 'expo-constants'
@@ -41,6 +41,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
+                <ScrollView>
                 <Animated.Image
                     style={styles.illustrationImage}
                     resizeMode='contain'
@@ -52,9 +53,9 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                     <Text style={[styles.speciesName, styles.nameContainer]}>{speciesDetails.display_name ? speciesDetails.display_name : "Name"}</Text>
                     <Text style={[styles.speciesScientificName, styles.nameContainer]}>{speciesDetails.scientificNameWithoutAuthor ? speciesDetails.scientificNameWithoutAuthor : "Scientific name"}</Text>
                     <FlatList
-                        style={{ marginTop: 60 }}
+                        style={{ marginBottom: 20 }}
                         vertical
-                        numColumns={2}
+                        scrollEnabled={false}
                         showsVerticalScrollIndicator={Platform.OS === 'web'}
                         data={speciesDetails.descriptions}
                         contentContainerStyle={{}}
@@ -69,6 +70,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                 </View>
                 <ImageModal modalVisible={modalVisible} setModalVisible={setModalVisible} modalImage={modalImage}/>
                 <ObservationCarousel observations={speciesObservations} onImagePress={(image) => {setModalImage(image); setModalVisible(true);}}/>
+                </ScrollView>
             </ImageBackground>
         </View>
     )
@@ -97,6 +99,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     speciesName: {
+        marginTop: 10,
         fontFamily: 'SpecialElite_400Regular',
         fontWeight: 400,
         fontSize: 20,
@@ -111,7 +114,9 @@ const styles = StyleSheet.create({
     },
     descriptionText: {
         fontFamily: 'SpecialElite_400Regular',
-        fontSize: 14,
+        fontSize: 15,
+        // fontFamily: 'Parisienne_400Regular',
+        // fontSize: 20,
         color:  '#332200',
         opacity: 0.7,
         marginTop: 30,

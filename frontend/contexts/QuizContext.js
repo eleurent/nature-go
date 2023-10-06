@@ -20,6 +20,7 @@ const quizReducer = (prevState, action) => {
                 quiz: action.quiz,
             };
         case 'RESET_ANSWERS':
+            if (prevState.quiz === null) return initialState;
             answers = [...Array(prevState.quiz.multiple_choice_questions.length).fill(null)];
             prevState.quiz.multiple_choice_questions.forEach((question, index) => {
                 const userAnswer = prevState.quiz.multiplechoiceuseranswer_set.find(
@@ -61,6 +62,9 @@ export const useQuiz = () => {
             getOrCreateQuiz: async () => {
                 axios.get(QUIZ_GET_URL).then(response => {
                     dispatch({ type: 'SET_QUIZ', quiz: response.data });
+                    dispatch({ type: 'RESET_ANSWERS' });
+                }).catch(error => {
+                    dispatch({ type: 'SET_QUIZ', quiz: null });
                     dispatch({ type: 'RESET_ANSWERS' });
                 })
             },

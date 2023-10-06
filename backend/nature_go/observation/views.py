@@ -121,7 +121,7 @@ class ObservationCreate(generics.CreateAPIView):
         # Save the serializer first so we can access the image
         observation = serializer.save(user=self.request.user)
         observation.identification_response = identification.plantnet_identify(observation.image.path)
-        observation.location, observation.datetime = identification.read_exif(observation.image.path)
+        # observation.location, observation.datetime = identification.read_exif(observation.image.path)
         observation.save()
         serializer = ObservationSerializer(instance=observation)
         return Response(serializer.data)
@@ -133,6 +133,8 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
     def update(self, request, *args, **kwargs):
+        if 'species' not in request.data:
+            return super().update(request, *args, **kwargs)
         instance = self.get_object()
         idx = int(request.data['species'])  # index of the correct species in the identification response, not species pk
         species_data = instance.identification_response['results'][idx]['species']

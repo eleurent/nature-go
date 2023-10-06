@@ -10,7 +10,7 @@ const API_URL = Constants.expoConfig.extra.API_URL;
 const URL_CREATE_OBSERVATION = API_URL + 'api/species/observation/'
 const OBSERVATION_URL = (id) => API_URL + `api/species/observation/${id}/`
 const NUM_CANDIDATES = 3; // Number of candidates to display
-const PROBABILITY_THRESHOLD = 0.25; // Minimum probability to display a candidate
+const PROBABILITY_THRESHOLD = 0.10; // Minimum probability to display a candidate
 
 
 const SpeciesCandidate = (props) => {
@@ -21,7 +21,7 @@ const SpeciesCandidate = (props) => {
                 source={{ uri: props.item.images[0].url.s }}
             />
             <View style={styles.textContainer}>
-                <Text style={styles.speciesName}>{props.item.species.commonNames[0]}</Text>
+                <Text style={styles.speciesName}>{props.item.species.commonNames.size ? props.item.species.commonNames[0] : props.item.species.scientificNameWithoutAuthor}</Text>
                 <Text style={styles.speciesScientificName}>{props.item.species.scientificNameWithoutAuthor}</Text>
             </View>
             <TouchableOpacity
@@ -34,16 +34,23 @@ const SpeciesCandidate = (props) => {
     );
 }
 
-const postObservationImageAsync = async (imageBase64, observation, setObservation, setIsLoading) => {
+const postObservationImageAsync = async (imageBase64, gpsLocation, datetime, observation, setObservation, setIsLoading) => {
     if (imageBase64 && !observation) {
         let formData = new FormData();
+        console.log('posting observation with gpsLocation ' + JSON.stringify(gpsLocation));
+        console.log('posting observation with datetime ' + JSON.stringify(datetime));
         formData.append('image', imageBase64);
-        const response = await axios.post(URL_CREATE_OBSERVATION, formData, {
+        formData.append('location', JSON.stringify(gpsLocation));
+        formData.append('datetime', datetime);
+        axios.post(URL_CREATE_OBSERVATION, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
-        });
-
-        setObservation(response.data);
-        setIsLoading(false);
+        }).then(response => {
+            setObservation(response.data);
+            setIsLoading(false);
+        }).catch(error => {
+            console.log(error.message);
+            setIsLoading(false);
+        })
     }
 };
 
@@ -87,13 +94,18 @@ export default function ObservationConfirmScreen({ navigation, route }) {
     const [isLoading, setIsLoading] = useState(true);
     const [xpModalVisible, setXPModalVisible] = useState(false);
     const imageBase64 = route.params.imageBase64;
+    const gpsLocation = route.params.gpsLocation;
+    const datetime = route.params.datetime;
 
     useEffect(() => {
-        postObservationImageAsync(imageBase64, observation, setObservation, setIsLoading);
+        if (!observation)
+            postObservationImageAsync(imageBase64, gpsLocation, datetime, observation, setObservation, setIsLoading);
     }, []);
 
     let has_results = observation && observation.identification_response && observation.identification_response.results;
     let topNResults = has_results ? observation.identification_response.results.filter(candidate => candidate.score >= PROBABILITY_THRESHOLD).slice(0, NUM_CANDIDATES) : [];
+    let emptyResults = has_results && topNResults.length === 0;
+
     const onConfirmResponse = (response) => { setObservation(response.data); setXPModalVisible(true); };
 
     const onXPModalClose = () => {
@@ -120,7 +132,8 @@ export default function ObservationConfirmScreen({ navigation, route }) {
                         <Text>Identifying the plant...</Text>
                     </View>
                 ) :
-                (has_results ? 
+                (has_results ?
+                    (!emptyResults ?  
                     <FlatList
                         style={{ marginTop: 60 }}
                         vertical
@@ -138,6 +151,7 @@ export default function ObservationConfirmScreen({ navigation, route }) {
                             );
                         }}
                     />
+                    : <Text style={styles.emptyResults}>I don't recognize this specimen. Maybe I should get closer?</Text>)
                 : null)}
                 <XPModal isVisible={xpModalVisible} xpData={observation?.xp} onClose={onXPModalClose}/>
             </ImageBackground>
@@ -151,7 +165,7 @@ const styles = StyleSheet.create({
     containerImage: { flex: 1, resizeMode: 'cover' },
     coverImage: {
         width: '100%',
-        height: 200,
+        height: 250,
         resizeMode: 'cover'
     },
     candidateContainer: { 
@@ -199,5 +213,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#4CAF50', 
         alignItems: 'center' 
     },
-    categoryLabel: { color: 'white' }
+    categoryLabel: { color: 'white' },
+    emptyResults: {
+        fontSize: 24,
+        textAlign: 'center',
+        paddingLeft: 10,
+        paddingRight: 10,
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        fontFamily: 'Tinos_400Regular'
+    },
 });

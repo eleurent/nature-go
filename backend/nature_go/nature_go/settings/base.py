@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'observation',
     'university',
     'user_profile',
+    'website',
 ]
 
 MIDDLEWARE = [

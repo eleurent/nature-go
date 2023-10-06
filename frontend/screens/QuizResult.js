@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image, Animated, Easing } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/elements';
-import { QuizContext } from '../contexts/quizContext';
+import { QuizContext } from '../contexts/QuizContext';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function QuizResultScreen({ navigation, route }) {
