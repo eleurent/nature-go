@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, Fl
 import axios from 'axios';
 import Constants from 'expo-constants'
 import Animated from 'react-native-reanimated';
+import { classifyRarity } from '../utils/rarityComputation';
+
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const SPECIES_LIST_URL = API_URL + 'api/species/'
@@ -12,9 +14,24 @@ const SPECIES_LIST_URL = API_URL + 'api/species/'
 const SpeciesButton = (props) => {
     let image_url = props.imageSource;
     image_url = image_url.replace('http://localhost/', API_URL)
+
+    const rarityStyles = {
+        'Very Common': { backgroundColor: 'rgba(128, 128, 128, 0.5)' },
+        'Common': { backgroundColor: 'rgba(128, 128, 128, 0.5)' },
+        'Uncommon': { backgroundColor: 'rgba(0, 128, 0, 0.5)' },
+        'Rare': { backgroundColor: 'rgba(0, 0, 255, 0.5)' },
+        'Legendary': { backgroundColor: 'rgba(255, 165, 0, 0.5)' },
+    };
+    
+
+    const buttonStyle = {
+        ...styles.categoryContainer,
+        ...rarityStyles[props.rarity],
+    };
+
     return (
         <TouchableOpacity
-            style={styles.categoryContainer}
+            style={buttonStyle}
             activeOpacity={0.5}
             onPress={props.onPress}>
             <Animated.Image style={styles.categoryImage}
@@ -59,6 +76,7 @@ export default function SpeciesListScreen({ navigation, route }) {
                         onPress={() => navigation.navigate('SpeciesDetail', { id: item.id })}
                         imageSource={item.illustration_url}
                         index={item.id}
+                        rarity={classifyRarity(item)}
                     />
                 );
             }}
@@ -86,6 +104,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         justifyContent: 'center',
+        margin: 5,
     },
     categoryImage: {
         width: 120,
