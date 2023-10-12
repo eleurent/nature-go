@@ -45,6 +45,8 @@ const CarouselCell = ({ obs, onImagePress }) => {
                 <MapView
                     style={styles.map}
                     initialRegion={initialRegion}
+                    scrollEnabled={false}
+                    zoomEnabled={false}
                 >
                     {coordinate ? <Marker coordinate={coordinate}/> : null}
                 </MapView>
