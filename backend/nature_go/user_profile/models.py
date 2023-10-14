@@ -36,16 +36,14 @@ class Profile(models.Model):
 
 def compute_observation_xp(obs: Observation) -> dict:
     rarity_xp_values = {
+        'Very Common' : 5,
         'Common' : 5,
         'Uncommon': 10,
-        'Rare': 20
+        'Rare': 20,
+        'Legendary': 40,
     }
-    rarity_reason = (
-        'Uncommon' if not obs.species.occurences_cdf else
-        'Common' if obs.species.occurences_cdf > 0.66 else
-        'Uncommon' if obs.species.occurences_cdf > 0.33 else
-        'Rare'
-    )
+    rarity_reason = obs.species.rarity
+
     rarity_xp = {
         'value': rarity_xp_values[rarity_reason],
         'reason': {'Rarity': rarity_reason}

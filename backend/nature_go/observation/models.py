@@ -23,6 +23,34 @@ class Species(models.Model):
     def __str__(self):
         return self.commonNames[0] if self.commonNames else self.scientificNameWithoutAuthor
 
+    @property
+    def rarity(self):
+        rgpt = self.rarity_gpt
+        ocdf = self.occurences_cdf
+        if not rgpt:
+            return 'Legendary'
+
+        if ocdf:
+            if rgpt <= 2.8:
+                return 'Very Common'
+            elif (2.8 < rgpt <= 3.4) or ocdf >= 0.3097:
+                return 'Common'
+            elif (3.4 < rgpt <= 3.6) or (0.11 <= ocdf < 0.3097):
+                return 'Uncommon'
+            elif (3.6 < rgpt <= 4.2) or (0.01 <= ocdf < 0.11):
+                return 'Rare'
+
+        if rgpt <= 2.8:
+            return 'Very Common'
+        elif 2.8 < rgpt <= 3.4:
+            return 'Common'
+        elif 3.4 < rgpt <= 3.8:
+            return 'Uncommon'
+        elif 3.8 < rgpt <= 4.6:
+            return 'Rare'
+        elif rgpt > 4.6:
+            return 'Legendary'
+
     class Meta:
         verbose_name_plural = 'Species'
 

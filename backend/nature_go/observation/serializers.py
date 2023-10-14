@@ -50,6 +50,7 @@ class SpeciesSerializer(serializers.ModelSerializer):
             'illustration_reference',
             'illustration_reference_transparent',
             'reference_image_url',
+            'rarity',
             'illustration_url',
             'display_name',
             'num_observations_total',
