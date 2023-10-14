@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, Platform, ActivityIndicator } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import * as MediaLibrary from 'expo-media-library';
 import IconButton from '../components/IconButton'
-
+import { ObservationContext } from '../contexts/ObservationContext';
+import { useIsFocused } from '@react-navigation/native';
 
 function parseDate(dateString) {
     // The date format is YYYY:MM:DD HH:MM:SS
@@ -27,24 +28,33 @@ function parseDate(dateString) {
     }
 }
 
-const pickImageAsync = async (navigation, setStatusMessage) => {
+const pickImageAsync = async (navigation, observationMethods) => {
     let result = await ImagePicker.launchImageLibraryAsync({
         base64: true,
         allowsEditing: false,  // See https://docs.expo.dev/versions/latest/sdk/imagepicker/#known-issues
         exif: true,
-        quality: 1,
+        quality: 0,
     });
 
     if (!result.canceled) {
+        navigation.navigate('ObservationConfirm', {});
+
+        observationMethods.setObservationImage(result.assets[0].base64);
+        const datetime = parseDate(result.assets[0].exif.DateTimeDigitized);
+        observationMethods.setObservationDatetime(datetime);
         // Get location
         // Getting location from exif data works on iOS (when the image has location), but not on Android
         // See https://github.com/expo/expo/issues/17399
-        setStatusMessage('Checking map and compass...');
         console.log('Image exif: ' + JSON.stringify(result.assets[0].exif))
-        const datetime = parseDate(result.assets[0].exif.DateTimeDigitized);
+
+        function gpsCoordinateWithReference(coordinate, ref) {
+            return !ref || ref === "S" || ref === "W" ? -coordinate : coordinate;
+        }
+
+        const exifData = result.assets[0].exif;
         let gpsLocation = {
-            latitude: result.assets[0].exif.GPSLatitude,
-            longitude: result.assets[0].exif.GPSLongitude,
+            latitude: gpsCoordinateWithReference(exifData.GPSLatitude, exifData.GPSLatitudeRef),
+            longitude: gpsCoordinateWithReference(exifData.GPSLongitude, exifData.GPSLongitudeRef),
         }
         if (!(gpsLocation.latitude && gpsLocation.longitude)) {
             // This additional step should make it work on Android, but it fails because of a new issue
@@ -53,27 +63,33 @@ const pickImageAsync = async (navigation, setStatusMessage) => {
             let info = await MediaLibrary.getAssetInfoAsync(result.assets[0].assetId)
             console.log(info)
         }
-        setStatusMessage(null);
-        navigation.navigate('ObservationConfirm', { imageBase64: result.assets[0].base64, isLoading: true, gpsLocation, datetime });
+        observationMethods.setObservationLocation(gpsLocation);
     } else {
         console.log('You did not select any image.');
     }
 };
 
-const takePictureAsync = async (camera, navigation, setStatusMessage) => {
+const takePictureAsync = (camera, navigation, observationMethods) => {
     if (camera) {
-        setStatusMessage('Taking a closer look...');
-        const data = await camera.takePictureAsync({ base64: true, exif: true, quality: 0. });
-        setStatusMessage('Checking map and compass...');
-        const location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Low});
-        const gpsLocation = {
-            "latitude": location.coords.latitude,
-            "longitude": location.coords.longitude,
-        };
-        console.log(gpsLocation);
-        setStatusMessage(null);
+        // setStatusMessage('Taking a closer look...');
+        // setStatusMessage('Checking map and compass...');
+        navigation.navigate('ObservationConfirm', {});
+
+        /* Set image */
+        camera.takePictureAsync({ base64: true, exif: true, quality: 0. }).then(data => observationMethods.setObservationImage(data.base64));
+        /* Set datetime */
         datetime = new Date().toISOString();
-        navigation.navigate('ObservationConfirm', { imageBase64: data.base64, isLoading: true, gpsLocation, datetime });
+        observationMethods.setObservationDatetime(datetime);
+        /* Set location */
+        Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Low}).then(location => {
+            console.log(location);
+            const gpsLocation = {
+                "latitude": location.coords.latitude,
+                "longitude": location.coords.longitude,
+            };
+            console.log(gpsLocation);
+            observationMethods.setObservationLocation(gpsLocation);
+        });
     }
 };
 
@@ -81,10 +97,10 @@ export default function CameraScreen({ navigation }) {
     const [cameraPermission, setCameraPermission] = useState(null);
     const [galleryPermission, setGalleryPermission] = useState(null);
 
+    const { observationState, observationMethods } = useContext(ObservationContext);
     const [camera, setCamera] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
 
-    const [statusMessage, setStatusMessage] = useState(null);
 
     const permissionFunction = async () => {
         let cameraPerm = await Camera.requestCameraPermissionsAsync();
@@ -114,14 +130,20 @@ export default function CameraScreen({ navigation }) {
         }
     };
 
+
+    const isFocused = useIsFocused();
     useEffect(() => {
+        if (isFocused)
+            observationMethods.clearObservation();
         permissionFunction();
-    }, []);
+    }, [isFocused]);
 
     let galleryColor = galleryPermission ? "#fff" : "#f00";
     let cameraColor = cameraPermission ? "#fff" : "#f00";
 
-    return (Platform.OS !== 'web') ? (
+    const cameraEnabled = (Platform.OS !== 'web');
+
+    return (
         <View style={styles.container}>
             <Camera
                 ref={(ref) => setCamera(ref)}
@@ -130,33 +152,10 @@ export default function CameraScreen({ navigation }) {
                 ratio={'16:9'}
             >
                 <View style={styles.cameraView}>
-
-                    {statusMessage ? (
-                        <View style={styles.statusMessageContainer}>
-                            <ActivityIndicator size={80} color="#fff" />
-                            <Text style={styles.statusMessage}>{statusMessage}</Text>
-                        </View>
-                    ): null}
-
-                    <IconButton icon="image" size={32} color={galleryColor} onPress={() => pickImageAsync(navigation, setStatusMessage)} extra_style={styles.galleryButtonContainer} />
-                    <IconButton icon="camera" size={70} color={cameraColor} onPress={() => takePictureAsync(camera, navigation, setStatusMessage)} extra_style={styles.captureButton}/>
+                    <IconButton icon="image" size={32} color={galleryColor} onPress={() => pickImageAsync(navigation, observationMethods)} extra_style={styles.galleryButtonContainer} />
+                    <IconButton icon="camera" size={70} color={cameraColor} onPress={() => takePictureAsync(camera, navigation, observationMethods)} extra_style={styles.captureButton}/>
                 </View>
             </Camera>
-        </View>
-    ) : (
-        <View style={styles.container}>
-            {/* TODO Camera is not working on web, getting Uncaught Error: Invalid hook call. */}
-            {statusMessage ? (
-                <View style={styles.statusMessageContainer}>
-                    <ActivityIndicator size={80} color="#fff" />
-                    <Text style={styles.statusMessage}>{statusMessage}</Text>
-                </View>
-            ) : null}
-            <View style={styles.cameraView}>
-                <IconButton icon="image" size={32} color={galleryColor} onPress={() => pickImageAsync(navigation, setStatusMessage)} extra_style={styles.galleryButtonContainer} />
-                <IconButton icon="camera" size={70} color={cameraColor} onPress={() => takePictureAsync(camera, navigation, setStatusMessage)} extra_style={styles.captureButton} />
-            </View>
-            <Text>Web</Text>
         </View>
     );
 }
@@ -184,16 +183,5 @@ const styles = StyleSheet.create({
         position: "absolute",
         left: 20,
         bottom: 30,
-    },
-    statusMessageContainer: {
-        position: "absolute",
-        top: '40%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
-    statusMessage: {
-        fontSize: 24,
-        fontFamily: 'Tinos_400Regular',
-        color: 'white',
     },
 });
