@@ -65,7 +65,7 @@ const takePictureAsync = async (camera, navigation, setStatusMessage) => {
         setStatusMessage('Taking a closer look...');
         const data = await camera.takePictureAsync({ base64: true, exif: true, quality: 0. });
         setStatusMessage('Checking map and compass...');
-        const location = await Location.getCurrentPositionAsync({});
+        const location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Low});
         const gpsLocation = {
             "latitude": location.coords.latitude,
             "longitude": location.coords.longitude,
