@@ -32,6 +32,11 @@ const observationReducer = (prevState, action) => {
                 ...prevState,
                 datetime: action.datetime,
             };
+        case 'SET_DATA':
+            return {
+                ...prevState,
+                data: action.data,
+            };
         case 'CLEAR_OBSERVATION':
             return initialState;
     }
@@ -51,6 +56,9 @@ export const useObservation = () => {
             },
             setObservationDatetime: (datetime) => {
                 dispatch({ type: 'SET_DATETIME', datetime: datetime });
+            },
+            setObservationData: (data) => {
+                dispatch({ type: 'SET_DATA', data: data });
             },
             clearObservation: () => {
                 dispatch({ type: 'CLEAR_OBSERVATION' });

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, StyleSheet, ImageBackground, Platform, TouchableOpacity , ActivityIndicator} from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants'
 import { FlatList } from 'react-native-gesture-handler';
 import XPModal from '../components/XPModal';
 import { CommonActions } from '@react-navigation/native';
+import { ObservationContext } from '../contexts/ObservationContext';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const URL_CREATE_OBSERVATION = API_URL + 'api/species/observation/'
@@ -34,50 +35,48 @@ const SpeciesCandidate = (props) => {
     );
 }
 
-const postObservationImageAsync = async (imageBase64, gpsLocation, datetime, observation, setObservation, setIsLoading) => {
-    if (imageBase64 && !observation) {
+const maybeSendObservationImageAsync = async (observationState, observationMethods, setIsLoading) => {
+    if (observationState.image && !observationState.data) {
         let formData = new FormData();
-        console.log('posting observation with gpsLocation ' + JSON.stringify(gpsLocation));
-        console.log('posting observation with datetime ' + JSON.stringify(datetime));
-        formData.append('image', imageBase64);
-        formData.append('location', JSON.stringify(gpsLocation));
-        formData.append('datetime', datetime);
+        console.log('posting observation with location ' + JSON.stringify(observationState.location));
+        console.log('posting observation with datetime ' + JSON.stringify(observationState.datetime));
+        formData.append('image', observationState.image);
+        formData.append('location', JSON.stringify(observationState.location));
+        formData.append('datetime', observationState.datetime);
         axios.post(URL_CREATE_OBSERVATION, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         }).then(response => {
-            setObservation(response.data);
+            observationMethods.setObservationData(response.data);
             setIsLoading(false);
         }).catch(error => {
-            console.log(error.message);
+            console.log(error.message); // TODO(eleurent): handle identification error?
             setIsLoading(false);
         })
+    } else {
+        setIsLoading(false);
     }
 };
 
 const confirmSpeciesAsync = async (observation_id, species_index, onConfirmResponse) => {
     let formData = new FormData();
     formData.append('species', species_index);
-    const config = {
+    axios.patch(OBSERVATION_URL(observation_id), formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         },
-        timeout: 10000 // 10 seconds
-    };
-    axios.patch(OBSERVATION_URL(observation_id), formData, config)
-        .then(response => {
-            onConfirmResponse(response);
-        })
-        .catch(error => console.log(error));
+    }).then(response => {
+        onConfirmResponse(response);
+    }).catch(error => console.log(error));
 };
 
 
-const goToSpeciesDetails = (navigation, observation) => {
+const goToSpeciesDetails = (navigation, observationData) => {
     navigation.dispatch((state) => {
         //update navigation state as you want.
         const routes = [
             { name: 'Home' },
             { name: 'SpeciesList' },
-            { name: 'SpeciesDetail', params: { id: observation.species } }, //you can also add params 
+            { name: 'SpeciesDetail', params: { id: observationData.species } }, //you can also add params 
         ];
 
         return CommonActions.reset({
@@ -90,40 +89,37 @@ const goToSpeciesDetails = (navigation, observation) => {
 
 export default function ObservationSelectScreen({ navigation, route }) {
 
-    const [observation, setObservation] = useState(null);
+    const { observationState, observationMethods } = useContext(ObservationContext);
     const [isLoading, setIsLoading] = useState(true);
     const [xpModalVisible, setXPModalVisible] = useState(false);
-    const imageBase64 = route.params.imageBase64;
-    const gpsLocation = route.params.gpsLocation;
-    const datetime = route.params.datetime;
 
     useEffect(() => {
-        if (!observation)
-            postObservationImageAsync(imageBase64, gpsLocation, datetime, observation, setObservation, setIsLoading);
+        maybeSendObservationImageAsync(observationState, observationMethods, setIsLoading);
     }, []);
 
-    let has_results = observation && observation.identification_response && observation.identification_response.results;
-    let topNResults = has_results ? observation.identification_response.results.filter(candidate => candidate.score >= PROBABILITY_THRESHOLD).slice(0, NUM_CANDIDATES) : [];
+    let has_results = observationState.data && observationState.data.identification_response && observationState.data.identification_response.results;
+    let topNResults = has_results ? observationState.data.identification_response.results.filter(candidate => candidate.score >= PROBABILITY_THRESHOLD).slice(0, NUM_CANDIDATES) : [];
     let emptyResults = has_results && topNResults.length === 0;
 
-    const onConfirmResponse = (response) => { setObservation(response.data); setXPModalVisible(true); };
+    const onConfirmResponse = (response) => { observationMethods.setObservationData(response.data); setXPModalVisible(true); };
 
     const onXPModalClose = () => {
         setXPModalVisible(false);
 
         // Timeout needed to prevent iOS crash, presumably from chaining modal and navigation transitions?
         // see https://github.com/react-navigation/react-navigation/issues/11259
-        setTimeout(() => { goToSpeciesDetails(navigation, observation); }, 100);
+        setTimeout(() => { goToSpeciesDetails(navigation, observationState.data); }, 100);
+        setTimeout(() => { observationMethods.clearObservation(); }, 200);
 
     };
 
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
-                {imageBase64 ? (
+                {observationState.image ? (
                     <Image
                         style={styles.coverImage}
-                        source={{ uri: `data:image/png;base64,${imageBase64}` }}
+                        source={{ uri: `data:image/png;base64,${observationState.image}` }}
                     />
                 ) : null}
                 { isLoading ? (
@@ -146,14 +142,14 @@ export default function ObservationSelectScreen({ navigation, route }) {
                                 <SpeciesCandidate
                                     key={index}
                                     item={item}
-                                    onPress={() => confirmSpeciesAsync(observation.id, index, onConfirmResponse)}
+                                    onPress={() => confirmSpeciesAsync(observationState.data.id, index, onConfirmResponse)}
                                 />
                             );
                         }}
                     />
                     : <Text style={styles.emptyResults}>I don't recognize this specimen. Maybe I should get closer?</Text>)
                 : null)}
-                <XPModal isVisible={xpModalVisible} xpData={observation?.xp} onClose={onXPModalClose}/>
+                <XPModal isVisible={xpModalVisible} xpData={observationState?.data?.xp} onClose={onXPModalClose}/>
             </ImageBackground>
         </View>
     );

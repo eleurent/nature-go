@@ -6,7 +6,7 @@ import * as Location from 'expo-location';
 import * as MediaLibrary from 'expo-media-library';
 import IconButton from '../components/IconButton'
 import { ObservationContext } from '../contexts/ObservationContext';
-
+import { useIsFocused } from '@react-navigation/native';
 
 function parseDate(dateString) {
     // The date format is YYYY:MM:DD HH:MM:SS
@@ -130,10 +130,13 @@ export default function CameraScreen({ navigation }) {
         }
     };
 
+
+    const isFocused = useIsFocused();
     useEffect(() => {
-        // observationMethods.clearObservation();
+        if (isFocused)
+            observationMethods.clearObservation();
         permissionFunction();
-    }, []);
+    }, [isFocused]);
 
     let galleryColor = galleryPermission ? "#fff" : "#f00";
     let cameraColor = cameraPermission ? "#fff" : "#f00";

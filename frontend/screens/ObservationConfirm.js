@@ -88,7 +88,7 @@ export default function ObservationConfirmScreen({ navigation, route }) {
                 >
                     {coordinate ? <Marker coordinate={coordinate} /> : null}
                 </MapView>
-                <TouchableOpacity style={styles.button} onPress={() => {}}>
+                <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate('ObservationSelect', {})}}>
                     <Text style={styles.buttonText}>Confirm</Text>
                 </TouchableOpacity>
                 </ScrollView>
