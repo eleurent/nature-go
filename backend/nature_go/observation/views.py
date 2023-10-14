@@ -33,7 +33,7 @@ class SpeciesAllList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAdminUser]
     filter_backends = [filters.OrderingFilter]
     pagination_class = pagination.LimitOffsetPagination
-    ordering_fields = ['occurences_cdf']
+    ordering_fields = ['occurences_cdf','rarity_gpt']
 
     def get_queryset(self):
         queryset = Species.objects.all()
