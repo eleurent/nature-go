@@ -12,7 +12,7 @@ class ObservationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Observation
-        fields = ['id', 'user', 'image', 'species', 'location', 'datetime', 'identification_response', 'xp']
+        fields = ['id', 'user', 'image', 'organ', 'species', 'location', 'datetime', 'identification_response', 'xp']
 
     def update(self, instance, validated_data):
         super().update(instance, validated_data)

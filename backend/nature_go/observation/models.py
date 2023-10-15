@@ -55,9 +55,16 @@ class Species(models.Model):
         verbose_name_plural = 'Species'
 
 class Observation(models.Model):
+    ORGAN_CHOICES = [
+        ('leaf', 'leaf'),
+        ('flower', 'flower'),
+        ('fruit', 'fruit'),
+        ('bark', 'bark'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='observation/image')
-    organ = models.CharField(max_length=10)
+    organ = models.CharField(max_length=10, choices=ORGAN_CHOICES)
     species = models.ForeignKey(Species, on_delete=models.CASCADE, blank=True, null=True)
     location = models.JSONField(default=dict, blank=True, null=True)
     identification_response = models.JSONField(default=dict, blank=True, null=True)
