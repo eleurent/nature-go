@@ -18,7 +18,7 @@ import nature_go_client
 # Stable Diffusion parameters
 comfyui_path = txt2img_workflow.find_path("ComfyUI")
 SD_HOST = 'http://nature-go.edouardleurent.com'
-PROMPT = "{commonNames} {scientificNameWithoutAuthor}, 19th century botanical illustration, transactions of the Botanical Society of London"
+PROMPT = "{commonNames} {scientificNameWithoutAuthor}, 19th century botanical illustration"
 BATCH_SIZE = 100
 
 # ## Retrieve species with missing images through Nature go API
