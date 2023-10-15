@@ -4,3 +4,4 @@ wikipedia
 openai
 python-dotenv
 tiktoken
+matplotlib
