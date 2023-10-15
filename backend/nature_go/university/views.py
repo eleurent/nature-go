@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions, serializers, status
+from rest_framework.response import Response
 from .models import MultipleChoiceQuestion, Quiz
 from .serializers import QuizSerializer, AdminMultipleChoiceQuestionSerializer
 from .permissions import IsOwner
@@ -40,23 +41,22 @@ class QuizCreateView(generics.CreateAPIView):
         return self.create(request, *args, **kwargs)
 
 
-class QuizGetOrCreateView(generics.RetrieveAPIView):
+class QuizGetOrCreateView(generics.RetrieveAPIView, generics.CreateAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
-    def get_object(self):
+    def retrieve(self, request, *args, **kwargs):
         recent_quizzes = Quiz.objects.filter(
             user=self.request.user, datetime__gte=timezone.now() - timedelta(hours=24))
-        for quiz in recent_quizzes:
-            if not quiz.is_answered:
-                return quiz
-        response = QuizCreateView.as_view()(self.request._request)
-        if response.status_code == status.HTTP_200_OK:
-            return Quiz.objects.get(pk=response.data['id'])
+        quizzes = [quiz for quiz in recent_quizzes if not quiz.is_answered]
+
+        if quizzes:
+            serializer = self.get_serializer(quizzes[0])
+            return Response(serializer.data)
         else:
-            raise serializers.ValidationError('The quiz could not be found or created.')
-    
+            return QuizCreateView.as_view()(self.request._request)
+
 
 class QuizRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Quiz.objects.all()
