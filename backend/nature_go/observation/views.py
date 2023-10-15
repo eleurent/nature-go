@@ -149,8 +149,6 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
         species, created = Species.objects.update_or_create(
             scientificNameWithoutAuthor=species_data['scientificNameWithoutAuthor'],
             defaults=species_data)
-        
-        serializer = ObservationSerializer(instance, data=dict(species=species.id))
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return Response(serializer.data)
+        instance.species = species
+        instance.save()
+        return Response(ObservationSerializer(instance).data)
