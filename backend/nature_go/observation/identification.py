@@ -8,7 +8,17 @@ import datetime
 logger = logging.getLogger(__name__)
 
 
-def plantnet_identify(image_path, mock: bool = False):
+def plantnet_identify(image_path: str, organ: str, mock: bool = False):
+    """Identify a plant though the plantnet API
+
+    Args:
+        image_path (str): path to an image file
+        organ (str): organ depicted in the image, in [leaf, flower, fruit, bark]
+        mock (bool, optional): Mock API call, for testing. Defaults to False.
+
+    Returns:
+        dict: PlantNet API response
+    """
     if mock:
         return plantnet_identify_mock()
     url = 'https://my-api.plantnet.org/v2/identify/all'
@@ -21,7 +31,7 @@ def plantnet_identify(image_path, mock: bool = False):
         'lang': 'en',
         'api-key': '2b10OHTHDcLlYXiJYoOA2bYeOO'
     }
-    data = {'organs': ['flower']}
+    data = {'organs': [organ]}
     response = requests.post(url, files=files, data=data, params=params)
     response.raise_for_status()
     result = response.json()
