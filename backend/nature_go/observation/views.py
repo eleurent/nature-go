@@ -9,6 +9,7 @@ from observation.models import Species, Observation
 from observation.serializers import ObservationSerializer, SpeciesSerializer
 from observation.permissions import IsOwner, IsAdminOrReadOnly
 from observation import identification
+from user_profile.signals import xp_gained
 
 logger = logging.getLogger(__name__)
 
@@ -151,4 +152,7 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
             defaults=species_data)
         instance.species = species
         instance.save()
+        if not instance.xp and instance.species:
+            xp_gained.send(sender=instance.__class__, instance=instance)
+
         return Response(ObservationSerializer(instance).data)
