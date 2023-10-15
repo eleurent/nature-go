@@ -32,7 +32,6 @@ const ImageType = ({ selected, onSelect, name, text }) => {
 export default function ObservationConfirmScreen({ navigation, route }) {
     const [statusMessage, setStatusMessage] = useState(null);
     const { observationState, observationMethods } = useContext(ObservationContext);
-    const [selectedImageType, setSelectedImageType] = useState('leaf');
 
     useEffect(() => {
     
@@ -70,14 +69,14 @@ export default function ObservationConfirmScreen({ navigation, route }) {
                     <ImageType
                         name="leaf"
                         text="leaf"
-                        selected={selectedImageType === 'leaf'}
-                        onSelect={() => setSelectedImageType('leaf')}
+                        selected={observationState.organ === 'leaf'}
+                        onSelect={() => observationMethods.setObservationOrgan('leaf')}
                     />
                     <ImageType
                         name="flower-outline"
                         text="flower"
-                        selected={selectedImageType === 'flower'}
-                        onSelect={() => setSelectedImageType('flower')}
+                        selected={observationState.organ === 'flower'}
+                        onSelect={() => observationMethods.setObservationOrgan('flower')}
                     />
                 </View>
                 <MapView

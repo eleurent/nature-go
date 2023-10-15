@@ -41,6 +41,7 @@ const maybeSendObservationImageAsync = async (observationState, observationMetho
         console.log('posting observation with location ' + JSON.stringify(observationState.location));
         console.log('posting observation with datetime ' + JSON.stringify(observationState.datetime));
         formData.append('image', observationState.image);
+        formData.append('organ', observationState.organ);
         formData.append('location', JSON.stringify(observationState.location));
         formData.append('datetime', observationState.datetime);
         axios.post(URL_CREATE_OBSERVATION, formData, {
@@ -72,11 +73,10 @@ const confirmSpeciesAsync = async (observation_id, species_index, onConfirmRespo
 
 const goToSpeciesDetails = (navigation, observationData) => {
     navigation.dispatch((state) => {
-        //update navigation state as you want.
         const routes = [
             { name: 'Home' },
             { name: 'SpeciesList' },
-            { name: 'SpeciesDetail', params: { id: observationData.species } }, //you can also add params 
+            { name: 'SpeciesDetail', params: { id: observationData.species } },
         ];
 
         return CommonActions.reset({

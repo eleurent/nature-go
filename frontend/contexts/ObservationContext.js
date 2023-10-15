@@ -10,6 +10,7 @@ export const ObservationContext = React.createContext();
 
 const initialState = {
     image: null,
+    organ: 'leaf',
     location: null,
     datetime: null,
     data: null,
@@ -21,6 +22,11 @@ const observationReducer = (prevState, action) => {
             return {
                 ...prevState,
                 image: action.image,
+            };
+        case 'SET_ORGAN':
+            return {
+                ...prevState,
+                organ: action.organ,
             };
         case 'SET_LOCATION':
             return {
@@ -50,6 +56,9 @@ export const useObservation = () => {
         () => ({
             setObservationImage: (imageBase64) => {
                 dispatch({ type: 'SET_IMAGE', image: imageBase64 });
+            },
+            setObservationOrgan: (organ) => {
+                dispatch({ type: 'SET_ORGAN', organ: organ });
             },
             setObservationLocation: (location) => {
                 dispatch({ type: 'SET_LOCATION', location: location });
