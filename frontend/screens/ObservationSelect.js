@@ -11,7 +11,7 @@ const API_URL = Constants.expoConfig.extra.API_URL;
 const URL_CREATE_OBSERVATION = API_URL + 'api/species/observation/'
 const OBSERVATION_URL = (id) => API_URL + `api/species/observation/${id}/`
 const NUM_CANDIDATES = 3; // Number of candidates to display
-const PROBABILITY_THRESHOLD = 0.10; // Minimum probability to display a candidate
+const PROBABILITY_THRESHOLD = 0.01; // Minimum probability to display a candidate
 
 
 const SpeciesCandidate = (props) => {
@@ -22,15 +22,18 @@ const SpeciesCandidate = (props) => {
                 source={{ uri: props.item.images[0].url.s }}
             />
             <View style={styles.textContainer}>
-                <Text style={styles.speciesName}>{props.item.species.commonNames.size ? props.item.species.commonNames[0] : props.item.species.scientificNameWithoutAuthor}</Text>
+                <Text style={styles.speciesName}>{props.item.species.commonNames.length ? props.item.species.commonNames[0] : props.item.species.scientificNameWithoutAuthor}</Text>
                 <Text style={styles.speciesScientificName}>{props.item.species.scientificNameWithoutAuthor}</Text>
             </View>
-            <TouchableOpacity
-                style={styles.validateButton}
-                activeOpacity={0.5}
-                onPress={props.onPress}>
-                <Text style={styles.categoryLabel}>Validate</Text>
-            </TouchableOpacity>
+            <View>
+                <Text style={styles.speciesScore}>{(props.item.score * 100).toFixed()} %</Text>
+                <TouchableOpacity
+                    style={styles.validateButton}
+                    activeOpacity={0.5}
+                    onPress={props.onPress}>
+                    <Text style={styles.categoryLabel}>Validate</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
@@ -193,13 +196,19 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#331100',
         opacity: 0.9,
-        marginBottom: 10,
     },
     speciesScientificName: { 
         fontFamily: 'Tinos_400Regular_Italic', 
         fontSize: 14, 
         color: '#332200',
         marginTop: 10
+    },
+    speciesScore: { 
+        fontFamily: 'Tinos_400Regular', 
+        fontSize: 20, 
+        color: '#332200',
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
     validateButton: { 
         width: 80, 
