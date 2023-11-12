@@ -32,8 +32,16 @@ def plantnet_identify(image_path: str, organ: str, mock: bool = False):
         'api-key': '2b10OHTHDcLlYXiJYoOA2bYeOO'
     }
     data = {'organs': [organ]}
-    response = requests.post(url, files=files, data=data, params=params)
-    response.raise_for_status()
+    try:
+        response = requests.post(url, files=files, data=data, params=params)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            # No result found, see https://my.plantnet.org/doc/faq#Rejection
+            return {"results": []}
+        else:
+            raise e
+
     result = response.json()
     return result
 
