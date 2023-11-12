@@ -3,7 +3,7 @@ import openai
 import re
 from question_prompt import *
 
-from gpt_utils import try_except_decorator, get_config, filter_and_get_within_context
+from gpt_utils import try_except_decorator, get_config, filter_and_get_within_context, get_wikipedia_species_page
 
 def parse_questions(questions: str):
     question_set_regex = r"Question (\d+):\n(.+?)\n((?:[A-D]: .+?\n)+)Answer: (\w)"
@@ -29,16 +29,16 @@ def parse_questions(questions: str):
 
 
 @try_except_decorator
-def generate_questions(plant_name: str, prompt: str="question_prompt_few_shot", num_try: int=0):
-
+def generate_questions(common_name: str, scientific_name: str, material: str | None = None, prompt: str="question_prompt_few_shot", num_try: int=0):
     gpt_config = get_config("question_generation")
 
     prompt = eval(prompt)
-    plant_page = wikipedia.page(plant_name).content
-    max_length = 4097 - len(prompt) - len(plant_name)
-    plant_page = filter_and_get_within_context(plant_page, max_length=max_length, num_try=num_try)
+    if not material:
+        material = get_wikipedia_species_page(common_name, scientific_name).content
+        max_length = 4097 - len(prompt) - len(common_name)
+        material = filter_and_get_within_context(material, max_length=max_length, num_try=num_try)
 
-    prompt = prompt.format(plant_name=plant_name, material=plant_page)
+    prompt = prompt.format(plant_name=common_name, material=material)
 
     messages = [{"role": "user", "content": prompt}]
     response = openai.ChatCompletion.create(

@@ -4,6 +4,25 @@ import time
 from typing import Any, Callable
 import tiktoken
 import re
+import requests
+from bs4 import BeautifulSoup
+import wikipedia
+
+
+def is_wikipedia_species_page(page):
+    response = requests.get(page.url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    side_panel = soup.find('table', {'class': "infobox"})
+    return side_panel and side_panel.find('a', string='Scientific classification')
+
+
+def get_wikipedia_species_page(common_name: str, scientific_name: str):
+    page = wikipedia.page(scientific_name)
+    if is_wikipedia_species_page(page): return page
+    page = wikipedia.page(common_name)
+    if is_wikipedia_species_page(page): return page
+    raise wikipedia.PageError
+
 
 def filter_and_get_within_context(text: str, max_length: int, num_try: int=0) -> str:
     # Sections to remove
@@ -72,18 +91,3 @@ def try_except_decorator(func: Callable) -> Callable:
                 else:
                     trials_counter += 1
     return func_wrapper
-
-def parse_summary(input_text):
-    parsed_summaries = {}
-
-    # Define the labels to look for in the input text
-    labels = ['Long summary:', 'Medium summary:', 'Short summary:']
-
-    start_index = 0
-    for i, label in enumerate(labels):
-        start_index = input_text.find(label, start_index)
-        end_index = input_text.find(labels[i + 1], start_index) if i + 1 < len(labels) else len(input_text)
-        summary_text = input_text[start_index + len(label):end_index].strip()
-        parsed_summaries[label[:-1].lower().replace(' ', '_')] = summary_text
-
-    return parsed_summaries

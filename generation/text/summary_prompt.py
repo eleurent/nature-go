@@ -74,3 +74,35 @@ Medium summary: {{medium_summary}}
 
 Short summary: {{short_summary}}
 """
+
+summary_v6 = """
+Here is some seed material about {plant_name}: 
+{material}
+
+-----
+Write a long summary of the article. It should be written in the first person, as if it was a personal observation by a 19th century botanist, an entry in his log / diary. it should be simple to understand, informal and not too scientific. Put emphasis on history, fun anecdotes or popular references if available in the material. It should be about 15 sentences long. After the full summary has been generated, break it down into three small independent parts, quoting/repeating it exactly. Please use the following template:
+
+Full summary: {{long_full_summary}}
+
+Discovery and Part 1: {{small_part_1}}
+
+Part 2: {{small_part_2}}
+
+Part 3: {{small_part_3}}
+"""
+
+summary_v7 = """
+Here is some seed material about {plant_name}: 
+{material}
+
+-----
+Write a short three-part summary of the article. It should be written in the first person, as if it was a personal observation by a 19th century botanist, an entry in his diary. It should be simple to understand, informal and not too scientific. Put emphasis on history, fun anecdotes or popular references if available in the material. Follow the style of a naturalist who is discovering and studying the species and writing a diary.
+[Formatting]: Break it down into three very small paragraphs with no line break, separated by two <BREAK_1> and <BREAK_2> delimiters as follows:
+
+{{paragraph_1}}
+<BREAK_1>
+{{small_paragraph_2}}
+<BREAK_2>
+{{small_paragraph_3}}
+<BREAK_3>
+"""
