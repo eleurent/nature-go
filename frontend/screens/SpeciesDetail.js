@@ -7,7 +7,7 @@ import ObservationCarousel from '../components/ObservationCarousel';
 import ImageModal from '../components/ImageModal';
 import Animated from 'react-native-reanimated';
 import { Badge } from '@rneui/themed';
-import { LinearGradient } from 'expo-linear-gradient';
+  import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
 
 const API_URL = Constants.expoConfig.extra.API_URL;

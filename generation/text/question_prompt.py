@@ -35,14 +35,6 @@ C: Rose
 D: Tulip
 Answer: B
 
-Question 4:
-What is one traditional medicinal use of the Edelweiss?
-A: Treating skin rashes
-B: Curing headaches
-C: Remedying abdominal and respiratory diseases
-D: Enhancing memory
-Answer: C
-
 User: Can you help me generate questions about the Austrian copper rose?
 Here is the material: {{not shown for brevity}}
 
@@ -57,14 +49,6 @@ D: Its contribution to the stock of cultivated roses
 Answer: B
 
 Question 2:
-Who successfully cultivated the Austrian copper rose in the imperial garden of Rudolf II in Vienna?
-A: Joris Hoefnagel
-B: Joseph Pernet-Ducher
-C: Carolus Clusius
-D: Antoine Ducher
-Answer: C
-
-Question 3:
 What is one drawback of the Austrian copper rose?
 A: Its objectionable scent
 B: Its lack of vigor
@@ -72,7 +56,7 @@ C: Its susceptibility to black spot
 D: Its spindly bush shape
 Answer: A
 
-Question 4:
+Question 3:
 Where does the name 'Rosa foetida' come from?
 A: it is Latin for "having a bad smell"
 B: it means "baby rose" in Latin
@@ -80,6 +64,6 @@ C: it comes from the greek word for "happiness"
 D: it was discoevered by Dr. Foetid
 Answer: A
 
-User: Can you help me generate 4 questions about {plant_name}?
+User: Can you help me generate 3 questions about {plant_name}?
 Here is the material: {material}
 """
