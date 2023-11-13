@@ -45,7 +45,7 @@ def generate_summaries(common_name: str, scientific_name: str, material: str | N
 
     if not material:
         material = get_wikipedia_species_page(common_name, scientific_name).content
-        max_length = 4097 - len(prompt) - len(common_name)
+        max_length = 4097 - len(prompt) - len(common_name) - 800
         material = filter_and_get_within_context(material, max_length=max_length, num_try=num_try)
 
     prompt = prompt.format(plant_name=common_name, material=material)

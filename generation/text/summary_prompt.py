@@ -96,7 +96,7 @@ Here is some seed material about {plant_name}:
 {material}
 
 -----
-Write a short three-part summary of the article. It should be written in the first person, as if it was a personal observation by a 19th century botanist, an entry in his diary. It should be simple to understand, informal and not too scientific. Put emphasis on history, fun anecdotes or popular references if available in the material. Follow the style of a naturalist who is discovering and studying the species and writing a diary.
+Write a short three-part summary of the article. It should be written in the first person, as if it was a personal observation by a 19th century botanist, an entry in his logbook. It should be simple to understand, informal and not too scientific. Put emphasis on history, fun anecdotes or popular references if available in the material. Follow the style of a naturalist who is discovering and studying the species and writing a personal expedition logbook (don't include specific dates, maybe just today).
 [Formatting]: Break it down into three very small paragraphs with no line break, separated by two <BREAK_1> and <BREAK_2> delimiters as follows:
 
 {{paragraph_1}}
