@@ -16,10 +16,18 @@ const SPECIES_OBSERVATIONS_URL = (id) => API_URL + `api/species/${id}/observatio
 
 
 
-const GradientText = ({ children, style, ...rest }) => {
+const GradientText = ({ children, style, placeholder, ...rest }) => {
     const gradientColors = ['rgba(0,0,0,0.5)', 'rgba(0,0,0,0)'];
     const B = (props) => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>
 
+    const placeholderSyle = { color: 'black', marginTop: -40, fontSize: 16, paddingHorizontal: 20, textAlign: 'center', };
+    if (placeholder == "1 more observation needed.")
+        placeholder = <Text style={placeholderSyle}><B>1</B> more observation needed.</Text>
+    else if (placeholder) {
+        placeholder = <Text style={placeholderSyle}>{placeholder}</Text>
+    }
+    if (!children)
+        return placeholder;
     return (
     <View>
       <MaskedView
@@ -37,9 +45,7 @@ const GradientText = ({ children, style, ...rest }) => {
           </Text>
         </LinearGradient>
       </MaskedView>
-      <Text style={{ color: 'black', marginTop: -40, fontSize: 16, paddingHorizontal: 20, textAlign: 'center', }}>
-        <B>1</B> more observation needed.
-      </Text>
+      { placeholder }
       </View>
     );
   };
@@ -97,7 +103,12 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         observationDate.setFullYear(observationDate.getFullYear() - 200);
         observationDate = observationDate.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
     }
-    
+    let descriptionsPlaceholder = null;
+    if (!(speciesDetails?.descriptions) || !(speciesDetails?.descriptions.length))
+        descriptionsPlaceholder = "I need more time to study this specimen.";
+    else if (speciesDetails.descriptions.length > speciesObservations.length)
+        descriptionsPlaceholder = "1 more observation needed.";
+
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
@@ -127,8 +138,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                             );
                         }}
                     />
-
-                    <GradientText style={[styles.descriptionText, {height: 50}]}>{ lockedSummary }</GradientText>
+                    <GradientText style={[styles.descriptionText, {height: 50}]} placeholder={descriptionsPlaceholder}>{ lockedSummary }</GradientText>
                     <View style = {{ marginBottom: 20 }}></View>
                 </View>
                 <ImageModal modalVisible={modalVisible} setModalVisible={setModalVisible} modalImage={modalImage}/>
@@ -182,7 +192,7 @@ const styles = StyleSheet.create({
         // fontSize: 20,
         color:  '#332200',
         opacity: 0.7,
-        marginTop: 30,
+        marginTop: 15,
         paddingHorizontal: 20,
         textAlign: 'justify',
     },
