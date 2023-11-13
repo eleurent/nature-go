@@ -74,3 +74,25 @@ Medium summary: {{medium_summary}}
 
 Short summary: {{short_summary}}
 """
+
+summary3_v1 = """
+Write a short summary of the article. It should be written in the first person, as if it was a personal observation by a 19th century botanist during an expedition, an entry in his log / diary. It should be simple to understand, informal, not too scientific, and contain a lot of fun facts and trivia to look smart during a diner. It should be made of three paragraphs, each one being about 5 sentences long. Please use the following template:
+
+Example:
+Input: Tradescantia zebrina
+Material: {{some material}}
+
+First paragraph:
+... (some content with general observations, in the style of a 19th century botanist in an expedition)
+
+Second paragraph:
+... (some content with more precise observations but stays interesting and non technical, keep the style of a 19th century botanist)
+
+Third paragraph:
+... (even more precise observations, stays interesting and non technical, keep the styke of a 19th century botanist)
+
+Input: {plant_name}
+Material: {material}
+
+First paragraph:
+"""

@@ -73,11 +73,14 @@ def try_except_decorator(func: Callable) -> Callable:
                     trials_counter += 1
     return func_wrapper
 
-def parse_summary(input_text):
+def parse_summary(input_text, three_paragraphs=True):
     parsed_summaries = {}
 
     # Define the labels to look for in the input text
-    labels = ['Long summary:', 'Medium summary:', 'Short summary:']
+    if three_paragraphs:
+        labels = ['First paragraph:', 'Second paragraph:', 'Third paragraph:']
+    else:
+        labels = ['Long summary:', 'Medium summary:', 'Short summary:']
 
     start_index = 0
     for i, label in enumerate(labels):
