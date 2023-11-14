@@ -19,9 +19,10 @@ def is_wikipedia_species_page(page):
 def get_wikipedia_species_page(common_name: str, scientific_name: str):
     page = wikipedia.page(scientific_name)
     if is_wikipedia_species_page(page): return page
+    if not common_name: raise wikipedia.PageError(scientific_name)
     page = wikipedia.page(common_name)
     if is_wikipedia_species_page(page): return page
-    raise wikipedia.PageError
+    raise wikipedia.PageError(common_name)
 
 
 def filter_and_get_within_context(text: str, max_length: int, num_try: int=0) -> str:
@@ -82,7 +83,7 @@ def try_except_decorator(func: Callable) -> Callable:
                     openai.error.InvalidRequestError,
                     ValueError,
             ) as e:
-                print("API error occurred:", str(e), ". Retrying in 1 second...")
+                print(f"API error occurred: {e}. Trials: {trials_counter}. Retrying in 1 second...")
 
                 # If the error is not an invalid request error, then wait for 1 second;
                 # otherwise, increment the history counter to discard the oldest message.

@@ -7,11 +7,48 @@ import ObservationCarousel from '../components/ObservationCarousel';
 import ImageModal from '../components/ImageModal';
 import Animated from 'react-native-reanimated';
 import { Badge } from '@rneui/themed';
+  import { LinearGradient } from 'expo-linear-gradient';
+import MaskedView from '@react-native-masked-view/masked-view';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const SPECIES_DETAILS_URL = (id) => API_URL + `api/species/${id}/`
 const SPECIES_OBSERVATIONS_URL = (id) => API_URL + `api/species/${id}/observations/`
 
+
+
+const GradientText = ({ children, style, placeholder, ...rest }) => {
+    const gradientColors = ['rgba(0,0,0,0.5)', 'rgba(0,0,0,0)'];
+    const B = (props) => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>
+
+    const placeholderSyle = { color: 'black', marginTop: -40, fontSize: 16, paddingHorizontal: 20, textAlign: 'center', };
+    if (placeholder == "1 more observation needed.")
+        placeholder = <Text style={placeholderSyle}><B>1</B> more observation needed.</Text>
+    else if (placeholder) {
+        placeholder = <Text style={placeholderSyle}>{placeholder}</Text>
+    }
+    if (!children)
+        return placeholder;
+    return (
+    <View>
+      <MaskedView
+        maskElement={
+          <Text style={style} {...rest}>
+            {children}
+          </Text>
+        }>
+        <LinearGradient
+          colors={gradientColors}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}>
+          <Text style={[style, { opacity: 0 }]} {...rest}>
+            {children}
+          </Text>
+        </LinearGradient>
+      </MaskedView>
+      { placeholder }
+      </View>
+    );
+  };
 
 const RarityBadge = ({ rarity }) => {
 
@@ -59,6 +96,19 @@ export default function SpeciesDetailScreen({ navigation, route }) {
 
     let illustration_url = ("illustration_url" in speciesDetails) ? 
                            speciesDetails.illustration_url.replace('http://localhost/', API_URL) : null;
+    const unlockedSummaries = speciesDetails.descriptions ? speciesDetails.descriptions.slice(0, speciesObservations.length) : null;
+    const lockedSummary = speciesDetails.descriptions && (speciesDetails.descriptions.length > speciesObservations.length) ? speciesDetails.descriptions[speciesObservations.length] : null;
+    let observationDate = (speciesObservations && speciesObservations[0]) ? new Date(speciesObservations[0].datetime) : null;
+    if (observationDate) {
+        observationDate.setFullYear(observationDate.getFullYear() - 200);
+        observationDate = observationDate.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
+    }
+    let descriptionsPlaceholder = null;
+    if (!(speciesDetails?.descriptions) || !(speciesDetails?.descriptions.length))
+        descriptionsPlaceholder = "I need more time to study this specimen.";
+    else if (speciesDetails.descriptions.length > speciesObservations.length)
+        descriptionsPlaceholder = "1 more observation needed.";
+
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
@@ -75,20 +125,21 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                     <Text style={[styles.speciesScientificName, styles.nameContainer, {marginBottom: 5}]}>{speciesDetails.scientificNameWithoutAuthor ? speciesDetails.scientificNameWithoutAuthor : "Scientific name"}</Text>
                     {speciesDetails.rarity ? <RarityBadge rarity={speciesDetails.rarity} /> : null}
                     <FlatList
-                        style={{ marginBottom: 20 }}
                         vertical
                         scrollEnabled={false}
                         showsVerticalScrollIndicator={Platform.OS === 'web'}
-                        data={speciesDetails.descriptions}
+                        data={unlockedSummaries}
                         contentContainerStyle={{}}
                         renderItem={({ item, index }) => {
                             return (
                                 <Text key={index} style={styles.descriptionText}>
-                                    { item }
+                                    { item.replace('[DATE]', 'On ' + observationDate) }
                                 </Text>
                             );
                         }}
                     />
+                    <GradientText style={[styles.descriptionText, {height: 50}]} placeholder={descriptionsPlaceholder}>{ lockedSummary }</GradientText>
+                    <View style = {{ marginBottom: 20 }}></View>
                 </View>
                 <ImageModal modalVisible={modalVisible} setModalVisible={setModalVisible} modalImage={modalImage}/>
                 <ObservationCarousel observations={speciesObservations} onImagePress={(image) => {setModalImage(image); setModalVisible(true);}}/>
@@ -141,7 +192,7 @@ const styles = StyleSheet.create({
         // fontSize: 20,
         color:  '#332200',
         opacity: 0.7,
-        marginTop: 30,
+        marginTop: 15,
         paddingHorizontal: 20,
         textAlign: 'justify',
     },
