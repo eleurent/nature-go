@@ -4,6 +4,25 @@ import time
 from typing import Any, Callable
 import tiktoken
 import re
+import requests
+from bs4 import BeautifulSoup
+import wikipedia
+
+
+def is_wikipedia_species_page(page):
+    response = requests.get(page.url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    side_panel = soup.find('table', {'class': "infobox"})
+    return side_panel and side_panel.find('a', string='Scientific classification')
+
+
+def get_wikipedia_species_page(common_name: str, scientific_name: str):
+    page = wikipedia.page(scientific_name)
+    if is_wikipedia_species_page(page): return page
+    page = wikipedia.page(common_name)
+    if is_wikipedia_species_page(page): return page
+    raise wikipedia.PageError
+
 
 def filter_and_get_within_context(text: str, max_length: int, num_try: int=0) -> str:
     # Sections to remove

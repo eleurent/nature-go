@@ -1,33 +1,31 @@
 
 import argparse
-import requests
 from PIL import Image
 import io
-import base64
 import pandas as pd
 from pathlib import Path
 import wikipedia
 import urllib.request
 import tqdm
-import nature_go_client
-import matplotlib.pyplot as plt
 import sys
 import rembg
 from illustration_workflows import txt2img_workflow
 from illustration_workflows import controlnet_workflow
 
+sys.path.append('..')
+import nature_go_client
 
 # Stable Diffusion parameters
 comfyui_path = txt2img_workflow.find_path("ComfyUI")
 SD_HOST = 'http://nature-go.edouardleurent.com'
-PROMPT = "herbarium illustration of {commonNames} {scientificNameWithoutAuthor}, 19th century, transactions of the Botanical Society of London"
+PROMPT = "{commonNames} {scientificNameWithoutAuthor}, 19th century botanical illustration"
 BATCH_SIZE = 100
 
 # ## Retrieve species with missing images through Nature go API
 
 
 def get_species(client, batch_size=5, ordering=None):
-    ordering = ordering or ordering.split(',')
+    ordering = ordering.split(',') if ',' in ordering else ordering
     species_list = client.get_labeled_species(illustration=False, limit=batch_size, ordering=ordering)
     print(f'Found {len(species_list)} species')
     return pd.DataFrame(species_list)
@@ -41,13 +39,6 @@ def download_image(url):
 def fetch_wikipedia_images(scientific_name):
     page = wikipedia.page(scientific_name)
     return page.images[:1]
-
-
-def display_images(*images):
-    _, axes = plt.subplots(1, len(images), figsize=(5*len(images), 5), squeeze=False)
-    for i, image in enumerate(images):
-        axes.flat[i].imshow(image)
-        axes.flat[i].axis('off')
 
 def run_txt2img_worflow(positive_prompts, negative_prompts, rembg_session):
     import random

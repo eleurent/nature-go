@@ -6,12 +6,33 @@ import Constants from 'expo-constants'
 import ObservationCarousel from '../components/ObservationCarousel';
 import ImageModal from '../components/ImageModal';
 import Animated from 'react-native-reanimated';
+import { Badge } from '@rneui/themed';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const SPECIES_DETAILS_URL = (id) => API_URL + `api/species/${id}/`
 const SPECIES_OBSERVATIONS_URL = (id) => API_URL + `api/species/${id}/observations/`
 
 
+const RarityBadge = ({ rarity }) => {
+
+    const rarityStyles = {
+        'Very Common': { backgroundColor: '#333', borderColor: '#333' },
+        'Common': { backgroundColor: '#333', borderColor: '#333' },
+        'Uncommon': { backgroundColor: '#070', borderColor: '#070' },
+        'Rare': { backgroundColor: '#05f', borderColor: '#05f' },
+        'Legendary': { backgroundColor: '#e60', borderColor: '#e60' },
+    };
+
+    return (
+      <Badge
+        value={rarity}
+        status="primary"
+        badgeStyle={rarityStyles[rarity]}
+        textStyle={{color:"#efe"}}
+      />
+    );
+  };
+  
 export default function SpeciesDetailScreen({ navigation, route }) {
 
     const [speciesDetails, setSpeciesDetails] = useState({});
@@ -51,7 +72,8 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                 />
                 <View style={styles.textContainer}>
                     <Text style={[styles.speciesName, styles.nameContainer]}>{speciesDetails.display_name ? speciesDetails.display_name : "Name"}</Text>
-                    <Text style={[styles.speciesScientificName, styles.nameContainer]}>{speciesDetails.scientificNameWithoutAuthor ? speciesDetails.scientificNameWithoutAuthor : "Scientific name"}</Text>
+                    <Text style={[styles.speciesScientificName, styles.nameContainer, {marginBottom: 5}]}>{speciesDetails.scientificNameWithoutAuthor ? speciesDetails.scientificNameWithoutAuthor : "Scientific name"}</Text>
+                    {speciesDetails.rarity ? <RarityBadge rarity={speciesDetails.rarity} /> : null}
                     <FlatList
                         style={{ marginBottom: 20 }}
                         vertical

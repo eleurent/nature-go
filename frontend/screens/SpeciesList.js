@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, Fl
 import axios from 'axios';
 import Constants from 'expo-constants'
 import Animated from 'react-native-reanimated';
-import { classifyRarity } from '../utils/rarityComputation';
 
 
 const API_URL = Constants.expoConfig.extra.API_URL;
@@ -16,22 +15,16 @@ const SpeciesButton = (props) => {
     image_url = image_url.replace('http://localhost/', API_URL)
 
     const rarityStyles = {
-        'Very Common': { backgroundColor: 'rgba(128, 128, 128, 0.5)' },
-        'Common': { backgroundColor: 'rgba(128, 128, 128, 0.5)' },
-        'Uncommon': { backgroundColor: 'rgba(0, 128, 0, 0.5)' },
-        'Rare': { backgroundColor: 'rgba(0, 0, 255, 0.5)' },
-        'Legendary': { backgroundColor: 'rgba(255, 165, 0, 0.5)' },
-    };
-    
-
-    const buttonStyle = {
-        ...styles.categoryContainer,
-        ...rarityStyles[props.rarity],
+        'Very Common': { color: '#333' },
+        'Common': { color: '#333' },
+        'Uncommon': { color: '#070' },
+        'Rare': { color: '#05f' },
+        'Legendary': { color: '#e60' },
     };
 
     return (
         <TouchableOpacity
-            style={buttonStyle}
+            style={styles.categoryContainer}
             activeOpacity={0.5}
             onPress={props.onPress}>
             <Animated.Image style={styles.categoryImage}
@@ -39,7 +32,7 @@ const SpeciesButton = (props) => {
                 source={{uri: image_url}}
                 sharedTransitionTag={"species" + props.index}
             />
-            <Text style={styles.categoryLabel}>{props.label}</Text>
+            <Text style={[styles.categoryLabel, rarityStyles[props.rarity]]}>{props.label}</Text>
         </TouchableOpacity>
     );
 }
@@ -76,7 +69,7 @@ export default function SpeciesListScreen({ navigation, route }) {
                         onPress={() => navigation.navigate('SpeciesDetail', { id: item.id })}
                         imageSource={item.illustration_url}
                         index={item.id}
-                        rarity={classifyRarity(item)}
+                        rarity={item.rarity}
                     />
                 );
             }}
@@ -118,6 +111,5 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         display: 'flex',
         textAlign: 'center',
-        color: '#000',
     },
 });

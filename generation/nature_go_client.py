@@ -27,7 +27,7 @@ class NatureGoClient:
             logger.info('Login successful')
             self.token = response.json()['token']
         else:
-            raise ValueError(f'Login failed with status  {response.status_code} and response {response.json()}')
+            raise ValueError(f'Login failed with status  {response.status_code} and response {response}')
         
     def assert_logged_in(self):
         if self.token is None:
@@ -42,7 +42,7 @@ class NatureGoClient:
             logger.info(f'Fetched {len(result)} species')
             return result['results']
         else:
-            raise ValueError(f'{SPECIES_LIST_URL} failed with status  {response.status_code} and response {response.json()}')
+            raise ValueError(f'{SPECIES_LIST_URL} failed with status  {response.status_code} and response {response}')
 
     def get_labeled_species(
             self,
@@ -71,7 +71,7 @@ class NatureGoClient:
             logger.info(f'Fetched {len(result)} species')
             return result['results']
         else:
-            raise ValueError(f'{SPECIES_LABELED_URL} failed with status  {response.status_code} and response {response.json()}')
+            raise ValueError(f'{SPECIES_LABELED_URL} failed with status  {response.status_code} and response {response}')
 
 
 
@@ -109,7 +109,7 @@ class NatureGoClient:
             logger.info(f'Fetched {len(result)} species')
             return result
         else:
-            raise ValueError(f'{QUESTION_CREATE_URL} failed with status  {response.status_code} and response {response.json()}')
+            raise ValueError(f'{QUESTION_CREATE_URL} failed with status  {response.status_code} and response {response}')
 
         
     def post_species_questions(self, species_id: int, questions: list):

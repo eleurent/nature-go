@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth, AuthContext } from './contexts/AuthContext';
+import { useObservation, ObservationContext } from './contexts/ObservationContext';
 import { useQuiz, QuizContext } from './contexts/QuizContext';
 import { useUserProfile, UserProfileContext } from './contexts/UserProfileContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -15,6 +16,7 @@ import SpeciesListScreen from './screens/SpeciesList';
 import SpeciesDetailScreen from './screens/SpeciesDetail';
 import CameraScreen from './screens/Camera';
 import ObservationConfirmScreen from './screens/ObservationConfirm';
+import ObservationSelectScreen from './screens/ObservationSelect';
 import QuizDetailScreen from './screens/QuizDetail';
 import QuizQuestionScreen from './screens/QuizQuestion';
 import QuizResultScreen from './screens/QuizResult';
@@ -28,6 +30,7 @@ export default function App() {
 
   const isLoadingComplete = useLoadedAssets();
   const { authState, authMethods } = useAuth();
+  const { observationState, observationMethods } = useObservation();
   const { profileState, profileMethods } = useUserProfile(authState);
   const { quizState, quizMethods } = useQuiz();
 
@@ -43,6 +46,7 @@ export default function App() {
     <AuthContext.Provider value = {{ authState, authMethods }}>
     <UserProfileContext.Provider value={{ profileState, profileMethods }}>
     <QuizContext.Provider value= {{ quizState, quizMethods }}>
+    <ObservationContext.Provider value= {{ observationState, observationMethods }}>
     <SafeAreaProvider>
       <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerTransparent: true, headerTitle: '', headerTintColor: 'black' }}>
@@ -61,6 +65,7 @@ export default function App() {
             <Stack.Screen name="SpeciesDetail" component={SpeciesDetailScreen}/>
             <Stack.Screen name="Camera" component={CameraScreen} options={{ headerTintColor: 'white' }}/>
             <Stack.Screen name="ObservationConfirm" component={ObservationConfirmScreen}/>
+            <Stack.Screen name="ObservationSelect" component={ObservationSelectScreen}/>
             <Stack.Screen name="QuizDetail" component={QuizDetailScreen}/>
             <Stack.Screen name="QuizQuestion" component={QuizQuestionScreen}/>
             <Stack.Screen name="QuizResult" component={QuizResultScreen}/>
@@ -71,6 +76,7 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
+    </ObservationContext.Provider>
     </QuizContext.Provider>
     </UserProfileContext.Provider>
     </AuthContext.Provider>

@@ -9,6 +9,7 @@ from observation.models import Species, Observation
 from observation.serializers import ObservationSerializer, SpeciesSerializer
 from observation.permissions import IsOwner, IsAdminOrReadOnly
 from observation import identification
+from user_profile.signals import xp_gained
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +34,7 @@ class SpeciesAllList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAdminUser]
     filter_backends = [filters.OrderingFilter]
     pagination_class = pagination.LimitOffsetPagination
-    ordering_fields = ['occurences_cdf']
+    ordering_fields = ['occurences_cdf','rarity_gpt']
 
     def get_queryset(self):
         queryset = Species.objects.all()
@@ -120,7 +121,8 @@ class ObservationCreate(generics.CreateAPIView):
             raise e
         # Save the serializer first so we can access the image
         observation = serializer.save(user=self.request.user)
-        observation.identification_response = identification.plantnet_identify(observation.image.path)
+        observation.identification_response = identification.plantnet_identify(
+            image_path=observation.image.path, organ=observation.organ)
         # observation.location, observation.datetime = identification.read_exif(observation.image.path)
         observation.save()
         serializer = ObservationSerializer(instance=observation)
@@ -148,8 +150,9 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
         species, created = Species.objects.update_or_create(
             scientificNameWithoutAuthor=species_data['scientificNameWithoutAuthor'],
             defaults=species_data)
-        
-        serializer = ObservationSerializer(instance, data=dict(species=species.id))
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return Response(serializer.data)
+        instance.species = species
+        instance.save()
+        if not instance.xp and instance.species:
+            xp_gained.send(sender=instance.__class__, instance=instance)
+
+        return Response(ObservationSerializer(instance).data)
