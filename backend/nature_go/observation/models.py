@@ -64,11 +64,11 @@ class Species(models.Model):
 
 class Observation(models.Model):
     ORGAN_CHOICES = [
+        ('whole', 'whole'),
         ('leaf', 'leaf'),
         ('flower', 'flower'),
         ('fruit', 'fruit'),
         ('bark', 'bark'),
-        ('whole', 'whole'),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -11,7 +11,7 @@ class ObservationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Observation
-        fields = ['id', 'user', 'image', 'organ', 'species', 'location', 'datetime', 'identification_response', 'xp']
+        fields = ['id', 'user', 'image', 'type', 'organ', 'species', 'location', 'datetime', 'identification_response', 'xp']
 
 
 class SpeciesSerializer(serializers.ModelSerializer):

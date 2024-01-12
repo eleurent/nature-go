@@ -27,6 +27,7 @@ class PlantSpeciesList(SpeciesList):
         user = self.request.user
         return Species.objects.filter(type=Species.PLANT_TYPE, observation__user=user).distinct()
 
+
 class BirdSpeciesList(SpeciesList):
     def get_queryset(self):
         user = self.request.user
@@ -122,6 +123,7 @@ class SpeciesObservationsList(generics.ListAPIView):
 
 class ObservationCreate(generics.CreateAPIView):
     serializer_class = ObservationSerializer
+    queryset = Observation.objects.none() # dummy queryset
 
     def create(self, request, *args, **kwargs):
         serializer = ObservationSerializer(data=request.data)
@@ -132,10 +134,16 @@ class ObservationCreate(generics.CreateAPIView):
             raise e
         # Save the serializer first so we can access the image
         observation = serializer.save(user=self.request.user)
-        observation.identification_response = identification.plantnet_identify(
-            image_path=observation.image.path, organ=observation.organ)
-        # observation.location, observation.datetime = identification.read_exif(observation.image.path)
-        observation.save()
+
+        # Run identification service
+        if observation.type == Species.PLANT_TYPE:
+            observation.identification_response = identification.plantnet_identify(
+                image_path=observation.image.path, organ=observation.organ)
+            observation.save()
+        elif observation.type == Species.BIRD_TYPE:
+            if not (observation.species and observation.species.type == Species.BIRD_TYPE):
+                raise serializers.ValidationError('For bird observations, a bird species must be provided')
+
         serializer = ObservationSerializer(instance=observation)
         return Response(serializer.data)
 
