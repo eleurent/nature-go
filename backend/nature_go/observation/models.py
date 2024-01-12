@@ -2,13 +2,21 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Species(models.Model):
+    PLANT_TYPE = 'plant'
+    BIRD_TYPE = 'bird'
+    SPECIES_TYPE_CHOICES = [
+        (PLANT_TYPE, PLANT_TYPE),
+        (BIRD_TYPE, BIRD_TYPE),
+    ]
+
+    type = models.CharField(max_length=10, choices=SPECIES_TYPE_CHOICES)
     scientificNameWithoutAuthor = models.CharField(max_length=255, unique=True)
     scientificNameAuthorship = models.CharField(max_length=255, default='')
     commonNames = models.JSONField(default=list, blank=True)
     genus = models.CharField(max_length=255)
     family = models.CharField(max_length=255)
-    gbif_id = models.CharField(max_length=20, default='')
-    powo_id = models.CharField(max_length=20, default='')
+    gbif_id = models.CharField(max_length=20, default='', blank=True)
+    powo_id = models.CharField(max_length=20, default='', blank=True)
     wikipedia_word_count = models.IntegerField(null=True, blank=True)
     number_of_occurrences = models.IntegerField(null=True, blank=True)
     occurences_cdf = models.FloatField(null=True, blank=True)
@@ -60,10 +68,12 @@ class Observation(models.Model):
         ('flower', 'flower'),
         ('fruit', 'fruit'),
         ('bark', 'bark'),
+        ('whole', 'whole'),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='observation/image')
+    type = models.CharField(max_length=10, choices=Species.SPECIES_TYPE_CHOICES)
     organ = models.CharField(max_length=10, choices=ORGAN_CHOICES)
     species = models.ForeignKey(Species, on_delete=models.CASCADE, blank=True, null=True)
     location = models.JSONField(default=dict, blank=True, null=True)

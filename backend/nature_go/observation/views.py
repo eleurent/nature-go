@@ -22,6 +22,17 @@ class SpeciesList(generics.ListAPIView):
         return Species.objects.filter(observation__user=user).distinct()
 
 
+class PlantSpeciesList(SpeciesList):
+    def get_queryset(self):
+        user = self.request.user
+        return Species.objects.filter(type=Species.PLANT_TYPE, observation__user=user).distinct()
+
+class BirdSpeciesList(SpeciesList):
+    def get_queryset(self):
+        user = self.request.user
+        return Species.objects.filter(type=Species.BIRD_TYPE, observation__user=user).distinct()
+
+
 class SpeciesAllList(generics.ListCreateAPIView):
     """
         This view should return a list of all the species in the database.
