@@ -44,7 +44,11 @@ export default function SpeciesListScreen({ navigation, route }) {
 
     useEffect(() => {
         const fetchSpeciesList = async () => {
-            const response = await axios.get(SPECIES_LIST_URL);
+            if (!route?.params?.type) {
+                console.log('Must specify a valid species type.');
+                return;
+            }
+            const response = await axios.get(SPECIES_LIST_URL + route.params.type + '/');
             setSpeciesList(response.data);
         };
 

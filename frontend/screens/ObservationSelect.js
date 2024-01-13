@@ -15,11 +15,12 @@ const PROBABILITY_THRESHOLD = 0.01; // Minimum probability to display a candidat
 
 
 const SpeciesCandidate = (props) => {
+    imageUri = (props.item.images.size > 0 && props.item.images[0]?.url?.s) ? props.item.images[0]?.url?.s : null;
     return (
         <View style={styles.candidateContainer}>
             <Image style={styles.candidateImage}
                 resizeMode='contain'
-                source={{ uri: props.item.images[0].url.s }}
+                source={{ uri: imageUri }}
             />
             <View style={styles.textContainer}>
                 <Text style={styles.speciesName}>{props.item.species.commonNames.length ? props.item.species.commonNames[0] : props.item.species.scientificNameWithoutAuthor}</Text>
@@ -81,7 +82,7 @@ const goToSpeciesDetails = (navigation, observationData) => {
     navigation.dispatch((state) => {
         const routes = [
             { name: 'Home' },
-            { name: 'SpeciesList' },
+            { name: 'SpeciesList' , params: {type: observationData.type}},
             { name: 'SpeciesDetail', params: { id: observationData.species } },
         ];
 

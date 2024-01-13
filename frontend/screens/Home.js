@@ -34,7 +34,7 @@ export default function HomeScreen({ navigation }) {
                     <View style={styles.categoryRowContainer}>
                         <View style={{ flex: 1 }}></View>
                         <CategoryButton 
-                            onPress={() => navigation.navigate('SpeciesList')}
+                            onPress={() => navigation.navigate('SpeciesList', {type: 'plant'})}
                             imageSource={require('../assets/images/botany.png')}
                             label={'BOTANY'}
                         />
@@ -48,7 +48,7 @@ export default function HomeScreen({ navigation }) {
                         />
                         <View style={{ flex: 1 }}></View>
                         <CategoryButton
-                            disabled
+                            onPress={() => navigation.navigate('SpeciesList', {type: 'bird'})}
                             imageSource={require('../assets/images/ornithology.png')}
                             label={'ORNITHOLOGY'}
                         />
