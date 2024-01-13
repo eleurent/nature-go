@@ -42,8 +42,11 @@ const maybeSendObservationImageAsync = async (observationState, observationMetho
     if (observationState.image && !observationState.data) {
         let formData = new FormData();
         console.log('posting observation with location ' + JSON.stringify(observationState.location));
-        console.log('posting observation with datetime ' + JSON.stringify(observationState.datetime));
+        console.log('datetime ' + JSON.stringify(observationState.datetime));
+        console.log('type ' + JSON.stringify(observationState.type));
+        console.log('organ ' + JSON.stringify(observationState.organ));
         formData.append('image', observationState.image);
+        formData.append('type', observationState.type);
         formData.append('organ', observationState.organ);
         formData.append('location', JSON.stringify(observationState.location));
         formData.append('datetime', observationState.datetime);

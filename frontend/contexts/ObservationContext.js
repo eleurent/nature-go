@@ -10,7 +10,8 @@ export const ObservationContext = React.createContext();
 
 const initialState = {
     image: null,
-    organ: 'leaf',
+    type: 'bird',
+    organ: 'whole',
     location: null,
     datetime: null,
     data: null,
@@ -23,10 +24,13 @@ const observationReducer = (prevState, action) => {
                 ...prevState,
                 image: action.image,
             };
-        case 'SET_ORGAN':
+        case 'SET_TYPE_OR_ORGAN':
+            const obs_type = action.type_or_organ == 'bird' ? 'bird': 'plant';
+            const organ = action.type_or_organ == 'bird' ? 'whole' : action.type_or_organ;
             return {
                 ...prevState,
-                organ: action.organ,
+                type: obs_type,
+                organ: organ,
             };
         case 'SET_LOCATION':
             return {
@@ -57,8 +61,8 @@ export const useObservation = () => {
             setObservationImage: (imageBase64) => {
                 dispatch({ type: 'SET_IMAGE', image: imageBase64 });
             },
-            setObservationOrgan: (organ) => {
-                dispatch({ type: 'SET_ORGAN', organ: organ });
+            setObservationTypeOrOrgan: (type_or_organ) => {
+                dispatch({ type: 'SET_TYPE_OR_ORGAN', type_or_organ: type_or_organ });
             },
             setObservationLocation: (location) => {
                 dispatch({ type: 'SET_LOCATION', location: location });

@@ -67,16 +67,22 @@ export default function ObservationConfirmScreen({ navigation, route }) {
                 ) : null}
                 <View style={{flexDirection: 'row', marginLeft: 'auto', marginRight: 'auto', marginTop: 20}}>
                     <ImageType
+                        name="logo-twitter"
+                        text="bird"
+                        selected={observationState.type === 'bird'}
+                        onSelect={() => observationMethods.setObservationTypeOrOrgan('bird')}
+                    />
+                    <ImageType
                         name="leaf"
                         text="leaf"
                         selected={observationState.organ === 'leaf'}
-                        onSelect={() => observationMethods.setObservationOrgan('leaf')}
+                        onSelect={() => observationMethods.setObservationTypeOrOrgan('leaf')}
                     />
                     <ImageType
                         name="flower-outline"
                         text="flower"
                         selected={observationState.organ === 'flower'}
-                        onSelect={() => observationMethods.setObservationOrgan('flower')}
+                        onSelect={() => observationMethods.setObservationTypeOrOrgan('flower')}
                     />
                 </View>
                 <MapView
