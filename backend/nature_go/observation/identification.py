@@ -92,7 +92,9 @@ def bird_identify_mock(image_path: str):
             }
         }
 
-    return {"results": list(map(format_species, bird_species))}
+    result = {"results": list(map(format_species, bird_species))}
+    result["results"] = [res | {"score": 1 / len(result["results"])} for res in result["results"]]
+    return result
 
 
 def read_exif(image_path):
