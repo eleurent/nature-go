@@ -5,6 +5,8 @@ import PIL.Image
 import PIL.ExifTags
 import datetime
 
+from observation.models import Species
+
 logger = logging.getLogger(__name__)
 
 
@@ -48,6 +50,49 @@ def plantnet_identify(image_path: str, organ: str, mock: bool = False):
 
 def plantnet_identify_mock():
     return json.load(open('observation/mock_plantnet_response.json'))
+
+
+def bird_identify_mock(image_path: str):
+    """Mock API to identify a bird
+
+    Args:
+        image_path (str): path to an image file
+
+    Returns:
+        dict: mock API response
+    """
+    del image_path
+    bird_species = Species.objects.filter(type=Species.BIRD_TYPE).all()
+
+    def format_species(species):
+        return {
+            "score": 0.0,
+            "species": {
+                "scientificNameWithoutAuthor": species.scientificNameWithoutAuthor,
+                "scientificNameAuthorship": species.scientificNameAuthorship,
+                "genus": {
+                    "scientificNameWithoutAuthor": species.genus,
+                    "scientificNameAuthorship": "",
+                    "scientificName": species.genus
+                },
+                "family": {
+                    "scientificNameWithoutAuthor": species.family,
+                    "scientificNameAuthorship": "",
+                    "scientificName": species.family
+                },
+                "commonNames": species.commonNames,
+                "scientificName": species.scientificNameWithoutAuthor + " " + species.scientificNameAuthorship,
+            },
+            "images": [],
+            "gbif": {
+                "id": species.gbif_id
+            },
+            "powo": {
+                "id": species.powo_id
+            }
+        }
+
+    return {"results": list(map(format_species, bird_species))}
 
 
 def read_exif(image_path):

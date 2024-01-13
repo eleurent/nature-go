@@ -141,8 +141,9 @@ class ObservationCreate(generics.CreateAPIView):
                 image_path=observation.image.path, organ=observation.organ)
             observation.save()
         elif observation.type == Species.BIRD_TYPE:
-            if not (observation.species and observation.species.type == Species.BIRD_TYPE):
-                raise serializers.ValidationError('For bird observations, a bird species must be provided')
+            observation.identification_response = identification.bird_identify_mock(
+                image_path=observation.image.path)
+            observation.save()
 
         serializer = ObservationSerializer(instance=observation)
         return Response(serializer.data)
