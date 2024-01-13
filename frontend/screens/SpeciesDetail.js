@@ -96,8 +96,9 @@ export default function SpeciesDetailScreen({ navigation, route }) {
 
     let illustration_url = ("illustration_url" in speciesDetails) ? 
                            speciesDetails.illustration_url.replace('http://localhost/', API_URL) : null;
-    const unlockedSummaries = speciesDetails.descriptions ? speciesDetails.descriptions.slice(0, speciesObservations.length) : null;
-    const lockedSummary = speciesDetails.descriptions && (speciesDetails.descriptions.length > speciesObservations.length) ? speciesDetails.descriptions[speciesObservations.length] : null;
+    const unlockedSummaries = speciesDetails.descriptions ? speciesDetails.descriptions.slice(0, speciesObservations.length) : [];
+    const lockedSummary = speciesDetails.descriptions && (speciesDetails.descriptions.length > speciesObservations.length) ? speciesDetails.descriptions[speciesObservations.length] : [];
+
     let observationDate = (speciesObservations && speciesObservations[0]) ? new Date(speciesObservations[0].datetime) : null;
     if (observationDate) {
         observationDate.setFullYear(observationDate.getFullYear() - 200);
