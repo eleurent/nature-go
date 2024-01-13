@@ -14,6 +14,8 @@ const parseReason = (reason) => {
             return 'Rare species';
         else if (reason.Rarity === 'Epic')
             return 'Epic species';
+        else if (reason.Rarity === 'Legendary')
+            return 'Legendary species';
     } else if ('Familiarity' in reason) {
         if (reason.Familiarity === 'New')
             return 'New species discovered!';
