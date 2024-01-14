@@ -42,16 +42,16 @@ export default function HomeScreen({ navigation }) {
                     </View>
                     <View style={styles.categoryRowContainer}>
                         <CategoryButton
+                            onPress={() => navigation.navigate('SpeciesList', {type: 'bird'})}
+                            imageSource={require('../assets/images/ornithology.png')}
+                            label={'ORNITHOLOGY'}
+                        />
+                        <CategoryButton
                             disabled
                             imageSource={require('../assets/images/entomology.png')}
                             label={'ENTOMOLOGY'}
                         />
                         <View style={{ flex: 1 }}></View>
-                        <CategoryButton
-                            onPress={() => navigation.navigate('SpeciesList', {type: 'bird'})}
-                            imageSource={require('../assets/images/ornithology.png')}
-                            label={'ORNITHOLOGY'}
-                        />
                     </View>
                     <View style={styles.categoryRowContainer}>
                         <View style={{ flex: 1 }}></View>
