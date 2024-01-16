@@ -33,7 +33,7 @@ export default function HomeScreen({ navigation }) {
                     <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                     <View style={styles.categoryRowContainer}>
                         <View style={{ flex: 1 }}></View>
-                        <CategoryButton 
+                        <CategoryButton
                             onPress={() => navigation.navigate('SpeciesList', {type: 'plant'})}
                             imageSource={require('../assets/images/botany.png')}
                             label={'BOTANY'}
@@ -46,12 +46,12 @@ export default function HomeScreen({ navigation }) {
                             imageSource={require('../assets/images/ornithology.png')}
                             label={'ORNITHOLOGY'}
                         />
+                        <View style={{ flex: 1 }}></View>
                         <CategoryButton
                             disabled
                             imageSource={require('../assets/images/entomology.png')}
                             label={'ENTOMOLOGY'}
                         />
-                        <View style={{ flex: 1 }}></View>
                     </View>
                     <View style={styles.categoryRowContainer}>
                         <View style={{ flex: 1 }}></View>
