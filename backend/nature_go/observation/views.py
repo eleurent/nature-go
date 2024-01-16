@@ -63,10 +63,12 @@ class SpeciesLabeledList(generics.ListCreateAPIView):
     """
         This view should return a list of labeled/unlabeled species in the database.
         ordered by number of observations and occurences.
-        Change ordering by listing ordering params, e.g.:
+        
+        - Set desired species type with ?type=bird/plant
+        - Change ordering by listing ordering params, e.g.:
           ?ordering=-observation_count&ordering=-rarity_gpt&ordering=-occurences_cdf
-        Filter by either illustration, descriptions, or multiplechoicequestions = True/False.
-        Paginate with limit=100.
+        - Filter by either illustration, descriptions, or multiplechoicequestions = True/False.
+        - Paginate with limit=100.
     """
     serializer_class = SpeciesSerializer
     permission_classes = [permissions.IsAdminUser]
@@ -74,6 +76,8 @@ class SpeciesLabeledList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = Species.objects.all()
+        if 'type' in self.request.query_params:
+            queryset = queryset.filter(type=self.request.query_params['type'])
         if 'illustration' in self.request.query_params:
             filter = Q(illustration__isnull=True) | Q(illustration__exact='')
             if self.request.query_params['illustration'] == 'True':
