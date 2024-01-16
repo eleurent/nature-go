@@ -18,18 +18,18 @@ import nature_go_client
 # Stable Diffusion parameters
 comfyui_path = txt2img_workflow.find_path("ComfyUI")
 SD_HOST = 'http://nature-go.edouardleurent.com'
-PROMPT = "{commonNames} {scientificNameWithoutAuthor}, 19th century botanical illustration"
+PROMPT = {
+    'plant': '{commonNames} {scientificNameWithoutAuthor}, 19th century botanical illustration',
+    'bird': '{commonNames} {scientificNameWithoutAuthor}, 19th century ornithology illustration',
+}
 BATCH_SIZE = 100
 
-# ## Retrieve species with missing images through Nature go API
-
-
-def get_species(client, batch_size=5, ordering=None):
+def get_species(client, type, batch_size=5, ordering=None):
+    """Retrieve species with missing images through Nature go API."""
     ordering = ordering.split(',') if ',' in ordering else ordering
-    species_list = client.get_labeled_species(illustration=False, limit=batch_size, ordering=ordering)
+    species_list = client.get_labeled_species(type, illustration=False, limit=batch_size, ordering=ordering)
     print(f'Found {len(species_list)} species')
     return pd.DataFrame(species_list)
-    
 
 def download_image(url):
     with urllib.request.urlopen(url) as url:
@@ -47,7 +47,6 @@ def run_txt2img_worflow(positive_prompts, negative_prompts, rembg_session):
         illustration = Image.open(Path(comfyui_path) / 'output' / result['illustration']['ui']['images'][0]['filename'])
         illustration_transparent = rembg.remove(illustration, session=rembg_session)
         yield illustration, illustration_transparent
-
 
 def run_controlnet_worflow(positive_prompt, negative_prompt, reference_image_name, rembg_session):
     import random
@@ -89,13 +88,15 @@ def main(args):
     rembg_session = rembg.new_session(model_name="isnet-general-use")
 
     while True:
-        species_batch = get_species(client, batch_size=args.batch_size, ordering=args.ordering)
+        species_batch = get_species(client, args.type, batch_size=args.batch_size, ordering=args.ordering)
         print('#############################')
+        prompt = args.prompt if args.prompt else PROMPT[args.type]
         positive_prompts = [
-            args.prompt.format(commonNames=', '.join(species.commonNames[:3]), scientificNameWithoutAuthor=species.scientificNameWithoutAuthor)
+            prompt.format(commonNames=', '.join(species.commonNames[:3]), scientificNameWithoutAuthor=species.scientificNameWithoutAuthor)
             for _, species in species_batch.iterrows()
         ]
         negative_prompts = [''] * len(positive_prompts)
+        if not positive_prompts: return
         for (illustration, illustration_transparent), (_, species) in zip(
             run_txt2img_worflow(positive_prompts=positive_prompts, negative_prompts=negative_prompts, rembg_session=rembg_session),
             species_batch.iterrows()
@@ -107,8 +108,9 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument("--type", help="species type, bird/plant", type=str)
     parser.add_argument("--ordering", help="species ordering", type=str, default='-observation_count,rarity_gpt,-occurences_cdf')
     parser.add_argument("--batch_size", help="batch size", type=int, default=100)
-    parser.add_argument("--prompt", help="prompt", type=str, default=PROMPT)
+    parser.add_argument("--prompt", help="prompt", type=str, default='')
     args = parser.parse_args()
     main(args)

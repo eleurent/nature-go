@@ -95,7 +95,7 @@ class SpeciesLabeledList(generics.ListCreateAPIView):
             if self.request.query_params['descriptions'] == 'True':
                 queryset = queryset.exclude(filter)
             else:
-                queryset = queryset.filter(filter) 
+                queryset = queryset.filter(filter)
         if 'multiplechoicequestions' in self.request.query_params:
             has_questions = self.request.query_params['multiplechoicequestions'] == 'True'
             queryset = queryset.filter(Q(multiplechoicequestion__isnull=not has_questions))

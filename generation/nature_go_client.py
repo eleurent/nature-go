@@ -28,7 +28,7 @@ class NatureGoClient:
             self.token = response.json()['token']
         else:
             raise ValueError(f'Login failed with status  {response.status_code} and response {response}')
-        
+
     def assert_logged_in(self):
         if self.token is None:
             raise ValueError('Client is not logged in')
@@ -46,7 +46,8 @@ class NatureGoClient:
 
     def get_labeled_species(
             self,
-            limit: int = 100, 
+            type: str = '',
+            limit: int = 100,
             offset: int = 0,
             illustration: bool | None = None,
             illustration_transparent: bool | None = None,
@@ -56,6 +57,7 @@ class NatureGoClient:
         ) -> list:
         self.assert_logged_in()
         params = {
+            'type': type,
             'limit': limit,
             'offset': offset,
             'illustration': illustration,
