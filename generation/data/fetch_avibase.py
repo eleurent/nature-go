@@ -34,31 +34,45 @@ def get_species_list():
     df = pd.DataFrame(data)
     return df
 
-def get_species_detail(species_row):
+
+def udate_species_detail(df, idx):
+    if 'genus' in df.columns and not pd.isna(df.loc[idx, 'genus']): return
+    html = requests.get(df.loc[idx, 'link'])
+    content = html.content
+    soup = BeautifulSoup(content, 'html.parser')
+    if not soup: return
+    taxoninfo_div = soup.find("div", id="taxoninfo")
+
+    scientificName = taxoninfo_div.find('b', string='Scientific:').find_next_sibling('i').string
+    protonym = taxoninfo_div.find('b', string='Protonym:').find_next_sibling('i').string
+    family = taxoninfo_div.find('b', string='Family:').find_next_sibling('a').string
+    genus = taxoninfo_div.find('b', string='Genus:').find_next_sibling('a').string
+    citation = taxoninfo_div.find('b', string='Citation:').find_next_sibling('a').string
+    avibaseId = df.loc[idx, 'link'].split('avibaseid=')[1]
+
+    df.loc[idx, 'scientificName'] = scientificName
+    df.loc[idx, 'protonym'] = protonym
+    df.loc[idx, 'family'] = family
+    df.loc[idx, 'genus'] = genus
+    df.loc[idx, 'citation'] = citation
+    df.loc[idx, 'avibaseId'] = avibaseId
+
+
+def main():
     try:
-        html = requests.get(species_row.link)
-        content = html.content
-        soup = BeautifulSoup(content, 'html.parser')
-        taxoninfo_div = soup.find("div", id="taxoninfo")
+        df = pd.read_csv('bird_species.csv')
+    except FileNotFoundError:
+        df = get_species_list()
+        df.to_csv('bird_species.csv', index=False)
 
-        scientificName = taxoninfo_div.find('b', string='Scientific:').find_next_sibling('i').string
-        protonym = taxoninfo_div.find('b', string='Protonym:').find_next_sibling('i').string
-        family = taxoninfo_div.find('b', string='Family:').find_next_sibling('a').string
-        genus = taxoninfo_div.find('b', string='Genus:').find_next_sibling('a').string
-        citation = taxoninfo_div.find('b', string='Citation:').find_next_sibling('a').string
-        avibaseId = species_row.link.split('avibaseid=')[1]
+    for i in tqdm(range(df.shape[0])):
+        udate_species_detail(df, i)
 
-        species_row['scientificName'] = scientificName
-        species_row['protonym'] = protonym
-        species_row['family'] = family
-        species_row['genus'] = genus
-        species_row['citation'] = citation
-        species_row['avibaseId'] = avibaseId
-    except Exception:
-        pass
-    return species_row
+        if i % 25 == 0:
+            df.to_csv('bird_species.csv', index=False)
+
+    df.to_csv('bird_species.csv', index=False)
 
 
-species_df = get_species_list()
-species_df = pd.DataFrame([get_species_detail(row) for _, row in tqdm(list(species_df.iterrows()))])
-species_df.to_csv('bird_species.csv')
+if __name__ == '__main__':
+    main()
