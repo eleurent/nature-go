@@ -5,10 +5,10 @@ from observation.models import Species
 
 
 class Command(BaseCommand):
-    help = 'Load a species csv file into the database'
+    help = 'Load a plant species csv file into the database'
 
     def add_arguments(self, parser):
-        parser.add_argument('--path', type=str, default='../../generation/data/species.csv')
+        parser.add_argument('--path', type=str, default='../../generation/data/plant_species.csv')
 
     def handle(self, *args, **kwargs):
         df = pd.read_csv(kwargs['path'])
@@ -25,6 +25,7 @@ class Command(BaseCommand):
             if Species.objects.filter(scientificNameWithoutAuthor=row.scientificNameWithoutAuthor).exists():
                 continue
             species = Species(
+                type='plant',
                 scientificNameWithoutAuthor=row.scientificNameWithoutAuthor,
                 scientificNameAuthorship=row.scientificNameAuthorship,
                 commonNames=json.loads(row.commonNames),
