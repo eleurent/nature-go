@@ -5,6 +5,7 @@
 {% block content %}
   <div class="app-species">
     <h1>Species Illustration Review</h1>
+    <p><b>Keymap:</b> Press <code>left</code>/<code>right</code> to navigate, and <code>del</code> to delete the illustration.</p>
     {% for species in page_obj %}
       <div class="species">
         <h2>{{ species.commonNames }}</h2>
