@@ -52,7 +52,7 @@ def plantnet_identify_mock():
     return json.load(open('observation/mock_plantnet_response.json'))
 
 
-def bird_identify_mock(image_path: str):
+def bird_identify_mock(image_path: str, max_count: int = 10):
     """Mock API to identify a bird
 
     Args:
@@ -62,7 +62,7 @@ def bird_identify_mock(image_path: str):
         dict: mock API response
     """
     del image_path
-    bird_species = Species.objects.filter(type=Species.BIRD_TYPE).all()
+    bird_species = Species.objects.filter(type=Species.BIRD_TYPE).order_by('rarity_gpt')[:max_count]
 
     def format_species(species):
         return {
