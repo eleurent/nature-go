@@ -25,7 +25,7 @@ class Command(BaseCommand):
             if Species.objects.filter(scientificNameWithoutAuthor=row.scientificName).exists():
                 continue
             species = Species(
-                type='plant',
+                type='bird',
                 scientificNameWithoutAuthor=row.scientificName,
                 scientificNameAuthorship=row.citation,
                 commonNames=[row.name],
