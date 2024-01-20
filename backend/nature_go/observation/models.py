@@ -23,7 +23,7 @@ class Species(models.Model):
     number_of_occurrences = models.IntegerField(null=True, blank=True)
     occurences_cdf = models.FloatField(null=True, blank=True)
     rarity_gpt = models.FloatField(null=True, blank=True)
-    rarity_status = models.CharField(max_length=31, default='')
+    rarity_status = models.CharField(max_length=31, default='', blank=True)
     descriptions = models.JSONField(default=list, blank=True)
     illustration = models.ImageField(upload_to='species/illustration', blank=True)
     illustration_transparent = models.ImageField(upload_to='species/illustration_transparent', blank=True)
