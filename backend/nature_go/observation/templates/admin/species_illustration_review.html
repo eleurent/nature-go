@@ -10,7 +10,13 @@
         <h2>{{ species.commonNames }}</h2>
         {% if species.illustration %}
           <img src="{{ species.illustration.url }}" alt="{{ species.scientificNameWithoutAuthor }} illustration">
-        {% else %}
+          <form method="POST" action="" id="deleteIllustration">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="delete_illustration" />
+            <input type="hidden" name="id" value="{{ species.id }}" />
+            <button type="submit">Delete illustration</button>
+          </form>
+          {% else %}
           <p>No illustration available</p>
         {% endif %}
       </div>
@@ -44,14 +50,13 @@
         window.location.href = '?{% param_replace page=page_obj.previous_page_number %}';
       }
       {% endif %}
-
       {% if page_obj.has_next %}
       if (event.code === 'ArrowRight') {
         window.location.href = '?{% param_replace page=page_obj.next_page_number %}';
       }
       {% endif %}
       if (event.code === 'Delete') {
-        window.location.href = '?action=delete_illustration&ids={{ page_obj.object_list|join:", " }}';
+        document.getElementById('deleteIllustration').submit();
       }
       {% endautoescape %}
     });

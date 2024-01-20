@@ -20,12 +20,16 @@ class SpeciesAdmin(admin.ModelAdmin):
 
     def species_illustration_review(self, request):
         """Visit /admin/observation/species/illustration-review/"""
-        
+       
+        if request.POST.get('action', '') == 'delete_illustration':
+            queryset = Species.objects.filter(id=request.POST['id'])
+            self.delete_illustration(request=request, queryset=queryset)
+            
         species = Species.objects.all()
         type_filter = request.GET.get('type')
         if type_filter:
             species = species.filter(type=type_filter)
-        ordering = request.GET.get('oredering')
+        ordering = request.GET.get('ordering')
         if ordering:
             species = species.order_by(ordering)
         paginator = Paginator(species, 1)
