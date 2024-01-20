@@ -1,0 +1,59 @@
+{% extends "admin/base_site.html" %}
+
+{% load admin_tags %}
+
+{% block content %}
+  <div class="app-species">
+    <h1>Species Illustration Review</h1>
+    {% for species in page_obj %}
+      <div class="species">
+        <h2>{{ species.commonNames }}</h2>
+        {% if species.illustration %}
+          <img src="{{ species.illustration.url }}" alt="{{ species.scientificNameWithoutAuthor }} illustration">
+        {% else %}
+          <p>No illustration available</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <div class="pagination">
+      <span class="step-links">
+          {% if page_obj.has_previous %}
+              <a href="?{% param_replace page=1 %}">&laquo; first</a>
+              <a href="?{% param_replace page=page_obj.previous_page_number %}">previous</a>
+          {% endif %}
+
+          <span class="current-page">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+          </span>
+
+          {% if page_obj.has_next %}
+              <a href="?{% param_replace page=page_obj.next_page_number %}">next</a>
+              <a href="?{% param_replace page=page_obj.paginator.num_pages %}">last &raquo;</a>
+          {% endif %}
+      </span>
+    </div>
+  </div>
+
+
+  <script>
+    document.addEventListener('keydown', function(event) {
+      {% autoescape off %}
+      {% if page_obj.has_previous %}
+      if (event.code === 'ArrowLeft') {
+        window.location.href = '?{% param_replace page=page_obj.previous_page_number %}';
+      }
+      {% endif %}
+
+      {% if page_obj.has_next %}
+      if (event.code === 'ArrowRight') {
+        window.location.href = '?{% param_replace page=page_obj.next_page_number %}';
+      }
+      {% endif %}
+      if (event.code === 'Delete') {
+        window.location.href = '?action=delete_illustration&ids={{ page_obj.object_list|join:", " }}';
+      }
+      {% endautoescape %}
+    });
+  </script>
+{% endblock %}
