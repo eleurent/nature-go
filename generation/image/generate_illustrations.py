@@ -20,7 +20,7 @@ comfyui_path = txt2img_workflow.find_path("ComfyUI")
 SD_HOST = 'http://nature-go.edouardleurent.com'
 PROMPT = {
     'plant': '{commonNames} {scientificNameWithoutAuthor}, 19th century botanical illustration',
-    'bird': '{commonNames} {scientificNameWithoutAuthor}, 19th century ornithology illustration',
+    'bird': '{commonNames}, 19th century ornithology illustration',
 }
 BATCH_SIZE = 100
 
@@ -90,11 +90,13 @@ def main(args):
     while True:
         species_batch = get_species(client, args.type, batch_size=args.batch_size, ordering=args.ordering)
         print('#############################')
-        prompt = args.prompt if args.prompt else PROMPT[args.type]
-        positive_prompts = [
-            prompt.format(commonNames=', '.join(species.commonNames[:3]), scientificNameWithoutAuthor=species.scientificNameWithoutAuthor)
-            for _, species in species_batch.iterrows()
-        ]
+        positive_prompts = []
+        for _, species in species_batch.iterrows():
+            prompt = args.prompt if args.prompt else PROMPT[species.type]
+            positive_prompts.append(prompt.format(
+                commonNames=', '.join(species.commonNames[:3]),
+                scientificNameWithoutAuthor=species.scientificNameWithoutAuthor
+            ))
         negative_prompts = [''] * len(positive_prompts)
         if not positive_prompts: return
         for (illustration, illustration_transparent), (_, species) in zip(
