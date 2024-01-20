@@ -6,6 +6,11 @@ from dotenv import load_dotenv
 from rarity_prompts import *
 from gpt_utils import try_except_decorator, get_config, filter_and_get_within_context
 
+FILENAME = "../data/bird_species.csv"
+DF_FIELD_NAME = "name"
+PROMPT_BATCH = "rarity_batch_bird_v2"
+BATCH_SIZE = 100
+
 @try_except_decorator
 def generate_rarety(plant_name, prompt="rarity_v1", num_try=0):
     def extract_rarity_score(answer):
@@ -31,11 +36,11 @@ def generate_rarety(plant_name, prompt="rarity_v1", num_try=0):
     return extract_rarity_score(response)
 
 
-def get_plant_names(df):
-    return f'[{", ".join(df["scientificNameWithoutAuthor"].tolist())}]'
+def get_species_names(df):
+    return f'[{", ".join(df[DF_FIELD_NAME].tolist())}]'
 
 @try_except_decorator
-def generate_rarety_batch(plant_names, prompt="rarity_batch_v1", num_try=0, batch_size=100):
+def generate_rarety_batch(species_names, prompt=PROMPT_BATCH, num_try=0, batch_size=100):
     def parse_rarity_batch(output_str):
         lines = output_str.strip().split("\n")
         rarity_dict = {}
@@ -47,7 +52,7 @@ def generate_rarety_batch(plant_names, prompt="rarity_batch_v1", num_try=0, batc
     gpt_config = get_config("rarity_generation_batch")
 
     prompt = eval(prompt)
-    prompt = prompt.format(plant_names=plant_names)
+    prompt = prompt.format(species_names=species_names)
     messages = [{"role": "user", "content": prompt}]
 
     response = openai.ChatCompletion.create(messages=messages, **gpt_config)
@@ -55,7 +60,6 @@ def generate_rarety_batch(plant_names, prompt="rarity_batch_v1", num_try=0, batc
     return parse_rarity_batch(response)
 
 if __name__ == '__main__':
-
     from tqdm import tqdm
     import pandas as pd
     import numpy as np
@@ -67,7 +71,7 @@ if __name__ == '__main__':
     openai.api_key = os.getenv("OPENAI_API_KEY")
 
     # Read DataFrame
-    df_sample = pd.read_csv("data/species_with_rarity.csv")
+    df = pd.read_csv(FILENAME)
 
     # Load processed batches log if exists
     processed_batches = []
@@ -76,15 +80,15 @@ if __name__ == '__main__':
             processed_batches = [int(line.split()[-1]) for line in log_file.readlines()]
 
     # Batch processing
-    for i in tqdm(range(0, 6200, 100)):
+    for i in tqdm(range(0, df.shape[0], BATCH_SIZE)):
         if i in processed_batches:
             print(f"Skipping batch starting at index {i}")
             continue
         
-        batch = df_sample.iloc[i:i+100]
-        plant_names = get_plant_names(batch)
+        batch = df.iloc[i:i+BATCH_SIZE]
+        species_names = get_species_names(batch)
         with ThreadPoolExecutor() as executor:
-            results = list(executor.map(generate_rarety_batch, [plant_names]*N))
+            results = list(executor.map(generate_rarety_batch, [species_names]*N))
 
         with open("processed_batches.log", "a") as log_file:
             log_file.write(f"Processed batch starting at index {i}\n")
@@ -93,8 +97,11 @@ if __name__ == '__main__':
         # Update the DataFrame
         for idx, rarity_scores in enumerate(results):
             if rarity_scores:
-                for plant, score in rarity_scores.items():
-                    df_sample.loc[df_sample['scientificNameWithoutAuthor'] == plant, f'rarity_batch_{idx}'] = score
+                for species, score in rarity_scores.items():
+                    df.loc[df[DF_FIELD_NAME] == species, f'rarity_batch_{idx}'] = score
 
         # Save the updated DataFrame
-        df_sample.to_csv("data/species_with_rarity2.csv", index=False)
+        df.to_csv(FILENAME, index=False)
+    
+    df['rarityGpt'] = df[[f'rarity_batch_{idx}' for idx in range(N)]].mean(axis=1)
+    df.to_csv(FILENAME, index=False)
