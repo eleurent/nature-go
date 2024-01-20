@@ -28,6 +28,7 @@ class SpeciesSerializer(serializers.ModelSerializer):
         model = Species
         fields = [
             'id',
+            'type',
             'scientificNameWithoutAuthor',
             'commonNames',
             'genus',
