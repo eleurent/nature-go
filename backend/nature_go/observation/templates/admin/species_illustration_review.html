@@ -6,23 +6,6 @@
   <div class="app-species">
     <h1>Species Illustration Review</h1>
     <p><b>Keymap:</b> Press <code>left</code>/<code>right</code> to navigate, and <code>del</code> to delete the illustration.</p>
-    {% for species in page_obj %}
-      <div class="species">
-        <h2>{{ species.commonNames }}</h2>
-        {% if species.illustration %}
-          <img src="{{ species.illustration.url }}" alt="{{ species.scientificNameWithoutAuthor }} illustration">
-          <form method="POST" action="" id="deleteIllustration">
-            {% csrf_token %}
-            <input type="hidden" name="action" value="delete_illustration" />
-            <input type="hidden" name="id" value="{{ species.id }}" />
-            <button type="submit">Delete illustration</button>
-          </form>
-          {% else %}
-          <p>No illustration available</p>
-        {% endif %}
-      </div>
-    {% endfor %}
-
     <div class="pagination">
       <span class="step-links">
           {% if page_obj.has_previous %}
@@ -40,6 +23,22 @@
           {% endif %}
       </span>
     </div>
+    {% for species in page_obj %}
+      <div class="species">
+        <h2>{{ species.commonNames }}</h2>
+        {% if species.illustration %}
+          <img style="width: 100%;" src="{{ species.illustration.url }}" alt="{{ species.scientificNameWithoutAuthor }} illustration">
+          <form method="POST" action="" id="deleteIllustration">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="delete_illustration" />
+            <input type="hidden" name="id" value="{{ species.id }}" />
+            <button type="submit">Delete illustration</button>
+          </form>
+          {% else %}
+          <p>No illustration available</p>
+        {% endif %}
+      </div>
+    {% endfor %}
   </div>
 
 
