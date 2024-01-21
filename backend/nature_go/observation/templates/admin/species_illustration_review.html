@@ -27,7 +27,7 @@
       <div class="species">
         <h2>{{ species.commonNames }}</h2>
         {% if species.illustration %}
-          <img style="width: 100%;" src="{{ species.illustration.url }}" alt="{{ species.scientificNameWithoutAuthor }} illustration">
+          <img style="max-width: 100%;" src="{{ species.illustration.url }}" alt="{{ species.scientificNameWithoutAuthor }} illustration">
           <form method="POST" action="" id="deleteIllustration">
             {% csrf_token %}
             <input type="hidden" name="action" value="delete_illustration" />
