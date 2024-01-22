@@ -52,7 +52,7 @@ def plantnet_identify_mock():
     return json.load(open('observation/mock_plantnet_response.json'))
 
 
-def bird_identify_mock(image_path: str, max_count: int = 10):
+def bird_identify_mock(image_path: str, max_count: int = 30):
     """Mock API to identify a bird
 
     Args:
