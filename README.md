@@ -1,4 +1,4 @@
-# Nature GO
+# <img src="https://github.com/eleurent/nature-go/assets/1706935/bedd5f5a-9f60-4d39-92d0-181df8f1d4f4)" height=32> Nature GO
 
 [![Deploy backend](https://github.com/eleurent/nature-go/actions/workflows/deploy-backend.yml/badge.svg)](https://github.com/eleurent/nature-go/actions/workflows/deploy-backend.yml)
 [![Deploy frontend](https://github.com/eleurent/nature-go/actions/workflows/deploy-frontend.yml/badge.svg)](https://github.com/eleurent/nature-go/actions/workflows/deploy-frontend.yml)
