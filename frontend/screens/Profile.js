@@ -63,7 +63,7 @@ export default function ProfileScreen({ navigation, route }) {
                                 </View>
                                 <View style={styles.statsRow}>
                                     <Text style={styles.statsKey}>Mean exam score</Text>
-                                    <Text style={styles.statsValue}>{profileData ? (profileData.quiz_mean_score * 100).toFixed(2) : 0}%</Text>
+                                    <Text style={styles.statsValue}>{profileData ? (profileData.quiz_mean_score * 100).toFixed(0) : 0}%</Text>
                                 </View>
                             </View>
                         </View>
