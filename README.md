@@ -11,13 +11,13 @@ A generative AI project
 
 
 
-<img src="resources/screens/home.png" width="33%"> <img src="resources/screens/profile.png" width="33%">
+<img src="resources/screens/home.png" width="32%"> <img src="resources/screens/profile.png" width="32%">
 
-<img src="resources/screens/species_list_1.png" width="33%"> <img src="resources/screens/species_list_2.png" width="33%">
+<img src="resources/screens/species_list_1.png" width="32%"> <img src="resources/screens/species_list_2.png" width="32%">
 
-<img src="resources/screens/species_1.png" width="33%"> <img src="resources/screens/species_2.png" width="33%"> <img src="resources/screens/species_3.png" width="33%">
+<img src="resources/screens/species_1.png" width="32%"> <img src="resources/screens/species_2.png" width="32%"> <img src="resources/screens/species_3.png" width="32%">
 
-<img src="resources/screens/quiz_1.png" width="33%"> <img src="resources/screens/quiz_3.png" width="33%"> <img src="resources/screens/quiz_4.png" width="33%">
+<img src="resources/screens/quiz_1.png" width="32%"> <img src="resources/screens/quiz_3.png" width="32%"> <img src="resources/screens/quiz_4.png" width="32%">
 
 
 ## Credit
