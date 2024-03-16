@@ -5,12 +5,6 @@
 
 A generative AI project
 
-<a href="https://expo.dev/@eleurent/nature-go?serviceType=eas&distribution=expo-go&scheme=exp%2Bnature-go&channel=main">
-  <img src="https://qr.expo.dev/eas-update?appScheme=exp&projectId=1b735d98-b598-406c-9235-ab43e10a0755&channel=main&runtimeVersion=exposdk%3A48.0.0&host=u.expo.dev" width="200" height="200">
-</a>
-
-
-
 <img src="resources/screens/home.png" width="32%"> <img src="resources/screens/profile.png" width="32%">
 
 <img src="resources/screens/species_list_1.png" width="32%"> <img src="resources/screens/species_list_2.png" width="32%">
@@ -19,6 +13,11 @@ A generative AI project
 
 <img src="resources/screens/quiz_1.png" width="32%"> <img src="resources/screens/quiz_3.png" width="32%"> <img src="resources/screens/quiz_4.png" width="32%">
 
+## Install
+
+<a href="https://expo.dev/@eleurent/nature-go?serviceType=eas&distribution=expo-go&scheme=exp%2Bnature-go&channel=main">
+  <img src="https://qr.expo.dev/eas-update?appScheme=exp&projectId=1b735d98-b598-406c-9235-ab43e10a0755&channel=main&runtimeVersion=exposdk%3A48.0.0&host=u.expo.dev" width="200" height="200">
+</a>
 
 ## Credit
 
