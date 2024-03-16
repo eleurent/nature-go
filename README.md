@@ -3,7 +3,7 @@
 [![Deploy backend](https://github.com/eleurent/nature-go/actions/workflows/deploy-backend.yml/badge.svg)](https://github.com/eleurent/nature-go/actions/workflows/deploy-backend.yml)
 [![Deploy frontend](https://github.com/eleurent/nature-go/actions/workflows/deploy-frontend.yml/badge.svg)](https://github.com/eleurent/nature-go/actions/workflows/deploy-frontend.yml)
 
-A generative AI project
+A wildlife identification game: become a 19th century naturalist!
 
 <img src="resources/screens/splash.png" width="32%"> <img src="resources/screens/home.png" width="32%"> <img src="resources/screens/profile.png" width="32%">
 
@@ -21,7 +21,7 @@ A generative AI project
 
 ## Credit
 
-- Inspired by the [Biodiversity Heritage Library](https://www.flickr.com/photos/61021753@N02/)
+- Inspired by the [Biodiversity Heritage Library](https://www.flickr.com/photos/61021753@N02/) and [Pokémon GO](https://pokemongolive.com/)
 - Plant data from [GBIF](https://www.gbif.org/)
 - Bird data from [Avibase](https://avibase.bsc-eoc.org/avibase.jsp)
 - Plant identification with [Pl@ntNet API](https://my.plantnet.org/)
