@@ -9,6 +9,17 @@ A generative AI project
   <img src="https://qr.expo.dev/eas-update?appScheme=exp&projectId=1b735d98-b598-406c-9235-ab43e10a0755&channel=main&runtimeVersion=exposdk%3A48.0.0&host=u.expo.dev" width="200" height="200">
 </a>
 
+
+
+<img src="resources/screens/home.png" width="33%"> <img src="resources/screens/profile.png" width="33%">
+
+<img src="resources/screens/species_list_1.png" width="33%"> <img src="resources/screens/species_list_2.png" width="33%">
+
+<img src="resources/screens/species_1.png" width="33%"> <img src="resources/screens/species_2.png" width="33%"> <img src="resources/screens/species_3.png" width="33%">
+
+<img src="resources/screens/quiz_1.png" width="33%"> <img src="resources/screens/quiz_3.png" width="33%"> <img src="resources/screens/quiz_4.png" width="33%">
+
+
 ## Credit
 
 - Inspired by the [Biodiversity Heritage Library](https://www.flickr.com/photos/61021753@N02/)
