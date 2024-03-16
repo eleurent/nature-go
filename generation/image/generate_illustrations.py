@@ -20,9 +20,9 @@ comfyui_path = txt2img_workflow.find_path("ComfyUI")
 SD_HOST = 'http://nature-go.edouardleurent.com'
 PROMPT = {
     'plant': '{commonNames} {scientificNameWithoutAuthor}, 19th century botanical illustration',
-    'bird': '{commonNames}, 19th century ornithology illustration',
+    'bird': '{commonNames}, ornithology illustration, 19th century London',
 }
-BATCH_SIZE = 100
+BATCH_SIZE = 5
 
 def get_species(client, type, batch_size=5, ordering=None):
     """Retrieve species with missing images through Nature go API."""
@@ -112,7 +112,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--type", help="species type, bird/plant", type=str)
     parser.add_argument("--ordering", help="species ordering", type=str, default='-observation_count,rarity_gpt,-occurences_cdf')
-    parser.add_argument("--batch_size", help="batch size", type=int, default=100)
+    parser.add_argument("--batch_size", help="batch size", type=int, default=BATCH_SIZE)
     parser.add_argument("--prompt", help="prompt", type=str, default='')
     args = parser.parse_args()
     main(args)
