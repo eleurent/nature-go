@@ -16,9 +16,9 @@ import question_generation
 
 
 
-def get_species(client, batch_size=5, ordering=None):
+def get_species(client, batch_size=5, ordering=None, type=None):
     ordering = ordering.split(',') if ',' in ordering else ordering
-    species_list = client.get_labeled_species(multiplechoicequestions=False, descriptions=False, limit=batch_size, ordering=ordering)
+    species_list = client.get_labeled_species(multiplechoicequestions=False, descriptions=False, limit=batch_size, ordering=ordering, type=type)
     print(f'Found {len(species_list)} species')
     return pd.DataFrame(species_list)
 
@@ -54,8 +54,9 @@ def main(args):
     client = nature_go_client.NatureGoClient(username=NG_USERNAME, password=NG_PASSWORD)
     client.login()
     
-    while True:
-        species_batch = get_species(client, batch_size=args.batch_size, ordering=args.ordering)
+    species_list = None
+    while species_list or (species_list is None):
+        species_batch = get_species(client, batch_size=args.batch_size, ordering=args.ordering, type=args.type)
         species_list = [species for (_, species) in species_batch.iterrows()]
         pool = multiprocessing.Pool(processes=multiprocessing.cpu_count() - 1)
         generate_and_upload = functools.partial(generate, client=client)
@@ -64,6 +65,7 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--ordering", help="species ordering", type=str, default='-observation_count,rarity_gpt,-occurences_cdf')
-    parser.add_argument("--batch_size", help="batch size", type=int, default=100)
+    parser.add_argument("--batch_size", help="batch size", type=int, default=10)
+    parser.add_argument("--type", help="species type (bird|plant)", type=str, default="bird")
     args = parser.parse_args()
     main(args)

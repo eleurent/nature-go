@@ -46,7 +46,7 @@ class NatureGoClient:
 
     def get_labeled_species(
             self,
-            type: str = '',
+            type: str | None = None,
             limit: int = 100,
             offset: int = 0,
             illustration: bool | None = None,
@@ -68,6 +68,7 @@ class NatureGoClient:
         }
         params = {k: v for k, v in params.items() if v is not None}
         response = requests.get(SPECIES_LABELED_URL, headers={'Authorization': f'Token {self.token}'}, params=params)
+        print(response.url)
         if response.ok:
             result = response.json()
             logger.info(f'Fetched {len(result)} species')

@@ -35,35 +35,35 @@ C: Rose
 D: Tulip
 Answer: B
 
-User: Can you help me generate questions about the Austrian copper rose?
+User: Can you help me generate questions about the Barn owl?
 Here is the material: {{not shown for brevity}}
 
-Assistant (you): Certainly! Let's generate multiple-choice questions based on the provided information about the Austrian copper rose, Rosa foetida:
+Assistant (you): Certainly! Let's generate multiple-choice questions based on the provided information about the barn owl (Tyto alba):
 
 Question 1:
-What is the primary reason the Austrian copper rose was important to European horticulture?
-A: Its unique scent
-B: Its vibrant yellow flowers
-C: Its resistance to black spot
-D: Its contribution to the stock of cultivated roses
-Answer: B
+Barn owls are most commonly found in which of the following habitats?
+A: Deserts
+B: Dense forests
+C: Open grasslands and farmlands
+D: Oceans
+Answer: C
 
 Question 2:
-What is one drawback of the Austrian copper rose?
-A: Its objectionable scent
-B: Its lack of vigor
-C: Its susceptibility to black spot
-D: Its spindly bush shape
-Answer: A
+What is the main function of the tiny serrations and hairlike fringes on a barn owl's wings?
+A: To attract mates
+B: To keep its wings warm
+C: To sense changes in air pressure
+D: To help the owl fly silently
+Answer: D
 
 Question 3:
-Where does the name 'Rosa foetida' come from?
-A: it is Latin for "having a bad smell"
-B: it means "baby rose" in Latin
-C: it comes from the greek word for "happiness"
-D: it was discoevered by Dr. Foetid
-Answer: A
+Barn owls are beneficial to farmers because they help control populations of:
+A: Insects
+B: Small mammals
+C: Fish
+D: Large birds
+Answer: B
 
-User: Can you help me generate 3 questions about {plant_name}?
+User: Can you help me generate 3 questions about {species_name}?
 Here is the material: {material}
 """

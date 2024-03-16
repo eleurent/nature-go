@@ -38,7 +38,7 @@ def generate_questions(common_name: str, scientific_name: str, material: str | N
         max_length = 4097 - len(prompt) - len(common_name) - 800
         material = filter_and_get_within_context(material, max_length=max_length, num_try=num_try)
 
-    prompt = prompt.format(plant_name=common_name, material=material)
+    prompt = prompt.format(species_name=common_name, material=material)
 
     messages = [{"role": "user", "content": prompt}]
     response = openai.ChatCompletion.create(
