@@ -5,13 +5,13 @@
 
 A wildlife identification game: become a 19th century naturalist!
 
-<img src="resources/screens/splash.png" width="32%"> <img src="resources/screens/home.png" width="32%"> <img src="resources/screens/profile.png" width="32%">
+<img src="resources/screens/splash.jpg" width="32%"> <img src="resources/screens/home.jpg" width="32%"> <img src="resources/screens/profile.jpg" width="32%">
 
-<img src="resources/screens/species_list_1.png" width="32%"> <img src="resources/screens/camera.png" width="32%"> <img src="resources/screens/species_list_2.png" width="32%">
+<img src="resources/screens/species_list_1.jpg" width="32%"> <img src="resources/screens/camera.jpg" width="32%"> <img src="resources/screens/species_list_2.jpg" width="32%">
 
-<img src="resources/screens/species_1.png" width="32%"> <img src="resources/screens/species_2.png" width="32%"> <img src="resources/screens/species_3.png" width="32%">
+<img src="resources/screens/species_1.jpg" width="32%"> <img src="resources/screens/species_2.jpg" width="32%"> <img src="resources/screens/species_3.jpg" width="32%">
 
-<img src="resources/screens/quiz_1.png" width="32%"> <img src="resources/screens/quiz_5.png" width="32%"> <img src="resources/screens/quiz_3.png" width="32%">
+<img src="resources/screens/quiz_1.jpg" width="32%"> <img src="resources/screens/quiz_2.jpg" width="32%"> <img src="resources/screens/quiz_3.jpg" width="32%">
 
 ## Install
 
