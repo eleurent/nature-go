@@ -4,10 +4,12 @@ import requests
 import PIL.Image
 import PIL.ExifTags
 import datetime
+import os
 
 from observation.models import Species
 
 logger = logging.getLogger(__name__)
+PLANTNET_API_KEY = os.environ['PLANTNET_API_KEY']
 
 
 def plantnet_identify(image_path: str, organ: str, mock: bool = False):
@@ -31,7 +33,7 @@ def plantnet_identify(image_path: str, organ: str, mock: bool = False):
     params = {
         'include-related-images': True,
         'lang': 'en',
-        'api-key': '2b10OHTHDcLlYXiJYoOA2bYeOO'
+        'api-key': PLANTNET_API_KEY
     }
     data = {'organs': [organ]}
     try:
