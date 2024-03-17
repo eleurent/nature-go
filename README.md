@@ -1,17 +1,21 @@
-# Nature GO <img src="https://github.com/eleurent/nature-go/assets/1706935/bef20554-5ed8-44ed-8f0e-dccb9d66620d" height=32>
+# <img src="resources/logo/logo.png" height=32> Nature GO
 
 [![Deploy backend](https://github.com/eleurent/nature-go/actions/workflows/deploy-backend.yml/badge.svg)](https://github.com/eleurent/nature-go/actions/workflows/deploy-backend.yml)
 [![Deploy frontend](https://github.com/eleurent/nature-go/actions/workflows/deploy-frontend.yml/badge.svg)](https://github.com/eleurent/nature-go/actions/workflows/deploy-frontend.yml)
 
-A wildlife identification game: become a 19th century naturalist!
+A wildlife identification game — become a 19th century naturalist
 
-<img src="resources/screens/splash.jpg" width="32%"> <img src="resources/screens/home.jpg" width="32%"> <img src="resources/screens/profile.jpg" width="32%">
+<p align="center">
+<img src="resources/screens/thumbnails/splash.jpg" width="32%"> <img src="resources/screens/thumbnails/home.jpg" width="32%"> 
+</p>
 
-<img src="resources/screens/species_list_1.jpg" width="32%"> <img src="resources/screens/camera.jpg" width="32%"> <img src="resources/screens/species_list_2.jpg" width="32%">
+<img src="resources/screens/thumbnails/camera.jpg" width="32%"> <img src="resources/screens/thumbnails/camera_5.jpg" width="32%"> <img src="resources/screens/thumbnails/camera_6.jpg" width="32%">
 
-<img src="resources/screens/species_1.jpg" width="32%"> <img src="resources/screens/species_2.jpg" width="32%"> <img src="resources/screens/species_3.jpg" width="32%">
+<img src="resources/screens/thumbnails/species_list_1.jpg" width="32%"> <img src="resources/screens/thumbnails/profile.jpg" width="32%"> <img src="resources/screens/thumbnails/species_list_2.jpg" width="32%">
 
-<img src="resources/screens/quiz_1.jpg" width="32%"> <img src="resources/screens/quiz_2.jpg" width="32%"> <img src="resources/screens/quiz_3.jpg" width="32%">
+<img src="resources/screens/thumbnails/species_1.jpg" width="32%"> <img src="resources/screens/thumbnails/species_2.jpg" width="32%"> <img src="resources/screens/thumbnails/species_3.jpg" width="32%">
+
+<img src="resources/screens/thumbnails/quiz_1.jpg" width="32%"> <img src="resources/screens/thumbnails/quiz_2.jpg" width="32%"> <img src="resources/screens/thumbnails/quiz_3.jpg" width="32%">
 
 ## Install
 
@@ -28,3 +32,5 @@ A wildlife identification game: become a 19th century naturalist!
 - Bird identification with [Gemini Pro Vision](https://deepmind.google/technologies/gemini/)
 - Illustration generation with [Stable Diffusion XL](https://stability.ai/stable-image)
 - Description and quiz generation with [gpt-3.5-turbo](https://platform.openai.com)
+
+Support your local community — [:uk:](https://www.rspb.org.uk), [:fr:](https://www.lpo.fr/).
