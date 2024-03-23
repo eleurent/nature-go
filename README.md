@@ -5,6 +5,8 @@
 
 <h4 align="center">A wildlife identification game — become a 19th century naturalist</h4>
 
+This project experiments with generative AI to create an engaging and educational wildlife identification experience, by allowing users to roleplay as a naturalist from the 1800s. The visual identity draws inspiration from scientific illustrations of the era. I acknowledge the limitations of this technology in terms of factuality, and ground generated content on open access resources whenever possible.
+
 <p align="center">
 <img src="resources/screens/thumbnails/splash.jpg" width="32%"> <img src="resources/screens/thumbnails/home.jpg" width="32%"> 
 </p>
@@ -34,6 +36,7 @@ You can preview the latest development version on Android & iOS using the [Expo 
 - Inspired by the [Biodiversity Heritage Library](https://www.flickr.com/photos/61021753@N02/) and [Pokémon GO](https://pokemongolive.com/)
 - Plant data from [GBIF](https://www.gbif.org/)
 - Bird data from [Avibase](https://avibase.bsc-eoc.org/avibase.jsp)
+- Species details from [Wikipedia](https://en.wikipedia.org)
 - Plant identification with [Pl@ntNet API](https://my.plantnet.org/)
 - Bird identification with [Gemini Pro Vision](https://deepmind.google/technologies/gemini/)
 - Illustration generation with [Stable Diffusion XL](https://stability.ai/stable-image)
