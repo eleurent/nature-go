@@ -58,7 +58,9 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
-      ]
+      ],
+      "expo-font",
+      "expo-secure-store"
     ]
   }
 }
