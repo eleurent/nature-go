@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
-import { Button, StyleSheet, Text, View, Modal, Image, Platform, Animated, Easing } from "react-native";
+import { Button, FlatList, StyleSheet, Text, View, Modal, Image, Platform, Animated, Easing } from "react-native";
 import QuizButton from "./QuizButton";
-import { FlatList } from "react-native-gesture-handler";
 
 
 const parseReason = (reason) => {

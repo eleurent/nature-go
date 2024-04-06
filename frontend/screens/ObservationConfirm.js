@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, Platform, TouchableOpacity , ActivityIndicator, ScrollView} from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, ImageBackground, Platform, TouchableOpacity , ActivityIndicator, ScrollView} from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants'
-import { FlatList } from 'react-native-gesture-handler';
 import { ObservationContext } from '../contexts/ObservationContext';
 import MapView, { Marker } from '../components/CustomMapView';
 import { Ionicons } from '@expo/vector-icons';

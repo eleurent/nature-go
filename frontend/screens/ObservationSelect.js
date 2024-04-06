@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, Platform, TouchableOpacity , ActivityIndicator} from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, ImageBackground, Platform, TouchableOpacity , ActivityIndicator} from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants'
-import { FlatList } from 'react-native-gesture-handler';
 import XPModal from '../components/XPModal';
 import { CommonActions } from '@react-navigation/native';
 import { ObservationContext } from '../contexts/ObservationContext';
