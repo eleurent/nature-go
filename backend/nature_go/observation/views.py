@@ -2,7 +2,7 @@ import logging
 from rest_framework import generics, permissions, pagination, filters
 from rest_framework.response import Response
 from rest_framework import serializers
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Min
 import ast
 
 from observation.models import Species, Observation
@@ -19,19 +19,24 @@ class SpeciesList(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Species.objects.filter(observation__user=user).distinct()
+        queryset = Species.objects.filter(observation__user=user).distinct()
+        ordered_queryset = queryset.annotate(discovery_datetime=Min('observation__datetime')).order_by('-discovery_datetime')
+        return ordered_queryset
 
 
 class PlantSpeciesList(SpeciesList):
     def get_queryset(self):
         user = self.request.user
-        return Species.objects.filter(type=Species.PLANT_TYPE, observation__user=user).distinct()
-
+        queryset = Species.objects.filter(type=Species.PLANT_TYPE, observation__user=user).distinct()
+        ordered_queryset = queryset.annotate(discovery_datetime=Min('observation__datetime')).order_by('-discovery_datetime')
+        return ordered_queryset
 
 class BirdSpeciesList(SpeciesList):
     def get_queryset(self):
         user = self.request.user
-        return Species.objects.filter(type=Species.BIRD_TYPE, observation__user=user).distinct()
+        queryset = Species.objects.filter(type=Species.BIRD_TYPE, observation__user=user).distinct()
+        ordered_queryset = queryset.annotate(discovery_datetime=Min('observation__datetime')).order_by('-discovery_datetime')
+        return ordered_queryset
 
 
 class SpeciesAllList(generics.ListCreateAPIView):
