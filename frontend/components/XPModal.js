@@ -5,7 +5,7 @@ import QuizButton from "./QuizButton";
 
 const parseReason = (reason) => {
     if ('Rarity' in reason){
-        if (reason.Rarity === 'Common')
+        if (reason.Rarity === 'Common' || reason.Rarity === 'Very Common')
             return 'Common species';
         else if (reason.Rarity === 'Uncommon')
             return 'Uncommon species';
