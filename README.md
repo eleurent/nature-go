@@ -27,7 +27,7 @@ You can preview the latest development version on Android & iOS using the [Expo 
 
 <p align="center">
 <a href="https://expo.dev/@eleurent/nature-go?serviceType=eas&distribution=expo-go&scheme=exp%2Bnature-go&channel=main">
-  <img src="https://qr.expo.dev/eas-update?appScheme=exp&projectId=1b735d98-b598-406c-9235-ab43e10a0755&channel=main&runtimeVersion=exposdk%3A48.0.0&host=u.expo.dev" width="200" height="200">
+  <img src="https://qr.expo.dev/eas-update?projectId=1b735d98-b598-406c-9235-ab43e10a0755&runtimeVersion=exposdk%3A50.0.0&channel=main" width="200" height="200">
 </a>
 </p>
 
