@@ -73,7 +73,10 @@ class SpeciesSerializer(serializers.ModelSerializer):
 
 
 def serialize_identification_response(response: IdentificationResponse):
-    return [serialize_identification_candidate(candidate) for candidate in response.candidates]
+    return {
+        'results': [serialize_identification_candidate(candidate) for candidate in response.candidates],
+        'raw_response': response.raw_response,
+    }
 
 def serialize_identification_candidate(candidate: IdentificationCandidate):
     return {
