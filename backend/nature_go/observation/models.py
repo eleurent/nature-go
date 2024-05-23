@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from dataclasses import dataclass
 
 class Species(models.Model):
     PLANT_TYPE = 'plant'
@@ -86,3 +87,13 @@ class Observation(models.Model):
 
     def __str__(self):
         return f'{self.species} observed by {self.user}'
+
+
+@dataclass
+class IdentificationCandidate:
+    species: Species
+    confidence: float
+
+@dataclass
+class IdentificationResponse:
+    candidates: list[IdentificationCandidate]

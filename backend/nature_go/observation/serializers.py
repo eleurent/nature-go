@@ -2,7 +2,7 @@ from rest_framework import serializers
 from drf_extra_fields.fields import Base64ImageField
 from django.contrib.staticfiles import finders
 
-from observation.models import Observation, Species
+from observation.models import Observation, Species, IdentificationResponse, IdentificationCandidate
 
 class ObservationSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
@@ -54,6 +54,7 @@ class SpeciesSerializer(serializers.ModelSerializer):
 
     def get_illustration_url(self, obj):
         request = self.context.get('request')
+        if request is None: return None  # TODO: this happens when serializing an identification response
         if bool(obj.illustration_transparent) and obj.type != Species.BIRD_TYPE:
             return request.build_absolute_uri(obj.illustration_transparent.url)
         elif bool(obj.illustration):
@@ -69,3 +70,13 @@ class SpeciesSerializer(serializers.ModelSerializer):
 
     def get_num_questions_total(self, obj):
         return obj.multiplechoicequestion_set.count()
+
+
+def serialize_identification_response(response: IdentificationResponse):
+    return [serialize_identification_candidate(candidate) for candidate in response.candidates]
+
+def serialize_identification_candidate(candidate: IdentificationCandidate):
+    return {
+        'confidence': candidate.confidence,
+        'species': SpeciesSerializer(instance=Species.objects.get(pk=candidate.species.id)).data
+    }

@@ -6,9 +6,9 @@ from django.db.models import Q, Count, Min
 import ast
 
 from observation.models import Species, Observation
-from observation.serializers import ObservationSerializer, SpeciesSerializer
+from observation.serializers import ObservationSerializer, SpeciesSerializer, serialize_identification_response
 from observation.permissions import IsOwner, IsAdminOrReadOnly
-from observation import identification
+from observation.identification import plantnet, mock
 from user_profile.signals import xp_gained
 
 logger = logging.getLogger(__name__)
@@ -146,12 +146,15 @@ class ObservationCreate(generics.CreateAPIView):
 
         # Run identification service
         if observation.type == Species.PLANT_TYPE:
-            observation.identification_response = identification.plantnet_identify(
-                image_path=observation.image.path, organ=observation.organ)
+            response = plantnet.plantnet_identify(
+                image_path=observation.image.path, organ=observation.organ
+            )
+            observation.identification_response = serialize_identification_response(response)
             observation.save()
         elif observation.type == Species.BIRD_TYPE:
-            observation.identification_response = identification.bird_identify_mock(
+            response = mock.bird_identify_mock(
                 image_path=observation.image.path)
+            observation.identification_response = serialize_identification_response(response)
             observation.save()
 
         serializer = ObservationSerializer(instance=observation)
@@ -168,18 +171,8 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
             return super().update(request, *args, **kwargs)
         instance = self.get_object()
         idx = int(request.data['species'])  # index of the correct species in the identification response, not species pk
-        species_data = instance.identification_response['results'][idx]['species']
-        species_data = dict(
-            scientificNameWithoutAuthor=species_data['scientificNameWithoutAuthor'],
-            scientificNameAuthorship=species_data['scientificNameAuthorship'],
-            commonNames=species_data['commonNames'],
-            genus=species_data['genus']['scientificNameWithoutAuthor'],
-            family=species_data['family']['scientificNameWithoutAuthor'],
-        )
-        species, created = Species.objects.update_or_create(
-            scientificNameWithoutAuthor=species_data['scientificNameWithoutAuthor'],
-            defaults=species_data)
-        instance.species = species
+        species_id = instance.identification_response[idx]['species']
+        instance.species = Species.objects.get(pk=species_id)
         instance.save()
         if not instance.xp and instance.species:
             xp_gained.send(sender=instance.__class__, instance=instance)
