@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from dataclasses import dataclass
+import typing as tp
 
 class Species(models.Model):
     PLANT_TYPE = 'plant'
@@ -96,4 +97,5 @@ class IdentificationCandidate:
 
 @dataclass
 class IdentificationResponse:
-    candidates: list[IdentificationCandidate]
+    candidates: tp.List[IdentificationCandidate]
+    raw_response: tp.Optional[str] = None
