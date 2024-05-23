@@ -171,7 +171,7 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
             return super().update(request, *args, **kwargs)
         instance = self.get_object()
         idx = int(request.data['species'])  # index of the correct species in the identification response, not species pk
-        species_id = instance.identification_response['candidates'][idx]['species']['id']
+        species_id = instance.identification_response['results'][idx]['species']['id']
         instance.species = Species.objects.get(pk=species_id)
         instance.save()
         if not instance.xp and instance.species:
