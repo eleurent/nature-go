@@ -14,19 +14,19 @@ const PROBABILITY_THRESHOLD = 0.00005; // Minimum probability to display a candi
 
 
 const SpeciesCandidate = (props) => {
-    imageUri = (props.item.images.size > 0 && props.item.images[0]?.url?.s) ? props.item.images[0]?.url?.s : null;
+    // imageUri = (props.item.images.size > 0 && props.item.images[0]?.url?.s) ? props.item.images[0]?.url?.s : null;
     return (
         <View style={styles.candidateContainer}>
-            <Image style={styles.candidateImage}
+            {/* <Image style={styles.candidateImage}
                 resizeMode='contain'
                 source={{ uri: imageUri }}
-            />
+            /> */}
             <View style={styles.textContainer}>
                 <Text style={styles.speciesName}>{props.item.species.commonNames.length ? props.item.species.commonNames[0] : props.item.species.scientificNameWithoutAuthor}</Text>
                 <Text style={styles.speciesScientificName}>{props.item.species.scientificNameWithoutAuthor}</Text>
             </View>
             <View>
-                <Text style={styles.speciesScore}>{(props.item.score * 100).toFixed()} %</Text>
+                <Text style={styles.speciesScore}>{(props.item.confidence * 100).toFixed()} %</Text>
                 <TouchableOpacity
                     style={styles.validateButton}
                     activeOpacity={0.5}
@@ -104,7 +104,7 @@ export default function ObservationSelectScreen({ navigation, route }) {
     }, []);
 
     let has_results = observationState.data && observationState.data.identification_response && observationState.data.identification_response.results;
-    let topNResults = has_results ? observationState.data.identification_response.results.filter(candidate => candidate.score >= PROBABILITY_THRESHOLD).slice(0, NUM_CANDIDATES) : [];
+    let topNResults = has_results ? observationState.data.identification_response.results.filter(candidate => candidate.confidence >= PROBABILITY_THRESHOLD).slice(0, NUM_CANDIDATES) : [];
     let emptyResults = has_results && topNResults.length === 0;
 
     const onConfirmResponse = (response) => { observationMethods.setObservationData(response.data); setXPModalVisible(true); };
@@ -131,7 +131,7 @@ export default function ObservationSelectScreen({ navigation, route }) {
                 { isLoading ? (
                     <View style={styles.loadingContainer}>
                         <ActivityIndicator size={80} color="#00ff00" />
-                        <Text>Identifying the plant...</Text>
+                        <Text>Identifying the specimen...</Text>
                     </View>
                 ) :
                 (has_results ?
