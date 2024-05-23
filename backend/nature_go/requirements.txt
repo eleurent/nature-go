@@ -8,3 +8,4 @@ pandas
 requests
 Pillow
 gunicorn
+google-generativeai

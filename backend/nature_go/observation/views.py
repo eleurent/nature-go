@@ -8,7 +8,7 @@ import ast
 from observation.models import Species, Observation
 from observation.serializers import ObservationSerializer, SpeciesSerializer, serialize_identification_response
 from observation.permissions import IsOwner, IsAdminOrReadOnly
-from observation.identification import plantnet, mock
+from observation.identification import plantnet, gemini
 from user_profile.signals import xp_gained
 
 logger = logging.getLogger(__name__)
@@ -152,8 +152,8 @@ class ObservationCreate(generics.CreateAPIView):
             observation.identification_response = serialize_identification_response(response)
             observation.save()
         elif observation.type == Species.BIRD_TYPE:
-            response = mock.bird_identify_mock(
-                image_path=observation.image.path)
+            response = gemini.gemini_identify_few_shot(
+                image_path=observation.image.path, few_shots=gemini.BIRD_ID_FEW_SHOTS)
             observation.identification_response = serialize_identification_response(response)
             observation.save()
 
