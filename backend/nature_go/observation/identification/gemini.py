@@ -11,6 +11,7 @@ import google.generativeai as genai
 import io
 from observation.models import Species, IdentificationCandidate, IdentificationResponse
 from django.db.models import Q
+import typing as tp
 
 GOOGLE_API_KEY =  os.environ.get('GOOGLE_API_KEY', None)
 BIRD_ID_FEW_SHOTS = {
@@ -20,7 +21,7 @@ BIRD_ID_FEW_SHOTS = {
 genai.configure(api_key=GOOGLE_API_KEY)
 
 
-def gemini_identify_few_shot(image_path: str, few_shots: list[tuple[str, str]], model_id: str = 'models/gemini-1.5-flash-latest'):
+def gemini_identify_few_shot(image_path: str, few_shots: tp.List[tp.Tuple[str, str]], model_id: str = 'models/gemini-1.5-flash-latest'):
     """Identify a plant though the plantnet API
 
     Args:
