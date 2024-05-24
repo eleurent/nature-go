@@ -38,7 +38,7 @@ You can preview the latest development version on Android & iOS using the [Expo 
 - Bird data from [Avibase](https://avibase.bsc-eoc.org/avibase.jsp)
 - Species details from [Wikipedia](https://en.wikipedia.org)
 - Plant identification with [Pl@ntNet API](https://my.plantnet.org/)
-- Bird identification with [Gemini Pro Vision](https://deepmind.google/technologies/gemini/) (WIP, Gemini API availability TBA in EU)
+- Bird identification with [Gemini 1.5 Flash](https://deepmind.google/technologies/gemini/)
 - Illustration generation with [Stable Diffusion XL](https://stability.ai/stable-image)
 - Description and quiz generation with [gpt-3.5-turbo](https://platform.openai.com)
 - Backend with [django](https://www.djangoproject.com/), frontend with [React Native](https://reactnative.dev/)
