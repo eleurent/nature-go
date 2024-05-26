@@ -9,8 +9,8 @@ PLANTNET_API_KEY = os.environ.get('PLANTNET_API_KEY', None)
 
 def parse_plantnet(plantnet_response: dict) -> IdentificationResponse:
     candidates = []
-    for species in plantnet_response['results']:
-        species_data = species['species']
+    for result in plantnet_response['results']:
+        species_data = result['species']
         species_data = dict(
             scientificNameWithoutAuthor=species_data['scientificNameWithoutAuthor'],
             scientificNameAuthorship=species_data['scientificNameAuthorship'],
@@ -21,7 +21,7 @@ def parse_plantnet(plantnet_response: dict) -> IdentificationResponse:
         species, created = Species.objects.update_or_create(
             scientificNameWithoutAuthor=species_data['scientificNameWithoutAuthor'],
             defaults=species_data)
-        candidates.append(IdentificationCandidate(species=species, confidence=species['score']))
+        candidates.append(IdentificationCandidate(species=species, confidence=result['score']))
     return IdentificationResponse(candidates=candidates)
 
 
