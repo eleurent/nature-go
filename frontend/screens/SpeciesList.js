@@ -40,7 +40,7 @@ const SpeciesButton = (props) => {
 
 export default function SpeciesListScreen({ navigation, route }) {
 
-    const [speciesList, setSpeciesList] = useState([]);
+    const [speciesList, setSpeciesList] = useState(null);
 
     useEffect(() => {
         const fetchSpeciesList = async () => {
@@ -59,25 +59,29 @@ export default function SpeciesListScreen({ navigation, route }) {
     return (
         <View style={styles.container} >
         <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
-        <FlatList
-            style = {{ marginTop: 60 }}
-            vertical
-            numColumns = { 2 }
-            showsVerticalScrollIndicator={Platform.OS === 'web'}
-            data={speciesList}
-            contentContainerStyle={{}}
-            renderItem={({ item, index }) => {
-                return (
-                    <SpeciesButton
-                        key={item.id} label={item.display_name} 
-                        onPress={() => navigation.navigate('SpeciesDetail', { id: item.id })}
-                        imageSource={item.illustration_url}
-                        index={item.id}
-                        rarity={item.rarity}
-                    />
-                );
-            }}
-        />
+        {speciesList && (speciesList.length === 0) ? (
+            <Text style={styles.emptyMessage}>{`I haven't found anything yet.\n\n Time to do some fieldwork!`}</Text>
+        ) : (
+            <FlatList
+                style = {{ marginTop: 60 }}
+                vertical
+                numColumns = { 2 }
+                showsVerticalScrollIndicator={Platform.OS === 'web'}
+                data={speciesList}
+                contentContainerStyle={{}}
+                renderItem={({ item, index }) => {
+                    return (
+                        <SpeciesButton
+                            key={item.id} label={item.display_name} 
+                            onPress={() => navigation.navigate('SpeciesDetail', { id: item.id })}
+                            imageSource={item.illustration_url}
+                            index={item.id}
+                            rarity={item.rarity}
+                        />
+                    );
+                }}
+            />
+        )}
         </ImageBackground>
         </View>
     );
@@ -116,4 +120,12 @@ const styles = StyleSheet.create({
         display: 'flex',
         textAlign: 'center',
     },
+    emptyMessage: {
+        fontFamily: 'OldStandardTT_400Regular',
+        fontSize: 24,
+        textAlign: 'center',
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        color: '#222',
+      },
 });
