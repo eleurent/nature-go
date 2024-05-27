@@ -30,7 +30,7 @@ const SpeciesButton = (props) => {
             <Image style={styles.categoryImage}
                 contentFit='contain'
                 source={{uri: image_url}}
-                cachePolicy={'memory'}
+                cachePolicy={'disk'}
                 // sharedTransitionTag={"species" + props.index}
             />
             <Text style={[styles.categoryLabel, rarityStyles[props.rarity]]}>{props.label}</Text>

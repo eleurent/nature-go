@@ -124,7 +124,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                     contentFit='contain'
                     source={{ uri: illustration_url }}
                     placeholder='empty'
-                    cachePolicy={'memory'}
+                    cachePolicy={'disk'}
                     // sharedTransitionTag={"species" + route.params.id}
                 />
                 <View style={styles.textContainer}>
