@@ -3,7 +3,7 @@ import pandas as pd
 import sys
 import os
 from dotenv import load_dotenv
-import openai
+import gemini
 import wikipedia
 import functools
 import multiprocessing
@@ -11,14 +11,19 @@ import multiprocessing
 sys.path.append('..')
 import nature_go_client
 import summary_generation
-import summary_prompt
+import prompts.summary_prompt
 import question_generation
 
 
+load_dotenv()
+NATURE_GO_USERNAME = os.getenv("NATURE_GO_USERNAME")
+NATURE_GO_PASSWORD = os.getenv("NATURE_GO_PASSWORD")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-def get_species(client, batch_size=5, ordering=None, type=None):
+
+def get_species(client: nature_go_client.NatureGoClient, batch_size=5, ordering=None, type=None):
     ordering = ordering.split(',') if ',' in ordering else ordering
-    species_list = client.get_labeled_species(multiplechoicequestions=False, descriptions=False, limit=batch_size, ordering=ordering, type=type)
+    species_list = client.get_labeled_species(multiplechoicequestions=False, descriptions=None, limit=batch_size, ordering=ordering, type=type)
     print(f'Found {len(species_list)} species')
     return pd.DataFrame(species_list)
 
@@ -26,7 +31,7 @@ def generate(species, client):
     print('#############################')
     print(f'Starting generation for {species.scientificNameWithoutAuthor}')
     try:
-        summary = summary_generation.generate_summaries(common_name=species.display_name, scientific_name=species.scientificNameWithoutAuthor, material=None, prompt=summary_prompt.summary_v7)
+        summary = summary_generation.generate_summaries(generate_text=gemini.generate_text, species=species, material=None, prompt=prompts.summary_prompt.summary_v7)
     except wikipedia.PageError as e:
         print(e)
         return
@@ -37,7 +42,7 @@ def generate(species, client):
     client.update_species_field(species.id, 'descriptions', [summary['part_1'], summary['part_2'], summary['part_3']])
     print('Uploaded summaries.')
     material = ' '.join([summary['part_1'], summary['part_2'], summary['part_3']])
-    questions = question_generation.generate_questions(common_name=species.display_name, scientific_name=species.scientificNameWithoutAuthor, material=material)
+    questions, _ = question_generation.generate_questions(generate_text=gemini.generate_text, species=species, material=material)
     if not questions:
         print(f'Problem with question generation for {species.scientificNameWithoutAuthor}: {questions}.')
         return
@@ -47,11 +52,8 @@ def generate(species, client):
 
 
 def main(args):
-    load_dotenv()
-    NG_USERNAME = os.getenv("NG_USERNAME")
-    NG_PASSWORD = os.getenv("NG_PASSWORD")
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    client = nature_go_client.NatureGoClient(username=NG_USERNAME, password=NG_PASSWORD)
+    gemini.configure(GOOGLE_API_KEY)
+    client = nature_go_client.NatureGoClient(username=NATURE_GO_USERNAME, password=NATURE_GO_PASSWORD)
     client.login()
     
     species_list = None
@@ -65,7 +67,7 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--ordering", help="species ordering", type=str, default='-observation_count,rarity_gpt,-occurences_cdf')
-    parser.add_argument("--batch_size", help="batch size", type=int, default=10)
+    parser.add_argument("--batch_size", help="batch size", type=int, default=1)
     parser.add_argument("--type", help="species type (bird|plant)", type=str, default="bird")
     args = parser.parse_args()
     main(args)
