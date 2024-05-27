@@ -1,8 +1,8 @@
+import { Image } from 'expo-image';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants'
-import Animated from 'react-native-reanimated';
 
 
 const API_URL = Constants.expoConfig.extra.API_URL;
@@ -27,10 +27,11 @@ const SpeciesButton = (props) => {
             style={styles.categoryContainer}
             activeOpacity={0.5}
             onPress={props.onPress}>
-            <Animated.Image style={styles.categoryImage}
-                resizeMode='contain'
+            <Image style={styles.categoryImage}
+                contentFit='contain'
                 source={{uri: image_url}}
-                sharedTransitionTag={"species" + props.index}
+                cachePolicy={'memory'}
+                // sharedTransitionTag={"species" + props.index}
             />
             <Text style={[styles.categoryLabel, rarityStyles[props.rarity]]}>{props.label}</Text>
         </TouchableOpacity>

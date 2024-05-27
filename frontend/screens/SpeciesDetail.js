@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, FlatList, Platform, ScrollView } from 'react-native';
+import { Image } from 'expo-image';
+import { View, Text, StyleSheet, ImageBackground, FlatList, Platform, ScrollView } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/elements'
 import axios from 'axios';
 import Constants from 'expo-constants'
 import ObservationCarousel from '../components/ObservationCarousel';
 import ImageModal from '../components/ImageModal';
-import Animated from 'react-native-reanimated';
 import { Badge } from '@rneui/themed';
   import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
@@ -114,12 +114,13 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
                 <ScrollView>
-                <Animated.Image
+                <Image
                     style={styles.illustrationImage}
-                    resizeMode='contain'
+                    contentFit='contain'
                     source={{ uri: illustration_url }}
                     placeholder='empty'
-                    sharedTransitionTag={"species" + route.params.id}
+                    cachePolicy={'memory'}
+                    // sharedTransitionTag={"species" + route.params.id}
                 />
                 <View style={styles.textContainer}>
                     <Text style={[styles.speciesName, styles.nameContainer]}>{speciesDetails.display_name ? speciesDetails.display_name : "Name"}</Text>
@@ -163,7 +164,9 @@ const styles = StyleSheet.create({
     illustrationImage: {
         marginTop: 60,
         width: 375,
-        height: 375
+        height: 375,
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
     textContainer: {
         flex: 1,
