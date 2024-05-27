@@ -16,6 +16,7 @@ export default function ObservationImageModal({ modalVisible, setModalVisible, m
                         source={(typeof modalImage === 'string') ? { uri: modalImage } : modalImage}
                         style={styles.modalImage}
                         cachePolicy='memory'
+                        contentFit='contain'
                     />
                 </View>
             </TouchableWithoutFeedback>
@@ -32,7 +33,6 @@ const styles = StyleSheet.create({
     modalImage: {
         width: '100%',
         height: '90%',
-        resizeMode: 'contain',
     }
 });
 

@@ -6,6 +6,7 @@ import axios from 'axios';
 import Constants from 'expo-constants'
 import ObservationCarousel from '../components/ObservationCarousel';
 import ImageModal from '../components/ImageModal';
+import MapModal from '../components/MapModal';
 import { Badge } from '@rneui/themed';
   import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
@@ -74,8 +75,12 @@ export default function SpeciesDetailScreen({ navigation, route }) {
 
     const [speciesDetails, setSpeciesDetails] = useState({});
     const [speciesObservations, setSpeciesObservations] = useState([]);
-    const [modalImage, setModalImage] = useState(null);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [imageModalImage, setImageModalImage] = useState(null);
+    const [imageModalVisible, setImageModalVisible] = useState(false);
+    const onImagePress = (image) => {setImageModalImage(image); setImageModalVisible(true);}
+    const [mapModalData, setMapModalData] = useState({initialRegion: null, coordinate: null});
+    const [mapModalVisible, setMapModalVisible] = useState(false);
+    const onMapPress = (initialRegion, coordinate) => {setMapModalData({initialRegion, coordinate}); setMapModalVisible(true);}
 
 
     useEffect(() => {
@@ -143,8 +148,9 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                     <GradientText style={[styles.descriptionText, {height: 50}]} placeholder={descriptionsPlaceholder}>{ lockedSummary }</GradientText>
                     <View style = {{ marginBottom: 20 }}></View>
                 </View>
-                <ImageModal modalVisible={modalVisible} setModalVisible={setModalVisible} modalImage={modalImage}/>
-                <ObservationCarousel observations={speciesObservations} onImagePress={(image) => {setModalImage(image); setModalVisible(true);}}/>
+                <ImageModal modalVisible={imageModalVisible} setModalVisible={setImageModalVisible} modalImage={imageModalImage}/>
+                <MapModal modalVisible={mapModalVisible} setModalVisible={setMapModalVisible} initialRegion={mapModalData.initialRegion} coordinate={mapModalData.coordinate}/>
+                <ObservationCarousel observations={speciesObservations} onImagePress={onImagePress} onMapPress={onMapPress}/>
                 </ScrollView>
             </ImageBackground>
         </View>

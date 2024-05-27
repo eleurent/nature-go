@@ -24,7 +24,7 @@ const formatDate = (datetime) => {
     return `${day}${nthNumber(day)} of ${month} ${year - 200}.`;
 }
 
-const CarouselCell = ({ obs, onImagePress }) => {
+const CarouselCell = ({ obs, onImagePress, onMapPress }) => {
     let initialRegion = undefined;
     let coordinate = undefined;
     if (obs.location?.latitude) {
@@ -47,6 +47,7 @@ const CarouselCell = ({ obs, onImagePress }) => {
                     initialRegion={initialRegion}
                     scrollEnabled={false}
                     zoomEnabled={false}
+                    onPress={() => onMapPress(initialRegion, coordinate)}
                 >
                     {coordinate ? <Marker coordinate={coordinate}/> : null}
                 </MapView>
@@ -57,7 +58,7 @@ const CarouselCell = ({ obs, onImagePress }) => {
 }
 
 
-export default function ObservationCarousel( {observations, onImagePress} ) {
+export default function ObservationCarousel( {observations, onImagePress, onMapPress} ) {
     if (!observations)
         return null;
 
@@ -71,7 +72,7 @@ export default function ObservationCarousel( {observations, onImagePress} ) {
                 showsHorizontalScrollIndicator={true}
             >
                 {observations.map((obs) => (
-                    <CarouselCell obs={obs} key={obs.id} onImagePress={onImagePress} />
+                    <CarouselCell obs={obs} key={obs.id} onImagePress={onImagePress} onMapPress={onMapPress} />
                 ))}
             </ScrollView>
         </View>
