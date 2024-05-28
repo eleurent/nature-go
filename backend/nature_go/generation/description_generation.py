@@ -1,18 +1,16 @@
 import random
 import typing as tp
-from prompts.summary_prompt import *
-import utils
+from generation import utils
 
 
-def parse_summary(input_text):
-    parsed_summaries = {'original': input_text}
+def parse_descriptions(input_text):
     assert '<BREAK' in input_text
     input_text = input_text.replace('<BREAK_1>', '<BREAK>')
     input_text = input_text.replace('<BREAK_2>', '<BREAK>')
     input_text = input_text.replace('<BREAK_3>', '<BREAK>')
     parts = input_text.split('<BREAK>')
-    parsed_summaries.update({f'part_{i+1}': part.strip() for i, part in enumerate(parts)})
-    return parsed_summaries
+    descripions = [part.strip() for part in parts[:3]]
+    return descripions
 
 def replace_today(summary):
     words = summary.split(" ", 1)
@@ -21,13 +19,9 @@ def replace_today(summary):
     else:
         return summary
  
-def generate_summaries(generate_text: tp.Callable, species, material: str | None = None, prompt: str | None = None,):
-    if prompt is None:
-        # randomly select one prompt from summary_v1, summary_v2, summary_v3... for diversity
-        prompt = eval(f'summary_v{random.randint(1, 1)}')
-
+def generate_descriptions(generate_text: tp.Callable, species, prompt: str, material: str | None = None):
     # Fill in the prompt
-    common_name, scientific_name = species.display_name, species.scientificNameWithoutAuthor
+    common_name, scientific_name = species.commonNames[0], species.scientificNameWithoutAuthor
     if not material:
         material = utils.get_wikipedia_species_page(common_name, scientific_name).content
     job_name = {'bird': 'ornithologist', 'plant': 'botanist'}[species.type]
@@ -39,6 +33,6 @@ def generate_summaries(generate_text: tp.Callable, species, material: str | None
     except ValueError as e:
         print(e)
         return {}
-    summaries = parse_summary(response)
-    updated_summaries = {key: replace_today(value) for key, value in summaries.items()}
-    return updated_summaries
+    descriptions = parse_descriptions(response)
+    descriptions = [replace_today(desc) for desc in descriptions]
+    return descriptions

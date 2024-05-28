@@ -1,7 +1,6 @@
 rembg
 pandas
 wikipedia
-openai
 python-dotenv
-tiktoken
 matplotlib
+google-generativeai

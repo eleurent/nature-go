@@ -11,6 +11,7 @@ urlpatterns = format_suffix_patterns([
     path('labeled/', views.SpeciesLabeledList.as_view(), name='species-labeled-list'),
     path('<int:pk>/', views.SpeciesDetail.as_view(), name='species-detail'),
     path('<int:pk>/observations/', views.SpeciesObservationsList.as_view(), name='species-observations-list'),
+    path('<int:pk>/generate_descriptions/', views.SpeciesGenerateDescription.as_view(), name='species-generate-descriptions'),
     path('observation/', views.ObservationCreate.as_view(), name='observations-create'),
     path('observation/<int:pk>/', views.ObservationUpdate.as_view(), name='observations-update'),
 ])

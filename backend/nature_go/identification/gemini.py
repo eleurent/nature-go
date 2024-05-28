@@ -1,27 +1,26 @@
 import json
 import requests
-import PIL.Image
-import PIL.ExifTags
-import datetime
-import os
-import requests
-import PIL.Image
-import PIL.ExifTags
-import google.generativeai as genai
 import io
+import os
+import PIL.Image
+import google.generativeai as genai
 from observation.models import Species, IdentificationCandidate, IdentificationResponse
 from django.db.models import Q
-import typing as tp
 
-GOOGLE_API_KEY =  os.environ.get('GOOGLE_API_KEY', None)
+CONFIGURED = False
 BIRD_ID_FEW_SHOTS = {
     '{"commonName": "Common starling", "scientificName": "Sturnus vulgaris"}': 'https://preview.redd.it/whats-this-bird-v0-sx6m25i5pm0d1.jpeg?width=1080&crop=smart&auto=webp&s=004ec0c9d413ca38001a069172b4e35f729aabec',
     '{"commonName": "Eurasian jay", "scientificName": "Garrulus glandarius"}': 'https://preview.redd.it/what-kind-of-bird-is-this-sighted-in-rome-italy-v0-wzm5jvwva20d1.jpg?width=1080&crop=smart&auto=webp&s=47eb746fd839673f4cceafa4896dd118d21b897d'
 }
-genai.configure(api_key=GOOGLE_API_KEY)
 
 
-def gemini_identify_few_shot(image_path: str, few_shots: tp.List[tp.Tuple[str, str]], model_id: str = 'models/gemini-1.5-flash-latest'):
+def configure():
+    google_api_key = os.environ.get('GOOGLE_API_KEY', None)
+    genai.configure(api_key=google_api_key)
+    CONFIGURED = True
+
+
+def gemini_identify_few_shot(image_path: str, few_shots: list[tuple[str, str]], model_id: str = 'models/gemini-1.5-flash-latest'):
     """Identify a plant though the plantnet API
 
     Args:
@@ -31,6 +30,7 @@ def gemini_identify_few_shot(image_path: str, few_shots: tp.List[tp.Tuple[str, s
     Returns:
         str: response for the input image
     """
+    if not CONFIGURED: configure()
 
     def load_image_from_url(image_url: str) -> PIL.Image:
         response = requests.get(image_url, stream=True)

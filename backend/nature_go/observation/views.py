@@ -8,7 +8,10 @@ import ast
 from observation.models import Species, Observation
 from observation.serializers import ObservationSerializer, SpeciesSerializer, serialize_identification_response
 from observation.permissions import IsOwner, IsAdminOrReadOnly
-from observation.identification import plantnet, gemini
+from identification import plantnet, gemini
+from generation.gemini import generate_text
+from generation.description_generation import generate_descriptions
+from generation.prompts import summary_prompt
 from user_profile.signals import xp_gained
 
 logger = logging.getLogger(__name__)
@@ -119,6 +122,28 @@ class SpeciesDetail(generics.RetrieveUpdateAPIView):
         context = super().get_serializer_context()
         context.update({"request": self.request})
         return context
+
+
+class SpeciesGenerateDescription(generics.GenericAPIView):
+  queryset = Species.objects.all()
+  serializer_class = SpeciesSerializer
+  permission_classes = [IsAdminOrReadOnly]
+
+  def post(self, request, *args, **kwargs):
+    del request, args, kwargs
+    species = self.get_object()
+
+    if not species.descriptions:
+        species.descriptions = generate_descriptions(
+            generate_text=generate_text,
+            species=species,
+            material=None,
+            prompt=summary_prompt.summary_v7
+        )    
+
+    species.save()
+    serializer = self.get_serializer(species)
+    return Response(serializer.data)
 
 
 class SpeciesObservationsList(generics.ListAPIView):

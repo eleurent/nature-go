@@ -1,5 +1,8 @@
 from .base import *
 
+import dotenv
+dotenv.load_dotenv()
+
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # SECURITY WARNING: keep the secret key used in production secret!

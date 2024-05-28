@@ -3,16 +3,16 @@ import pandas as pd
 import sys
 import os
 from dotenv import load_dotenv
-import gemini
 import wikipedia
 import functools
 import multiprocessing
 
 sys.path.append('..')
 import nature_go_client
-import summary_generation
-import prompts.summary_prompt
-import question_generation
+from backend.nature_go.generation import gemini
+from backend.nature_go.generation import summary_generation
+from backend.nature_go.generation.prompts import summary_prompt
+from backend.nature_go.generation import question_generation
 
 
 load_dotenv()
@@ -31,7 +31,7 @@ def generate(species, client):
     print('#############################')
     print(f'Starting generation for {species.scientificNameWithoutAuthor}')
     try:
-        summary = summary_generation.generate_summaries(generate_text=gemini.generate_text, species=species, material=None, prompt=prompts.summary_prompt.summary_v7)
+        summary = summary_generation.generate_summaries(generate_text=gemini.generate_text, species=species, material=None, prompt=summary_prompt.summary_v7)
     except wikipedia.PageError as e:
         print(e)
         return
