@@ -10,3 +10,4 @@ Pillow
 gunicorn
 google-generativeai
 wikipedia
+beautifulsoup4
