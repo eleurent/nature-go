@@ -127,7 +127,6 @@ class SpeciesDetail(generics.RetrieveUpdateAPIView):
 class SpeciesGenerateDescription(generics.GenericAPIView):
   queryset = Species.objects.all()
   serializer_class = SpeciesSerializer
-  permission_classes = [IsAdminOrReadOnly]
 
   def post(self, request, *args, **kwargs):
     del request, args, kwargs
@@ -138,7 +137,6 @@ class SpeciesGenerateDescription(generics.GenericAPIView):
             generate_text=generate_text,
             species=species,
             material=None,
-            prompt=description_prompt.summary_v7
         )    
 
     species.save()

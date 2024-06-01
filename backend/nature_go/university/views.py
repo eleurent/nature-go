@@ -1,9 +1,11 @@
 from rest_framework import generics, permissions, serializers, status
 from rest_framework.response import Response
 from .models import MultipleChoiceQuestion, Quiz
-from .serializers import QuizSerializer, AdminMultipleChoiceQuestionSerializer
+from .serializers import QuizSerializer, AdminMultipleChoiceQuestionSerializer, MultipleChoiceQuestionSerializer
 from .permissions import IsOwner
-from observation.models import Observation
+from observation.models import Species, Observation
+from generation.question_generation import generate_questions
+from generation.gemini import generate_text
 import random
 from django.utils import timezone
 from datetime import timedelta
@@ -20,6 +22,34 @@ class MultipleChoiceQuestionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroy
     queryset = MultipleChoiceQuestion.objects.all()
     serializer_class = AdminMultipleChoiceQuestionSerializer
     permission_classes = [permissions.IsAdminUser]
+
+
+class MultipleChoiceQuestionGeneration(generics.GenericAPIView):
+  queryset = Species.objects.all()
+  serializer_class = MultipleChoiceQuestionSerializer
+
+  def post(self, request, *args, **kwargs):
+    del request, args, kwargs
+    species = self.get_object()
+    questions = species.multiplechoicequestion_set
+    if species.descriptions and not questions.exists():
+        material = '\n '.join(species.descriptions)
+        questions, _ = generate_questions(
+            generate_text=generate_text,
+            species=species,
+            material=material,
+        )
+        questions = [
+            MultipleChoiceQuestion(
+                species=species,
+                **q
+            )
+            for q in questions
+        ]
+        [q.save() for q in questions]
+
+    serializer = self.get_serializer(questions, many=True)
+    return Response(serializer.data)
 
 
 class QuizCreateView(generics.CreateAPIView):
@@ -62,3 +92,4 @@ class QuizRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
+
