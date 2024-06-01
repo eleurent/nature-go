@@ -11,7 +11,7 @@ from observation.permissions import IsOwner, IsAdminOrReadOnly
 from identification import plantnet, gemini
 from generation.gemini import generate_text
 from generation.description_generation import generate_descriptions
-from backend.nature_go.generation.prompts import description_prompt
+from generation.prompts import description_prompt
 from user_profile.signals import xp_gained
 
 logger = logging.getLogger(__name__)
