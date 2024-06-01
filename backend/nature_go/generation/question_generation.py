@@ -1,8 +1,8 @@
 import typing as tp
-import prompts.question_prompt
-import utils
 import json
 from string import Template
+from .prompts import question_prompt
+from . import utils
 
 def parse_questions(questions: str):
     start_index = questions.find("[")
@@ -16,7 +16,7 @@ def parse_questions(questions: str):
     return data
 
 
-def generate_questions(generate_text: tp.Callable, species, material: str | None = None, prompt: str=prompts.question_prompt.question_prompt_few_shot):
+def generate_questions(generate_text: tp.Callable, species, material: str | None = None, prompt: str=question_prompt.question_prompt_few_shot):
     common_name, scientific_name = species.display_name, species.scientificNameWithoutAuthor
     if not material:
         material = utils.get_wikipedia_species_page(common_name, scientific_name).content

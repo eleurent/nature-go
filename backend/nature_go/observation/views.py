@@ -11,7 +11,7 @@ from observation.permissions import IsOwner, IsAdminOrReadOnly
 from identification import plantnet, gemini
 from generation.gemini import generate_text
 from generation.description_generation import generate_descriptions
-from generation.prompts import summary_prompt
+from backend.nature_go.generation.prompts import description_prompt
 from user_profile.signals import xp_gained
 
 logger = logging.getLogger(__name__)
@@ -134,11 +134,11 @@ class SpeciesGenerateDescription(generics.GenericAPIView):
     species = self.get_object()
 
     if not species.descriptions:
-        species.descriptions = generate_descriptions(
+        species.descriptions, _ = generate_descriptions(
             generate_text=generate_text,
             species=species,
             material=None,
-            prompt=summary_prompt.summary_v7
+            prompt=description_prompt.summary_v7
         )    
 
     species.save()

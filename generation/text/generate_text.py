@@ -7,18 +7,16 @@ import wikipedia
 import functools
 import multiprocessing
 
-sys.path.append('..')
+sys.path.extend(['..', '../..'])
 import nature_go_client
 from backend.nature_go.generation import gemini
-from backend.nature_go.generation import summary_generation
-from backend.nature_go.generation.prompts import summary_prompt
+from backend.nature_go.generation import description_generation
 from backend.nature_go.generation import question_generation
 
 
 load_dotenv()
 NATURE_GO_USERNAME = os.getenv("NATURE_GO_USERNAME")
 NATURE_GO_PASSWORD = os.getenv("NATURE_GO_PASSWORD")
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 
 def get_species(client: nature_go_client.NatureGoClient, batch_size=5, ordering=None, type=None):
@@ -31,17 +29,17 @@ def generate(species, client):
     print('#############################')
     print(f'Starting generation for {species.scientificNameWithoutAuthor}')
     try:
-        summary = summary_generation.generate_summaries(generate_text=gemini.generate_text, species=species, material=None, prompt=summary_prompt.summary_v7)
+        summary, _ = description_generation.generate_descriptions(generate_text=gemini.generate_text, species=species, material=None)
     except wikipedia.PageError as e:
         print(e)
         return
-    if not all(f'part_{i}' in summary.keys() for i in range(1, 4)):
-        print(f'Problem with summary generation for {species.scientificNameWithoutAuthor}: keys: {list(summary.keys())}.')
+    if not len(summary) == 3:
+        print(f'Problem with summary generation for {species.scientificNameWithoutAuthor}: summary: {summary}.')
         return
     print(f'Generated summaries for {species.scientificNameWithoutAuthor}.')
-    client.update_species_field(species.id, 'descriptions', [summary['part_1'], summary['part_2'], summary['part_3']])
+    client.update_species_field(species.id, 'descriptions', summary)
     print('Uploaded summaries.')
-    material = ' '.join([summary['part_1'], summary['part_2'], summary['part_3']])
+    material = '\n '.join(summary)
     questions, _ = question_generation.generate_questions(generate_text=gemini.generate_text, species=species, material=material)
     if not questions:
         print(f'Problem with question generation for {species.scientificNameWithoutAuthor}: {questions}.')
@@ -52,7 +50,7 @@ def generate(species, client):
 
 
 def main(args):
-    gemini.configure(GOOGLE_API_KEY)
+    gemini.configure()
     client = nature_go_client.NatureGoClient(username=NATURE_GO_USERNAME, password=NATURE_GO_PASSWORD)
     client.login()
     

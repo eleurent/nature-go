@@ -91,4 +91,11 @@ Assistant (you): Certainly! Let's generate multiple-choice questions based on th
 
 User: Can you help me generate 3 questions about $species_name?
 Here is the material: $material
+
+DO NOT mention the existence of this material.
+
+Use this JSON schema:
+  Question = {"question": str, "choices": list[str], "correct_choice": int}
+
+Return: list[Question]
 """

@@ -1,16 +1,8 @@
-import random
 import typing as tp
-from generation import utils
+import json
+from . import utils
+from .prompts import description_prompt
 
-
-def parse_descriptions(input_text):
-    assert '<BREAK' in input_text
-    input_text = input_text.replace('<BREAK_1>', '<BREAK>')
-    input_text = input_text.replace('<BREAK_2>', '<BREAK>')
-    input_text = input_text.replace('<BREAK_3>', '<BREAK>')
-    parts = input_text.split('<BREAK>')
-    descripions = [part.strip() for part in parts[:3]]
-    return descripions
 
 def replace_today(summary):
     words = summary.split(" ", 1)
@@ -19,7 +11,7 @@ def replace_today(summary):
     else:
         return summary
  
-def generate_descriptions(generate_text: tp.Callable, species, prompt: str, material: str | None = None):
+def generate_descriptions(generate_text: tp.Callable, species, prompt: str = description_prompt.summary_v7, material: str | None = None):
     # Fill in the prompt
     common_name, scientific_name = species.commonNames[0], species.scientificNameWithoutAuthor
     if not material:
@@ -33,6 +25,6 @@ def generate_descriptions(generate_text: tp.Callable, species, prompt: str, mate
     except ValueError as e:
         print(e)
         return {}
-    descriptions = parse_descriptions(response)
+    descriptions = json.loads(response)
     descriptions = [replace_today(desc) for desc in descriptions]
-    return descriptions
+    return descriptions, response
