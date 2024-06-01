@@ -69,8 +69,8 @@ export default function QuizResultScreen({ navigation, route }) {
                                 <View key={index} style={styles.breakdownContainer}>
                                     {
                                         isQuestionCorrect(item) ? 
-                                        <Ionicons name='md-checkmark-circle' size={30} color='#659900' style={{marginTop: -3}}/> : 
-                                        <Ionicons name='md-close-circle' size={30} color='#d00' style={{ marginTop: -3 }} />
+                                        <Ionicons name='checkmark-circle' size={30} color='#659900' style={{marginTop: -3}}/> : 
+                                        <Ionicons name='close-circle' size={30} color='#d00' style={{ marginTop: -3 }} />
                                     }
                                     <Text style={styles.breakdownReason}>{questionDifficulty(item)}</Text>
                                     <Text style={styles.breakdownValue}>{Math.round(item.total)} XP</Text>

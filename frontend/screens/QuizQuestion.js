@@ -78,11 +78,11 @@ export default function QuizQuestionScreen({ navigation, route }) {
             <ImageBackground source={require('../assets/images/page-background-2.png')} style={styles.containerImage}>
                 {hasAnswered && isCorrect ? 
                 <View style={styles.successContainer}>
-                    <Ionicons name='md-checkmark-circle' size={30} color='#659900'/><Text style={styles.succesText}>{POSITIVE_FEEDBACK.sample()}</Text>
+                    <Ionicons name='checkmark-circle' size={30} color='#659900'/><Text style={styles.succesText}>{POSITIVE_FEEDBACK.sample()}</Text>
                 </View>: 
                 hasAnswered && !isCorrect ?
                 <View style={[styles.successContainer, styles.failureContainer]}>
-                    <Ionicons name='md-close-circle' size={30} color='#d00' /><Text style={[styles.succesText, styles.failureText]}>{NEGATIVE_FEEDBACK.sample()}</Text>
+                    <Ionicons name='close-circle' size={30} color='#d00' /><Text style={[styles.succesText, styles.failureText]}>{NEGATIVE_FEEDBACK.sample()}</Text>
                 </View> :
                 null}
                 <View style={styles.outline}>
