@@ -15,6 +15,7 @@ const API_URL = Constants.expoConfig.extra.API_URL;
 const SPECIES_DETAILS_URL = (id) => API_URL + `api/species/${id}/`
 const SPECIES_OBSERVATIONS_URL = (id) => API_URL + `api/species/${id}/observations/`
 const SPECIES_GENERATE_DESCRIPTIONS_URL = (id) => API_URL + `api/species/${id}/generate_descriptions/`
+const SPECIES_GENERATE_QUESTIONS_URL = (id) => API_URL + `api/university/quiz/questions/generate/${id}/`
 
 
 
@@ -76,10 +77,11 @@ const RarityBadge = ({ rarity }) => {
 const generateSpeciesDescription = async (species_id, setSpeciesDetails, setGeneratingContent) => {
     console.log('Generating description for this species');
     setGeneratingContent(true);
-    const response = await axios.post(SPECIES_GENERATE_DESCRIPTIONS_URL(species_id));
-    setGeneratingContent(false);
-    console.log('Generated description: response' + response.data);
+    let response = await axios.post(SPECIES_GENERATE_DESCRIPTIONS_URL(species_id));
+    console.log(response.data);
     setSpeciesDetails(response.data);
+    setGeneratingContent(false);
+    response = await axios.post(SPECIES_GENERATE_QUESTIONS_URL(species_id));
 };
 
 export default function SpeciesDetailScreen({ navigation, route }) {
