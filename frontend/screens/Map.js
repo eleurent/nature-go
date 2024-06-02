@@ -64,7 +64,9 @@ export default function MapScreen({ navigation, route }) {
                         coordinate={obs.location}
                         pinColor={SPECIES_TYPE_TO_COLOR[obs.type]}
                         title={obs.species_display_name}
-                        description={formatDate(obs.datetime)}/>
+                        description={formatDate(obs.datetime)}
+                        pointerEvents="auto" //See https://github.com/react-native-maps/react-native-maps/issues/2410, does not seem to work though...
+                    />
                 )}
                 </MapView>
                 { isLoading ? (
