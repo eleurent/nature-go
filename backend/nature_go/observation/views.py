@@ -153,9 +153,12 @@ class SpeciesObservationsList(generics.ListAPIView):
         return Observation.objects.filter(user=user, species=species_id)
 
 
-class ObservationCreate(generics.CreateAPIView):
+class ObservationListCreate(generics.ListCreateAPIView):
     serializer_class = ObservationSerializer
-    queryset = Observation.objects.none() # dummy queryset
+
+    def get_queryset(self):
+        user = self.request.user
+        return Observation.objects.filter(user=user)
 
     def create(self, request, *args, **kwargs):
         serializer = ObservationSerializer(data=request.data)

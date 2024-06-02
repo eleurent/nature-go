@@ -8,10 +8,14 @@ class ObservationSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
     identification_response = serializers.ReadOnlyField()
     image = Base64ImageField(required=False)
+    species_display_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Observation
-        fields = ['id', 'user', 'image', 'type', 'organ', 'species', 'location', 'datetime', 'identification_response', 'xp']
+        fields = ['id', 'user', 'image', 'type', 'organ', 'species', 'species_display_name', 'location', 'datetime', 'identification_response', 'xp']
+
+    def get_species_display_name(self, obj):
+        return str(obj.species)
 
 
 class SpeciesSerializer(serializers.ModelSerializer):
