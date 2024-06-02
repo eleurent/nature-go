@@ -158,7 +158,7 @@ class ObservationListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Observation.objects.filter(user=user)
+        return Observation.objects.filter(user=user, species__isnull=False)
 
     def create(self, request, *args, **kwargs):
         serializer = ObservationSerializer(data=request.data)
