@@ -61,6 +61,12 @@ export default function HomeScreen({ navigation }) {
                             label={'UNIVERSITY'}
                         />
                         <View style={{ flex: 1 }}></View>
+                        <CategoryButton
+                            onPress={() => navigation.navigate('Map')}
+                            imageSource={require('../assets/images/map.png')}
+                            label={'MAP'}
+                        />
+                        <View style={{ flex: 1 }}></View>
                     </View>
                 </View>
                 <View style={styles.avatarContainer}>
@@ -151,6 +157,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
     },
     categoryLabel: {
+        width: 120,
         fontFamily: 'OldStandardTT_400Regular',
         fontStyle: 'normal',
         fontSize: 14.3846,
