@@ -47,7 +47,7 @@ export default function MapScreen({ navigation, route }) {
         
     }, []);
 
-    const validObservations = observations.filter(obs => obs.location.latitude !== null);
+    let validObservations = observations.filter(obs => (Object.keys(obs.location).length !==0)  && (obs.location?.latitude !== null) && (obs.location?.longitude !== null) );
 
     return (
         <View style={styles.container}>
@@ -65,7 +65,7 @@ export default function MapScreen({ navigation, route }) {
                         pinColor={SPECIES_TYPE_TO_COLOR[obs.type]}
                         title={obs.species_display_name}
                         description={formatDate(obs.datetime)}
-                        pointerEvents="auto" //See https://github.com/react-native-maps/react-native-maps/issues/2410, does not seem to work though...
+                        pointerEvents="auto" //See https://github.com/react-native-maps/react-native-maps/issues/2410, does not seem to work though... 
                     />
                 )}
                 </MapView>
