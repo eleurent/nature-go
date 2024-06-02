@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Pressable } from 'react-native';
 import Constants from 'expo-constants'
-import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import MapView, { Marker } from '../components/CustomMapView';
 
@@ -9,15 +8,42 @@ const API_URL = Constants.expoConfig.extra.API_URL;
 const SPECIES_LIST_URL = API_URL + 'api/species/'
 const SPECIES_OBSERVATIONS_URL = (id) => API_URL + `api/species/${id}/observations/`
 
+const SPECIES_TYPE_TO_COLOR = {bird: 'red', plant: 'green'}
+
+
+const formatDate = (datetime) => {
+    const dateObj = new Date(datetime);
+    const day = dateObj.getDate();
+    const month = dateObj.toLocaleString("default", { month: "long" });
+    const year = dateObj.getFullYear();
+    const nthNumber = (number) => {
+        if (number > 3 && number < 21) return "th";
+        switch (number % 10) {
+            case 1:
+                return "st";
+            case 2:
+                return "nd";
+            case 3:
+                return "rd";
+            default:
+                return "th";
+        }
+    };
+    return `${day}${nthNumber(day)} of ${month} ${year - 200}.`;
+}
 
 export default function MapScreen({ navigation, route }) {
-    const [speciesList, setSpeciesList] = useState([]);
+    const [speciesList, setSpeciesList] = useState({});
     const [speciesObservations, setSpeciesObservations] = useState({});
 
     useEffect(() => {
         const fetchSpeciesListandObservations = async () => {
             const response = await axios.get(SPECIES_LIST_URL);
-            setSpeciesList(response.data);
+            const speciesList = {};
+            for (const species of response.data) {
+                speciesList[species.id] = species;
+            }
+            setSpeciesList(speciesList);
             const observations = {};
             for (const species of response.data) {
               observations[species.id] = await fetchSpeciesObservations(species.id);
@@ -34,21 +60,26 @@ export default function MapScreen({ navigation, route }) {
         
     }, []);
 
-    let locations = Object.values(speciesObservations).flatMap(observations => observations.map(obs => obs.location));
-    locations = locations.filter(location => location.latitude !== null);
+    let allObservations = Object.values(speciesObservations).flatMap(observations => observations);
+    allObservations = allObservations.filter(obs => obs.location.latitude !== null);
 
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
-                <SafeAreaView style={styles.containerInsideImage}>
                 <MapView
                     style={styles.map}
                     scrollEnabled={true}
                     zoomEnabled={true}
                 >
-                {locations && locations.map((coordinate, index) => <Marker key={index} coordinate={coordinate}/>)}
+                {allObservations && allObservations.map((obs, index) => 
+                    <Marker
+                        key={index}
+                        coordinate={obs.location}
+                        pinColor={SPECIES_TYPE_TO_COLOR[speciesList[obs.species].type]}
+                        title={speciesList[obs.species].display_name}
+                        description={formatDate(obs.datetime)}/>
+                )}
                 </MapView>
-                </SafeAreaView>
             </ImageBackground>
         </View>
     );
@@ -71,6 +102,6 @@ const styles = StyleSheet.create({
     },
     map: {
         width: '100%',
-        height: '90%',
+        height: '100%',
     },
 });
