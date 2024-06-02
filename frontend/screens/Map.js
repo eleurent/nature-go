@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
+
 import Constants from 'expo-constants'
 import axios from 'axios';
 import MapView, { Marker } from '../components/CustomMapView';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
-const SPECIES_LIST_URL = API_URL + 'api/species/'
-const SPECIES_OBSERVATIONS_URL = (id) => API_URL + `api/species/${id}/observations/`
+const SPECIES_OBSERVATIONS_URL = API_URL + `api/species/observation/`
 
 const SPECIES_TYPE_TO_COLOR = {bird: 'red', plant: 'green'}
 
@@ -33,53 +33,45 @@ const formatDate = (datetime) => {
 }
 
 export default function MapScreen({ navigation, route }) {
-    const [speciesList, setSpeciesList] = useState({});
-    const [speciesObservations, setSpeciesObservations] = useState({});
+    const [observations, setObservations] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchSpeciesListandObservations = async () => {
-            const response = await axios.get(SPECIES_LIST_URL);
-            const speciesList = {};
-            for (const species of response.data) {
-                speciesList[species.id] = species;
-            }
-            setSpeciesList(speciesList);
-            const observations = {};
-            for (const species of response.data) {
-              observations[species.id] = await fetchSpeciesObservations(species.id);
-            }
-            setSpeciesObservations(observations);
+        const fetchObservations = async () => {
+            const response = await axios.get(SPECIES_OBSERVATIONS_URL);
+            setObservations(response.data);
+            setIsLoading(false);
           };
 
-        const fetchSpeciesObservations = async (species_id) => {
-            response = await axios.get(SPECIES_OBSERVATIONS_URL(species_id));
-            return response.data;
-        };
-
-        fetchSpeciesListandObservations();
+        fetchObservations();
         
     }, []);
 
-    let allObservations = Object.values(speciesObservations).flatMap(observations => observations);
-    allObservations = allObservations.filter(obs => obs.location.latitude !== null);
+    const validObservations = observations.filter(obs => obs.location.latitude !== null);
 
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
+                
                 <MapView
                     style={styles.map}
                     scrollEnabled={true}
                     zoomEnabled={true}
                 >
-                {allObservations && allObservations.map((obs, index) => 
+                {validObservations && validObservations.map((obs, index) => 
                     <Marker
                         key={index}
                         coordinate={obs.location}
-                        pinColor={SPECIES_TYPE_TO_COLOR[speciesList[obs.species].type]}
-                        title={speciesList[obs.species].display_name}
+                        pinColor={SPECIES_TYPE_TO_COLOR[obs.type]}
+                        title={obs.species_display_name}
                         description={formatDate(obs.datetime)}/>
                 )}
                 </MapView>
+                { isLoading ? (
+                    <View style={styles.loadingContainer} pointerEvents="none">
+                        <ActivityIndicator size={"large"} color="#660000"/>
+                    </View>
+                ) : null}
             </ImageBackground>
         </View>
     );
@@ -103,5 +95,14 @@ const styles = StyleSheet.create({
     map: {
         width: '100%',
         height: '100%',
+    },
+    loadingContainer: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontFamily: 'SpecialElite_400Regular'
     },
 });
