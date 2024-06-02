@@ -46,7 +46,7 @@ def gemini_identify_few_shot(image_path: str, few_shots: list[tuple[str, str]], 
     multimodal_model = genai.GenerativeModel(model_id, generation_config={"response_mime_type": "application/json"})
     examples = [(load_image_from_url(image_url), prompt) for prompt, image_url in few_shots.items()]
     image = PIL.Image.open(image_path)
-    contents = list(sum((PROMPT_PREFIX,), examples, (image,)))
+    contents = [PROMPT_PREFIX] + sum(examples, []) + [image]
     response = multimodal_model.generate_content(contents)
 
     # Parse response
