@@ -9,11 +9,18 @@ import urllib.request
 import tqdm
 import sys
 import rembg
+from dotenv import load_dotenv
+import os
 from illustration_workflows import txt2img_workflow
 from illustration_workflows import controlnet_workflow
 
 sys.path.append('..')
 import nature_go_client
+
+
+load_dotenv()
+NATURE_GO_USERNAME = os.getenv("NATURE_GO_USERNAME")
+NATURE_GO_PASSWORD = os.getenv("NATURE_GO_PASSWORD")
 
 # Stable Diffusion parameters
 comfyui_path = txt2img_workflow.find_path("ComfyUI")
@@ -79,11 +86,7 @@ def send_results(client, species, illustration, illustration_transparent, refere
         client.update_species_field(species_id=species.id, key='reference_image_url', value=reference_image_url) 
 
 def main(args):
-    print('Nature go username?')
-    username = input()
-    print('Nature go password?')
-    password = input()
-    client = nature_go_client.NatureGoClient(username=username, password=password)
+    client = nature_go_client.NatureGoClient(username=NATURE_GO_USERNAME, password=NATURE_GO_PASSWORD)
     client.login()
     rembg_session = rembg.new_session(model_name="isnet-general-use")
 
