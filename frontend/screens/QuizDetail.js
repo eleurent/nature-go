@@ -46,7 +46,7 @@ export default function QuizDetailScreen({ navigation, route }) {
                 <Text style={styles.title}>UNIVERSITY OF OXFORD</Text>
                 <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                 <Text style={styles.subtitle}>EXAMINATION PAPERS</Text>
-                <Text style={[styles.subtitle, {fontSize: 13}]}>{'FOR THE YEAR ' + new Date().getFullYear() - 200 + ','}</Text>
+                <Text style={[styles.subtitle, {fontSize: 13}]}>{'FOR THE YEAR ' + (new Date().getFullYear() - 200) + ','}</Text>
                 <Image source={require('../assets/images/separator.png')} style={styles.separator} />
                 <Text style={[styles.subtitle, { fontSize: 25 }]}>Syllabus</Text>
                 {hasQuiz ?
