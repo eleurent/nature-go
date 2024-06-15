@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/university/', include('university.urls')),
     path('api/auth/', include('authentication.urls')),
     path('api/profile/', include('user_profile.urls')),
+    path('api/badge/', include('badge.urls')),
     path('api-auth/', include('rest_framework.urls')),  # Is this needed?
     path('', include('website.urls')),
 ]
