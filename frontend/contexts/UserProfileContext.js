@@ -5,6 +5,7 @@ import Constants from 'expo-constants'
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const USER_PROFILE_URL = API_URL + 'api/profile/';
+const BADGES_URL = API_URL + 'api/badge/badges//';
 
 export const UserProfileContext = React.createContext();
 
@@ -17,11 +18,17 @@ const profileReducer = (prevState, action) => {
                 profile: action.profile,
                 avatar: action.profile.avatar ? global.AVATAR_PATHS[action.profile.avatar]: {},
             };
+        case 'SET_BADGES':
+            return {
+                ...prevState,
+                badges: action.badges,
+            }
     }
 };
 const initialState = {
     profile: null,
-    avatar: {}
+    avatar: {},
+    badges: {},
 };
 
 export const useUserProfile = () => {
@@ -53,6 +60,13 @@ export const useUserProfile = () => {
                 };
                 const response = await axios.patch(USER_PROFILE_URL, formData, config);
                 dispatch({ type: 'SET_PROFILE', profile: response.data });
+            },
+            fetchBadges: async () => {
+                axios.get(BADGES_URL).then(response => {
+                    dispatch({ type: 'SET_BADGES', badges: response.data });
+                }).catch(error => {
+                    console.log(error);
+                })
             }
         }),
         []

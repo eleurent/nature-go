@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Pressable, FlatList, Modal, Button } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants'
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,6 +20,81 @@ const XPBar = ({data}) => {
     )
 }
 
+export const BADGE_IMAGES = {
+    corvid_connoisseur: {
+      uri: require('../assets/images/badges/duck.png')
+    },
+    owl_observer: {
+      uri: require('../assets/images/badges/raptors.png')
+    }
+  }
+
+const BadgeListView = ({ badgeData }) => {
+    const [selectedBadge, setSelectedBadge] = useState(null);
+  
+    // Assuming a function to fetch badge images based on the badge name
+    const fetchBadgeImage = async (badgeName) => {
+      // ... your implementation to fetch image URLs 
+    };
+  
+    useEffect(() => {
+      // Fetch badge images when the component mounts or badgeData changes
+      // ... your implementation to update the badgeData with image URLs
+    }, [badgeData]);
+  
+
+    const renderBadgeItem = ({ item }) => {
+        const badgeName = item.badge.name.toLowerCase().replace(/ /g, '_'); // Convert to snake_case
+        const imageSource = BADGE_IMAGES[badgeName]; // Adjust path if needed
+    
+        return (
+          <TouchableOpacity onPress={() => setSelectedBadge(item)}>
+            <Image source={imageSource?.uri} style={styles.badgeImage} />
+          </TouchableOpacity>
+        );
+      };
+  
+    const renderModalContent = () => {
+        const badgeName = selectedBadge.badge.name.toLowerCase().replace(/ /g, '_'); // Convert to snake_case
+        const imageSource = BADGE_IMAGES[badgeName]; // Adjust path if needed
+
+        return (
+        <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+            <Image source={imageSource?.uri} style={styles.modalImage} />
+            <Text style={styles.modalTitle}>{selectedBadge.badge.name}</Text>
+            <Text>{selectedBadge.badge.description}</Text>
+            {selectedBadge.badge.species_list && (
+                <View>
+                <Text style={styles.speciesTitle}>Species:</Text>
+                {selectedBadge.badge.species_list.map(species => (
+                    <Text key={species}>
+                    {species} {selectedBadge.badge.species_observed.includes(species) ? '(Observed)' : ''}
+                    </Text>
+                ))}
+                </View>
+            )}
+            <Button title="Close" onPress={() => setSelectedBadge(null)} />
+            </View>
+        </View>
+        );
+    };
+  
+    return (
+      <View>
+        <FlatList
+          data={badgeData}
+          renderItem={renderBadgeItem}
+          keyExtractor={(item) => item.badge.name}
+          numColumns={2} // Adjust for your desired layout
+        />
+        <Modal visible={selectedBadge !== null} animationType="slide" onRequestClose={() => setSelectedBadge(null)}>
+          {selectedBadge && renderModalContent()}
+        </Modal>
+      </View>
+    );
+  };
+
 export default function ProfileScreen({ navigation, route }) {
     const { authMethods } = useContext(AuthContext);
     const { profileState, profileMethods } = useContext(UserProfileContext);
@@ -28,6 +103,7 @@ export default function ProfileScreen({ navigation, route }) {
 
     useEffect(() => {
         profileMethods.fetchProfile();
+        profileMethods.fetchBadges(); 
     }, []);
 
     return (
@@ -68,7 +144,8 @@ export default function ProfileScreen({ navigation, route }) {
                             </View>
                         </View>
                     </View>
-                    <Image source={require('../assets/images/separator.png')} style={styles.separator} />
+                    <Image source={require('../assets/images/separator.png')} style={styles.separator}/>
+                    <BadgeListView badgeData={profileState?.badges}/>
                     <TouchableOpacity style={styles.button} onPress={authMethods.signOut}>
                         <Text style={styles.buttonText}>Sign out</Text>
                     </TouchableOpacity>
@@ -80,7 +157,7 @@ export default function ProfileScreen({ navigation, route }) {
 };
 
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
     container: {
         flex: 1,
         flexDirection: 'column',
@@ -188,5 +265,39 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 24,
         fontFamily: 'Tinos_400Regular',
-    }
+    },
+    badgesContainer: {
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+    },
+    badgeImage : {
+        width: 96,
+        height: 96,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalImage: {
+        width: 100,
+        height: 100,
+        marginBottom: 10,
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    speciesTitle: {
+        fontWeight: 'bold',
+        marginTop: 10,
+    },
 });
