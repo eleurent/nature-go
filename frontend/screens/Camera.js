@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { StyleSheet, Text, View, Platform, ActivityIndicator } from 'react-native';
-import { Camera } from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import * as MediaLibrary from 'expo-media-library';
@@ -69,14 +69,14 @@ const pickImageAsync = async (navigation, observationMethods) => {
     }
 };
 
-const takePictureAsync = (camera, navigation, observationMethods) => {
-    if (camera) {
+const takePictureAsync = (cameraRef, navigation, observationMethods) => {
+    if (cameraRef.current) {
         // setStatusMessage('Taking a closer look...');
         // setStatusMessage('Checking map and compass...');
         navigation.navigate('ObservationConfirm', {});
 
         /* Set image */
-        camera.takePictureAsync({ base64: true, exif: true, quality: 0. }).then(data => observationMethods.setObservationImage(data.base64));
+        cameraRef.current.takePictureAsync({ base64: true, exif: true, quality: 0. }).then(data => observationMethods.setObservationImage(data.base64));
         /* Set datetime */
         datetime = new Date().toISOString();
         observationMethods.setObservationDatetime(datetime);
@@ -94,24 +94,17 @@ const takePictureAsync = (camera, navigation, observationMethods) => {
 };
 
 export default function CameraScreen({ navigation }) {
-    const [cameraPermission, setCameraPermission] = useState(null);
+    const [cameraPermission, requestCameraPermission] = useCameraPermissions();
     const [galleryPermission, setGalleryPermission] = useState(null);
 
     const { observationState, observationMethods } = useContext(ObservationContext);
-    const [camera, setCamera] = useState(null);
-    const [type, setType] = useState(Camera.Constants.Type.back);
+    const [facing, setFacing] = useState('back');
+    const cameraRef = useRef(null);
 
 
     const permissionFunction = async () => {
-        let cameraPerm = await Camera.requestCameraPermissionsAsync();
-        setCameraPermission(cameraPerm.status === 'granted');
-        if (cameraPerm.status !== 'granted') {
-            console.log('Permission for camera access needed. Status: ' + cameraPerm.status);
-            await ImagePicker.requestCameraPermissionsAsync();
-            cameraPerm = await Camera.requestCameraPermissionsAsync();
-            setCameraPermission(cameraPerm.status === 'granted');
-        }
-
+        requestCameraPermission();
+        
         let galleryPerm = await ImagePicker.getMediaLibraryPermissionsAsync();
         setGalleryPermission(galleryPerm.status === 'granted');
         if (galleryPerm.status !== 'granted') {
@@ -141,21 +134,22 @@ export default function CameraScreen({ navigation }) {
     let galleryColor = galleryPermission ? "#fff" : "#f00";
     let cameraColor = cameraPermission ? "#fff" : "#f00";
 
-    const cameraEnabled = (Platform.OS !== 'web');
+    const cameraEnabled = cameraPermission && (Platform.OS !== 'web');
+    if (!cameraEnabled)
+        return <View style={styles.container}></View>
 
     return (
         <View style={styles.container}>
-            <Camera
-                ref={(ref) => setCamera(ref)}
+            <CameraView
+                ref={cameraRef}
                 style={styles.cameraContainer}
-                type={type}
-                ratio={'16:9'}
+                facing={facing}
             >
                 <View style={styles.cameraView}>
                     <IconButton icon="image" size={32} color={galleryColor} onPress={() => pickImageAsync(navigation, observationMethods)} extra_style={styles.galleryButtonContainer} />
-                    <IconButton icon="camera" size={70} color={cameraColor} onPress={() => takePictureAsync(camera, navigation, observationMethods)} extra_style={styles.captureButton}/>
+                    <IconButton icon="camera" size={70} color={cameraColor} onPress={() => takePictureAsync(cameraRef, navigation, observationMethods)} extra_style={styles.captureButton}/>
                 </View>
-            </Camera>
+            </CameraView>
         </View>
     );
 }
