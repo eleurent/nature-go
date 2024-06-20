@@ -51,5 +51,8 @@ def unlock_badge(badge, user):
 
 def update_user_badges(user):
     for badge_logic in BADGE_LOGICS.values():
-        badge = Badge.objects.get(name=badge_logic.name)
+        badge, created = Badge.objects.get_or_create(
+            name=badge_logic.name,
+            description=badge_logic.description,
+        )
         unlock_badge(badge, user)
