@@ -22,10 +22,10 @@ const XPBar = ({data}) => {
 
 export const BADGE_IMAGES = {
     corvid_connoisseur: {
-      uri: require('../assets/images/badges/duck.png')
+      uri: require('../assets/images/badges/corvids.png')
     },
     owl_observer: {
-      uri: require('../assets/images/badges/raptors.png')
+      uri: require('../assets/images/badges/owls.png')
     }
   }
 
@@ -54,31 +54,41 @@ const BadgeListView = ({ badgeData }) => {
         );
       };
   
-    const renderModalContent = () => {
+      const renderModalContent = () => {
         const badgeName = selectedBadge.badge.name.toLowerCase().replace(/ /g, '_'); // Convert to snake_case
         const imageSource = BADGE_IMAGES[badgeName]; // Adjust path if needed
-
-        return (
-        <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-            <Image source={imageSource?.uri} style={styles.modalImage} />
-            <Text style={styles.modalTitle}>{selectedBadge.badge.name}</Text>
-            <Text>{selectedBadge.badge.description}</Text>
-            {selectedBadge.badge.species_list && (
-                <View>
-                <Text style={styles.speciesTitle}>Species:</Text>
-                {selectedBadge.badge.species_list.map(species => (
-                    <Text key={species}>
-                    {species} {selectedBadge.badge.species_observed.includes(species) ? '(Observed)' : ''}
-                    </Text>
-                ))}
-                </View>
-            )}
-            <Button title="Close" onPress={() => setSelectedBadge(null)} />
-            </View>
-        </View>
+        const highestUnlockedLevel = Object.keys(selectedBadge.progress).find(level => 
+          selectedBadge.progress[level].unlocked
         );
-    };
+    
+        return (
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Image source={imageSource?.uri} style={styles.modalImage} />
+              <Text style={styles.modalTitle}>{selectedBadge.badge.name}</Text>
+              {highestUnlockedLevel ? ( // Conditional rendering for the level
+                <Text style={styles.modalLevel}>Level: {highestUnlockedLevel}</Text> 
+              ) : null}
+              <Text>{selectedBadge.badge.description}</Text>
+              {selectedBadge.badge.species_list && (
+                <View>
+                  <Text style={styles.speciesTitle}>Species:</Text>
+                  {selectedBadge.badge.species_list.map(species => (
+                    <Text 
+                      key={species} 
+                      style={selectedBadge.badge.species_observed.includes(species) ? styles.observedSpecies : null}
+                    >
+                      {species} {selectedBadge.badge.species_observed.includes(species) && "(Observed)"}
+                    </Text>
+                  ))}
+                </View>
+              )}
+              <Button title="Close" onPress={() => setSelectedBadge(null)} />
+            </View>
+          </View>
+        );
+      };
+    
   
     return (
       <View>
@@ -299,5 +309,12 @@ const styles = StyleSheet.create({
     speciesTitle: {
         fontWeight: 'bold',
         marginTop: 10,
+    },
+    modalLevel: {
+        fontSize: 14,
+        marginBottom: 5,
+    },
+        observedSpecies: {
+        fontWeight: 'bold', 
     },
 });
