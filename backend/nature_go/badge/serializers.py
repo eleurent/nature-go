@@ -19,7 +19,7 @@ class SpeciesBadgeDetailSerializer(BadgeDetailSerializer):
 
     def get_species_list(self, obj):
         # The full list is a bit overwhelming, so we return the common subset and those and observed
-        return set(obj.logic.species_list).union(self.get_species_observed(obj))
+        return set(obj.logic.common_species_list).union(self.get_species_observed(obj))
     
     def get_species_observed(self, obj):
         user = self.context['request'].user
