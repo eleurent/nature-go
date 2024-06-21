@@ -33,6 +33,21 @@ export const BADGE_IMAGES = {
     duck_dynasty: {
       uri: require('../assets/images/badges/duck.png')
     },
+    woodland_wanderer: {
+      uri: require('../assets/images/badges/woodland.png')
+    },
+    backyard_birder: {
+      uri: require('../assets/images/badges/backyard.png')
+    },
+    songbird_specialist: {
+      uri: require('../assets/images/badges/songbird.png')
+    },
+    coastal_connoisseur: {
+      uri: require('../assets/images/badges/coastal.png')
+    },
+    waterfowl_whisperer: {
+      uri: require('../assets/images/badges/waterfowl.png')
+    },
   }
 
 function getCurrentLevelAndProgress(progressData) {
@@ -85,7 +100,7 @@ const BadgeListView = ({ badgeData }) => {
         return (
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Image source={imageSource?.uri} style={styles.modalImage} />
+              <Image source={imageSource?.uri} style={styles.modalBadgeImage} />
               <Text style={styles.modalTitle}>{selectedBadge.badge.name}</Text>
               <Text style={styles.modalLevel}>{currentLevel ? 'Level: ' + currentLevel + ' - ' : ''} {parseInt(nextLevelProgress)}%</Text>
               
@@ -184,7 +199,7 @@ export default function ProfileScreen({ navigation, route }) {
                     <TouchableOpacity style={styles.button} onPress={authMethods.signOut}>
                         <Text style={styles.buttonText}>Sign out</Text>
                     </TouchableOpacity>
-                    <ImageModal modalVisible={modalVisible} setModalVisible={setModalVisible} modalImage={profileState.avatar?.full} backgroundColor='rgba(230,200,150,0.5)'/>
+                    <ImageModal modalVisible={modalVisible} setModalVisible={setModalVisible} modalBadgeImage={profileState.avatar?.full} backgroundColor='rgba(230,200,150,0.5)'/>
                 </SafeAreaView>
             </ImageBackground>
         </View>
@@ -321,9 +336,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
     },
-    modalImage: {
-        width: 100,
-        height: 100,
+    modalBadgeImage: {
+        width: 196,
+        height: 196,
         marginBottom: 10,
     },
     modalTitle: {
