@@ -35,19 +35,32 @@ export const BADGE_IMAGES = {
     },
   }
 
+function getCurrentLevelAndProgress(progressData) {
+    let currentLevel = null;
+    let nextLevelProgress = 0;
+    let allUnlocked = true;
+  
+    for (const level in progressData) {
+      const { unlocked, progress } = progressData[level];
+  
+      if (unlocked) {
+        currentLevel = level;
+      } else {
+        allUnlocked = false;
+        nextLevelProgress = progress * 100; // Convert to percentage
+        break; // Stop after finding the first locked level
+      }
+    }
+  
+    if (allUnlocked) {
+      nextLevelProgress = 100;
+    }
+  
+    return { currentLevel, nextLevelProgress };
+}
+
 const BadgeListView = ({ badgeData }) => {
-    const [selectedBadge, setSelectedBadge] = useState(null);
-  
-    // Assuming a function to fetch badge images based on the badge name
-    const fetchBadgeImage = async (badgeName) => {
-      // ... your implementation to fetch image URLs 
-    };
-  
-    useEffect(() => {
-      // Fetch badge images when the component mounts or badgeData changes
-      // ... your implementation to update the badgeData with image URLs
-    }, [badgeData]);
-  
+    const [selectedBadge, setSelectedBadge] = useState(null); 
 
     const renderBadgeItem = ({ item }) => {
         const badgeName = item.badge.name.toLowerCase().replace(/ /g, '_'); // Convert to snake_case
@@ -63,22 +76,18 @@ const BadgeListView = ({ badgeData }) => {
       const renderModalContent = () => {
         const badgeName = selectedBadge.badge.name.toLowerCase().replace(/ /g, '_'); // Convert to snake_case
         const imageSource = BADGE_IMAGES[badgeName]; // Adjust path if needed
-        const highestUnlockedLevel = Object.keys(selectedBadge.progress).find(level => 
-          selectedBadge.progress[level].unlocked
-        );
-        const lowestLockedLevel = Object.keys(selectedBadge.progress).find(level => 
-            !selectedBadge.progress[level].unlocked
-        );
+
         const isSpeciesObserved = (speciesId) => selectedBadge.badge.species_observed.some(
             (observedSpecies) => observedSpecies.id === speciesId
         );
+        const { currentLevel, nextLevelProgress } = getCurrentLevelAndProgress(selectedBadge.progress);
     
         return (
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               <Image source={imageSource?.uri} style={styles.modalImage} />
               <Text style={styles.modalTitle}>{selectedBadge.badge.name}</Text>
-              <Text style={styles.modalLevel}>{highestUnlockedLevel ? 'Level: ' + highestUnlockedLevel + ' - ': ''} {parseInt(selectedBadge.progress[lowestLockedLevel]?.progress * 100)}%</Text>
+              <Text style={styles.modalLevel}>{currentLevel ? 'Level: ' + currentLevel + ' - ' : ''} {parseInt(nextLevelProgress)}%</Text>
               
               <Text>{selectedBadge.badge.description}</Text>
               {selectedBadge.badge.species_list && (
@@ -114,7 +123,7 @@ const BadgeListView = ({ badgeData }) => {
           keyExtractor={(item) => item.badge.name}
           numColumns={4}
         />
-        <Modal visible={selectedBadge !== null} animationType="slide" onRequestClose={() => setSelectedBadge(null)}>
+        <Modal visible={selectedBadge !== null} animationType="slide" onRequestClose={() => setSelectedBadge(null)} transparent={true}>
           {selectedBadge && renderModalContent()}
         </Modal>
       </View>
@@ -307,7 +316,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
     },
     modalContent: {
-        backgroundColor: 'white',
+        backgroundColor: 'rgba(255, 235, 180, 1)',
         padding: 20,
         borderRadius: 10,
         alignItems: 'center',
