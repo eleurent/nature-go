@@ -82,18 +82,23 @@ const BadgeListView = ({ badgeData }) => {
               
               <Text>{selectedBadge.badge.description}</Text>
               {selectedBadge.badge.species_list && (
-                <View>
-                  <Text style={styles.speciesTitle}>Species:</Text>
-                  {selectedBadge.badge.species_list.map(species => (
-                    <Text 
-                      key={species.id} 
-                      style={isSpeciesObserved(species.id) ? styles.observedSpecies : null}
+                <FlatList
+                    data={selectedBadge.badge.species_list}
+                    keyExtractor={(species) => species.id.toString()}
+                    renderItem={({ item: species }) => (
+                    <Text
+                        key={species.id}
+                        style={[
+                        styles.speciesItem,
+                        isSpeciesObserved(species.id) && styles.observedSpecies
+                        ]}
                     >
-                      {species.display_name} {isSpeciesObserved(species.id) && "(Observed)"}
+                        {species.display_name} {isSpeciesObserved(species.id) && "(Observed)"}
                     </Text>
-                  ))}
-                </View>
-              )}
+                    )}
+                    style={styles.speciesList} // Optional style for the FlatList container
+                />
+                )}
               <Button title="Close" onPress={() => setSelectedBadge(null)} />
             </View>
           </View>
@@ -327,5 +332,17 @@ const styles = StyleSheet.create({
     },
         observedSpecies: {
         fontWeight: 'bold', 
+    },
+    speciesList: {
+        maxHeight: 200, // Adjust the max height as needed
+        paddingTop: 15,
+    },
+    speciesItem: {
+        paddingVertical: 5,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc', // Adjust the border color if needed
+    },
+        observedSpecies: {
+        fontWeight: 'bold',
     },
 });
