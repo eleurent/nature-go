@@ -26,7 +26,13 @@ export const BADGE_IMAGES = {
     },
     owl_observer: {
       uri: require('../assets/images/badges/owls.png')
-    }
+    },
+    raptor_ranger: {
+      uri: require('../assets/images/badges/raptors.png')
+    },
+    duck_dynasty: {
+      uri: require('../assets/images/badges/duck.png')
+    },
   }
 
 const BadgeListView = ({ badgeData }) => {
@@ -60,25 +66,30 @@ const BadgeListView = ({ badgeData }) => {
         const highestUnlockedLevel = Object.keys(selectedBadge.progress).find(level => 
           selectedBadge.progress[level].unlocked
         );
+        const lowestLockedLevel = Object.keys(selectedBadge.progress).find(level => 
+            !selectedBadge.progress[level].unlocked
+        );
+        const isSpeciesObserved = (speciesId) => selectedBadge.badge.species_observed.some(
+            (observedSpecies) => observedSpecies.id === speciesId
+        );
     
         return (
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               <Image source={imageSource?.uri} style={styles.modalImage} />
               <Text style={styles.modalTitle}>{selectedBadge.badge.name}</Text>
-              {highestUnlockedLevel ? ( // Conditional rendering for the level
-                <Text style={styles.modalLevel}>Level: {highestUnlockedLevel}</Text> 
-              ) : null}
+              <Text style={styles.modalLevel}>{highestUnlockedLevel ? 'Level: ' + highestUnlockedLevel + ' - ': ''} {parseInt(selectedBadge.progress[lowestLockedLevel]?.progress * 100)}%</Text>
+              
               <Text>{selectedBadge.badge.description}</Text>
               {selectedBadge.badge.species_list && (
                 <View>
                   <Text style={styles.speciesTitle}>Species:</Text>
                   {selectedBadge.badge.species_list.map(species => (
                     <Text 
-                      key={species} 
-                      style={selectedBadge.badge.species_observed.includes(species) ? styles.observedSpecies : null}
+                      key={species.id} 
+                      style={isSpeciesObserved(species.id) ? styles.observedSpecies : null}
                     >
-                      {species} {selectedBadge.badge.species_observed.includes(species) && "(Observed)"}
+                      {species.display_name} {isSpeciesObserved(species.id) && "(Observed)"}
                     </Text>
                   ))}
                 </View>
@@ -96,7 +107,7 @@ const BadgeListView = ({ badgeData }) => {
           data={badgeData}
           renderItem={renderBadgeItem}
           keyExtractor={(item) => item.badge.name}
-          numColumns={2} // Adjust for your desired layout
+          numColumns={4}
         />
         <Modal visible={selectedBadge !== null} animationType="slide" onRequestClose={() => setSelectedBadge(null)}>
           {selectedBadge && renderModalContent()}
