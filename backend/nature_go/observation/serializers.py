@@ -18,7 +18,34 @@ class ObservationSerializer(serializers.ModelSerializer):
         return str(obj.species)
 
 
-class SpeciesSerializer(serializers.ModelSerializer):
+class SpeciesSmallSerializer(serializers.ModelSerializer):
+    illustration_url = serializers.SerializerMethodField()
+    display_name = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Species
+        fields = [
+            'id',
+            'scientificNameWithoutAuthor',
+            'illustration_url',
+            'display_name',
+        ]
+
+    def get_illustration_url(self, obj):
+        request = self.context.get('request')
+        if request is None: return None  # TODO: this happens when serializing an identification response
+        if bool(obj.illustration_transparent) and obj.type != Species.BIRD_TYPE:
+            return request.build_absolute_uri(obj.illustration_transparent.url)
+        elif bool(obj.illustration):
+            return request.build_absolute_uri(obj.illustration.url)
+        else:
+            return request.build_absolute_uri('/static/img/unkown_species_illustration_transparent.png')
+    
+    def get_display_name(self, obj):
+        return str(obj)
+
+
+class SpeciesSerializer(SpeciesSmallSerializer):
     illustration = Base64ImageField()
     illustration_transparent = Base64ImageField()
     illustration_reference = Base64ImageField()
@@ -56,24 +83,12 @@ class SpeciesSerializer(serializers.ModelSerializer):
             'num_questions_total',
         ]
 
-    def get_illustration_url(self, obj):
-        request = self.context.get('request')
-        if request is None: return None  # TODO: this happens when serializing an identification response
-        if bool(obj.illustration_transparent) and obj.type != Species.BIRD_TYPE:
-            return request.build_absolute_uri(obj.illustration_transparent.url)
-        elif bool(obj.illustration):
-            return request.build_absolute_uri(obj.illustration.url)
-        else:
-            return request.build_absolute_uri('/static/img/unkown_species_illustration_transparent.png')
-    
-    def get_display_name(self, obj):
-        return str(obj)
-    
     def get_num_observations_total(self, obj):
         return obj.observation_set.count()
 
     def get_num_questions_total(self, obj):
         return obj.multiplechoicequestion_set.count()
+
 
 
 def serialize_identification_response(response: IdentificationResponse):

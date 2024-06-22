@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Badge, UserBadge
 from .badge import SpeciesBadgeLogic, TotalObservationsBadgeLogic
 from observation.models import Species, Observation
-from observation.serializers import SpeciesSerializer
+from observation.serializers import SpeciesSmallSerializer
 
 class BadgeDetailSerializer(serializers.Serializer):
     name = serializers.CharField()
@@ -22,7 +22,7 @@ class SpeciesBadgeDetailSerializer(BadgeDetailSerializer):
         serialized_observed = self.get_species_observed(obj)
         all_species_names =  set(obj.logic.common_species_list).union([species['scientificNameWithoutAuthor'] for species in serialized_observed])
         all_species_queryset = Species.objects.filter(scientificNameWithoutAuthor__in=all_species_names)
-        serialized_all = SpeciesSerializer(all_species_queryset, many=True).data
+        serialized_all = SpeciesSmallSerializer(all_species_queryset, many=True).data
         return serialized_all
 
 
@@ -33,7 +33,7 @@ class SpeciesBadgeDetailSerializer(BadgeDetailSerializer):
             species__scientificNameWithoutAuthor__in=obj.logic.species_list
         ).values_list('species__scientificNameWithoutAuthor', flat=True).distinct()
         species_queryset = Species.objects.filter(scientificNameWithoutAuthor__in=observed_species)
-        serialized_all = SpeciesSerializer(species_queryset, many=True).data
+        serialized_all = SpeciesSmallSerializer(species_queryset, many=True).data
         return serialized_all
 
     def get_levels(self, obj):
