@@ -38,6 +38,7 @@ export default function App() {
   useEffect(() => {
     if (authState.userToken) {
       profileMethods.fetchProfile();
+      profileMethods.fetchBadges();
     }
   }, [authState.userToken, profileMethods]);
 
