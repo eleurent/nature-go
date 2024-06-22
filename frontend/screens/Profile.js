@@ -5,145 +5,12 @@ import Constants from 'expo-constants'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthContext } from '../contexts/AuthContext';
 import { UserProfileContext } from '../contexts/UserProfileContext';
+import XPBar from '../components/XPBar';
 import ImageModal from '../components/ImageModal';
+import BadgeList from '../components/BadgeList';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 
-const XPBar = ({data}) => {
-    const maxWidth = styles.xpBarBackground.width - 2;
-    let width = data ? (data.xp - data.current_level_xp) / (data.next_level_xp - data.current_level_xp) * maxWidth : 0;
-
-    return (
-        <View style={styles.xpBarBackground}>
-            <View style={[styles.xpBarForeground, {width}]}></View>
-        </View>
-    )
-}
-
-export const BADGE_IMAGES = {
-    corvid_connoisseur: {
-      uri: require('../assets/images/badges/corvids.png')
-    },
-    owl_observer: {
-      uri: require('../assets/images/badges/owls.png')
-    },
-    raptor_ranger: {
-      uri: require('../assets/images/badges/raptors.png')
-    },
-    duck_dynasty: {
-      uri: require('../assets/images/badges/duck.png')
-    },
-    woodland_wanderer: {
-      uri: require('../assets/images/badges/woodland.png')
-    },
-    backyard_birder: {
-      uri: require('../assets/images/badges/backyard.png')
-    },
-    songbird_specialist: {
-      uri: require('../assets/images/badges/songbird.png')
-    },
-    coastal_connoisseur: {
-      uri: require('../assets/images/badges/coastal.png')
-    },
-    waterfowl_whisperer: {
-      uri: require('../assets/images/badges/waterfowl.png')
-    },
-  }
-
-function getCurrentLevelAndProgress(progressData) {
-    let currentLevel = null;
-    let nextLevelProgress = 0;
-    let allUnlocked = true;
-  
-    for (const level in progressData) {
-      const { unlocked, progress } = progressData[level];
-  
-      if (unlocked) {
-        currentLevel = level;
-      } else {
-        allUnlocked = false;
-        nextLevelProgress = progress * 100; // Convert to percentage
-        break; // Stop after finding the first locked level
-      }
-    }
-  
-    if (allUnlocked) {
-      nextLevelProgress = 100;
-    }
-  
-    return { currentLevel, nextLevelProgress };
-}
-
-const BadgeListView = ({ badgeData }) => {
-    const [selectedBadge, setSelectedBadge] = useState(null); 
-
-    const renderBadgeItem = ({ item }) => {
-        const badgeName = item.badge.name.toLowerCase().replace(/ /g, '_'); // Convert to snake_case
-        const imageSource = BADGE_IMAGES[badgeName]; // Adjust path if needed
-    
-        return (
-          <TouchableOpacity onPress={() => setSelectedBadge(item)}>
-            <Image source={imageSource?.uri} style={styles.badgeImage} />
-          </TouchableOpacity>
-        );
-      };
-  
-      const renderModalContent = () => {
-        const badgeName = selectedBadge.badge.name.toLowerCase().replace(/ /g, '_'); // Convert to snake_case
-        const imageSource = BADGE_IMAGES[badgeName]; // Adjust path if needed
-
-        const isSpeciesObserved = (speciesId) => selectedBadge.badge.species_observed.some(
-            (observedSpecies) => observedSpecies.id === speciesId
-        );
-        const { currentLevel, nextLevelProgress } = getCurrentLevelAndProgress(selectedBadge.progress);
-    
-        return (
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Image source={imageSource?.uri} style={styles.modalBadgeImage} />
-              <Text style={styles.modalTitle}>{selectedBadge.badge.name}</Text>
-              <Text style={styles.modalLevel}>{currentLevel ? 'Level: ' + currentLevel + ' - ' : ''} {parseInt(nextLevelProgress)}%</Text>
-              
-              <Text>{selectedBadge.badge.description}</Text>
-              {selectedBadge.badge.species_list && (
-                <FlatList
-                    data={selectedBadge.badge.species_list}
-                    keyExtractor={(species) => species.id.toString()}
-                    renderItem={({ item: species }) => (
-                    <Text
-                        key={species.id}
-                        style={[
-                        styles.speciesItem,
-                        isSpeciesObserved(species.id) && styles.observedSpecies
-                        ]}
-                    >
-                        {species.display_name} {isSpeciesObserved(species.id) && "(Observed)"}
-                    </Text>
-                    )}
-                    style={styles.speciesList} // Optional style for the FlatList container
-                />
-                )}
-              <Button title="Close" onPress={() => setSelectedBadge(null)} />
-            </View>
-          </View>
-        );
-      };
-    
-  
-    return (
-      <View>
-        <FlatList
-          data={badgeData}
-          renderItem={renderBadgeItem}
-          keyExtractor={(item) => item.badge.name}
-          numColumns={4}
-        />
-        <Modal visible={selectedBadge !== null} animationType="slide" onRequestClose={() => setSelectedBadge(null)} transparent={true}>
-          {selectedBadge && renderModalContent()}
-        </Modal>
-      </View>
-    );
-  };
 
 export default function ProfileScreen({ navigation, route }) {
     const { authMethods } = useContext(AuthContext);
@@ -195,7 +62,7 @@ export default function ProfileScreen({ navigation, route }) {
                         </View>
                     </View>
                     <Image source={require('../assets/images/separator.png')} style={styles.separator}/>
-                    <BadgeListView badgeData={profileState?.badges}/>
+                    <BadgeList badgeData={profileState?.badges}/>
                     <TouchableOpacity style={styles.button} onPress={authMethods.signOut}>
                         <Text style={styles.buttonText}>Sign out</Text>
                     </TouchableOpacity>
@@ -245,24 +112,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginLeft: 'auto',
         marginRight: 'auto',
-    },
-    xpBarBackground: {
-        marginRight: 'auto',
-        marginLeft: 'auto',
-        marginTop: 10,
-        marginBottom: 10,
-        backgroundColor: '#999',
-        borderRadius: 5,
-        width: 168,
-        height: 9,
-    },
-    xpBarForeground: {
-        marginTop: 1,
-        marginLeft: 1,
-        backgroundColor: '#F5C92D',
-        borderRadius: 4.8,
-        width: 95,
-        height: 7,
     },
     xpText: {
         marginLeft: 'auto',
@@ -315,58 +164,5 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 24,
         fontFamily: 'Tinos_400Regular',
-    },
-    badgesContainer: {
-        flexWrap: 'wrap',
-        flexDirection: 'row',
-    },
-    badgeImage : {
-        width: 96,
-        height: 96,
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
-    },
-    modalContent: {
-        backgroundColor: 'rgba(255, 235, 180, 1)',
-        padding: 20,
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-    modalBadgeImage: {
-        width: 196,
-        height: 196,
-        marginBottom: 10,
-    },
-    modalTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 5,
-    },
-    speciesTitle: {
-        fontWeight: 'bold',
-        marginTop: 10,
-    },
-    modalLevel: {
-        fontSize: 14,
-        marginBottom: 5,
-    },
-        observedSpecies: {
-        fontWeight: 'bold', 
-    },
-    speciesList: {
-        maxHeight: 200, // Adjust the max height as needed
-        paddingTop: 15,
-    },
-    speciesItem: {
-        paddingVertical: 5,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc', // Adjust the border color if needed
-    },
-        observedSpecies: {
-        fontWeight: 'bold',
     },
 });
