@@ -1,31 +1,5 @@
 import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Pressable, FlatList, Modal, Button } from 'react-native';
-import { BADGE_IMAGES } from  './BadgeItem';
-
-
-function getCurrentLevelAndProgress(progressData) {
-  let currentLevel = null;
-  let nextLevelProgress = 0;
-  let allUnlocked = true;
-
-  for (const level in progressData) {
-    const { unlocked, progress } = progressData[level];
-
-    if (unlocked) {
-      currentLevel = level;
-    } else {
-      allUnlocked = false;
-      nextLevelProgress = progress * 100; // Convert to percentage
-      break; // Stop after finding the first locked level
-    }
-  }
-
-  if (allUnlocked) {
-    nextLevelProgress = 100;
-  }
-
-  return { currentLevel, nextLevelProgress };
-}
-
+import { BADGE_IMAGES, getCurrentLevelAndProgress } from  './BadgeItem';
 
 
 export default function BadgeModal(selectedBadge, setSelectedBadge)
@@ -44,7 +18,7 @@ export default function BadgeModal(selectedBadge, setSelectedBadge)
       <View style={styles.modalContent}>
         <Image source={imageSource?.uri} style={styles.modalBadgeImage} />
         <Text style={styles.modalTitle}>{selectedBadge.badge.name}</Text>
-        <Text style={styles.modalLevel}>{currentLevel ? 'Level: ' + currentLevel + ' - ' : ''} {parseInt(nextLevelProgress)}%</Text>
+        <Text style={styles.modalLevel}>{currentLevel ? 'Level: ' + currentLevel + ' - ' : ''} {parseInt(nextLevelProgress * 100)}%</Text>
         
         <Text>{selectedBadge.badge.description}</Text>
         {selectedBadge.badge.species_list && (
