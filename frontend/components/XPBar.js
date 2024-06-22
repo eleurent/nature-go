@@ -1,10 +1,9 @@
 import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Pressable, FlatList, Modal, Button } from 'react-native';
 
-export default function XPBar(data)
+export default function XPBar({data})
 {
     const maxWidth = styles.xpBarBackground.width - 2;
-    // let width = data ? (data.xp - data.current_level_xp) / (data.next_level_xp - data.current_level_xp) * maxWidth : 0;
-    let width=25;
+    let width = data ? (data.xp - data.current_level_xp) / (data.next_level_xp - data.current_level_xp) * maxWidth : 0;
 
     return (
         <View style={styles.xpBarBackground}>
