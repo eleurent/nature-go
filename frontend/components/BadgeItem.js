@@ -72,10 +72,17 @@ export default function BadgeItem({item}, selectedBadge, setSelectedBadge )
   const badgeName = item.badge.name.toLowerCase().replace(/ /g, '_'); // Convert to snake_case
   const imageSource = BADGE_IMAGES[badgeName];
   const {currentLevel, nextLevelProgress} = getCurrentLevelAndProgress(item.progress)
+  const isLocked = currentLevel === null;
 
   return (
     <TouchableOpacity onPress={() => setSelectedBadge(item)}>
-      <Image source={imageSource?.uri} style={styles.badgeImage} />
+      <Image
+        source={imageSource?.uri}
+        style={[
+          styles.badgeImage,
+          isLocked && styles.lockedBadge
+        ]}
+      />
       <ProgressBar level={nextLevelProgress} min={0} max={1}/>
     </TouchableOpacity>
   );
@@ -90,6 +97,9 @@ const styles = StyleSheet.create({
   badgeImage : {
     width: 96,
     height: 96,
+  },
+  lockedBadge: {
+    opacity: 0.2,
   },
   barBackground: {
     marginRight: 'auto',
