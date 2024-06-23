@@ -1,22 +1,22 @@
 import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Pressable, FlatList, Modal, Button } from 'react-native';
-import { BADGE_IMAGES, getCurrentLevelAndProgress } from  './BadgeItem';
+import { BADGE_IMAGES, getCurrentLevelAndProgress, badgeImageSource } from  './BadgeItem';
 
 
 export default function BadgeModal(selectedBadge, setSelectedBadge)
 {
   if (!selectedBadge) return null;
   const badgeName = selectedBadge.badge.name.toLowerCase().replace(/ /g, '_'); // Convert to snake_case
-  const imageSource = BADGE_IMAGES[badgeName];
-
+  
   const isSpeciesObserved = (selectedBadge, speciesId) => selectedBadge.badge?.species_observed.some(
-      (observedSpecies) => observedSpecies.id === speciesId
+    (observedSpecies) => observedSpecies.id === speciesId
   );
   const { currentLevel, nextLevelProgress } = getCurrentLevelAndProgress(selectedBadge.progress);
+  const imageSource = badgeImageSource(badgeName, currentLevel);
 
   return (
     <View style={styles.modalContainer}>
       <View style={styles.modalContent}>
-        <Image source={imageSource?.uri} style={styles.modalBadgeImage} />
+        <Image source={imageSource} style={styles.modalBadgeImage} />
         <Text style={styles.modalTitle}>{selectedBadge.badge.name}</Text>
         <Text style={styles.modalLevel}>{currentLevel ? 'Level: ' + currentLevel + ' - ' : ''} {parseInt(nextLevelProgress * 100)}%</Text>
         

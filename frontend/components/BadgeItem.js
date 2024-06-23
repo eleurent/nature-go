@@ -1,32 +1,59 @@
 import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Pressable, FlatList, Modal, Button } from 'react-native';
 
-export const BADGE_IMAGES = {
+const BADGE_IMAGES = {
   corvid_connoisseur: {
-    uri: require('../assets/images/badges/corvids.png')
+    uri: require('../assets/images/badges/corvids.png'),
+    bronze: require('../assets/images/badges/bronze/corvids.png'),
+    silver: require('../assets/images/badges/silver/corvids.png'),
+    none: require('../assets/images/badges/none/corvids.png'),
   },
   owl_observer: {
-    uri: require('../assets/images/badges/owls.png')
+    uri: require('../assets/images/badges/owls.png'),
+    bronze: require('../assets/images/badges/bronze/owls.png'),
+    silver: require('../assets/images/badges/silver/owls.png'),
+    none: require('../assets/images/badges/none/owls.png'),
   },
   raptor_ranger: {
-    uri: require('../assets/images/badges/raptors.png')
+    uri: require('../assets/images/badges/raptors.png'),
+    bronze: require('../assets/images/badges/bronze/raptors.png'),
+    silver: require('../assets/images/badges/silver/raptors.png'),
+    none: require('../assets/images/badges/none/raptors.png'),
   },
   duck_dynasty: {
-    uri: require('../assets/images/badges/duck.png')
+    uri: require('../assets/images/badges/duck.png'),
+    bronze: require('../assets/images/badges/bronze/duck.png'),
+    silver: require('../assets/images/badges/silver/duck.png'),
+    none: require('../assets/images/badges/none/duck.png'),
   },
   woodland_wanderer: {
-    uri: require('../assets/images/badges/woodland.png')
+    uri: require('../assets/images/badges/woodland.png'),
+    bronze: require('../assets/images/badges/bronze/woodland.png'),
+    silver: require('../assets/images/badges/silver/woodland.png'),
+    none: require('../assets/images/badges/none/woodland.png'),
   },
   backyard_birder: {
-    uri: require('../assets/images/badges/backyard.png')
+    uri: require('../assets/images/badges/backyard.png'),
+    bronze: require('../assets/images/badges/bronze/backyard.png'),
+    silver: require('../assets/images/badges/silver/backyard.png'),
+    none: require('../assets/images/badges/none/backyard.png'),
   },
   songbird_specialist: {
-    uri: require('../assets/images/badges/songbird.png')
+    uri: require('../assets/images/badges/songbird.png'),
+    bronze: require('../assets/images/badges/bronze/songbird.png'),
+    silver: require('../assets/images/badges/silver/songbird.png'),
+    none: require('../assets/images/badges/none/songbird.png'),
   },
   coastal_connoisseur: {
-    uri: require('../assets/images/badges/coastal.png')
+    uri: require('../assets/images/badges/coastal.png'),
+    bronze: require('../assets/images/badges/bronze/coastal.png'),
+    silver: require('../assets/images/badges/silver/coastal.png'),
+    none: require('../assets/images/badges/none/coastal.png'),
   },
   waterfowl_whisperer: {
-    uri: require('../assets/images/badges/waterfowl.png')
+    uri: require('../assets/images/badges/waterfowl.png'),
+    bronze: require('../assets/images/badges/bronze/waterfowl.png'),
+    silver: require('../assets/images/badges/silver/waterfowl.png'),
+    none: require('../assets/images/badges/none/waterfowl.png'),
   },
 }
 
@@ -55,6 +82,14 @@ export function getCurrentLevelAndProgress(progressData) {
   return { currentLevel, nextLevelProgress };
 }
 
+export function badgeImageSource(name, level)
+{
+  if (level === null) level = 'none';
+  level = level.toLowerCase();
+  if (level === 'gold') level = 'uri';
+  return BADGE_IMAGES[name][level]
+}
+
 const ProgressBar = ({level, min, max}) => {
     if (level == max) return null;
     const maxWidth = styles.barBackground.width - 2;
@@ -70,14 +105,13 @@ const ProgressBar = ({level, min, max}) => {
 export default function BadgeItem({item}, selectedBadge, setSelectedBadge )
 {
   const badgeName = item.badge.name.toLowerCase().replace(/ /g, '_'); // Convert to snake_case
-  const imageSource = BADGE_IMAGES[badgeName];
   const {currentLevel, nextLevelProgress} = getCurrentLevelAndProgress(item.progress)
   const isLocked = currentLevel === null;
 
   return (
     <TouchableOpacity onPress={() => setSelectedBadge(item)}>
       <Image
-        source={imageSource?.uri}
+        source={badgeImageSource(badgeName, currentLevel)}
         style={[
           styles.badgeImage,
           isLocked && styles.lockedBadge
