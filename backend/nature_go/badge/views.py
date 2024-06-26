@@ -12,7 +12,10 @@ class BadgeListView(ListAPIView):
 
     def get_queryset(self):
         update_user_badges(self.request.user)
-        return UserBadge.objects.filter(user=self.request.user)
+        queryset = UserBadge.objects.filter(user=self.request.user)
+        levels = ["Bronze", "Silver", "Gold"]
+        index_or_minus_one = lambda x: levels.index(x.unlocked_level) if x.unlocked_level in levels else -1
+        return sorted(queryset, key=index_or_minus_one, reverse=True)
 
 
 class BadgeDetailView(RetrieveAPIView):

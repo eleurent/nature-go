@@ -53,7 +53,7 @@ class UserBadgeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserBadge
-        fields = ['badge', 'progress', 'highest_unlocked_level']
+        fields = ['badge', 'progress', 'unlocked_level']
 
     def get_badge(self, obj):
         if isinstance(obj.badge.logic, SpeciesBadgeLogic):
