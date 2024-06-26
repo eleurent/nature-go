@@ -3,6 +3,7 @@ from .models import Badge, UserBadge
 from .badge import SpeciesBadgeLogic, TotalObservationsBadgeLogic
 from observation.models import Species, Observation
 from observation.serializers import SpeciesSmallSerializer
+from django.db.models import Q
 
 class BadgeDetailSerializer(serializers.Serializer):
     name = serializers.CharField()
@@ -20,8 +21,11 @@ class SpeciesBadgeDetailSerializer(BadgeDetailSerializer):
 
     def get_species_list(self, obj):
         serialized_observed = self.get_species_observed(obj)
-        all_species_names =  set(obj.logic.common_species_list).union([species['scientificNameWithoutAuthor'] for species in serialized_observed])
-        all_species_queryset = Species.objects.filter(scientificNameWithoutAuthor__in=all_species_names)
+        all_species_names = list(set(obj.logic.common_species_list).union([species['scientificNameWithoutAuthor'] for species in serialized_observed]))
+        all_species_queryset = Species.objects.filter(
+            Q(scientificNameWithoutAuthor__in=all_species_names) |
+            Q(protonyms__overlap=all_species_names)
+        )
         serialized_all = SpeciesSmallSerializer(all_species_queryset, many=True).data
         return serialized_all
 
@@ -29,9 +33,10 @@ class SpeciesBadgeDetailSerializer(BadgeDetailSerializer):
     def get_species_observed(self, obj):
         user = self.context['request'].user
         observed_species = Observation.objects.filter(
-            user=user,
-            species__scientificNameWithoutAuthor__in=obj.logic.species_list
-        ).values_list('species__scientificNameWithoutAuthor', flat=True).distinct()
+            Q(user=user, species__scientificNameWithoutAuthor__in=obj.logic.species_list) |
+            Q(user=user, species__protonyms__overlap=obj.logic.species_list)
+        )
+        observed_species = observed_species.values_list('species__scientificNameWithoutAuthor', flat=True).distinct()
         species_queryset = Species.objects.filter(scientificNameWithoutAuthor__in=observed_species)
         serialized_all = SpeciesSmallSerializer(species_queryset, many=True).data
         return serialized_all

@@ -1,5 +1,6 @@
 from collections import defaultdict
 from observation.models import Observation
+from django.db.models import Q
 
 class BadgeLogic:
     def __init__(self, name, description, levels, icon=None):
@@ -29,7 +30,11 @@ class SpeciesBadgeLogic(BadgeLogic):
         self.common_species_list = common_species_list if common_species_list else species_list
 
     def calculate_progress(self, user):
-        observed_species = Observation.objects.filter(user=user, species__scientificNameWithoutAuthor__in=self.species_list)
+        # We look for the species name in both scientificNameWithoutAuthor and protonyms
+        observed_species = Observation.objects.filter(
+            Q(user=user, species__scientificNameWithoutAuthor__in=self.species_list) |
+            Q(user=user, species__protonyms__overlap=self.species_list)
+        )
         observed_species = set(obs.species.scientificNameWithoutAuthor for obs in observed_species.all())
         return len(observed_species)
 
