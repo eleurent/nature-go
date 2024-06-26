@@ -57,7 +57,7 @@ BADGE_LOGICS = {
     ),
     "Waterfowl Whisperer": SpeciesBadgeLogic(
         "Waterfowl Whisperer", "Observe different waterfowl species.",
-        levels={"Bronze": 3, "Silver": 6, "Gold": 10},
+        levels={"Bronze": 5, "Silver": 10, "Gold": 15},
         species_list=["Dendrocygna viduata", "Dendrocygna bicolor", "Anser indicus", "Anser caerulescens",
                      "Anser rossii", "Anser anser", "Anser albifrons", "Anser erythropus", "Anser fabalis",
                      "Anser serrirostris", "Anser brachyrhynchus", "Branta bernicla", "Branta leucopsis",
