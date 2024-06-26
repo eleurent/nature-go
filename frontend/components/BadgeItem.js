@@ -19,11 +19,11 @@ const BADGE_IMAGES = {
     silver: require('../assets/images/badges/silver/raptors.png'),
     none: require('../assets/images/badges/none/raptors.png'),
   },
-  duck_dynasty: {
-    uri: require('../assets/images/badges/duck.png'),
-    bronze: require('../assets/images/badges/bronze/duck.png'),
-    silver: require('../assets/images/badges/silver/duck.png'),
-    none: require('../assets/images/badges/none/duck.png'),
+  wading_wonderer: {
+    uri: require('../assets/images/badges/wading.png'),
+    bronze: require('../assets/images/badges/bronze/wading.png'),
+    silver: require('../assets/images/badges/silver/wading.png'),
+    none: require('../assets/images/badges/none/wading.png'),
   },
   woodland_wanderer: {
     uri: require('../assets/images/badges/woodland.png'),
