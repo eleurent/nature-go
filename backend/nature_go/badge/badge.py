@@ -49,10 +49,11 @@ BADGE_LOGICS = {
         "Corvid Connoisseur", "Observe different corvid species.",
         levels={"Bronze": 3, "Silver": 5, "Gold": 8},
         species_list=["Corvus corax", "Corvus corone", "Corvus cornix", "Pica pica", "Nucifraga caryocatactes",
-                     "Pyrrhocorax pyrrhocorax", "Pyrrhocorax graculus", "Corvus monedula", "Corvus frugilegus",
-                     "Corvus ruficollis", "Corvus rhipidurus"],
-        common_species_list=["Corvus corax", "Corvus corone", "Corvus cornix", "Pica pica", "Corvus monedula", 
-                             "Pyrrhocorax pyrrhocorax", "Pyrrhocorax graculus", "Corvus frugilegus"]
+                     "Pyrrhocorax pyrrhocorax", "Pyrrhocorax graculus", "Coloeus monedula", "Corvus frugilegus",
+                     "Corvus ruficollis", "Corvus rhipidurus", "Garrulus glandarius"],
+        common_species_list=["Corvus corax", "Corvus corone", "Corvus cornix", "Pica pica", "Coloeus monedula", 
+                             "Pyrrhocorax pyrrhocorax", "Pyrrhocorax graculus", "Corvus frugilegus", "Garrulus glandarius",
+                             "Nucifraga caryocatactes"]
     ),
     "Owl Observer": SpeciesBadgeLogic(
         "Owl Observer", "Observe different owl species.",
