@@ -13,7 +13,9 @@ class BadgeLogic:
         for level_name, threshold in self.levels.items():
             observed_count = self.calculate_progress(user)
             progress[level_name]["unlocked"] = observed_count >= threshold
-            progress[level_name]["progress"] = observed_count / threshold if threshold > 0 else 1
+            progress[level_name]["progress"] = observed_count
+            progress[level_name]["threshold"] = threshold
+            progress[level_name]["percentage"] = observed_count / threshold if threshold > 0 else 1
         return progress
 
     def calculate_progress(self, user):

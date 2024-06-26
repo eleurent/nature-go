@@ -38,12 +38,10 @@ class UserBadge(models.Model):
 
 def unlock_badge(badge, user):
     user_badge, _ = UserBadge.objects.get_or_create(user=user, badge=badge)
-
     highest_unlocked_level = None
-    for level_name, data in user_badge.progress.items():
-        if data["unlocked"]:
-            highest_unlocked_level = level_name
-    #print(f"highest_unlocked_level for {badge.name}: {highest_unlocked_level}")
+    unlocked_levels = [level_name for (level_name, data) in user_badge.progress.items() if data["unlocked"]]
+    unlocked_levels = sorted(unlocked_levels, key=lambda x: badge.logic.levels[x])
+    highest_unlocked_level = unlocked_levels[-1] if unlocked_levels else None
     user_badge.unlocked_level = highest_unlocked_level
     user_badge.progress = badge.check_user_progress(user)
     user_badge.save()

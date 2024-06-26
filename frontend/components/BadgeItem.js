@@ -64,14 +64,14 @@ export function getCurrentLevelAndProgress(progressData) {
   let allUnlocked = true;
 
   for (const level in progressData) {
-    const { unlocked, progress } = progressData[level];
+    const { unlocked, percentage } = progressData[level];
 
     if (unlocked) {
       currentLevel = level;
     } else {
       allUnlocked = false;
-      nextLevelProgress = progress; // Convert to percentage
-      break; // Stop after finding the first locked level
+      nextLevelProgress = percentage;
+      break;
     }
   }
 
