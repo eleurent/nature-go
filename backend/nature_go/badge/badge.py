@@ -82,6 +82,7 @@ BADGE_LOGICS = {
                              "Mareca penelope", "Anas platyrhynchos", "Anas acuta", "Anas crecca", 
                              "Aythya ferina", "Aythya fuligula", "Aythya marila", "Somateria mollissima",
                              "Clangula hyemalis", "Bucephala clangula", "Mergus merganser", "Mergus serrator"]
+    ),
     "Wading Wonderer": SpeciesBadgeLogic(
         "Wading Wonderer", "Observe different wading bird species.",
         levels={"Bronze": 3, "Silver": 6, "Gold": 10},
