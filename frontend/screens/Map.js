@@ -47,8 +47,11 @@ export default function MapScreen({ navigation, route }) {
         
     }, []);
 
-    let validObservations = observations.filter(obs => (Object.keys(obs.location).length !==0)  && (obs.location?.latitude !== null) && (obs.location?.longitude !== null) );
-
+    let validObservations = observations.filter(obs => 
+        (obs.location !== null) && 
+        (obs.location?.latitude !== null) && 
+        (obs.location?.longitude !== null) 
+    );
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
