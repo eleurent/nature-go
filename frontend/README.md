@@ -1,10 +1,19 @@
 # Nature GO
 
+
+## Install dependencies
+
+```npm install```
+
 ## Run
 
 ```npx expo start```
 
-Usfeful options: `--web`, and `--tunnel` for serving mobile through a GitHub CodeSpace.
+# Run through a GitHub CodeSpace
+
+```npx expo start --tunnel```
+
+Click the `Make public` button on the popup, or in the `Ports` tab. 
 
 ## Run with local config
 
