@@ -60,7 +60,7 @@ def gemini_identify_few_shot(
     multimodal_model = genai.GenerativeModel(model_id, generation_config={"response_mime_type": "application/json"})
     examples = [(few_shot['metadata'], load_image_from_url(few_shot['url']), few_shot['response']) for few_shot in few_shots]
     image = PIL.Image.open(image_path)
-    metadata = location
+    metadata = str(location)
     contents = (PROMPT_PREFIX,) + sum(examples, ()) + (metadata, image,)
     response = multimodal_model.generate_content(contents) 
 
