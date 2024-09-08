@@ -25,7 +25,7 @@ BIRD_ID_FEW_SHOTS = [
     {
         'metadata': '{"latitude": 41.909442, "longitude": 12.503025}',
         'url': 'https://preview.redd.it/what-kind-of-bird-is-this-sighted-in-rome-italy-v0-wzm5jvwva20d1.jpg?width=1080&crop=smart&auto=webp&s=47eb746fd839673f4cceafa4896dd118d21b897d',
-        'response': '[{"commonName": "Eurasian jay", "scientificName": "Garrulus glandarius", confidence: 0.9}]',
+        'response': '[{"commonName": "Hooded crow", "scientificName": "Corvus cornix", confidence: 0.9}, {"commonName": "Carrion crow", "scientificName": "Corvus corone", confidence: 0.1}, {"commonName": "Eurasian jay", "scientificName": "Garrulus glandarius", confidence: 0.05}]',
     }
 ]
 
