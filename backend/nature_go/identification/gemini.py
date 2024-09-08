@@ -8,7 +8,8 @@ from observation.models import Species, IdentificationCandidate, IdentificationR
 from django.db.models import Q
 
 CONFIGURED = False
-PROMPT_PREFIX = """Identify the species in the picture, taking metadata into account.
+PROMPT_PREFIX = """Identify the species in the picture, taking metadata into account. Be comprehensive.
+
 Use this JSON schema:
   Result = {"commonName": str, "scientificName": str, "confidence": float}
 
@@ -24,8 +25,10 @@ BIRD_ID_FEW_SHOTS = [
         },
         'url': 'https://preview.redd.it/whats-this-bird-v0-sx6m25i5pm0d1.jpeg?width=1080&crop=smart&auto=webp&s=004ec0c9d413ca38001a069172b4e35f729aabec',
         'response': [
-            {"commonName": "Common starling", "scientificName": "Sturnus vulgaris", "confidence": 0.60},
-            {"commonName": "Spotless starling", "scientificName": "Sturnus unicolor", "confidence": 0.40}
+            {"commonName": "Common starling", "scientificName": "Sturnus vulgaris", "confidence": 0.70},
+            {"commonName": "Spotless starling", "scientificName": "Sturnus unicolor", "confidence": 0.10},
+            {"commonName": "Eurasian jackdaw", "scientificName": "Coloeus monedula", "confidence": 0.05},
+            {"commonName": "Common Grackle", "scientificName": "Quiscalus quiscula", "confidence": 0.01},
         ],
     },
     {
@@ -37,7 +40,8 @@ BIRD_ID_FEW_SHOTS = [
         'response': [
             {"commonName": "Hooded crow", "scientificName": "Corvus cornix", "confidence": 0.9},
             {"commonName": "Carrion crow", "scientificName": "Corvus corone", "confidence": 0.1},
-            {"commonName": "Eurasian jay", "scientificName": "Garrulus glandarius", "confidence": 0.05}
+            {"commonName": "Eurasian jackdaw", "scientificName": "Coloeus monedula", "confidence": 0.05},
+            {"commonName": "Eurasian jay", "scientificName": "Garrulus glandarius", "confidence": 0.02},
         ],
     }
 ]
