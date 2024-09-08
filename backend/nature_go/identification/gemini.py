@@ -18,12 +18,12 @@ Return: list[Result].
 # Metadata, url, response
 BIRD_ID_FEW_SHOTS = [
     {
-        'metadata': '{"latitude": 51.495780, "longitude": -0.176399}'
+        'metadata': '{"latitude": 51.495780, "longitude": -0.176399}',
         'url': 'https://preview.redd.it/whats-this-bird-v0-sx6m25i5pm0d1.jpeg?width=1080&crop=smart&auto=webp&s=004ec0c9d413ca38001a069172b4e35f729aabec',
         'response': '[{"commonName": "Common starling", "scientificName": "Sturnus vulgaris", "confidence": 0.60}, {"commonName": "Spotless starling", "scientificName": "Sturnus unicolor", "confidence": 0.40}]'
     },
     {
-        'metadata': '{"latitude": 41.909442, "longitude": 12.503025}'
+        'metadata': '{"latitude": 41.909442, "longitude": 12.503025}',
         'url': 'https://preview.redd.it/what-kind-of-bird-is-this-sighted-in-rome-italy-v0-wzm5jvwva20d1.jpg?width=1080&crop=smart&auto=webp&s=47eb746fd839673f4cceafa4896dd118d21b897d'
         'response': '[{"commonName": "Eurasian jay", "scientificName": "Garrulus glandarius", confidence: 0.9}]'
     }
