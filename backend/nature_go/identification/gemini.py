@@ -18,14 +18,27 @@ Return: list[Result].
 # Metadata, url, response
 BIRD_ID_FEW_SHOTS = [
     {
-        'metadata': '{"latitude": 51.495780, "longitude": -0.176399}',
+        'metadata': {
+            "latitude": 51.495780,
+            "longitude": -0.176399,
+        },
         'url': 'https://preview.redd.it/whats-this-bird-v0-sx6m25i5pm0d1.jpeg?width=1080&crop=smart&auto=webp&s=004ec0c9d413ca38001a069172b4e35f729aabec',
-        'response': '[{"commonName": "Common starling", "scientificName": "Sturnus vulgaris", "confidence": 0.60}, {"commonName": "Spotless starling", "scientificName": "Sturnus unicolor", "confidence": 0.40}]',
+        'response': [
+            {"commonName": "Common starling", "scientificName": "Sturnus vulgaris", "confidence": 0.60},
+            {"commonName": "Spotless starling", "scientificName": "Sturnus unicolor", "confidence": 0.40}
+        ],
     },
     {
-        'metadata': '{"latitude": 41.909442, "longitude": 12.503025}',
+        'metadata': {
+            "latitude": 41.909442,
+            "longitude": 12.503025,
+        },
         'url': 'https://preview.redd.it/what-kind-of-bird-is-this-sighted-in-rome-italy-v0-wzm5jvwva20d1.jpg?width=1080&crop=smart&auto=webp&s=47eb746fd839673f4cceafa4896dd118d21b897d',
-        'response': '[{"commonName": "Hooded crow", "scientificName": "Corvus cornix", confidence: 0.9}, {"commonName": "Carrion crow", "scientificName": "Corvus corone", confidence: 0.1}, {"commonName": "Eurasian jay", "scientificName": "Garrulus glandarius", confidence: 0.05}]',
+        'response': [
+            {"commonName": "Hooded crow", "scientificName": "Corvus cornix", "confidence": 0.9},
+            {"commonName": "Carrion crow", "scientificName": "Corvus corone", "confidence": 0.1},
+            {"commonName": "Eurasian jay", "scientificName": "Garrulus glandarius", "confidence": 0.05}
+        ],
     }
 ]
 
@@ -58,7 +71,13 @@ def gemini_identify_few_shot(
         return PIL.Image.open(io.BytesIO(response.content))
 
     multimodal_model = genai.GenerativeModel(model_id, generation_config={"response_mime_type": "application/json"})
-    examples = [(few_shot['metadata'], load_image_from_url(few_shot['url']), few_shot['response']) for few_shot in few_shots]
+    examples = [
+        (
+            str(few_shot['metadata']),
+            load_image_from_url(few_shot['url']),
+            str(few_shot['response'])
+        )
+        for few_shot in few_shots]
     image = PIL.Image.open(image_path)
     metadata = str(location)
     contents = (PROMPT_PREFIX,) + sum(examples, ()) + (metadata, image,)
