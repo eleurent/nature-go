@@ -72,7 +72,10 @@ def gemini_identify_few_shot(
     if not CONFIGURED: configure()
 
     def load_image_from_url(image_url: str) -> PIL.Image:
-        response = requests.get(image_url, stream=True)
+        headers = {
+            'User-Agent': 'NatureGo/1.0 (https://nature-go.edouardleurent.com; eleurent@gmail.com)'
+        }
+        response = requests.get(image_url, stream=True, headers=headers)
         return PIL.Image.open(io.BytesIO(response.content))
 
     multimodal_model = genai.GenerativeModel(model_id, generation_config={"response_mime_type": "application/json"})
