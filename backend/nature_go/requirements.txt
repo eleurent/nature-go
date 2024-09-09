@@ -11,3 +11,4 @@ gunicorn
 google-generativeai
 wikipedia
 beautifulsoup4
+python-dotenv
