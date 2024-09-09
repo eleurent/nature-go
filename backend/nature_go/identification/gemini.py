@@ -8,7 +8,9 @@ from observation.models import Species, IdentificationCandidate, IdentificationR
 from django.db.models import Q
 
 CONFIGURED = False
-PROMPT_PREFIX = """Identify the species in the picture, taking metadata into account. Be comprehensive.
+PROMPT_PREFIX = """Identify the species in the picture, taking metadata into account. 
+
+Be comprehensive. Return an empty list if there are no species.
 
 Use this JSON schema:
   Result = {"commonName": str, "scientificName": str, "confidence": float}
@@ -23,7 +25,7 @@ BIRD_ID_FEW_SHOTS = [
             "latitude": 51.495780,
             "longitude": -0.176399,
         },
-        'url': 'https://preview.redd.it/whats-this-bird-v0-sx6m25i5pm0d1.jpeg?width=1080&crop=smart&auto=webp&s=004ec0c9d413ca38001a069172b4e35f729aabec',
+        'url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Beaumaris_Castle_2015_123.jpg/1080px-Beaumaris_Castle_2015_123.jpg',
         'response': [
             {"commonName": "Common starling", "scientificName": "Sturnus vulgaris", "confidence": 0.70},
             {"commonName": "Spotless starling", "scientificName": "Sturnus unicolor", "confidence": 0.10},
@@ -36,11 +38,10 @@ BIRD_ID_FEW_SHOTS = [
             "latitude": 41.909442,
             "longitude": 12.503025,
         },
-        'url': 'https://preview.redd.it/what-kind-of-bird-is-this-sighted-in-rome-italy-v0-wzm5jvwva20d1.jpg?width=1080&crop=smart&auto=webp&s=47eb746fd839673f4cceafa4896dd118d21b897d',
+        'url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flying_Crow.jpg/720px-Flying_Crow.jpg',
         'response': [
             {"commonName": "Hooded crow", "scientificName": "Corvus cornix", "confidence": 0.9},
             {"commonName": "Carrion crow", "scientificName": "Corvus corone", "confidence": 0.1},
-            {"commonName": "Eurasian jackdaw", "scientificName": "Coloeus monedula", "confidence": 0.05},
             {"commonName": "Eurasian jay", "scientificName": "Garrulus glandarius", "confidence": 0.02},
         ],
     }
