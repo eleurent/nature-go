@@ -150,7 +150,7 @@ class SpeciesObservationsList(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         species_id = self.kwargs['pk']
-        return Observation.objects.filter(user=user, species=species_id)
+        return Observation.objects.filter(user=user, species=species_id).order_by('-datetime')
 
 
 class ObservationListCreate(generics.ListCreateAPIView):
