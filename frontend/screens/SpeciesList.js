@@ -38,6 +38,10 @@ const SpeciesButton = (props) => {
     );
 }
 
+const ListHeader = ({ speciesCount }) => (
+    <Text style={styles.numSpeciesDiscovered}>{speciesCount} species discovered.</Text>
+);
+
 
 export default function SpeciesListScreen({ navigation, route }) {
 
@@ -60,16 +64,20 @@ export default function SpeciesListScreen({ navigation, route }) {
     return (
         <View style={styles.container} >
         <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
-        {speciesList && (speciesList.length === 0) ? (
+        {
+        (!speciesList) ?
+         null : 
+        (speciesList.length === 0) ? (
             <Text style={styles.emptyMessage}>{`I haven't found anything yet.\n\n Time to do some fieldwork!`}</Text>
         ) : (
             <FlatList
-                style = {{ marginTop: 60 }}
+                style = {styles.speciesList}
                 vertical
                 numColumns = { 2 }
                 showsVerticalScrollIndicator={Platform.OS === 'web'}
                 data={speciesList}
                 contentContainerStyle={{}}
+                ListHeaderComponent={<ListHeader speciesCount={speciesList.length} />}
                 renderItem={({ item, index }) => {
                     return (
                         <SpeciesButton
@@ -98,9 +106,10 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         justifyContent: 'center',
     },
+    speciesList: {},
     categoryContainer: {
         width: 120,
-        height: 140,
+        height: 147,
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
@@ -120,6 +129,7 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         display: 'flex',
         textAlign: 'center',
+        marginTop: 3,
     },
     emptyMessage: {
         fontFamily: 'OldStandardTT_400Regular',
@@ -128,5 +138,13 @@ const styles = StyleSheet.create({
         marginTop: 'auto',
         marginBottom: 'auto',
         color: '#222',
-      },
+    },
+    numSpeciesDiscovered: {
+        fontFamily: 'OldStandardTT_400Regular',
+        fontSize: 24,
+        textAlign: 'center',
+        marginTop: 55,
+        marginBottom: 20,
+        color: '#222',
+    },
 });
