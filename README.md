@@ -19,6 +19,10 @@ This project experiments with generative AI to create an engaging and educationa
 
 <img src="resources/screens/thumbnails/quiz_1.jpg" width="32%"> <img src="resources/screens/thumbnails/quiz_2.jpg" width="32%"> <img src="resources/screens/thumbnails/quiz_3.jpg" width="32%">
 
+<p align="center">
+<img src="resources/screens/thumbnails/map.jpg" width="32%">
+</p>
+
 ## Install
 
 This project is still in development, and not available on App Stores yet.
