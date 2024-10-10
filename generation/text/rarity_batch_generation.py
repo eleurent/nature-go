@@ -1,77 +1,40 @@
-import openai
-import re
+import sys
 import os
 from dotenv import load_dotenv
+sys.path.extend(['..', '../..'])
+from backend.nature_go.generation import gemini
 
-from rarity_prompts import *
-from gpt_utils import try_except_decorator, get_config, filter_and_get_within_context
+from rarity_prompts import rarity_batch_bird_v2
 
 FILENAME = "../data/bird_species.csv"
 DF_FIELD_NAME = "name"
-PROMPT_BATCH = "rarity_batch_bird_v2"
 BATCH_SIZE = 100
 
-@try_except_decorator
-def generate_rarety(plant_name, prompt="rarity_v1", num_try=0):
-    def extract_rarity_score(answer):
-        pattern = r"([1-9])[^1-9]*$"
-        match = re.search(pattern, answer)
-        if match:
-            return int(match.group(1))
-        else:
-            return None
-    
-    prompt = eval(prompt)
-    prompt = prompt.format(plant_name=plant_name)
-
-    messages = [{"role": "user", "content": prompt}]
-    response = openai.ChatCompletion.create(
-        messages=messages,
-        **gpt_config,
-    )
-    response = response["choices"][0]["message"]["content"]
-
-    print(response)
-
-    return extract_rarity_score(response)
+import typing as tp
+import json
 
 
-def get_species_names(df):
-    return f'[{", ".join(df[DF_FIELD_NAME].tolist())}]'
-
-@try_except_decorator
-def generate_rarety_batch(species_names, prompt=PROMPT_BATCH, num_try=0, batch_size=100):
-    def parse_rarity_batch(output_str):
-        lines = output_str.strip().split("\n")
-        rarity_dict = {}
-        for line in lines:
-            plant, rarity = line.split(":")
-            rarity_dict[plant.strip()] = int(rarity.strip())
-        return rarity_dict
-    
-    gpt_config = get_config("rarity_generation_batch")
-
-    prompt = eval(prompt)
+def generate_rarity_batch(species_names, generate_text: tp.Callable = gemini.generate_text, prompt: str = rarity_batch_bird_v2):
     prompt = prompt.format(species_names=species_names)
-    messages = [{"role": "user", "content": prompt}]
+    try:
+        response = generate_text(contents=[prompt])
+    except ValueError as e:
+        print(e)
+        return {}
+    data = json.loads(response)
+    return data, response
 
-    response = openai.ChatCompletion.create(messages=messages, **gpt_config)
-    response = response["choices"][0]["message"]["content"]
-    return parse_rarity_batch(response)
 
-if __name__ == '__main__':
+def generate_rarity_all(filename: str, repeats: int = 5):
     from tqdm import tqdm
     import pandas as pd
     import numpy as np
     from concurrent.futures import ThreadPoolExecutor
 
-    N = 5
-
     load_dotenv()
-    openai.api_key = os.getenv("OPENAI_API_KEY")
 
     # Read DataFrame
-    df = pd.read_csv(FILENAME)
+    df = pd.read_csv(filename)
 
     # Load processed batches log if exists
     processed_batches = []
@@ -86,16 +49,16 @@ if __name__ == '__main__':
             continue
         
         batch = df.iloc[i:i+BATCH_SIZE]
-        species_names = get_species_names(batch)
+        species_names = batch[DF_FIELD_NAME].to_list()
         with ThreadPoolExecutor() as executor:
-            results = list(executor.map(generate_rarety_batch, [species_names]*N))
+            results = list(executor.map(generate_rarity_batch, [species_names]*repeats))
 
         with open("processed_batches.log", "a") as log_file:
             log_file.write(f"Processed batch starting at index {i}\n")
         processed_batches.append(i)
         
         # Update the DataFrame
-        for idx, rarity_scores in enumerate(results):
+        for idx, (rarity_scores, _) in enumerate(results):
             if rarity_scores:
                 for species, score in rarity_scores.items():
                     df.loc[df[DF_FIELD_NAME] == species, f'rarity_batch_{idx}'] = score
@@ -103,5 +66,8 @@ if __name__ == '__main__':
         # Save the updated DataFrame
         df.to_csv(FILENAME, index=False)
     
-    df['rarityGpt'] = df[[f'rarity_batch_{idx}' for idx in range(N)]].mean(axis=1)
+    df['rarityGpt'] = df[[f'rarity_batch_{idx}' for idx in range(repeats)]].mean(axis=1)
     df.to_csv(FILENAME, index=False)
+
+if __name__ == '__main__':
+    generate_rarity_all(FILENAME)

@@ -29,18 +29,24 @@ Input: {species_names}
 Output:
  """
 
-rarity_batch_bird_v2 = """How rare is it to encounter these birds in Western Europe? Consider the following scale: 1. Very common 2. Uncommon 3. 
+rarity_batch_bird_v2 = """How rare is it to encounter these birds in Western Europe or North America? Consider the following scale: 1. Very common 2. Uncommon 3. 
 Rare 4. Very rare  5. Accidental / not recorded. You will be given a list of bird names, and 
-you will have to write the numbers corresponding to the rarity of each one. 
+you will have to write the numbers corresponding to the rarity of each one.
+
+Use this JSON schema:
+Return: dict[str, int]
+
 Example:
-Input: [Carrion crow, Hawfinch, Bearded vulture, House sparrow, Lesser redpoll, Goldfinch]
+Input: ["Carrion crow", "Hawfinch", "Bearded vulture", "House sparrow", "Lesser redpoll", "Goldfinch"]
 Output:
-Carrion crow: 1
-Hawfinch: 3
-Bearded vulture: 5
-House sparrow: 1
-Lesser redpoll: 4
-Barn owl: 2
+{{
+  "Carrion crow": 1,
+  "Hawfinch": 3,
+  "Bearded vulture": 5,
+  "House sparrow": 1,
+  "Lesser redpoll": 4,
+  "Barn owl": 2,
+}}
 Input: {species_names}
 Output:
- """
+"""

@@ -3,14 +3,14 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from tqdm import tqdm
 
-REGION = 'EUO'
+REGIONS = ['NAM', 'EUO']
 FORMAT = 'clements'
-SPECIES_LIST_URL = f'https://avibase.bsc-eoc.org/checklist.jsp?region={REGION}&list={FORMAT}'
+SPECIES_LIST_URL = 'https://avibase.bsc-eoc.org/checklist.jsp?region={REGION}&list={FORMAT}'
 
 
-def get_species_list():
+def get_region_species_list(region):
     # Get the bird listing table from Avibase
-    html = requests.get(SPECIES_LIST_URL)
+    html = requests.get(SPECIES_LIST_URL.format(REGION=region, FORMAT=FORMAT))
     content = html.content
     soup = BeautifulSoup(content, 'html.parser')
 
@@ -34,10 +34,15 @@ def get_species_list():
     df = pd.DataFrame(data)
     return df
 
+def get_species_list():
+    df = pd.concat([get_region_species_list(region) for region in REGIONS], ignore_index=True)
+    df = df.drop_duplicates(subset=['species'], keep='first')
+    return df
+
 
 def udate_species_detail(df, idx):
     if 'genus' in df.columns and not pd.isna(df.loc[idx, 'genus']): return
-    html = requests.get(df.loc[idx, 'link'])
+    html = requests.get(df.iloc[idx]['link'])
     content = html.content
     soup = BeautifulSoup(content, 'html.parser')
     if not soup: return
@@ -48,7 +53,7 @@ def udate_species_detail(df, idx):
     family = taxoninfo_div.find('b', string='Family:').find_next_sibling('a').string
     genus = taxoninfo_div.find('b', string='Genus:').find_next_sibling('a').string
     citation = taxoninfo_div.find('b', string='Citation:').find_next_sibling('a').string
-    avibaseId = df.loc[idx, 'link'].split('avibaseid=')[1]
+    avibaseId = df.iloc[idx]['link'].split('avibaseid=')[1]
 
     df.loc[idx, 'scientificName'] = scientificName
     df.loc[idx, 'protonym'] = protonym
