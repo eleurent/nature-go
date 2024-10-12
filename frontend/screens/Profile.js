@@ -11,6 +11,23 @@ import BadgeList from '../components/BadgeList';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 
+const TITLES = {
+    1: 'Scout',
+    2: 'Field Assistant',
+    3: 'Apprentice Naturalist',
+    4: 'Undergraduate',
+    5: 'PhD Candidate',
+    6: 'Postdoctoral Fellow',
+    7: 'Assistant Professor',
+    8: 'Associate Professor',
+    9: 'Professor',
+    10: 'Distinguished Professor',
+};
+
+const title = (level) => {
+    return TITLES[level] || TITLES[Object.keys(TITLES).length - 1];
+};
+
 
 export default function ProfileScreen({ navigation, route }) {
     const { authMethods } = useContext(AuthContext);
@@ -32,7 +49,7 @@ export default function ProfileScreen({ navigation, route }) {
                             <Image source={profileState.avatar?.full} style={styles.avatar} />
                         </Pressable>
                         <View style={styles.statsContainer}>
-                            <Text style={styles.title}>Undergraduate</Text>
+                            <Text style={styles.title}>{title(profileData.level)}</Text>
                             <XPBar data={profileData} />
                             <Text style={styles.xpText}>{profileData ? (profileData.xp - profileData.current_level_xp) : 0} / {profileData ? (profileData.next_level_xp - profileData.current_level_xp) : 0} XP</Text>
                             <Text style={styles.level}>{profileData ? profileData.level : 0}</Text>
