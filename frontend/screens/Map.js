@@ -11,7 +11,6 @@ const SPECIES_OBSERVATIONS_URL = API_URL + `api/species/observation/`
 
 const SPECIES_TYPE_TO_COLOR = {bird: 'red', plant: 'green'}
 
-
 const formatDate = (datetime) => {
     const dateObj = new Date(datetime);
     const day = dateObj.getDate();
@@ -49,9 +48,9 @@ export default function MapScreen({ navigation, route }) {
     }, []);
 
     let validObservations = observations.filter(obs => 
-        (obs.location !== null) && 
-        (obs.location?.latitude !== null) && 
-        (obs.location?.longitude !== null) 
+        (obs.location != null) &&
+        (obs.location.latitude != null) &&
+        (obs.location.longitude != null)
     );
     return (
         <View style={styles.container}>
@@ -82,7 +81,6 @@ export default function MapScreen({ navigation, route }) {
         </View>
     );
 };
-
 
 const styles = StyleSheet.create({
     container: {
