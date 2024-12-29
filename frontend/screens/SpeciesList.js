@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, Platform, FlatList } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import axios from 'axios';
 import Constants from 'expo-constants'
 
@@ -76,12 +77,12 @@ export default function SpeciesListScreen({ navigation, route }) {
                 numColumns = { 2 }
                 showsVerticalScrollIndicator={Platform.OS === 'web'}
                 data={speciesList}
-                contentContainerStyle={{}}
+                contentContainerStyle={{ alignItems: 'center' }}
                 ListHeaderComponent={<ListHeader speciesCount={speciesList.length} />}
                 renderItem={({ item, index }) => {
                     return (
                         <SpeciesButton
-                            key={item.id} label={item.display_name} 
+                            key={item.id} label={item.display_name}
                             onPress={() => navigation.navigate('SpeciesDetail', { id: item.id })}
                             imageSource={item.illustration_url}
                             index={item.id}
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     },
     speciesList: {},
     categoryContainer: {
-        width: 120,
+        width: 165,
         height: 147,
         flex: 1,
         flexDirection: 'column',

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image, Animated, Easing } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, Platform, FlatList, Image, Animated, Easing } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { HeaderBackButton } from '@react-navigation/elements';
 import { QuizContext } from '../contexts/QuizContext';
 import Ionicons from '@expo/vector-icons/Ionicons';

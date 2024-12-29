@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground, Pressable, ActivityIndicator } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Constants from 'expo-constants'
 import axios from 'axios';

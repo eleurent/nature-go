@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
-import QuizButton from '../components/QuizButton'
+import { View, Text, ImageBackground, StyleSheet, Platform, FlatList, Image } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import QuizButton from '../components/QuizButton';
 import { QuizContext } from '../contexts/QuizContext';
 
 const toRomanNumeral = num => {

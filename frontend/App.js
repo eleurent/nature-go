@@ -7,6 +7,7 @@ import { useObservation, ObservationContext } from './contexts/ObservationContex
 import { useQuiz, QuizContext } from './contexts/QuizContext';
 import { useUserProfile, UserProfileContext } from './contexts/UserProfileContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useLoadedAssets } from "./hooks/useLoadedAssets";
 import HomeScreen from './screens/Home'
 import SignInScreen from './screens/SignIn'
@@ -50,6 +51,7 @@ export default function App() {
     <QuizContext.Provider value= {{ quizState, quizMethods }}>
     <ObservationContext.Provider value= {{ observationState, observationMethods }}>
     <SafeAreaProvider>
+    <GestureHandlerRootView>
       <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerTransparent: true, headerTitle: '', headerTintColor: 'black' }}>
           {authState.userToken === null ? (
@@ -78,6 +80,7 @@ export default function App() {
           )}
         </Stack.Navigator>
       </NavigationContainer>
+    </GestureHandlerRootView>
     </SafeAreaProvider>
     </ObservationContext.Provider>
     </QuizContext.Provider>
@@ -91,4 +94,3 @@ export default function App() {
 
 const styles = StyleSheet.create({
 });
-

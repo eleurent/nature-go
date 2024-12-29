@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Pressable, FlatList, Modal, Button } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground, Pressable, FlatList, Modal, Button } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import axios from 'axios';
 import Constants from 'expo-constants'
 import { SafeAreaView } from 'react-native-safe-area-context';

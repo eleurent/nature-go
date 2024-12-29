@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, FlatList, StyleSheet, ImageBackground, Platform, TouchableOpacity , ActivityIndicator, ScrollView} from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, ImageBackground, Platform, ActivityIndicator, ScrollView} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import axios from 'axios';
 import Constants from 'expo-constants'
 import { ObservationContext } from '../contexts/ObservationContext';

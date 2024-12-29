@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, FlatList, StyleSheet, ImageBackground, Platform, TouchableOpacity , ActivityIndicator} from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, ImageBackground, Platform, ActivityIndicator} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import axios from 'axios';
 import Constants from 'expo-constants'
 import XPModal from '../components/XPModal';
