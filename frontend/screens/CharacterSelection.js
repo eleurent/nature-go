@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { View, Image, StyleSheet, Dimensions, ImageBackground, TouchableOpacity, Text } from 'react-native';
+import { View, Image, StyleSheet, Dimensions, ImageBackground, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { UserProfileContext } from '../contexts/UserProfileContext';
 
 // We use a fork of the original react-native-swiper to get a bugfix, see https://github.com/leecade/react-native-swiper/issues/1053

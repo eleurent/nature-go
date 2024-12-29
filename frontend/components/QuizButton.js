@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Pressable, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Pressable, Text, TouchableHighlight } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 

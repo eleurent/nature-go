@@ -1,4 +1,5 @@
-import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity, Pressable, FlatList, Modal, Button } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground, Pressable, FlatList, Modal, Button } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function XPBar({data})
 {

@@ -1,4 +1,5 @@
-import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 export default function IconButton({ icon, label, onPress, size, color, extra_style }) {
