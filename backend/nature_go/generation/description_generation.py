@@ -9,7 +9,22 @@ def replace_today(summary):
     if words[0] == "Today,":
         return "[DATE], " + words[1]
     else:
-        return summary
+        return summary    
+
+def get_leaf_nodes(data):
+    """Recursively extracts leaf nodes from a JSON-like object."""
+    if isinstance(data, dict):
+        leaves = []
+        for value in data.values():
+            leaves.extend(get_leaf_nodes(value))
+        return leaves
+    elif isinstance(data, list):
+        leaves = []
+        for item in data:
+            leaves.extend(get_leaf_nodes(item))
+        return leaves
+    else:
+        return [data]
  
 def generate_descriptions(generate_text: tp.Callable, species, prompt: str = description_prompt.summary_v7, material: str | None = None):
     # Fill in the prompt
@@ -26,5 +41,6 @@ def generate_descriptions(generate_text: tp.Callable, species, prompt: str = des
         print(e)
         return {}
     descriptions = json.loads(response)
+    descriptions = get_leaf_nodes(descriptions)
     descriptions = [replace_today(desc) for desc in descriptions]
     return descriptions, response
