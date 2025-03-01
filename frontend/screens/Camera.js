@@ -146,7 +146,9 @@ export default function CameraScreen({ navigation }) {
                 facing={facing}
             >
                 <View style={styles.cameraView}>
-                    <IconButton icon="image" size={32} color={galleryColor} onPress={() => pickImageAsync(navigation, observationMethods)} extra_style={styles.galleryButtonContainer} />
+                    <View style={styles.galleryButtonContainer}>
+                        <IconButton icon="image" size={32} color={galleryColor} onPress={() => pickImageAsync(navigation, observationMethods)}/>
+                    </View>
                     <IconButton icon="camera" size={70} color={cameraColor} onPress={() => takePictureAsync(cameraRef, navigation, observationMethods)} extra_style={styles.captureButton}/>
                 </View>
             </CameraView>
@@ -175,7 +177,7 @@ const styles = StyleSheet.create({
     },
     galleryButtonContainer: {
         position: "absolute",
-        left: 20,
-        bottom: 30,
+        left: 30,
+        bottom: 55,
     },
 });
