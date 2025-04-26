@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Image } from 'expo-image';
-import { View, Text, StyleSheet, ImageBackground, FlatList, Platform, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, FlatList, Platform, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/elements'
 import axios from 'axios';
 import Constants from 'expo-constants'
 import ObservationCarousel from '../components/ObservationCarousel';
 import ImageModal from '../components/ImageModal';
 import MapModal from '../components/MapModal';
+import ConfirmationModal from '../components/ConfirmationModal';
 import { Badge } from '@rneui/themed';
   import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
@@ -16,6 +17,7 @@ const SPECIES_DETAILS_URL = (id) => API_URL + `api/species/${id}/`
 const SPECIES_OBSERVATIONS_URL = (id) => API_URL + `api/species/${id}/observations/`
 const SPECIES_GENERATE_DESCRIPTIONS_URL = (id) => API_URL + `api/species/${id}/generate_descriptions/`
 const SPECIES_GENERATE_QUESTIONS_URL = (id) => API_URL + `api/university/quiz/questions/generate/${id}/`
+const OBSERVATION_DELETE_URL = (id) => API_URL + `api/species/observation/${id}/delete/`; // Define delete URL
 
 
 
@@ -95,6 +97,9 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     const [mapModalVisible, setMapModalVisible] = useState(false);
     const [generatingContent, setGeneratingContent] = useState(false);
     const onMapPress = (initialRegion, coordinate) => {setMapModalData({initialRegion, coordinate}); setMapModalVisible(true);}
+    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+    const [observationToDeleteId, setObservationToDeleteId] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false); // Loading state for deletion
 
 
     useEffect(() => {
@@ -112,6 +117,43 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         fetchSpeciesDetails();
         fetchSpeciesObservations();
     }, []);
+
+
+    // --- HANDLERS FOR DELETE MODAL ---
+    const handleLongPressObservation = useCallback((obsId) => {
+        console.log("Long press on observation ID:", obsId);
+        setObservationToDeleteId(obsId);
+        setIsDeleteModalVisible(true);
+    }, []); // useCallback ensures the function identity is stable
+
+    const handleCancelDelete = () => {
+        setIsDeleteModalVisible(false);
+        setObservationToDeleteId(null);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!observationToDeleteId) return;
+        setIsDeleting(true); // Start loading indicator
+
+        try {
+            await axios.delete(OBSERVATION_DELETE_URL(observationToDeleteId));
+
+            // Remove observation from state locally
+            setSpeciesObservations(prevObservations =>
+                prevObservations.filter(obs => obs.id !== observationToDeleteId)
+            );
+
+            Alert.alert("Success", "Observation deleted."); // User feedback
+            handleCancelDelete(); // Close modal and reset state
+
+        } catch (error) {
+            console.error("Failed to delete observation:", error.response?.data || error.message);
+            Alert.alert("Error", `Could not delete observation. ${error.response?.data?.detail || 'Please try again.'}`);
+        } finally {
+             setIsDeleting(false); // Stop loading indicator
+        }
+    };
+    // --- END DELETE MODAL HANDLERS ---
 
     let illustration_url = ("illustration_url" in speciesDetails) ? 
                            speciesDetails.illustration_url.replace('http://localhost/', API_URL) : null;
@@ -167,7 +209,15 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                 </View>
                 <ImageModal modalVisible={imageModalVisible} setModalVisible={setImageModalVisible} modalImage={imageModalImage}/>
                 <MapModal modalVisible={mapModalVisible} setModalVisible={setMapModalVisible} initialRegion={mapModalData.initialRegion} coordinate={mapModalData.coordinate}/>
-                <ObservationCarousel observations={speciesObservations} onImagePress={onImagePress} onMapPress={onMapPress}/>
+                <ConfirmationModal
+                    visible={isDeleteModalVisible}
+                    title="Delete Observation"
+                    message="Are you sure you want to delete this observation? This action cannot be undone."
+                    onCancel={handleCancelDelete}
+                    onConfirm={handleConfirmDelete}
+                />
+                 {isDeleting && <ActivityIndicator size="large" color="#d9534f" style={styles.loadingIndicator} />}
+                <ObservationCarousel observations={speciesObservations} onImagePress={onImagePress} onMapPress={onMapPress} onLongPressObservation={handleLongPressObservation}/>
                 </ScrollView>
             </ImageBackground>
         </View>

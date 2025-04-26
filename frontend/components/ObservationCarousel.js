@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, Pressable } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Pressable, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import MapView, { Marker } from './CustomMapView';
 
@@ -24,7 +24,7 @@ const formatDate = (datetime) => {
     return `${day}${nthNumber(day)} of ${month} ${year - 200}.`;
 }
 
-const CarouselCell = ({ obs, onImagePress, onMapPress }) => {
+const CarouselCell = ({ obs, onImagePress, onMapPress, onLongPressObservation }) => {
     let initialRegion = undefined;
     let coordinate = undefined;
     if (obs.location?.latitude) {
@@ -36,29 +36,46 @@ const CarouselCell = ({ obs, onImagePress, onMapPress }) => {
         };
         coordinate = obs.location;
     }
+
+    const handleLongPress = () => {
+        // Call the passed handler with the observation ID
+        if (onLongPressObservation) {
+            onLongPressObservation(obs.id);
+        }
+    };
+
     return (
-        <View style={styles.carouselCell}>
+        // Wrap the content in TouchableOpacity or Pressable to detect long press
+        <TouchableOpacity
+            style={styles.carouselCell}
+            onLongPress={handleLongPress} // Add the long press handler
+            activeOpacity={0.8} // Optional: visual feedback on press
+        >
             <View style={styles.imageContainer}>
+                {/* Use Pressable for the image itself if you need separate onPress */}
                 <Pressable style={styles.image} onPress={() => onImagePress(obs.image)}>
                     <Image style={styles.image} source={{ uri: obs.image }} cachePolicy='memory' />
                 </Pressable>
-                <MapView
-                    style={styles.map}
-                    initialRegion={initialRegion}
-                    scrollEnabled={false}
-                    zoomEnabled={false}
-                    onPress={() => onMapPress(initialRegion, coordinate)}
-                >
-                    {coordinate ? <Marker coordinate={coordinate}/> : null}
-                </MapView>
+                <Pressable onPress={() => onMapPress(initialRegion, coordinate)}>
+                    <MapView
+                        style={styles.map}
+                        initialRegion={initialRegion}
+                        scrollEnabled={false}
+                        zoomEnabled={false}
+                        // Make map non-interactive for long press on cell
+                        pointerEvents="none"
+                    >
+                        {coordinate ? <Marker coordinate={coordinate}/> : null}
+                    </MapView>
+                </Pressable>
             </View>
             <Text style={styles.dateText}>{formatDate(obs.datetime)}</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 
 
-export default function ObservationCarousel( {observations, onImagePress, onMapPress} ) {
+export default function ObservationCarousel( {observations, onImagePress, onMapPress, onLongPressObservation} ) {
     if (!observations)
         return null;
 
@@ -72,7 +89,7 @@ export default function ObservationCarousel( {observations, onImagePress, onMapP
                 showsHorizontalScrollIndicator={true}
             >
                 {observations.map((obs) => (
-                    <CarouselCell obs={obs} key={obs.id} onImagePress={onImagePress} onMapPress={onMapPress} />
+                    <CarouselCell obs={obs} key={obs.id} onImagePress={onImagePress} onMapPress={onMapPress} onLongPressObservation={onLongPressObservation}/>
                 ))}
             </ScrollView>
         </View>
