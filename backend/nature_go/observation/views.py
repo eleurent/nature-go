@@ -206,3 +206,12 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
             xp_gained.send(sender=instance.__class__, instance=instance)
 
         return Response(ObservationSerializer(instance).data)
+
+
+class ObservationDelete(generics.DestroyAPIView):
+    """
+    Allows the owner of an observation to delete it.
+    """
+    queryset = Observation.objects.all()
+    serializer_class = ObservationSerializer # Still good practice to include
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
