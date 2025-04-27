@@ -4,7 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Constants from 'expo-constants'
 import axios from 'axios';
-import MapView, { Marker } from '../components/CustomMapView';
+import MapView, { Marker } from 'react-native-maps';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const SPECIES_OBSERVATIONS_URL = API_URL + `api/species/observation/`
@@ -52,26 +52,28 @@ export default function MapScreen({ navigation, route }) {
         (obs.location.latitude != null) &&
         (obs.location.longitude != null)
     );
+    let markers = validObservations.map(obs => 
+        <Marker
+            key={obs.id}
+            coordinate={obs.location}
+            pinColor={SPECIES_TYPE_TO_COLOR[obs.type]}
+            title={obs.species_display_name}
+            description={formatDate(obs.datetime)}
+            pointerEvents="auto" //See https://github.com/react-native-maps/react-native-maps/issues/2410
+        />
+    );
+    /* MapView is initialised to null when markers are empty.
+    This is unfortunate, but without this the map does not update when markers are loaded. */
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
-                
-                <MapView
+                {markers.length ? <MapView
                     style={styles.map}
                     scrollEnabled={true}
                     zoomEnabled={true}
                 >
-                {validObservations && validObservations.map((obs, index) => 
-                    <Marker
-                        key={index}
-                        coordinate={obs.location}
-                        pinColor={SPECIES_TYPE_TO_COLOR[obs.type]}
-                        title={obs.species_display_name}
-                        description={formatDate(obs.datetime)}
-                        pointerEvents="auto" //See https://github.com/react-native-maps/react-native-maps/issues/2410, does not seem to work though... 
-                    />
-                )}
-                </MapView>
+                {markers}
+                </MapView> : null}
                 { isLoading ? (
                     <View style={styles.loadingContainer} pointerEvents="none">
                         <ActivityIndicator size={"large"} color="#660000"/>
