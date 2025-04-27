@@ -31,8 +31,8 @@ const CarouselCell = ({ obs, onImagePress, onMapPress, onLongPressObservation })
         initialRegion = {
             latitude: obs.location?.latitude,
             longitude: obs.location?.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: 0.0922*32,
+            longitudeDelta: 0.0421*32,
         };
         coordinate = obs.location;
     }
