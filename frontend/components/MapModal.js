@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Modal, TouchableWithoutFeedback, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import MapView, { Marker } from './CustomMapView';
+import MapView, { Marker } from 'react-native-maps';
 
 export default function ObservationMapModal({ modalVisible, setModalVisible, initialRegion, coordinate, backgroundColor='rgba(0,0,0,0.5)' }) {
     return (
@@ -35,17 +35,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    parentWithoutTouchEvents: {
-        width: '100%',
-        height: '50%',
-        resizeMode: 'contain',
-    },
     untouchableChild: {
-        width: '100%',
-        height: '50%',
+        width: '350',
+        height: '350',
     },
     modalMap: {
-        width: '100%',
-        height: '100%',
+        width: '350',
+        height: '350',
     },
 });
