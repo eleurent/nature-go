@@ -6,6 +6,8 @@ import { useAuth, AuthContext } from './contexts/AuthContext';
 import { useObservation, ObservationContext } from './contexts/ObservationContext';
 import { useQuiz, QuizContext } from './contexts/QuizContext';
 import { useUserProfile, UserProfileContext } from './contexts/UserProfileContext';
+import { NotificationProvider } from './contexts/NotificationContext';
+import NotificationModal from './components/NotificationModal';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useLoadedAssets } from "./hooks/useLoadedAssets";
@@ -50,6 +52,7 @@ export default function App() {
     <UserProfileContext.Provider value={{ profileState, profileMethods }}>
     <QuizContext.Provider value= {{ quizState, quizMethods }}>
     <ObservationContext.Provider value= {{ observationState, observationMethods }}>
+    <NotificationProvider>
     <SafeAreaProvider>
     <GestureHandlerRootView>
       <NavigationContainer>
@@ -80,8 +83,10 @@ export default function App() {
           )}
         </Stack.Navigator>
       </NavigationContainer>
+      <NotificationModal />
     </GestureHandlerRootView>
     </SafeAreaProvider>
+    </NotificationProvider>
     </ObservationContext.Provider>
     </QuizContext.Provider>
     </UserProfileContext.Provider>

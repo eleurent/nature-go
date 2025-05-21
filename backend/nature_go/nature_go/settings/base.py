@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'university',
     'user_profile',
     'website',
+    'notifications',
 ]
 
 MIDDLEWARE = [

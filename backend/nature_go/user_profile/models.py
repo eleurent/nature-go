@@ -4,6 +4,7 @@ import numpy as np
 
 from university.models import MultipleChoiceUserAnswer, Quiz
 from observation.models import Observation
+from notifications.models import Notification
 
 
 class Profile(models.Model):
@@ -31,6 +32,11 @@ class Profile(models.Model):
         self.xp += instance.xp['total']
         if self.xp > self.level_xp(self.level + 1):
             self.level += 1
+            Notification.objects.create(
+                user=self.user,
+                type='level_up',
+                message=f"Congratulations! You've reached Level {self.level}!"
+            )
         self.save()
 
 

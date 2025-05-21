@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from .badge import BADGE_LOGICS
+from notifications.models import Notification
 
 class Badge(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -38,13 +39,33 @@ class UserBadge(models.Model):
 
 def unlock_badge(badge, user):
     user_badge, _ = UserBadge.objects.get_or_create(user=user, badge=badge)
-    highest_unlocked_level = None
-    unlocked_levels = [level_name for (level_name, data) in user_badge.progress.items() if data["unlocked"]]
-    unlocked_levels = sorted(unlocked_levels, key=lambda x: badge.logic.levels[x])
-    highest_unlocked_level = unlocked_levels[-1] if unlocked_levels else None
-    user_badge.unlocked_level = highest_unlocked_level
-    user_badge.progress = badge.check_user_progress(user)
+    old_unlocked_level = user_badge.unlocked_level
+
+    # Update progress first
+    current_progress = badge.check_user_progress(user)
+    user_badge.progress = current_progress
+
+    # Determine new highest unlocked level based on the updated progress
+    new_highest_unlocked_level = None
+    if current_progress: # Ensure progress is not empty
+        unlocked_levels = [level_name for level_name, data in current_progress.items() if data.get("unlocked")]
+        if unlocked_levels and badge.logic and hasattr(badge.logic, 'levels'): # Check if badge.logic and levels exist
+             # Ensure levels are sortable by their actual threshold values
+            unlocked_levels = sorted(
+                unlocked_levels, 
+                key=lambda x: badge.logic.levels.get(x, 0) # Default to 0 if level not in logic.levels
+            )
+            new_highest_unlocked_level = unlocked_levels[-1] if unlocked_levels else None
+        
+    user_badge.unlocked_level = new_highest_unlocked_level
     user_badge.save()
+
+    if user_badge.unlocked_level and user_badge.unlocked_level != old_unlocked_level:
+        Notification.objects.create(
+            user=user,
+            type='badge_unlocked',
+            message=f"New Badge Unlocked: {badge.name} - {user_badge.unlocked_level}!"
+        )
 
 
 def update_user_badges(user):
