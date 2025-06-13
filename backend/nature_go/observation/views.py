@@ -15,7 +15,7 @@ from generation.gemini import generate_text
 from generation.description_generation import generate_descriptions
 from generation.prompts import description_prompt
 from user_profile.signals import xp_gained
-from nature_go.generation.gemini import generate_illustration
+from generation.gemini import generate_illustration
 
 logger = logging.getLogger(__name__)
 
