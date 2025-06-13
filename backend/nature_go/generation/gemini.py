@@ -2,7 +2,7 @@ from google import genai
 from google.genai import types
 import logging
 from django.core.files.base import ContentFile
-from nature_go.observation.models import Species
+from observation.models import Species
 
 # Initialize a logger for this module
 logger = logging.getLogger(__name__)
