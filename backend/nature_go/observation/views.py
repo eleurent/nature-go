@@ -1,5 +1,7 @@
 import logging
-from rest_framework import generics, permissions, pagination, filters
+from rest_framework import generics, permissions, pagination, filters, status
+from rest_framework.views import APIView # This might be removable if no other class uses APIView directly
+from rest_framework.decorators import api_view, permission_classes # api_view and permission_classes might be removable if no other FBVs use them
 from rest_framework.response import Response
 from rest_framework import serializers
 from django.db.models import Q, Count, Min
@@ -13,6 +15,7 @@ from generation.gemini import generate_text
 from generation.description_generation import generate_descriptions
 from generation.prompts import description_prompt
 from user_profile.signals import xp_gained
+from nature_go.generation.gemini import generate_illustration
 
 logger = logging.getLogger(__name__)
 
@@ -215,3 +218,26 @@ class ObservationDelete(generics.DestroyAPIView):
     queryset = Observation.objects.all()
     serializer_class = ObservationSerializer # Still good practice to include
     permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+
+class GenerateIllustrationView(generics.GenericAPIView): # Corrected base class
+    queryset = Species.objects.all()
+    serializer_class = SpeciesSerializer
+    permission_classes = [permissions.IsAuthenticated] # Use permissions alias
+
+    def post(self, request, *args, **kwargs): # Standard signature
+        # pk should be in self.kwargs from the URL pattern
+        species = self.get_object() # Use DRF's get_object
+
+        # Optional: Check if illustration already exists
+        # if species.illustration and species.illustration.name:
+        #     serializer = self.get_serializer(species) # Use self.get_serializer
+        #     return Response(serializer.data, status=status.HTTP_200_OK)
+
+        success = generate_illustration(species)
+
+        if success:
+            serializer = self.get_serializer(species) # Use self.get_serializer
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Failed to generate illustration'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

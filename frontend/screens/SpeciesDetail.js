@@ -16,6 +16,7 @@ const API_URL = Constants.expoConfig.extra.API_URL;
 const SPECIES_DETAILS_URL = (id) => API_URL + `api/species/${id}/`
 const SPECIES_OBSERVATIONS_URL = (id) => API_URL + `api/species/${id}/observations/`
 const SPECIES_GENERATE_DESCRIPTIONS_URL = (id) => API_URL + `api/species/${id}/generate_descriptions/`
+const SPECIES_GENERATE_ILLUSTRATION_URL = (id) => API_URL + `api/species/${id}/generate_illustration/`;
 const SPECIES_GENERATE_QUESTIONS_URL = (id) => API_URL + `api/university/quiz/questions/generate/${id}/`
 const OBSERVATION_DELETE_URL = (id) => API_URL + `api/species/observation/${id}/delete/`; // Define delete URL
 
@@ -86,6 +87,23 @@ const generateSpeciesDescription = async (species_id, setSpeciesDetails, setGene
     response = await axios.post(SPECIES_GENERATE_QUESTIONS_URL(species_id));
 };
 
+const generateIllustration = async (species_id, setSpeciesDetails, setIsGeneratingIllustration) => {
+    console.log('Attempting to generate illustration for species ID:', species_id);
+    setIsGeneratingIllustration(true);
+    try {
+        // Assuming axios is already imported and configured with auth tokens if needed
+        const response = await axios.post(SPECIES_GENERATE_ILLUSTRATION_URL(species_id));
+        console.log('Illustration generation response:', response.data);
+        setSpeciesDetails(response.data); // Update species details with the new illustration URL
+        Alert.alert("Illustration Generated", "A new illustration has been generated for this species.");
+    } catch (error) {
+        console.error('Failed to generate illustration:', error.response?.data || error.message);
+        Alert.alert("Error", `Could not generate illustration. ${error.response?.data?.error || 'Please try again later.'}`);
+    } finally {
+        setIsGeneratingIllustration(false);
+    }
+};
+
 export default function SpeciesDetailScreen({ navigation, route }) {
 
     const [speciesDetails, setSpeciesDetails] = useState({});
@@ -96,6 +114,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     const [mapModalData, setMapModalData] = useState({initialRegion: null, coordinate: null});
     const [mapModalVisible, setMapModalVisible] = useState(false);
     const [generatingContent, setGeneratingContent] = useState(false);
+    const [isGeneratingIllustration, setIsGeneratingIllustration] = useState(false);
     const onMapPress = (initialRegion, coordinate) => {setMapModalData({initialRegion, coordinate}); setMapModalVisible(true);}
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [observationToDeleteId, setObservationToDeleteId] = useState(null);
@@ -174,18 +193,40 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     if (!generatingContent &&speciesDetails?.descriptions && !(speciesDetails?.descriptions.length))
         generateSpeciesDescription(route.params.id, setSpeciesDetails, setGeneratingContent)
 
+    useEffect(() => {
+        if (speciesDetails && speciesDetails.id && !speciesDetails.illustration_url &&
+            !generatingContent && !isGeneratingIllustration) {
+            // Call generateIllustration if no illustration URL is present and no other generation is active
+            generateIllustration(speciesDetails.id, setSpeciesDetails, setIsGeneratingIllustration);
+        }
+    }, [speciesDetails, generatingContent, isGeneratingIllustration]);
+
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
                 <ScrollView>
-                <Image
+                {isGeneratingIllustration && !illustration_url ? (
+                    <View style={[styles.illustrationImage, styles.loadingImageContainer]}>
+                        <ActivityIndicator size="large" color="#007bff" />
+                        <Text style={styles.loadingText}>Sketching the observed specimen...</Text>
+                    </View>
+                ) : (
+                    <Image
+                        style={styles.illustrationImage}
+                        contentFit='contain'
+                        source={{ uri: illustration_url }}
+                        placeholder='empty' // Or a specific placeholder image asset
+                        cachePolicy={'disk'}
+                    />
+                )}
+                {/* <Image
                     style={styles.illustrationImage}
                     contentFit='contain'
                     source={{ uri: illustration_url }}
                     placeholder='empty'
                     cachePolicy={'disk'}
                     // sharedTransitionTag={"species" + route.params.id}
-                />
+                /> */}
                 <View style={styles.textContainer}>
                     <Text style={[styles.speciesName, styles.nameContainer]}>{speciesDetails.display_name ? speciesDetails.display_name : "Name"}</Text>
                     <Text style={[styles.speciesScientificName, styles.nameContainer, {marginBottom: 5}]}>{speciesDetails.scientificNameWithoutAuthor ? speciesDetails.scientificNameWithoutAuthor : "Scientific name"}</Text>
@@ -272,5 +313,15 @@ const styles = StyleSheet.create({
         marginTop: 15,
         paddingHorizontal: 20,
         textAlign: 'justify',
+    },
+    loadingImageContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#f0f0f0', // A light background for the loading area
+    },
+    loadingText: {
+        marginTop: 10,
+        fontSize: 16,
+        color: '#333'
     },
 });
