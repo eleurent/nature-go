@@ -8,7 +8,7 @@ pandas
 requests
 Pillow
 gunicorn
-google-generativeai
+google-genai
 wikipedia
 beautifulsoup4
 python-dotenv
