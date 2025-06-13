@@ -3,12 +3,13 @@ import requests
 import io
 import os
 import PIL.Image
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from observation.models import Species, IdentificationCandidate, IdentificationResponse
 from django.db.models import Q
 
-CONFIGURED = False
-PROMPT_PREFIX = """Identify the species in the picture, taking metadata into account. 
+client = genai.Client(api_key=os.environ.get('GOOGLE_API_KEY', None))
+PROMPT_PREFIX = """Identify the species in the picture, taking metadata into account.
 
 Be comprehensive. Return an empty list if there are no species.
 
@@ -48,12 +49,6 @@ BIRD_ID_FEW_SHOTS = [
 ]
 
 
-def configure():
-    google_api_key = os.environ.get('GOOGLE_API_KEY', None)
-    genai.configure(api_key=google_api_key)
-    CONFIGURED = True
-
-
 def gemini_identify_few_shot(
     image_path: str,
     location: str,
@@ -69,7 +64,6 @@ def gemini_identify_few_shot(
     Returns:
         str: response for the input image
     """
-    if not CONFIGURED: configure()
 
     def load_image_from_url(image_url: str) -> PIL.Image:
         headers = {
@@ -78,7 +72,6 @@ def gemini_identify_few_shot(
         response = requests.get(image_url, stream=True, headers=headers)
         return PIL.Image.open(io.BytesIO(response.content))
 
-    multimodal_model = genai.GenerativeModel(model_id, generation_config={"response_mime_type": "application/json"})
     examples = [
         (
             str(few_shot['metadata']),
@@ -89,7 +82,11 @@ def gemini_identify_few_shot(
     image = PIL.Image.open(image_path)
     metadata = str(location)
     contents = (PROMPT_PREFIX,) + sum(examples, ()) + (metadata, image,)
-    response = multimodal_model.generate_content(contents) 
+    response = client.models.generate_content(
+        model=model_id,
+        contents=contents,
+        generation_config=types.GenerateContentConfig(response_mime_type="application/json")
+    )
 
     # Parse response
     candidates = []
