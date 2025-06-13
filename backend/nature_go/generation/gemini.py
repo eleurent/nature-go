@@ -9,15 +9,18 @@ logger = logging.getLogger(__name__)
 
 # Global client for google.genai, initialized when the module is loaded.
 # Ensure API key is configured (e.g., GOOGLE_API_KEY environment variable).
-client = genai.Client()
+client = None
 
 def generate_text(contents, model_name='gemini-2.0-flash'):
+    if client is None:
+        client = genai.Client()
     response = client.models.generate_content(model=model_name, contents=contents, config=types.GenerateContentConfig(response_mime_type="application/json"))
     return response.text
 
 def generate_illustration(species: Species) -> bool:
     try:
-        # This function will now use the global 'client' instance.
+        if client is None:
+            client = genai.Client()
 
         common_name = species.commonNames[0] if species.commonNames else species.scientificNameWithoutAuthor
         scientific_name = species.scientificNameWithoutAuthor

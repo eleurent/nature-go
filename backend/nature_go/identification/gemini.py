@@ -8,7 +8,7 @@ from google.genai import types
 from observation.models import Species, IdentificationCandidate, IdentificationResponse
 from django.db.models import Q
 
-client = genai.Client(api_key=os.environ.get('GOOGLE_API_KEY', None))
+client = None
 PROMPT_PREFIX = """Identify the species in the picture, taking metadata into account.
 
 Be comprehensive. Return an empty list if there are no species.
@@ -82,6 +82,9 @@ def gemini_identify_few_shot(
     image = PIL.Image.open(image_path)
     metadata = str(location)
     contents = (PROMPT_PREFIX,) + sum(examples, ()) + (metadata, image,)
+
+    if client is None:
+        client = genai.Client()
     response = client.models.generate_content(
         model=model_id,
         contents=contents,
