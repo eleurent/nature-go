@@ -23,7 +23,7 @@ def generate_illustration(species: Species) -> bool:
     try:
         common_name = species.commonNames[0] if species.commonNames else species.scientificNameWithoutAuthor
         scientific_name = species.scientificNameWithoutAuthor
-        prompt_text = f"illustration of a {common_name} ({scientific_name}) in its sketched habitat, 19th century quick rough sketch on an yellowish page"
+        prompt_text = f"quick rough watercolor and graphite sketch of a {common_name} ({scientific_name}), on a 19th century yellowish page"
 
         logger.info(f"Generating image for {scientific_name} with prompt: '{prompt_text}' using model imagen-4.0-generate-preview-06-06 via google.genai SDK")
 
