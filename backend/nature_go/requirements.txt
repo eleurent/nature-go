@@ -12,3 +12,4 @@ google-genai
 wikipedia
 beautifulsoup4
 python-dotenv
+pydantic

@@ -7,17 +7,19 @@ from google import genai
 from google.genai import types
 from observation.models import Species, IdentificationCandidate, IdentificationResponse
 from django.db.models import Q
+from pydantic import BaseModel
 
 client = None
+
+
+class IdentificationCandidate(BaseModel):
+    commonName: str
+    scientificName: str
+    confidence: float
+
 PROMPT_PREFIX = """Identify the species in the picture, taking metadata into account.
 
 Be comprehensive. Return an empty list if there are no species.
-
-Use this JSON schema:
-  Result = {"commonName": str, "scientificName": str, "confidence": float}
-
-Return: list[Result].
-
 """
 # Metadata, url, response
 BIRD_ID_FEW_SHOTS = [
@@ -89,7 +91,10 @@ def gemini_identify_few_shot(
     response = client.models.generate_content(
         model=model_id,
         contents=contents,
-        generation_config=types.GenerateContentConfig(response_mime_type="application/json")
+        config={
+            "response_mime_type": "application/json",
+            "response_schema": list[IdentificationCandidate],
+        },
     )
 
     # Parse response
