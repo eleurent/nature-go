@@ -1,5 +1,6 @@
+from io import BytesIO
 import typing as tp
-from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile, File
 from generation.prompts import illustration_prompt
 from rembg import remove
 from PIL import Image
@@ -27,9 +28,11 @@ def generate_illustration_transparent(species) -> bool:
         return True
     scientific_name = species.scientificNameWithoutAuthor
     illustration = Image.open(species.illustration)
-    raw_bytes = remove(illustration, force_return_bytes=True)
+    illustration_transparent = remove(illustration)
+    bytes_io = BytesIO()
+    illustration_transparent.save(bytes_io, 'JPEG')  
     file_name = f"{scientific_name.replace(' ', '_')}_illustration.png"
-    species.illustration_transparent.save(file_name, ContentFile(raw_bytes), save=False)
+    species.illustration_transparent.save(file_name, File(bytes_io), save=False)
     species.save()
     return True
 
