@@ -238,7 +238,7 @@ class GenerateIllustrationView(generics.GenericAPIView): # Corrected base class
         prompt_text = f"quick rough watercolor and graphite sketch of a {common_name} ({scientific_name}), on a 19th century yellowish page"
         logger.info(f"Generating image for {scientific_name} with prompt: '{prompt_text}'")
 
-        raw_bytes = generate_image(species)
+        raw_bytes = generate_image(prompt_text)
 
         if raw_bytes:
             file_name = f"{scientific_name.replace(' ', '_')}_illustration.png"
