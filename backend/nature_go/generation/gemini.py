@@ -31,7 +31,7 @@ def generate_illustration(species: Species) -> bool:
             client = genai.Client()
         
         image_response = client.models.generate_images(
-            model="imagen-4.0-generate-preview-06-06", # Hardcoded model name
+            model="imagen-3.0-generate-002", # Hardcoded model name
             prompt=prompt_text
         )
 
