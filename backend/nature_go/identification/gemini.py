@@ -5,7 +5,7 @@ import os
 import PIL.Image
 from google import genai
 from google.genai import types
-from observation.models import Species, IdentificationCandidate, IdentificationResponse
+from observation.models import Species, IdentificationCandidate as ModelIdentificationCandidate, IdentificationResponse
 from django.db.models import Q
 from pydantic import BaseModel
 
@@ -105,5 +105,5 @@ def gemini_identify_few_shot(
         if not Species.objects.filter(query).exists():
             query |= Q(commonNames__icontains=[candidate_data['commonName']])
         species = Species.objects.filter(query).all()
-        candidates.extend([IdentificationCandidate(species=s, confidence=candidate_data['confidence']/len(species)) for s in species])
+        candidates.extend([ModelIdentificationCandidate(species=s, confidence=candidate_data['confidence']/len(species)) for s in species])
     return IdentificationResponse(candidates=candidates, raw_response=response.text)
