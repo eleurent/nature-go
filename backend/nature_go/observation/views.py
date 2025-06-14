@@ -11,7 +11,7 @@ from observation.permissions import IsOwner, IsAdminOrReadOnly
 from identification import plantnet, gemini
 from generation.gemini import generate_text, generate_image
 from generation.description_generation import generate_descriptions
-from generation.illustration_generation import generate_illustration
+from generation.illustration_generation import generate_illustration, generate_illustration_transparent
 from user_profile.signals import xp_gained
 
 logger = logging.getLogger(__name__)
@@ -223,8 +223,9 @@ class GenerateIllustrationView(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         species = self.get_object()
-
         success = generate_illustration(generate_image=generate_image, species=species)
+        transparent_success = generate_illustration_transparent(species=species)
+        success = success or transparent_success
         if success:
             serializer = self.get_serializer(species)
             return Response(serializer.data, status=status.HTTP_200_OK)
