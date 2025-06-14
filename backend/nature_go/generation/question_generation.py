@@ -19,7 +19,7 @@ def parse_questions(questions: str):
 def generate_questions(generate_text: tp.Callable, species, material: str | None = None, prompt: str=question_prompt.question_prompt_few_shot):
     common_name, scientific_name = species.commonNames[0], species.scientificNameWithoutAuthor
     if not material:
-        material = utils.get_wikipedia_species_page(common_name, scientific_name).content
+        material = utils.get_wikipedia_species_page(common_name, scientific_name)
     prompt = Template(prompt).substitute(species_name=common_name, material=material)
 
     response = generate_text(contents=[prompt])

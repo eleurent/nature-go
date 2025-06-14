@@ -30,7 +30,7 @@ def generate_descriptions(generate_text: tp.Callable, species, prompt: str = des
     # Fill in the prompt
     common_name, scientific_name = species.commonNames[0], species.scientificNameWithoutAuthor
     if not material:
-        material = utils.get_wikipedia_species_page(common_name, scientific_name).content
+        material = utils.get_wikipedia_species_page(common_name, scientific_name)
     job_name = {'bird': 'ornithologist', 'plant': 'botanist'}[species.type]
     prompt = prompt.format(species_name=common_name, material=material, job_name=job_name)
 
