@@ -2,6 +2,7 @@ import typing as tp
 from django.core.files.base import ContentFile
 from generation.prompts import illustration_prompt
 from rembg import remove
+from PIL import Image
 
 
 def generate_illustration(generate_image: tp.Callable, species) -> bool:
@@ -25,11 +26,10 @@ def generate_illustration_transparent(species) -> bool:
     if species.illustration_transparent:
         return True
     scientific_name = species.scientificNameWithoutAuthor
-    with open(species.illustration, 'rb') as i:
-        input = i.read()
-        raw_bytes = remove(input, force_return_bytes=True)
-        file_name = f"{scientific_name.replace(' ', '_')}_illustration.png"
-        species.illustration_transparent.save(file_name, ContentFile(raw_bytes), save=False)
-        species.save()
+    illustration = Image.open(species.illustration)
+    raw_bytes = remove(illustration, force_return_bytes=True)
+    file_name = f"{scientific_name.replace(' ', '_')}_illustration.png"
+    species.illustration_transparent.save(file_name, ContentFile(raw_bytes), save=False)
+    species.save()
     return True
 
