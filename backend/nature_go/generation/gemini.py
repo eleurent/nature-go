@@ -39,7 +39,7 @@ def generate_illustration(species: Species) -> bool:
         logger.info(f"Image generation API call completed for {scientific_name} using google.genai.")
 
         if image_response.generated_images:
-            generated_image_object = image_response.generated_images[0]
+            generated_image_object = image_response.generated_images[0].image
 
             # The API is returning a base64 encoded string in the `image_bytes` attribute.
             # This is a bit of a misnomer for the attribute name, but we handle it.
