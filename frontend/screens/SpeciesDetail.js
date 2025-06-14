@@ -95,10 +95,8 @@ const generateIllustration = async (species_id, setSpeciesDetails, setIsGenerati
         const response = await axios.post(SPECIES_GENERATE_ILLUSTRATION_URL(species_id));
         console.log('Illustration generation response:', response.data);
         setSpeciesDetails(response.data); // Update species details with the new illustration URL
-        Alert.alert("Illustration Generated", "A new illustration has been generated for this species.");
     } catch (error) {
         console.error('Failed to generate illustration:', error.response?.data || error.message);
-        Alert.alert("Error", `Could not generate illustration. ${error.response?.data?.error || 'Please try again later.'}`);
     } finally {
         setIsGeneratingIllustration(false);
     }
@@ -174,8 +172,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     };
     // --- END DELETE MODAL HANDLERS ---
 
-    let illustration_url = ("illustration_url" in speciesDetails) ? 
-                           speciesDetails.illustration_url.replace('http://localhost/', API_URL) : null;
+    let illustration_url = speciesDetails.illustration_url;
     const unlockedSummaries = speciesDetails.descriptions ? speciesDetails.descriptions.slice(0, speciesObservations.length) : [];
     const lockedSummary = speciesDetails.descriptions && (speciesDetails.descriptions.length > speciesObservations.length) ? speciesDetails.descriptions[speciesObservations.length] : [];
 
@@ -317,7 +314,6 @@ const styles = StyleSheet.create({
     loadingImageContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#f0f0f0', // A light background for the loading area
     },
     loadingText: {
         marginTop: 10,

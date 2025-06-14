@@ -13,7 +13,8 @@ const SPECIES_LIST_URL = API_URL + 'api/species/'
 
 const SpeciesButton = (props) => {
     let image_url = props.imageSource;
-    image_url = image_url.replace('http://localhost/', API_URL)
+    if (image_url)
+        image_url = image_url.replace('http://localhost/', API_URL)
 
     const rarityStyles = {
         'Very Common': { color: '#333' },
