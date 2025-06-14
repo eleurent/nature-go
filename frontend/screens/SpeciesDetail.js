@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Image } from 'expo-image';
-import { View, Text, StyleSheet, ImageBackground, FlatList, Platform, ScrollView, Alert, ActivityIndicator } from 'react-native';
-import { HeaderBackButton } from '@react-navigation/elements'
+import { View, Text, StyleSheet, ImageBackground, FlatList, Platform, ScrollView, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { HeaderBackButton } from '@react-navigation/elements';
+import { useAudioPlayer } from 'expo-audio'; // Using the new hook
+import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import Constants from 'expo-constants'
 import ObservationCarousel from '../components/ObservationCarousel';
@@ -115,6 +117,17 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     const [isGeneratingIllustration, setIsGeneratingIllustration] = useState(false);
     const onMapPress = (initialRegion, coordinate) => {setMapModalData({initialRegion, coordinate}); setMapModalVisible(true);}
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+
+    // Initialize Audio Player Hook
+    // The player will be re-initialized if audio_description changes.
+    // useAudioPlayer should handle loading and preparation internally.
+    const player = useAudioPlayer(speciesDetails.audio_description ? { uri: speciesDetails.audio_description } : null, {
+        // TODO: It's not clear from the prompt if useAudioPlayer has an onPlaybackStatusUpdate equivalent built-in
+        // or if player.playing and other properties are directly reactive.
+        // Assuming player properties like 'playing', 'loading', 'duration', 'currentTime' are reactive.
+        // If specific event listeners are needed (e.g. for 'didJustFinish'), the hook's docs would be key.
+    });
+
     const [observationToDeleteId, setObservationToDeleteId] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false); // Loading state for deletion
 
@@ -133,8 +146,57 @@ export default function SpeciesDetailScreen({ navigation, route }) {
 
         fetchSpeciesDetails();
         fetchSpeciesObservations();
-    }, []);
+    }, [route.params.id]); // Ensure data re-fetches if ID changes
 
+    // Autoplay Effect for useAudioPlayer
+    useEffect(() => {
+        if (player && speciesDetails.audio_description && player.isLoaded && !player.playing && !player.error) {
+            // Check if player is loaded, not already playing, and no error, then play.
+            // This assumes `player.isLoaded` and `player.error` properties exist.
+            // The initial play for autoplay is often handled by the hook itself if an `autoplay` option exists,
+            // or by an explicit play call once ready.
+            // If `useAudioPlayer` has an `autoplay` option, that would be preferred.
+            // If not, this effect tries to achieve it.
+            // This might need refinement based on actual `useAudioPlayer` behavior for readiness.
+            player.play();
+        }
+        // Dependencies: player instance and the audio description URL.
+        // player.isLoaded, player.playing, player.error might also be needed if they are reactive.
+    }, [player, speciesDetails.audio_description, player?.isLoaded, player?.playing, player?.error]);
+
+
+    const handlePlayPause = async () => {
+        if (!player || !player.isLoaded) { // Check if player is available and loaded
+            if (speciesDetails.audio_description) {
+                 Alert.alert("Audio Not Ready", "Audio is loading or not available. Please wait.");
+            } else {
+                Alert.alert("No Audio", "No audio description available for this species.");
+            }
+            return;
+        }
+
+        if (player.error) {
+            console.error("Player error:", player.error);
+            Alert.alert("Audio Error", "Cannot play audio due to an error.");
+            return;
+        }
+
+        if (player.playing) {
+            console.log('Pausing Sound with useAudioPlayer');
+            player.pause();
+        } else {
+            console.log('Playing Sound with useAudioPlayer');
+            // Check if playback had finished (current time equals duration)
+            // This assumes player.currentTime and player.duration properties exist and are reliable.
+            if (player.currentTime != null && player.duration != null && player.currentTime >= player.duration - 0.1) { // -0.1 for float precision
+                console.log('Replaying sound from beginning');
+                await player.seekTo(0); // Seek to start
+                player.play(); // And play
+            } else {
+                player.play(); // Resume or play from current position
+            }
+        }
+    };
 
     // --- HANDLERS FOR DELETE MODAL ---
     const handleLongPressObservation = useCallback((obsId) => {
@@ -225,25 +287,44 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                     // sharedTransitionTag={"species" + route.params.id}
                 /> */}
                 <View style={styles.textContainer}>
-                    <Text style={[styles.speciesName, styles.nameContainer]}>{speciesDetails.display_name ? speciesDetails.display_name : "Name"}</Text>
-                    <Text style={[styles.speciesScientificName, styles.nameContainer, {marginBottom: 5}]}>{speciesDetails.scientificNameWithoutAuthor ? speciesDetails.scientificNameWithoutAuthor : "Scientific name"}</Text>
-                    {speciesDetails.rarity ? <RarityBadge rarity={speciesDetails.rarity} /> : null}
-                    <FlatList
-                        vertical
-                        scrollEnabled={false}
-                        showsVerticalScrollIndicator={Platform.OS === 'web'}
-                        data={unlockedSummaries}
-                        contentContainerStyle={{}}
-                        renderItem={({ item, index }) => {
-                            return (
-                                <Text key={index} style={styles.descriptionText}>
-                                    { item.replace('[DATE]', 'On ' + observationDate) }
-                                </Text>
-                            );
-                        }}
-                    />
-                    <GradientText style={[styles.descriptionText, {height: 50}]} placeholder={descriptionsPlaceholder}>{ lockedSummary }</GradientText>
-                    <View style = {{ marginBottom: 20 }}></View>
+                    <View style={styles.nameAndAudioContainer}>
+                        <View style={styles.nameTextContainer}>
+                            <Text style={[styles.speciesName]}>{speciesDetails.display_name ? speciesDetails.display_name : "Name"}</Text>
+                            <Text style={[styles.speciesScientificName, {marginBottom: 5}]}>{speciesDetails.scientificNameWithoutAuthor ? speciesDetails.scientificNameWithoutAuthor : "Scientific name"}</Text>
+                        </View>
+                        {/* Audio button removed from here */}
+                    </View>
+                    {speciesDetails.rarity ? <View style={styles.rarityContainer}><RarityBadge rarity={speciesDetails.rarity} /></View> : null}
+
+                    <View style={styles.descriptionAreaWrapper}>
+                        {speciesDetails.audio_description && player && ( // Only show button if URL exists AND player is initialized
+                            <TouchableOpacity onPress={handlePlayPause} style={styles.audioButtonDescriptionArea}>
+                                {player.loading ? ( // Assuming player.loading indicates buffering/loading
+                                    <ActivityIndicator size="large" color="#007bff" />
+                                ) : player.playing ? (
+                                    <Ionicons name="pause-circle" size={32} color="#007bff" />
+                                ) : (
+                                    <Ionicons name="play-circle" size={32} color="#007bff" />
+                                )}
+                            </TouchableOpacity>
+                        )}
+                        <FlatList
+                            vertical
+                            scrollEnabled={false}
+                            showsVerticalScrollIndicator={Platform.OS === 'web'}
+                            data={unlockedSummaries}
+                            contentContainerStyle={{}}
+                            renderItem={({ item, index }) => {
+                                return (
+                                    <Text key={index} style={styles.descriptionText}>
+                                        { item.replace('[DATE]', 'On ' + observationDate) }
+                                    </Text>
+                                );
+                            }}
+                        />
+                        <GradientText style={[styles.descriptionText, {height: 50}]} placeholder={descriptionsPlaceholder}>{ lockedSummary }</GradientText>
+                        <View style = {{ marginBottom: 20 }}></View>
+                    </View>
                 </View>
                 <ImageModal modalVisible={imageModalVisible} setModalVisible={setImageModalVisible} modalImage={imageModalImage}/>
                 <MapModal modalVisible={mapModalVisible} setModalVisible={setMapModalVisible} initialRegion={mapModalData.initialRegion} coordinate={mapModalData.coordinate}/>
@@ -283,20 +364,49 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
     },
-    nameContainer: {
-        textAlign: 'center',
-    },
-    speciesName: {
+    nameAndAudioContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between', // Pushes name and button to opposite ends
+        alignItems: 'center', // Vertically align items in the center
+        paddingHorizontal: 20, // Add some horizontal padding
         marginTop: 10,
+    },
+    nameTextContainer: {
+        flex: 1, // Allows text container to take up available space
+        alignItems: 'center', // Center the text block itself
+    },
+    // audioButton style removed as it's no longer used.
+    descriptionAreaWrapper: {
+        position: 'relative', // Needed for absolute positioning of the child button
+        paddingTop: 5, // Add a little padding at the top if button is too close to elements above
+    },
+    audioButtonDescriptionArea: {
+        position: 'absolute',
+        top: 10, // Adjust as needed from the top of descriptionAreaWrapper
+        right: 15, // Adjust as needed from the right of descriptionAreaWrapper
+        zIndex: 1, // Ensure button is on top
+        padding: 5, // Add some touchable area around the icon
+        // backgroundColor: 'rgba(255, 255, 255, 0.7)', // Optional: for better visibility on varied backgrounds
+        // borderRadius: 20, // Optional: for rounded background
+    },
+    // Ensure speciesName and speciesScientificName are centered if they were individually centered before
+    speciesName: {
         fontFamily: 'SpecialElite_400Regular',
-        fontWeight: 400,
+        fontWeight: '400', // Note: fontWeight for custom fonts might not always behave as expected. Ensure font supports it.
         fontSize: 20,
         color: '#331100',
-        opacity: 0.9
+        opacity: 0.9,
+        textAlign: 'center', // Center text within its container
     },
     speciesScientificName: {
-        // fontFamily: 'Tinos_400Regular_Italic',
         fontSize: 12,
+        color: '#332200',
+        opacity: 0.7,
+        textAlign: 'center', // Center text
+    },
+    rarityContainer: {
+        alignItems: 'center', // Center the rarity badge
+        marginBottom: 5,
         color: '#332200',
         opacity: 0.7
     },
