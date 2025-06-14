@@ -39,7 +39,7 @@ class SpeciesSmallSerializer(serializers.ModelSerializer):
         elif bool(obj.illustration):
             return request.build_absolute_uri(obj.illustration.url)
         else:
-            return request.build_absolute_uri('/static/img/unkown_species_illustration_transparent.png')
+            return None
     
     def get_display_name(self, obj):
         return str(obj)
