@@ -4,6 +4,7 @@ from rest_framework.views import APIView # This might be removable if no other c
 from rest_framework.decorators import api_view, permission_classes # api_view and permission_classes might be removable if no other FBVs use them
 from rest_framework.response import Response
 from rest_framework import serializers
+from django.core.files.base import ContentFile
 from django.db.models import Q, Count, Min
 import ast
 
@@ -11,11 +12,9 @@ from observation.models import Species, Observation
 from observation.serializers import ObservationSerializer, SpeciesSerializer, serialize_identification_response
 from observation.permissions import IsOwner, IsAdminOrReadOnly
 from identification import plantnet, gemini
-from generation.gemini import generate_text
+from generation.gemini import generate_text, generate_image
 from generation.description_generation import generate_descriptions
-from generation.prompts import description_prompt
 from user_profile.signals import xp_gained
-from generation.gemini import generate_illustration
 
 logger = logging.getLogger(__name__)
 
@@ -234,9 +233,18 @@ class GenerateIllustrationView(generics.GenericAPIView): # Corrected base class
         #     serializer = self.get_serializer(species) # Use self.get_serializer
         #     return Response(serializer.data, status=status.HTTP_200_OK)
 
-        success = generate_illustration(species)
+        common_name = species.commonNames[0] if species.commonNames else species.scientificNameWithoutAuthor
+        scientific_name = species.scientificNameWithoutAuthor
+        prompt_text = f"quick rough watercolor and graphite sketch of a {common_name} ({scientific_name}), on a 19th century yellowish page"
+        logger.info(f"Generating image for {scientific_name} with prompt: '{prompt_text}'")
 
-        if success:
+        raw_bytes = generate_image(species)
+
+        if raw_bytes:
+            file_name = f"{scientific_name.replace(' ', '_')}_illustration.png"
+            species.illustration.save(file_name, ContentFile(raw_bytes), save=False)
+            species.save()
+
             serializer = self.get_serializer(species) # Use self.get_serializer
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
