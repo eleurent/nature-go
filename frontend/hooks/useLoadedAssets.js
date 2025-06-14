@@ -13,7 +13,6 @@ import {
 } from '@expo-google-fonts/dancing-script';
 import { Parisienne_400Regular } from '@expo-google-fonts/parisienne';
 import * as Font from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
 import React from "react";
 import { Asset } from 'expo-asset';
 
@@ -62,8 +61,6 @@ export function useLoadedAssets() {
     React.useEffect(() => {
         async function loadResourcesAndDataAsync() {
             try {
-                SplashScreen.preventAutoHideAsync();
-
                 const imageAssets = cacheImages([
                     require('../assets/images/page-background.png'),
                     require('../assets/images/page-background-2.png'),
@@ -88,7 +85,6 @@ export function useLoadedAssets() {
                 console.warn(e);
             } finally {
                 setLoadingComplete(true);
-                SplashScreen.hideAsync();
             }
         }
 
