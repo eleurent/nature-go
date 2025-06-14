@@ -182,8 +182,7 @@ class ObservationListCreate(generics.ListCreateAPIView):
         elif observation.type == Species.BIRD_TYPE:
             response = gemini.gemini_identify_few_shot(
                 image_path=observation.image.path,
-                location=observation.location,
-                few_shots=gemini.BIRD_ID_FEW_SHOTS)
+                location=observation.location)
             observation.identification_response = serialize_identification_response(response)
             observation.save()
 

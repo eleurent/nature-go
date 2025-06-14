@@ -21,7 +21,6 @@ class GeminiTestCase(TestCase):
         response = gemini.gemini_identify_few_shot(
             image_path=image_path,
             location=location,
-            few_shots=gemini.BIRD_ID_FEW_SHOTS,
         )
         print(response)
         self.assertIsNotNone(response)
