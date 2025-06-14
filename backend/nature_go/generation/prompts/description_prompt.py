@@ -8,3 +8,15 @@ Break it down into three very small paragraphs with no line break. Each paragrap
 Paragraph: str
 Return: list[Paragraph]
 """
+
+summary_v8 = """Write a three-part pokedex entry about the species described in the article below. It should be simple to understand, informal and not too scientific. Put emphasis on history, fun anecdotes or popular references if available in the material. Follow the style of a pokedex entry. When needed, use the first person (I) rather than second person (you), like a naturalist who is discovering and studying the species, and thinking to himself. Do not mention you are summarising some article. DO NOT mention Pokemons. Do not start by naming the species.
+Break it down into three very small paragraphs (2-3 sentences) with no line break. Each paragraph should be informational, witty and light. 
+
+-----
+Here is some seed material about the {species_name}: 
+{material}
+-----
+Use this JSON schema:
+Paragraph: str
+Return: list[Paragraph]
+"""

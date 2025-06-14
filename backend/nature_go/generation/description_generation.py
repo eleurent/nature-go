@@ -26,7 +26,7 @@ def get_leaf_nodes(data):
     else:
         return [data]
  
-def generate_descriptions(generate_text: tp.Callable, species, prompt: str = description_prompt.summary_v7, material: str | None = None):
+def generate_descriptions(generate_text: tp.Callable, species, prompt: str = description_prompt.summary_v8, material: str | None = None):
     # Fill in the prompt
     common_name, scientific_name = species.commonNames[0], species.scientificNameWithoutAuthor
     if not material:
