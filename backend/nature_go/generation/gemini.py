@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 client = None
 
 def generate_text(contents, model_name='gemini-2.0-flash'):
+    global client
     if client is None:
         client = genai.Client()
     response = client.models.generate_content(model=model_name, contents=contents, config=types.GenerateContentConfig(response_mime_type="application/json"))
@@ -19,15 +20,16 @@ def generate_text(contents, model_name='gemini-2.0-flash'):
 
 def generate_illustration(species: Species) -> bool:
     try:
-        if client is None:
-            client = genai.Client()
-
         common_name = species.commonNames[0] if species.commonNames else species.scientificNameWithoutAuthor
         scientific_name = species.scientificNameWithoutAuthor
         prompt_text = f"illustration of a {common_name}, {scientific_name}, 19th century, transactions of the Natural History Museum Society of London"
 
         logger.info(f"Generating image for {scientific_name} with prompt: '{prompt_text}' using model imagen-4.0-generate-preview-06-06 via google.genai SDK")
 
+        global client
+        if client is None:
+            client = genai.Client()
+        
         image_response = client.models.generate_images(
             model="imagen-4.0-generate-preview-06-06", # Hardcoded model name
             prompt=prompt_text

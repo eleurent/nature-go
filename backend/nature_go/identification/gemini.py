@@ -83,6 +83,7 @@ def gemini_identify_few_shot(
     metadata = str(location)
     contents = (PROMPT_PREFIX,) + sum(examples, ()) + (metadata, image,)
 
+    global client
     if client is None:
         client = genai.Client()
     response = client.models.generate_content(
