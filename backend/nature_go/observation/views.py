@@ -1,10 +1,7 @@
 import logging
 from rest_framework import generics, permissions, pagination, filters, status
-from rest_framework.views import APIView # This might be removable if no other class uses APIView directly
-from rest_framework.decorators import api_view, permission_classes # api_view and permission_classes might be removable if no other FBVs use them
 from rest_framework.response import Response
 from rest_framework import serializers
-from django.core.files.base import ContentFile
 from django.db.models import Q, Count, Min
 import ast
 
@@ -14,6 +11,7 @@ from observation.permissions import IsOwner, IsAdminOrReadOnly
 from identification import plantnet, gemini
 from generation.gemini import generate_text, generate_image
 from generation.description_generation import generate_descriptions
+from generation.illustration_generation import generate_illustration
 from user_profile.signals import xp_gained
 
 logger = logging.getLogger(__name__)
@@ -214,37 +212,21 @@ class ObservationDelete(generics.DestroyAPIView):
     Allows the owner of an observation to delete it.
     """
     queryset = Observation.objects.all()
-    serializer_class = ObservationSerializer # Still good practice to include
+    serializer_class = ObservationSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
 
-class GenerateIllustrationView(generics.GenericAPIView): # Corrected base class
+class GenerateIllustrationView(generics.GenericAPIView):
     queryset = Species.objects.all()
     serializer_class = SpeciesSerializer
-    permission_classes = [permissions.IsAuthenticated] # Use permissions alias
+    permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, *args, **kwargs): # Standard signature
-        # pk should be in self.kwargs from the URL pattern
-        species = self.get_object() # Use DRF's get_object
+    def post(self, request, *args, **kwargs):
+        species = self.get_object()
 
-        # Optional: Check if illustration already exists
-        # if species.illustration and species.illustration.name:
-        #     serializer = self.get_serializer(species) # Use self.get_serializer
-        #     return Response(serializer.data, status=status.HTTP_200_OK)
-
-        common_name = species.commonNames[0] if species.commonNames else species.scientificNameWithoutAuthor
-        scientific_name = species.scientificNameWithoutAuthor
-        prompt_text = f"quick rough watercolor and graphite sketch of a {common_name} ({scientific_name}), on a 19th century yellowish page"
-        logger.info(f"Generating image for {scientific_name} with prompt: '{prompt_text}'")
-
-        raw_bytes = generate_image(prompt_text)
-
-        if raw_bytes:
-            file_name = f"{scientific_name.replace(' ', '_')}_illustration.png"
-            species.illustration.save(file_name, ContentFile(raw_bytes), save=False)
-            species.save()
-
-            serializer = self.get_serializer(species) # Use self.get_serializer
+        success = generate_illustration(generate_image=generate_image, species=species)
+        if success:
+            serializer = self.get_serializer(species)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Failed to generate illustration'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
