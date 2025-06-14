@@ -81,6 +81,7 @@ class SpeciesSerializer(SpeciesSmallSerializer):
             'display_name',
             'num_observations_total',
             'num_questions_total',
+            'audio_description',
         ]
 
     def get_num_observations_total(self, obj):
