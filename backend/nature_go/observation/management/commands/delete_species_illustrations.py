@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from backend.nature_go.observation.models import Species
+from observation.models import Species
 
 class Command(BaseCommand):
     help = 'Deletes all illustration and illustration_transparent files from all Species objects.'
