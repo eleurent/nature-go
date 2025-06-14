@@ -118,15 +118,8 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     const onMapPress = (initialRegion, coordinate) => {setMapModalData({initialRegion, coordinate}); setMapModalVisible(true);}
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
-    // Initialize Audio Player Hook
-    // The player will be re-initialized if audio_description changes.
-    // useAudioPlayer should handle loading and preparation internally.
-    const player = useAudioPlayer(speciesDetails.audio_description ? { uri: speciesDetails.audio_description } : null, {
-        // TODO: It's not clear from the prompt if useAudioPlayer has an onPlaybackStatusUpdate equivalent built-in
-        // or if player.playing and other properties are directly reactive.
-        // Assuming player properties like 'playing', 'loading', 'duration', 'currentTime' are reactive.
-        // If specific event listeners are needed (e.g. for 'didJustFinish'), the hook's docs would be key.
-    });
+    const player = useAudioPlayer(null);
+    const [audioPlayerisPlaying, setAudioPlayerIsPlaying] = useState(false);
 
     const [observationToDeleteId, setObservationToDeleteId] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false); // Loading state for deletion
@@ -146,26 +139,26 @@ export default function SpeciesDetailScreen({ navigation, route }) {
 
         fetchSpeciesDetails();
         fetchSpeciesObservations();
-    }, [route.params.id]); // Ensure data re-fetches if ID changes
+    }, []);
 
     // Autoplay Effect for useAudioPlayer
-    useEffect(() => {
-        if (player && speciesDetails.audio_description && player.isLoaded && !player.playing && !player.error) {
-            // Check if player is loaded, not already playing, and no error, then play.
-            // This assumes `player.isLoaded` and `player.error` properties exist.
-            // The initial play for autoplay is often handled by the hook itself if an `autoplay` option exists,
-            // or by an explicit play call once ready.
-            // If `useAudioPlayer` has an `autoplay` option, that would be preferred.
-            // If not, this effect tries to achieve it.
-            // This might need refinement based on actual `useAudioPlayer` behavior for readiness.
-            player.play();
-        }
-        // Dependencies: player instance and the audio description URL.
-        // player.isLoaded, player.playing, player.error might also be needed if they are reactive.
-    }, [player, speciesDetails.audio_description, player?.isLoaded, player?.playing, player?.error]);
+    // useEffect(() => {
+    //     if (player && speciesDetails.audio_description && player.isLoaded && !player.playing &&) {
+    //         // Check if player is loaded, not already playing, and no error, then play.
+    //         // This assumes `player.isLoaded` and `player.error` properties exist.
+    //         // The initial play for autoplay is often handled by the hook itself if an `autoplay` option exists,
+    //         // or by an explicit play call once ready.
+    //         // If `useAudioPlayer` has an `autoplay` option, that would be preferred.
+    //         // If not, this effect tries to achieve it.
+    //         // This might need refinement based on actual `useAudioPlayer` behavior for readiness.
+    //         player.play();
+    //     }
+    //     // Dependencies: player instance and the audio description URL.
+    // }, [speciesDetails.audio_description]);
 
 
     const handlePlayPause = async () => {
+        console.log('HANDLE AUDIO PLAY/PAUSE', player)
         if (!player || !player.isLoaded) { // Check if player is available and loaded
             if (speciesDetails.audio_description) {
                  Alert.alert("Audio Not Ready", "Audio is loading or not available. Please wait.");
@@ -184,6 +177,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         if (player.playing) {
             console.log('Pausing Sound with useAudioPlayer');
             player.pause();
+            setAudioPlayerIsPlaying(false);
         } else {
             console.log('Playing Sound with useAudioPlayer');
             // Check if playback had finished (current time equals duration)
@@ -195,6 +189,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
             } else {
                 player.play(); // Resume or play from current position
             }
+            setAudioPlayerIsPlaying(true);
         }
     };
 
@@ -260,6 +255,14 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         }
     }, [speciesDetails, generatingContent, isGeneratingIllustration]);
 
+    useEffect(() => {
+        if (speciesDetails && speciesDetails.id && speciesDetails.audio_description &&
+            !player.source) {
+                player.replace({uri: speciesDetails.audio_description});
+        }
+    }, [speciesDetails]);
+
+
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
@@ -278,14 +281,6 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                         cachePolicy={'disk'}
                     />
                 )}
-                {/* <Image
-                    style={styles.illustrationImage}
-                    contentFit='contain'
-                    source={{ uri: illustration_url }}
-                    placeholder='empty'
-                    cachePolicy={'disk'}
-                    // sharedTransitionTag={"species" + route.params.id}
-                /> */}
                 <View style={styles.textContainer}>
                     <View style={styles.nameAndAudioContainer}>
                         <View style={styles.nameTextContainer}>
@@ -299,12 +294,10 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                     <View style={styles.descriptionAreaWrapper}>
                         {speciesDetails.audio_description && player && ( // Only show button if URL exists AND player is initialized
                             <TouchableOpacity onPress={handlePlayPause} style={styles.audioButtonDescriptionArea}>
-                                {player.loading ? ( // Assuming player.loading indicates buffering/loading
-                                    <ActivityIndicator size="large" color="#007bff" />
-                                ) : player.playing ? (
-                                    <Ionicons name="pause-circle" size={32} color="#007bff" />
+                                {audioPlayerisPlaying ? (
+                                    <Ionicons name="pause-circle" size={26} color="#331100" />
                                 ) : (
-                                    <Ionicons name="play-circle" size={32} color="#007bff" />
+                                    <Ionicons name="play-circle" size={26} color="#331100" />
                                 )}
                             </TouchableOpacity>
                         )}
@@ -382,7 +375,7 @@ const styles = StyleSheet.create({
     },
     audioButtonDescriptionArea: {
         position: 'absolute',
-        top: 10, // Adjust as needed from the top of descriptionAreaWrapper
+        top: -20, // Adjust as needed from the top of descriptionAreaWrapper
         right: 15, // Adjust as needed from the right of descriptionAreaWrapper
         zIndex: 1, // Ensure button is on top
         padding: 5, // Add some touchable area around the icon
