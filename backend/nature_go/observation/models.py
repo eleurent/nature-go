@@ -32,6 +32,7 @@ class Species(models.Model):
     illustration_reference = models.ImageField(upload_to='species/illustration_reference', blank=True)
     illustration_reference_transparent = models.ImageField(upload_to='species/illustration_reference_transparent', blank=True)
     reference_image_url = models.URLField(max_length=255, blank=True)
+    audio_description = models.FileField(upload_to='species/audio_description', blank=True, null=True)
 
     def __str__(self):
         return self.commonNames[0] if self.commonNames else self.scientificNameWithoutAuthor
