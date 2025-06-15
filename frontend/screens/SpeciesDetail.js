@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Image } from 'expo-image';
 import { View, Text, StyleSheet, ImageBackground, FlatList, Platform, ScrollView, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/elements';
-import { useAudioPlayer } from 'expo-audio'; // Using the new hook
+import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio'; // Using the new hook
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import Constants from 'expo-constants'
@@ -79,13 +79,13 @@ const RarityBadge = ({ rarity }) => {
   };
 
 
-const generateSpeciesDescription = async (species_id, setSpeciesDetails, setGeneratingContent) => {
+const generateSpeciesDescription = async (species_id, setSpeciesDetails, setIsGeneratingTextContent) => {
     console.log('Generating description for this species');
-    setGeneratingContent(true);
+    setIsGeneratingTextContent(true);
     let response = await axios.post(SPECIES_GENERATE_DESCRIPTIONS_URL(species_id));
     console.log(response.data);
     setSpeciesDetails(response.data);
-    setGeneratingContent(false);
+    setIsGeneratingTextContent(false);
     response = await axios.post(SPECIES_GENERATE_QUESTIONS_URL(species_id));
 };
 
@@ -113,16 +113,16 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     const onImagePress = (image) => {setImageModalImage(image); setImageModalVisible(true);}
     const [mapModalData, setMapModalData] = useState({initialRegion: null, coordinate: null});
     const [mapModalVisible, setMapModalVisible] = useState(false);
-    const [generatingContent, setGeneratingContent] = useState(false);
+    const [isGeneratingTextContent, setIsGeneratingTextContent] = useState(false);
     const [isGeneratingIllustration, setIsGeneratingIllustration] = useState(false);
     const onMapPress = (initialRegion, coordinate) => {setMapModalData({initialRegion, coordinate}); setMapModalVisible(true);}
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
     const player = useAudioPlayer(null);
-    const [audioPlayerisPlaying, setAudioPlayerIsPlaying] = useState(false);
+    const audioStatus = useAudioPlayerStatus(player);
 
     const [observationToDeleteId, setObservationToDeleteId] = useState(null);
-    const [isDeleting, setIsDeleting] = useState(false); // Loading state for deletion
+    const [isDeleting, setIsDeleting] = useState(false);
 
 
     useEffect(() => {
@@ -141,24 +141,15 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         fetchSpeciesObservations();
     }, []);
 
-    // Autoplay Effect for useAudioPlayer
-    // useEffect(() => {
-    //     if (player && speciesDetails.audio_description && player.isLoaded && !player.playing &&) {
-    //         // Check if player is loaded, not already playing, and no error, then play.
-    //         // This assumes `player.isLoaded` and `player.error` properties exist.
-    //         // The initial play for autoplay is often handled by the hook itself if an `autoplay` option exists,
-    //         // or by an explicit play call once ready.
-    //         // If `useAudioPlayer` has an `autoplay` option, that would be preferred.
-    //         // If not, this effect tries to achieve it.
-    //         // This might need refinement based on actual `useAudioPlayer` behavior for readiness.
-    //         player.play();
-    //     }
-    //     // Dependencies: player instance and the audio description URL.
-    // }, [speciesDetails.audio_description]);
+    // Autoplay Effect for audio player
+    useEffect(() => {
+        if (player && speciesDetails.audio_description && player.isLoaded && !player.playing) {
+            player.play();
+        }
+    }, [speciesDetails.audio_description, player.isLoaded]);
 
 
     const handlePlayPause = async () => {
-        console.log('HANDLE AUDIO PLAY/PAUSE', player)
         if (!player || !player.isLoaded) { // Check if player is available and loaded
             if (speciesDetails.audio_description) {
                  Alert.alert("Audio Not Ready", "Audio is loading or not available. Please wait.");
@@ -167,29 +158,15 @@ export default function SpeciesDetailScreen({ navigation, route }) {
             }
             return;
         }
-
         if (player.error) {
-            console.error("Player error:", player.error);
             Alert.alert("Audio Error", "Cannot play audio due to an error.");
             return;
         }
 
         if (player.playing) {
-            console.log('Pausing Sound with useAudioPlayer');
             player.pause();
-            setAudioPlayerIsPlaying(false);
         } else {
-            console.log('Playing Sound with useAudioPlayer');
-            // Check if playback had finished (current time equals duration)
-            // This assumes player.currentTime and player.duration properties exist and are reliable.
-            if (player.currentTime != null && player.duration != null && player.currentTime >= player.duration - 0.1) { // -0.1 for float precision
-                console.log('Replaying sound from beginning');
-                await player.seekTo(0); // Seek to start
-                player.play(); // And play
-            } else {
-                player.play(); // Resume or play from current position
-            }
-            setAudioPlayerIsPlaying(true);
+            player.play();
         }
     };
 
@@ -244,16 +221,16 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     else if (speciesDetails.descriptions.length > speciesObservations.length)
         descriptionsPlaceholder = "1 more observation needed.";
 
-    if (!generatingContent &&speciesDetails?.descriptions && !(speciesDetails?.descriptions.length))
-        generateSpeciesDescription(route.params.id, setSpeciesDetails, setGeneratingContent)
+    if (!isGeneratingTextContent &&speciesDetails?.descriptions && !(speciesDetails?.descriptions.length))
+        generateSpeciesDescription(route.params.id, setSpeciesDetails, setIsGeneratingTextContent)
 
     useEffect(() => {
         if (speciesDetails && speciesDetails.id && !speciesDetails.illustration_url &&
-            !generatingContent && !isGeneratingIllustration) {
+            !isGeneratingTextContent && !isGeneratingIllustration) {
             // Call generateIllustration if no illustration URL is present and no other generation is active
             generateIllustration(speciesDetails.id, setSpeciesDetails, setIsGeneratingIllustration);
         }
-    }, [speciesDetails, generatingContent, isGeneratingIllustration]);
+    }, [speciesDetails, isGeneratingTextContent, isGeneratingIllustration]);
 
     useEffect(() => {
         if (speciesDetails && speciesDetails.id && speciesDetails.audio_description &&
@@ -262,7 +239,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         }
     }, [speciesDetails]);
 
-
+    console.log("AUDIOSTATUS", audioStatus);
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
@@ -282,19 +259,18 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                     />
                 )}
                 <View style={styles.textContainer}>
-                    <View style={styles.nameAndAudioContainer}>
+                    <View style={styles.nameContainer}>
                         <View style={styles.nameTextContainer}>
                             <Text style={[styles.speciesName]}>{speciesDetails.display_name ? speciesDetails.display_name : "Name"}</Text>
                             <Text style={[styles.speciesScientificName, {marginBottom: 5}]}>{speciesDetails.scientificNameWithoutAuthor ? speciesDetails.scientificNameWithoutAuthor : "Scientific name"}</Text>
                         </View>
-                        {/* Audio button removed from here */}
                     </View>
                     {speciesDetails.rarity ? <View style={styles.rarityContainer}><RarityBadge rarity={speciesDetails.rarity} /></View> : null}
 
                     <View style={styles.descriptionAreaWrapper}>
-                        {speciesDetails.audio_description && player && ( // Only show button if URL exists AND player is initialized
+                        {speciesDetails.audio_description && player && (
                             <TouchableOpacity onPress={handlePlayPause} style={styles.audioButtonDescriptionArea}>
-                                {audioPlayerisPlaying ? (
+                                {(audioStatus.playing && !audioStatus.didJustFinish) ? (
                                     <Ionicons name="pause-circle" size={26} color="#331100" />
                                 ) : (
                                     <Ionicons name="play-circle" size={26} color="#331100" />
@@ -357,7 +333,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
     },
-    nameAndAudioContainer: {
+    nameContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between', // Pushes name and button to opposite ends
         alignItems: 'center', // Vertically align items in the center
