@@ -12,6 +12,7 @@ from identification import plantnet, gemini
 from generation.gemini import generate_text, generate_image
 from generation.description_generation import generate_descriptions
 from generation.illustration_generation import generate_illustration, generate_illustration_transparent
+from generation.audio_description_generation import generate_audio_description
 from user_profile.signals import xp_gained
 
 logger = logging.getLogger(__name__)
@@ -231,3 +232,26 @@ class GenerateIllustrationView(generics.GenericAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Failed to generate illustration'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class GenerateAudioDescriptionView(generics.GenericAPIView):
+    queryset = Species.objects.all()
+    serializer_class = SpeciesSerializer
+    permission_classes = [permissions.IsAdminUser]  # Or IsAuthenticated, based on actual requirements
+
+    def post(self, request, *args, **kwargs):
+        species = self.get_object()
+
+        success = generate_audio_description(species=species)
+
+        if success:
+            species.save() # Save the species instance as audio_description was saved with save=False
+            serializer = self.get_serializer(species)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            # Logger is already defined at module level
+            logger.error(f"Failed to generate audio description for species ID {species.pk} in view.")
+            return Response(
+                {'error': f'Failed to generate audio description for {str(species)}.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
