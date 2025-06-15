@@ -1,1 +1,2 @@
 prompt_v1 = "quick rough watercolor and graphite sketch of a {common_name} ({scientific_name}), on a 19th century yellowish page"
+prompt_v2 = "illustration of a {common_name} ({scientific_name}), 19th century, Journal of the London Society of {field_name}"

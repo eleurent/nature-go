@@ -4,14 +4,20 @@ from django.core.files.base import ContentFile, File
 from generation.prompts import illustration_prompt
 from rembg import remove
 from PIL import Image
+from observation.models import Species
 
 
-def generate_illustration(generate_image: tp.Callable, species) -> bool:
+def generate_illustration(generate_image: tp.Callable, species: Species) -> bool:
     if species.illustration:
         return True
     common_name = species.commonNames[0] if species.commonNames else species.scientificNameWithoutAuthor
     scientific_name = species.scientificNameWithoutAuthor
-    prompt_text = illustration_prompt.prompt_v1.format(common_name=common_name, scientific_name=scientific_name)
+    field_name = {Species.PLANT_TYPE: 'Botany', Species.BIRD_TYPE: 'Ornithology'}[species.type]
+    prompt_text = illustration_prompt.prompt_v2.format(
+        common_name=common_name,
+        scientific_name=scientific_name,
+        field_name=field_name,
+    )
     raw_bytes = generate_image(prompt_text)
 
     if raw_bytes:
