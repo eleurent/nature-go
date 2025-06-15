@@ -96,7 +96,9 @@ def generate_audio(text):
         ),
     )
 
-    file_index = 0
+    audio_chunks = []
+    mime_type = None
+
     for chunk in client.models.generate_content_stream(
         model=model,
         contents=contents,
@@ -106,27 +108,30 @@ def generate_audio(text):
             chunk.candidates is None
             or chunk.candidates[0].content is None
             or chunk.candidates[0].content.parts is None
+            or not chunk.candidates[0].content.parts[0].inline_data
+            or not chunk.candidates[0].content.parts[0].inline_data.data
         ):
+            if chunk.text:
+                logger.info(chunk.text)
             continue
-        if chunk.candidates[0].content.parts[0].inline_data and chunk.candidates[0].content.parts[0].inline_data.data:
-            file_name = f"ENTER_FILE_NAME_{file_index}"
-            file_index += 1
-            inline_data = chunk.candidates[0].content.parts[0].inline_data
-            data_buffer = inline_data.data
-            file_extension = mimetypes.guess_extension(inline_data.mime_type)
-            if file_extension is None:
-                file_extension = ".wav"
-                data_buffer = convert_to_wav(inline_data.data, inline_data.mime_type)
-            save_binary_file(f"{file_name}{file_extension}", data_buffer)
-        else:
-            logger.info(chunk.text)
 
+        inline_data = chunk.candidates[0].content.parts[0].inline_data
+        if mime_type is None:
+            mime_type = inline_data.mime_type
 
-def save_binary_file(file_name, data):
-    f = open(file_name, "wb")
-    f.write(data)
-    f.close()
-    logger.info(f"File saved to to: {file_name}")
+        audio_chunks.append(inline_data.data)
+
+    if not audio_chunks:
+        logger.warning("No audio data received from the stream.")
+        return None
+
+    full_audio_data = b"".join(audio_chunks)
+
+    if mime_type != "audio/wav" and mimetypes.guess_extension(mime_type) != ".wav":
+        logger.info(f"Converting audio from {mime_type} to WAV format.")
+        full_audio_data = convert_to_wav(full_audio_data, mime_type)
+
+    return full_audio_data
 
 
 def convert_to_wav(audio_data: bytes, mime_type: str) -> bytes:

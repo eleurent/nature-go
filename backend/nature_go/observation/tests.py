@@ -1,8 +1,17 @@
 import os
-from django.test import TestCase
+# import os # Duplicate os import removed
+from django.urls import reverse # Kept: Potentially useful for other API tests
+# from django.contrib.auth.models import User # Removed: Was for TestGenerateAudioDescriptionView
 from django.core.management import call_command
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.files.base import ContentFile # For potential future use if checking file content
+# from rest_framework.test import APITestCase # Removed: Was for TestGenerateAudioDescriptionView
+from rest_framework import status # Kept: Potentially useful for other API tests
+# from unittest.mock import patch # Removed: Was for TestGenerateAudioDescriptionView
+
+from django.test import TestCase # Ensure TestCase is imported
 from .models import Species
+# from .serializers import SpeciesSerializer # If we need to assert serializer output structure
 
 
 class DeleteSpeciesIllustrationsCommandTest(TestCase):
