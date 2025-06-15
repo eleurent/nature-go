@@ -111,11 +111,12 @@ def generate_audio(text):
         if chunk.candidates[0].content.parts[0].inline_data and chunk.candidates[0].content.parts[0].inline_data.data:
             file_index += 1
             inline_data = chunk.candidates[0].content.parts[0].inline_data
-            data_buffer = inline_data.data
+            actual_raw_bytes = base64.b64decode(inline_data.data)  # This should not be needed, see https://github.com/googleapis/python-genai/issues/837
+            data_buffer = actual_raw_bytes
             file_extension = mimetypes.guess_extension(inline_data.mime_type)
             if file_extension is None:
                 file_extension = ".wav"
-                data_buffer = convert_to_wav(inline_data.data, inline_data.mime_type)
+                data_buffer = convert_to_wav(actual_raw_bytes, inline_data.mime_type)
             return data_buffer, file_extension
         else:
             logger.info(chunk.text)
