@@ -29,7 +29,7 @@ def generate_audio_description(species) -> bool:
         audio_bytes, file_extension = gemini.generate_audio(prompt_text)
 
         if audio_bytes:
-            file_name = f"{species.scientificNameWithoutAuthor.replace(' ', '_').lower()}_audio_desc.{file_extension}"
+            file_name = f"{species.scientificNameWithoutAuthor.replace(' ', '_').lower()}_audio_desc{file_extension}"
             species.audio_description.save(file_name, ContentFile(audio_bytes), save=False)
             species.save()
             logger.info(f"Successfully generated audio description for {species.scientificNameWithoutAuthor} and prepared for saving.")
