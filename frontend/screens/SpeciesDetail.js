@@ -221,12 +221,11 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     else if (speciesDetails.descriptions.length > speciesObservations.length)
         descriptionsPlaceholder = "1 more observation needed.";
 
-    if (!isGeneratingTextContent &&speciesDetails?.descriptions && !(speciesDetails?.descriptions.length))
-        generateSpeciesDescription(route.params.id, setSpeciesDetails, setIsGeneratingTextContent)
-
     useEffect(() => {
-        if (speciesDetails && speciesDetails.id && !speciesDetails.illustration_url &&
-            !isGeneratingTextContent && !isGeneratingIllustration) {
+        if (speciesDetails?.descriptions && !(speciesDetails?.descriptions.length) && !isGeneratingTextContent)
+            generateSpeciesDescription(route.params.id, setSpeciesDetails, setIsGeneratingTextContent)
+
+        if (speciesDetails && speciesDetails.id && !speciesDetails.illustration_url && !isGeneratingIllustration) {
             // Call generateIllustration if no illustration URL is present and no other generation is active
             generateIllustration(speciesDetails.id, setSpeciesDetails, setIsGeneratingIllustration);
         }
