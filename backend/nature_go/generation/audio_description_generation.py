@@ -1,6 +1,6 @@
 import logging
 from django.core.files.base import ContentFile
-from backend.nature_go.generation import gemini
+from generation import gemini
 
 logger = logging.getLogger(__name__)
 
