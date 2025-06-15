@@ -243,10 +243,10 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         if (speciesDetails?.descriptions && !(speciesDetails?.descriptions.length) && !isGeneratingTextContent)
             generateSpeciesDescription(route.params.id, setSpeciesDetails, setIsGeneratingTextContent)
 
-        if (speciesDetails && speciesDetails.id && !speciesDetails.illustration_url && !isGeneratingIllustration) {
+        if (speciesDetails && speciesDetails.id && !speciesDetails.illustration_url && !isGeneratingTextContent && !isGeneratingIllustration) {
             generateIllustration(speciesDetails.id, setSpeciesDetails, setIsGeneratingIllustration);
         }
-        if (speciesDetails && speciesDetails.id && !speciesDetails.audio_description && !isGeneratingAudioContent) {
+        if (speciesDetails && speciesDetails.id && speciesDetails.descriptions && (speciesDetails.descriptions.length > 0) && !speciesDetails.audio_description && !isGeneratingTextContent && !isGeneratingIllustration && !isGeneratingAudioContent) {
             generateAudioDescription(speciesDetails.id, setSpeciesDetails, setIsGeneratingAudioContent);
         }
     }, [speciesDetails, isGeneratingTextContent, isGeneratingIllustration, isGeneratingAudioContent, route.params.id]);
