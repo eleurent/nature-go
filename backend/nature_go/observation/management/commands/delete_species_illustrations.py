@@ -5,7 +5,7 @@ class Command(BaseCommand):
     help = 'Deletes all illustration and illustration_transparent files from all Species objects.'
 
     def handle(self, *args, **options):
-        species_list = Species.objects.all()
+        species_list = Species.objects.filter(illustration__isnull=False)
         for species in species_list:
             if species.illustration:
                 species.illustration.delete(save=False)

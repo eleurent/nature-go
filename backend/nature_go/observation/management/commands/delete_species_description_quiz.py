@@ -6,10 +6,12 @@ class Command(BaseCommand):
     help = 'Deletes all saved descriptions and related quiz questions from all Species.'
 
     def handle(self, *args, **options):
-        for species in Species.objects.all():
-            species.descriptions = []  # Changed from species.description = ""
+        for species in Species.objects.exclude(descriptions=[]):
+            species.descriptions = []
+            species.audio_description.delete(save=False)
             species.save()
 
-            MultipleChoiceQuestion.objects.filter(species=species).delete()
+        for question in MultipleChoiceQuestion.objects.all():
+            question.delete()
 
         self.stdout.write(self.style.SUCCESS('Successfully deleted all species descriptions and related quiz questions.'))
