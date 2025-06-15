@@ -18,7 +18,7 @@ def generate_audio_description(species) -> bool:
     """
     try:
         if species.audio_description:
-            return False
+            return True
         if not species.descriptions:
             logger.error(f"No descriptions available for species {species.scientificNameWithoutAuthor} to generate audio.")
             return False
