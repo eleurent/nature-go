@@ -237,7 +237,7 @@ class GenerateIllustrationView(generics.GenericAPIView):
 class GenerateAudioDescriptionView(generics.GenericAPIView):
     queryset = Species.objects.all()
     serializer_class = SpeciesSerializer
-    permission_classes = [permissions.IsAdminUser]  # Or IsAuthenticated, based on actual requirements
+    permission_classes = [permissions.IsAuthenticated]  # Or IsAuthenticated, based on actual requirements
 
     def post(self, request, *args, **kwargs):
         species = self.get_object()

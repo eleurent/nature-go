@@ -19,6 +19,7 @@ const SPECIES_DETAILS_URL = (id) => API_URL + `api/species/${id}/`
 const SPECIES_OBSERVATIONS_URL = (id) => API_URL + `api/species/${id}/observations/`
 const SPECIES_GENERATE_DESCRIPTIONS_URL = (id) => API_URL + `api/species/${id}/generate_descriptions/`
 const SPECIES_GENERATE_ILLUSTRATION_URL = (id) => API_URL + `api/species/${id}/generate_illustration/`;
+const SPECIES_GENERATE_AUDIO_DESCRIPTION_URL = (id) => API_URL + `api/species/${id}/generate_audio_description/`;
 const SPECIES_GENERATE_QUESTIONS_URL = (id) => API_URL + `api/university/quiz/questions/generate/${id}/`
 const OBSERVATION_DELETE_URL = (id) => API_URL + `api/species/observation/${id}/delete/`; // Define delete URL
 
@@ -104,6 +105,22 @@ const generateIllustration = async (species_id, setSpeciesDetails, setIsGenerati
     }
 };
 
+const generateAudioDescription = async (species_id, setSpeciesDetails, setIsGeneratingAudioContent) => {
+    console.log('Generating audio description for this species');
+    setIsGeneratingAudioContent(true);
+    try {
+        let response = await axios.post(SPECIES_GENERATE_AUDIO_DESCRIPTION_URL(species_id));
+        console.log(response.data);
+        setSpeciesDetails(response.data);
+    } catch (error) {
+        console.error('Failed to generate audio description:', error.response?.data || error.message);
+        // Optionally, display an alert to the user
+        // Alert.alert("Error", "Could not generate audio description.");
+    } finally {
+        setIsGeneratingAudioContent(false);
+    }
+};
+
 export default function SpeciesDetailScreen({ navigation, route }) {
 
     const [speciesDetails, setSpeciesDetails] = useState({});
@@ -115,6 +132,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     const [mapModalVisible, setMapModalVisible] = useState(false);
     const [isGeneratingTextContent, setIsGeneratingTextContent] = useState(false);
     const [isGeneratingIllustration, setIsGeneratingIllustration] = useState(false);
+    const [isGeneratingAudioContent, setIsGeneratingAudioContent] = useState(false);
     const onMapPress = (initialRegion, coordinate) => {setMapModalData({initialRegion, coordinate}); setMapModalVisible(true);}
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
@@ -225,11 +243,16 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         if (speciesDetails?.descriptions && !(speciesDetails?.descriptions.length) && !isGeneratingTextContent)
             generateSpeciesDescription(route.params.id, setSpeciesDetails, setIsGeneratingTextContent)
 
-        if (speciesDetails && speciesDetails.id && !speciesDetails.illustration_url && !isGeneratingIllustration) {
+        if (speciesDetails && speciesDetails.id && !speciesDetails.illustration_url && !isGeneratingIllustration && !isGeneratingTextContent) {
             // Call generateIllustration if no illustration URL is present and no other generation is active
             generateIllustration(speciesDetails.id, setSpeciesDetails, setIsGeneratingIllustration);
         }
-    }, [speciesDetails, isGeneratingTextContent, isGeneratingIllustration]);
+
+        // New logic for audio description
+        if (speciesDetails && speciesDetails.id && !speciesDetails.audio_description && !isGeneratingAudioContent && !isGeneratingTextContent && !isGeneratingIllustration) {
+            generateAudioDescription(speciesDetails.id, setSpeciesDetails, setIsGeneratingAudioContent);
+        }
+    }, [speciesDetails, isGeneratingTextContent, isGeneratingIllustration, isGeneratingAudioContent, route.params.id]);
 
     useEffect(() => {
         if (speciesDetails && speciesDetails.id && speciesDetails.audio_description &&
