@@ -1,10 +1,15 @@
 from io import BytesIO
 import typing as tp
 from django.core.files.base import ContentFile, File
-from generation.prompts import illustration_prompt
 from PIL import Image
 import math
+import logging
+
+from generation.prompts import illustration_prompt
 from observation.models import Species
+
+logger = logging.getLogger(__name__)
+
 
 
 def generate_illustration(generate_image: tp.Callable, species: Species) -> bool:
@@ -28,10 +33,12 @@ def generate_illustration(generate_image: tp.Callable, species: Species) -> bool
     return False
 
 def generate_illustration_transparent(species) -> bool:
+    logger.info('Will generate transparent illustration')
     if not species.illustration:
         return False
     if species.illustration_transparent:
         return True
+    logger.info('Start background removal')
     scientific_name = species.scientificNameWithoutAuthor
     illustration = Image.open(species.illustration)
     illustration_transparent = remove_background_by_pixel(illustration)
