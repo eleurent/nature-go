@@ -243,13 +243,10 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         if (speciesDetails?.descriptions && !(speciesDetails?.descriptions.length) && !isGeneratingTextContent)
             generateSpeciesDescription(route.params.id, setSpeciesDetails, setIsGeneratingTextContent)
 
-        if (speciesDetails && speciesDetails.id && !speciesDetails.illustration_url && !isGeneratingIllustration && !isGeneratingTextContent) {
-            // Call generateIllustration if no illustration URL is present and no other generation is active
+        if (speciesDetails && speciesDetails.id && !speciesDetails.illustration_url && !isGeneratingIllustration) {
             generateIllustration(speciesDetails.id, setSpeciesDetails, setIsGeneratingIllustration);
         }
-
-        // New logic for audio description
-        if (speciesDetails && speciesDetails.id && !speciesDetails.audio_description && !isGeneratingAudioContent && !isGeneratingTextContent && !isGeneratingIllustration) {
+        if (speciesDetails && speciesDetails.id && !speciesDetails.audio_description && !isGeneratingAudioContent) {
             generateAudioDescription(speciesDetails.id, setSpeciesDetails, setIsGeneratingAudioContent);
         }
     }, [speciesDetails, isGeneratingTextContent, isGeneratingIllustration, isGeneratingAudioContent, route.params.id]);
@@ -261,7 +258,6 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         }
     }, [speciesDetails]);
 
-    console.log("AUDIOSTATUS", audioStatus);
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/images/page-background.png')} style={styles.containerImage}>
