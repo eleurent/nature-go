@@ -240,13 +240,18 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         descriptionsPlaceholder = "1 more observation needed.";
 
     useEffect(() => {
-        if (speciesDetails?.descriptions && !(speciesDetails?.descriptions.length) && !isGeneratingTextContent)
+        if (!speciesDetails || !speciesDetails.id)
+            return
+        const shouldGenerateDescription = speciesDetails.descriptions && !(speciesDetails?.descriptions.length);
+        if (shouldGenerateDescription && !isGeneratingTextContent)
             generateSpeciesDescription(route.params.id, setSpeciesDetails, setIsGeneratingTextContent)
 
-        if (speciesDetails && speciesDetails.id && !speciesDetails.illustration_url && !isGeneratingTextContent && !isGeneratingIllustration) {
+        const shouldGenerateIllustration = !speciesDetails.illustration_url && !shouldGenerateDescription
+        if (shouldGenerateIllustration && !isGeneratingTextContent && !isGeneratingIllustration) {
             generateIllustration(speciesDetails.id, setSpeciesDetails, setIsGeneratingIllustration);
         }
-        if (speciesDetails && speciesDetails.id && speciesDetails.descriptions && (speciesDetails.descriptions.length > 0) && !speciesDetails.audio_description && !isGeneratingTextContent && !isGeneratingIllustration && !isGeneratingAudioContent) {
+        const shouldGenerateAudioDescription = !speciesDetails.audio_description && speciesDetails.descriptions && (speciesDetails.descriptions.length > 0) && !shouldGenerateIllustration
+        if (shouldGenerateAudioDescription && !isGeneratingTextContent && !isGeneratingIllustration && !isGeneratingAudioContent) {
             generateAudioDescription(speciesDetails.id, setSpeciesDetails, setIsGeneratingAudioContent);
         }
     }, [speciesDetails, isGeneratingTextContent, isGeneratingIllustration, isGeneratingAudioContent, route.params.id]);
