@@ -71,7 +71,7 @@ def generate_image(text: str) -> bytes | None:
 def generate_audio(text):
     global client
     if client is None:
-        client = genai.Client()
+        client = genai.Client(api_key='AIzaSyD2B0ibiXjADNNnayI9GkeVXjEZr4C4YAA')
 
     model = "gemini-2.5-flash-preview-tts"
     contents = [
@@ -96,9 +96,7 @@ def generate_audio(text):
         ),
     )
 
-    audio_chunks = []
-    mime_type = None
-
+    file_index = 0
     for chunk in client.models.generate_content_stream(
         model=model,
         contents=contents,
@@ -108,30 +106,19 @@ def generate_audio(text):
             chunk.candidates is None
             or chunk.candidates[0].content is None
             or chunk.candidates[0].content.parts is None
-            or not chunk.candidates[0].content.parts[0].inline_data
-            or not chunk.candidates[0].content.parts[0].inline_data.data
         ):
-            if chunk.text:
-                logger.info(chunk.text)
             continue
-
-        inline_data = chunk.candidates[0].content.parts[0].inline_data
-        if mime_type is None:
-            mime_type = inline_data.mime_type
-
-        audio_chunks.append(inline_data.data)
-
-    if not audio_chunks:
-        logger.warning("No audio data received from the stream.")
-        return None
-
-    full_audio_data = b"".join(audio_chunks)
-
-    if mime_type != "audio/wav" and mimetypes.guess_extension(mime_type) != ".wav":
-        logger.info(f"Converting audio from {mime_type} to WAV format.")
-        full_audio_data = convert_to_wav(full_audio_data, mime_type)
-
-    return full_audio_data
+        if chunk.candidates[0].content.parts[0].inline_data and chunk.candidates[0].content.parts[0].inline_data.data:
+            file_index += 1
+            inline_data = chunk.candidates[0].content.parts[0].inline_data
+            data_buffer = inline_data.data
+            file_extension = mimetypes.guess_extension(inline_data.mime_type)
+            if file_extension is None:
+                file_extension = ".wav"
+                data_buffer = convert_to_wav(inline_data.data, inline_data.mime_type)
+            return data_buffer, file_extension
+        else:
+            logger.info(chunk.text)
 
 
 def convert_to_wav(audio_data: bytes, mime_type: str) -> bytes:

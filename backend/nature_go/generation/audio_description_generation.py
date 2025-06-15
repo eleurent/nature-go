@@ -17,6 +17,8 @@ def generate_audio_description(species) -> bool:
         True if audio generation and saving were successful, False otherwise.
     """
     try:
+        if species.audio_description:
+            return False
         if not species.descriptions:
             logger.error(f"No descriptions available for species {species.scientificNameWithoutAuthor} to generate audio.")
             return False
@@ -24,12 +26,12 @@ def generate_audio_description(species) -> bool:
         prompt_text = f"{str(species)} ({species.scientificNameWithoutAuthor}). {species.descriptions[0]}"
         logger.info(f"Generating audio for: {prompt_text}")
 
-        audio_bytes = gemini.generate_audio(prompt_text)
+        audio_bytes, file_extension = gemini.generate_audio(prompt_text)
 
         if audio_bytes:
-            file_name = f"{species.scientificNameWithoutAuthor.replace(' ', '_').lower()}_audio_desc.wav"
+            file_name = f"{species.scientificNameWithoutAuthor.replace(' ', '_').lower()}_audio_desc.{file_extension}"
             species.audio_description.save(file_name, ContentFile(audio_bytes), save=False)
-            # Note: The actual species.save() should be called separately after this function returns True.
+            species.save()
             logger.info(f"Successfully generated audio description for {species.scientificNameWithoutAuthor} and prepared for saving.")
             return True
         else:

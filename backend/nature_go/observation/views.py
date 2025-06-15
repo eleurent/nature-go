@@ -245,7 +245,6 @@ class GenerateAudioDescriptionView(generics.GenericAPIView):
         success = generate_audio_description(species=species)
 
         if success:
-            species.save() # Save the species instance as audio_description was saved with save=False
             serializer = self.get_serializer(species)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
