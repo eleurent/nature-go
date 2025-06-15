@@ -23,7 +23,7 @@ def generate_audio_description(species) -> bool:
             logger.error(f"No descriptions available for species {species.scientificNameWithoutAuthor} to generate audio.")
             return False
 
-        prompt_text = f"{str(species)} ({species.scientificNameWithoutAuthor}). {species.descriptions[0]}"
+        prompt_text = f"Read aloud in a warm and somewhat fast tone: {str(species)} ({species.scientificNameWithoutAuthor}). {species.descriptions[0]}"
         logger.info(f"Generating audio for: {prompt_text}")
 
         audio_bytes, file_extension = gemini.generate_audio(prompt_text)
