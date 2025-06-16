@@ -291,14 +291,20 @@ export default function SpeciesDetailScreen({ navigation, route }) {
                     {speciesDetails.rarity ? <View style={styles.rarityContainer}><RarityBadge rarity={speciesDetails.rarity} /></View> : null}
 
                     <View style={styles.descriptionAreaWrapper}>
-                        {speciesDetails.audio_description && player && (
-                            <TouchableOpacity onPress={handlePlayPause} style={styles.audioButtonDescriptionArea}>
-                                {(audioStatus.playing && !audioStatus.didJustFinish) ? (
-                                    <Ionicons name="pause-circle" size={26} color="#331100" />
-                                ) : (
-                                    <Ionicons name="play-circle" size={26} color="#331100" />
-                                )}
+                        {isGeneratingAudioContent ? (
+                            <TouchableOpacity style={styles.audioButtonDescriptionArea}>
+                                <ActivityIndicator size="small" color="#331100" />
                             </TouchableOpacity>
+                        ) : (
+                            speciesDetails.audio_description && player && (
+                                <TouchableOpacity onPress={handlePlayPause} style={styles.audioButtonDescriptionArea}>
+                                    {(audioStatus.playing && !audioStatus.didJustFinish) ? (
+                                        <Ionicons name="pause-circle" size={26} color="#331100" />
+                                    ) : (
+                                        <Ionicons name="play-circle" size={26} color="#331100" />
+                                    )}
+                                </TouchableOpacity>
+                            )
                         )}
                         <FlatList
                             vertical
