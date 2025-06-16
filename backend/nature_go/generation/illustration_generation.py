@@ -17,11 +17,12 @@ def generate_illustration(generate_image: tp.Callable, species: Species) -> bool
         return True
     common_name = species.commonNames[0] if species.commonNames else species.scientificNameWithoutAuthor
     scientific_name = species.scientificNameWithoutAuthor
-    field_name = {Species.PLANT_TYPE: 'Botany', Species.BIRD_TYPE: 'Ornithology'}[species.type]
-    prompt_text = illustration_prompt.prompt_v2.format(
+    field_name = {Species.PLANT_TYPE: 'botanical', Species.BIRD_TYPE: 'ornithological'}[species.type]
+    prompt_text = illustration_prompt.prompt_v3.format(
         common_name=common_name,
         scientific_name=scientific_name,
         field_name=field_name,
+        type=species.type,
     )
     raw_bytes = generate_image(prompt_text)
 
