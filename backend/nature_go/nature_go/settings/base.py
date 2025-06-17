@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'authentication',
     'badge',
+    'generation',
     'observation',
     'university',
     'user_profile',
