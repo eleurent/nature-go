@@ -3,7 +3,6 @@ from drf_extra_fields.fields import Base64ImageField
 from django.contrib.staticfiles import finders
 
 from observation.models import Observation, Species, IdentificationResponse, IdentificationCandidate
-from observation.models import Species # Ensure Species is imported for Species.PLANT_TYPE
 
 class ObservationSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
