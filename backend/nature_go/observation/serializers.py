@@ -3,6 +3,7 @@ from drf_extra_fields.fields import Base64ImageField
 from django.contrib.staticfiles import finders
 
 from observation.models import Observation, Species, IdentificationResponse, IdentificationCandidate
+from observation.models import Species # Ensure Species is imported for Species.PLANT_TYPE
 
 class ObservationSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
@@ -33,10 +34,12 @@ class SpeciesSmallSerializer(serializers.ModelSerializer):
 
     def get_illustration_url(self, obj):
         request = self.context.get('request')
-        if request is None: return None  # TODO: this happens when serializing an identification response
-        if bool(obj.illustration_transparent):
+        if request is None:
+            return None
+
+        if obj.illustration_transparent and obj.type == Species.PLANT_TYPE:
             return request.build_absolute_uri(obj.illustration_transparent.url)
-        elif bool(obj.illustration):
+        elif obj.illustration:
             return request.build_absolute_uri(obj.illustration.url)
         else:
             return None
