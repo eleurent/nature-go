@@ -4,3 +4,4 @@ prompt_v3 = """A vintage 19th-century scientific {field_name} illustration of a 
 
 The {type} is the central focus of the composition, shown in a clear, descriptive pose. The background is simple and sparse, with softly rendered natural elements to suggest the habitat. The entire illustration is presented on a uniform transparent background.
 """
+prompt_v4 = "A vintage 19th-century scientific {field_name} illustration of a {common_name} ({scientific_name})"
