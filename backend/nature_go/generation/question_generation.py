@@ -20,9 +20,27 @@ def generate_questions(generate_text: tp.Callable, species, material: str | None
     common_name, scientific_name = species.commonNames[0], species.scientificNameWithoutAuthor
     if not material:
         material = utils.get_wikipedia_species_page(common_name, scientific_name)
-    prompt = Template(prompt).substitute(species_name=common_name, material=material)
 
-    response = generate_text(contents=[prompt])
-    questions = parse_questions(response)
-    return questions, response
+    if not isinstance(prompt, str):
+        # This check is important as Template() expects a string.
+        raise TypeError(f"Prompt must be a string, got {type(prompt)}")
+
+    current_prompt_str = Template(prompt).substitute(species_name=common_name, material=material)
+
+    response_content = None
+    try:
+        if not callable(generate_text):
+            # This check should ideally not be needed if type hints are respected.
+            raise TypeError(f"generate_text is not callable, it is {type(generate_text)}")
+        response_content = generate_text(contents=[current_prompt_str])
+    except TypeError as te:
+        print(f"TypeError during generate_text call in generate_questions: {te}")
+        raise
+
+    if not isinstance(response_content, str):
+        print(f"Warning: response_content from generate_text is not a string. Type: {type(response_content)}")
+        return [], ""
+
+    questions = parse_questions(response_content)
+    return questions, response_content
 
