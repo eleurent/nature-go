@@ -33,8 +33,10 @@ class SpeciesSmallSerializer(serializers.ModelSerializer):
 
     def get_illustration_url(self, obj):
         request = self.context.get('request')
-        if request is None: return None  # TODO: this happens when serializing an identification response
-        if bool(obj.illustration_transparent):
+        if request is None:
+            return None
+
+        if bool(obj.illustration_transparent) and obj.type == Species.PLANT_TYPE:
             return request.build_absolute_uri(obj.illustration_transparent.url)
         elif bool(obj.illustration):
             return request.build_absolute_uri(obj.illustration.url)
