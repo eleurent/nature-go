@@ -1,5 +1,6 @@
 from io import BytesIO
 import typing as tp
+import uuid
 from django.core.files.base import ContentFile, File
 from PIL import Image
 import math
@@ -27,7 +28,8 @@ def generate_illustration(generate_image: tp.Callable, species: Species) -> bool
     raw_bytes = generate_image(prompt_text)
 
     if raw_bytes:
-        file_name = f"{scientific_name.replace(' ', '_')}_illustration.png"
+        random_slug = uuid.uuid4().hex[:8]
+        file_name = f"{scientific_name.replace(' ', '_')}_{random_slug}_illustration.png"
         species.illustration.save(file_name, ContentFile(raw_bytes), save=False)
         species.save()
         return True
@@ -45,7 +47,8 @@ def generate_illustration_transparent(species) -> bool:
     illustration_transparent = remove_background_by_pixel(illustration)
     bytes_io = BytesIO()
     illustration_transparent.save(bytes_io, 'PNG')  
-    file_name = f"{scientific_name.replace(' ', '_')}_illustration_transparent.png"
+    random_slug = uuid.uuid4().hex[:8]
+    file_name = f"{scientific_name.replace(' ', '_')}_{random_slug}_illustration_transparent.png"
     species.illustration_transparent.save(file_name, File(bytes_io), save=False)
     species.save()
     return True
