@@ -226,13 +226,26 @@ class GenerateIllustrationView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         species = self.get_object()
         success = generate_illustration(generate_image=generate_image, species=species)
-        transparent_success = generate_illustration_transparent(remove_background_fn=remove_background, species=species)
-        success = success or transparent_success
         if success:
             serializer = self.get_serializer(species)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Failed to generate illustration'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class GenerateTransparentIllustrationView(generics.GenericAPIView):
+    queryset = Species.objects.all()
+    serializer_class = SpeciesSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        species = self.get_object()
+        success = generate_illustration_transparent(remove_background_fn=remove_background, species=species)
+        if success:
+            serializer = self.get_serializer(species)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Failed to generate transparent illustration'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class GenerateAudioDescriptionView(generics.GenericAPIView):

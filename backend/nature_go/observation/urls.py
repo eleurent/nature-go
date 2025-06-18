@@ -13,6 +13,7 @@ urlpatterns = format_suffix_patterns([
     path('<int:pk>/observations/', views.SpeciesObservationsList.as_view(), name='species-observations-list'),
     path('<int:pk>/generate_descriptions/', views.SpeciesGenerateDescription.as_view(), name='species-generate-descriptions'),
     path('<int:pk>/generate_illustration/', views.GenerateIllustrationView.as_view(), name='species-generate-illustration'),
+    path('<int:pk>/generate_transparent_illustration/', views.GenerateTransparentIllustrationView.as_view(), name='species-generate-transparent-illustration'),
     path('<int:pk>/generate_audio_description/', views.GenerateAudioDescriptionView.as_view(), name='species-generate-audio-description'),
     path('observation/', views.ObservationListCreate.as_view(), name='observations-list-create'),
     path('observation/<int:pk>/', views.ObservationUpdate.as_view(), name='observations-update'),
