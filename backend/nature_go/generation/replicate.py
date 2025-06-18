@@ -8,7 +8,7 @@ BACKGROUND_REMOVAL_ENDPOINT = "abhisingh0909/rembg:9b5eeb79d1be3900b39303bbbc0b9
 def remove_background(image: Image) -> Image:
     raw_bytes = io.BytesIO()
     image.save(raw_bytes, format='PNG')
-    raw_bytes = raw_bytes.getvalue()
+    raw_bytes.seek(0)
     input = {
         "image":  raw_bytes
     }
