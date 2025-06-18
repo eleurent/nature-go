@@ -19,6 +19,7 @@ const SPECIES_DETAILS_URL = (id) => API_URL + `api/species/${id}/`
 const SPECIES_OBSERVATIONS_URL = (id) => API_URL + `api/species/${id}/observations/`
 const SPECIES_GENERATE_DESCRIPTIONS_URL = (id) => API_URL + `api/species/${id}/generate_descriptions/`
 const SPECIES_GENERATE_ILLUSTRATION_URL = (id) => API_URL + `api/species/${id}/generate_illustration/`;
+const SPECIES_GENERATE_TRANSPARENT_ILLUSTRATION_URL = (id) => API_URL + `api/species/${id}/generate_transparent_illustration/`;
 const SPECIES_GENERATE_AUDIO_DESCRIPTION_URL = (id) => API_URL + `api/species/${id}/generate_audio_description/`;
 const SPECIES_GENERATE_QUESTIONS_URL = (id) => API_URL + `api/university/quiz/questions/generate/${id}/`
 const OBSERVATION_DELETE_URL = (id) => API_URL + `api/species/observation/${id}/delete/`; // Define delete URL
@@ -105,6 +106,20 @@ const generateIllustration = async (species_id, setSpeciesDetails, setIsGenerati
     }
 };
 
+const generateTransparentIllustration = async (species_id, setSpeciesDetails, setIsGeneratingTransparentIllustration) => {
+    console.log('Attempting to generate transparent illustration for species ID:', species_id);
+    setIsGeneratingTransparentIllustration(true);
+    try {
+        const response = await axios.post(SPECIES_GENERATE_TRANSPARENT_ILLUSTRATION_URL(species_id));
+        console.log('Transparent illustration generation response:', response.data);
+        setSpeciesDetails(response.data); // Update species details with the new illustration URL
+    } catch (error) {
+        console.error('Failed to generate transparent illustration:', error.response?.data || error.message);
+    } finally {
+        setIsGeneratingTransparentIllustration(false);
+    }
+};
+
 const generateAudioDescription = async (species_id, setSpeciesDetails, setIsGeneratingAudioContent) => {
     console.log('Generating audio description for this species');
     setIsGeneratingAudioContent(true);
@@ -132,6 +147,7 @@ export default function SpeciesDetailScreen({ navigation, route }) {
     const [mapModalVisible, setMapModalVisible] = useState(false);
     const [isGeneratingTextContent, setIsGeneratingTextContent] = useState(false);
     const [isGeneratingIllustration, setIsGeneratingIllustration] = useState(false);
+    const [isGeneratingTransparentIllustration, setIsGeneratingTransparentIllustration] = useState(false);
     const [isGeneratingAudioContent, setIsGeneratingAudioContent] = useState(false);
     const onMapPress = (initialRegion, coordinate) => {setMapModalData({initialRegion, coordinate}); setMapModalVisible(true);}
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -246,15 +262,20 @@ export default function SpeciesDetailScreen({ navigation, route }) {
         if (shouldGenerateDescription && !isGeneratingTextContent)
             generateSpeciesDescription(route.params.id, setSpeciesDetails, setIsGeneratingTextContent)
 
-        const shouldGenerateIllustration = !speciesDetails.illustration_url && !shouldGenerateDescription
+        const shouldGenerateIllustration = !speciesDetails.illustration && !shouldGenerateDescription
         if (shouldGenerateIllustration && !isGeneratingTextContent && !isGeneratingIllustration) {
             generateIllustration(speciesDetails.id, setSpeciesDetails, setIsGeneratingIllustration);
         }
-        const shouldGenerateAudioDescription = !speciesDetails.audio_description && speciesDetails.descriptions && (speciesDetails.descriptions.length > 0) && !shouldGenerateIllustration
-        if (shouldGenerateAudioDescription && !isGeneratingTextContent && !isGeneratingIllustration && !isGeneratingAudioContent) {
+
+        const shouldGenerateTransparentIllustration = speciesDetails.illustration && !speciesDetails.illustration_transparent && !shouldGenerateDescription && !shouldGenerateIllustration
+        if (shouldGenerateTransparentIllustration && !isGeneratingTextContent && !isGeneratingIllustration && !isGeneratingTransparentIllustration) {
+            generateTransparentIllustration(speciesDetails.id, setSpeciesDetails, setIsGeneratingTransparentIllustration);
+        }
+        const shouldGenerateAudioDescription = !speciesDetails.audio_description && speciesDetails.descriptions && (speciesDetails.descriptions.length > 0) && !shouldGenerateIllustration && !shouldGenerateTransparentIllustration
+        if (shouldGenerateAudioDescription && !isGeneratingTextContent && !isGeneratingIllustration && !isGeneratingTransparentIllustration && !isGeneratingAudioContent) {
             generateAudioDescription(speciesDetails.id, setSpeciesDetails, setIsGeneratingAudioContent);
         }
-    }, [speciesDetails, isGeneratingTextContent, isGeneratingIllustration, isGeneratingAudioContent, route.params.id]);
+    }, [speciesDetails, isGeneratingTextContent, isGeneratingIllustration, isGeneratingTransparentIllustration, isGeneratingAudioContent, route.params.id]);
 
     useEffect(() => {
         if (speciesDetails && speciesDetails.id && speciesDetails.audio_description &&
