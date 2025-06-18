@@ -13,3 +13,4 @@ wikipedia
 beautifulsoup4
 python-dotenv
 pydantic
+replicate

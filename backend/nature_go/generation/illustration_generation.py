@@ -35,7 +35,7 @@ def generate_illustration(generate_image: tp.Callable, species: Species) -> bool
         return True
     return False
 
-def generate_illustration_transparent(species) -> bool:
+def generate_illustration_transparent(remove_background_fn: tp.Callable, species) -> bool:
     logger.info('Will generate transparent illustration')
     if not species.illustration:
         return False
@@ -44,7 +44,7 @@ def generate_illustration_transparent(species) -> bool:
     logger.info('Start background removal')
     scientific_name = species.scientificNameWithoutAuthor
     illustration = Image.open(species.illustration)
-    illustration_transparent = remove_background_by_pixel(illustration)
+    illustration_transparent = remove_background_fn(illustration)
     bytes_io = BytesIO()
     illustration_transparent.save(bytes_io, 'PNG')  
     random_slug = uuid.uuid4().hex[:8]
@@ -54,7 +54,7 @@ def generate_illustration_transparent(species) -> bool:
     return True
 
 
-def remove_background_by_pixel(img, ref_coords=(5, 5), tolerance=30):
+def remove_background_by_pixel(img: Image, ref_coords=(5, 5), tolerance=30) -> Image:
     """
     Removes the background of an image based on a reference pixel's color.
     """

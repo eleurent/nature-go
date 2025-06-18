@@ -10,6 +10,7 @@ from observation.serializers import ObservationSerializer, SpeciesSerializer, se
 from observation.permissions import IsOwner, IsAdminOrReadOnly
 from identification import plantnet, gemini
 from generation.gemini import generate_text, generate_image
+from generation.replicate import remove_background
 from generation.description_generation import generate_descriptions
 from generation.illustration_generation import generate_illustration, generate_illustration_transparent
 from generation.audio_description_generation import generate_audio_description
@@ -225,7 +226,7 @@ class GenerateIllustrationView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         species = self.get_object()
         success = generate_illustration(generate_image=generate_image, species=species)
-        transparent_success = generate_illustration_transparent(species=species)
+        transparent_success = generate_illustration_transparent(remove_background_fn=remove_background, species=species)
         success = success or transparent_success
         if success:
             serializer = self.get_serializer(species)
