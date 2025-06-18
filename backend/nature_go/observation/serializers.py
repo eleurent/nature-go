@@ -36,7 +36,7 @@ class SpeciesSmallSerializer(serializers.ModelSerializer):
         if request is None:
             return None
 
-        if bool(obj.illustration_transparent) and obj.type == Species.PLANT_TYPE:
+        if bool(obj.illustration_transparent):
             return request.build_absolute_uri(obj.illustration_transparent.url)
         elif bool(obj.illustration):
             return request.build_absolute_uri(obj.illustration.url)
