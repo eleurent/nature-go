@@ -19,7 +19,7 @@ def generate_illustration(generate_image: tp.Callable, species: Species) -> bool
     common_name = species.commonNames[0] if species.commonNames else species.scientificNameWithoutAuthor
     scientific_name = species.scientificNameWithoutAuthor
     field_name = {Species.PLANT_TYPE: 'botanical', Species.BIRD_TYPE: 'ornithological'}[species.type]
-    prompt_text = illustration_prompt.prompt_v4.format(
+    prompt_text = illustration_prompt.prompt_v5.format(
         common_name=common_name,
         scientific_name=scientific_name,
         field_name=field_name,
