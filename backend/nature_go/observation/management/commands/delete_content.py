@@ -49,7 +49,7 @@ class Command(BaseCommand):
                 for species in species_with_illustrations:
                     if species.illustration:
                         species.illustration.delete(save=False)
-                        self.stdout.write(self.style.SUCCESS(f"Successfully deleted illustration for {species.name}"))
+                        self.stdout.write(self.style.SUCCESS(f"Successfully deleted illustration for {str(species)}"))
                         species.save() # Save after this specific modification
                         content_deleted = True
                 self.stdout.write(self.style.SUCCESS("Finished deleting illustrations."))
@@ -63,7 +63,7 @@ class Command(BaseCommand):
                 for species in species_with_transparent_illustrations:
                     if species.illustration_transparent:
                         species.illustration_transparent.delete(save=False)
-                        self.stdout.write(self.style.SUCCESS(f"Successfully deleted transparent illustration for {species.name}"))
+                        self.stdout.write(self.style.SUCCESS(f"Successfully deleted transparent illustration for {str(species)}"))
                         species.save() # Save after this specific modification
                         content_deleted = True
                 self.stdout.write(self.style.SUCCESS("Finished deleting transparent illustrations."))
@@ -87,13 +87,13 @@ class Command(BaseCommand):
                     modified = False
                     if species.descriptions and species.descriptions != []:
                         species.descriptions = []
-                        self.stdout.write(self.style.SUCCESS(f"Successfully deleted text descriptions for {species.name}"))
+                        self.stdout.write(self.style.SUCCESS(f"Successfully deleted text descriptions for {str(species)}"))
                         modified = True
                         content_deleted = True
 
                     if species.audio_description:
                         species.audio_description.delete(save=False)
-                        self.stdout.write(self.style.SUCCESS(f"Successfully deleted audio description for {species.name}"))
+                        self.stdout.write(self.style.SUCCESS(f"Successfully deleted audio description for {str(species)}"))
                         modified = True
                         content_deleted = True
 
