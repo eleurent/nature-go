@@ -3,6 +3,7 @@ from django.conf import settings
 from observation.models import Species, Observation
 from university.models import MultipleChoiceQuestion
 from generation.illustration_generation import generate_illustration, generate_illustration_transparent
+from generation.replicate import remove_background as replicate_remove_background
 from generation.description_generation import generate_descriptions
 from generation.question_generation import generate_questions
 from generation.gemini import generate_image, generate_text as gemini_generate_text_func
@@ -20,6 +21,11 @@ class Command(BaseCommand):
             help='Generate missing illustrations.'
         )
         parser.add_argument(
+            '--illustrations-transparent',
+            action='store_true',
+            help='Generate missing transparent illustrations (requires base illustration to exist).'
+        )
+        parser.add_argument(
             '--descriptions',
             action='store_true',
             help='Generate missing descriptions.'
@@ -33,18 +39,22 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # Use different names for the boolean flags to avoid conflict with imported function names
         gen_illustrations_flag = options['illustrations']
+        gen_illustrations_transparent_flag = options['illustrations_transparent']
         gen_descriptions_flag = options['descriptions']
         gen_questions_flag = options['questions']
 
         # If no specific content type is requested, generate all.
-        if not any([gen_illustrations_flag, gen_descriptions_flag, gen_questions_flag]):
+        if not any([gen_illustrations_flag, gen_illustrations_transparent_flag, gen_descriptions_flag, gen_questions_flag]):
             gen_illustrations_flag = True
+            gen_illustrations_transparent_flag = True
             gen_descriptions_flag = True
             gen_questions_flag = True
 
         self.stdout.write("Starting content generation...")
         if gen_illustrations_flag:
             self.stdout.write("- Illustrations will be generated.")
+        if gen_illustrations_transparent_flag:
+            self.stdout.write("- Transparent illustrations will be generated.")
         if gen_descriptions_flag:
             self.stdout.write("- Descriptions will be generated.")
         if gen_questions_flag:
@@ -61,6 +71,7 @@ class Command(BaseCommand):
         self.stdout.write(f"Found {observed_species.count()} observed species to process.")
 
         illustrations_generated_count = 0
+        illustrations_transparent_generated_count = 0
         descriptions_generated_count = 0
         questions_generated_count = 0
 
@@ -73,7 +84,6 @@ class Command(BaseCommand):
                     try:
                         # Call the original imported generate_illustration function
                         if generate_illustration(generate_image, species):
-                            generate_illustration_transparent(species)
                             illustrations_generated_count += 1
                             self.stdout.write(self.style.SUCCESS(f"    Successfully generated illustration for {species}."))
                         else:
@@ -82,6 +92,24 @@ class Command(BaseCommand):
                         self.stdout.write(self.style.ERROR(f"    Error generating illustration for {species}: {e}"))
                 else:
                     self.stdout.write(f"  Illustration already exists for {species}.")
+
+            if gen_illustrations_transparent_flag:
+                if species.illustration:
+                    if not species.illustration_transparent:
+                        self.stdout.write(f"  Generating transparent illustration for {species}...")
+                        try:
+                            if generate_illustration_transparent(replicate_remove_background, species):
+                                illustrations_transparent_generated_count += 1
+                                self.stdout.write(self.style.SUCCESS(f"    Successfully generated transparent illustration for {species}."))
+                            else:
+                                self.stdout.write(self.style.WARNING(f"    Failed to generate transparent illustration for {species}."))
+                        except Exception as e:
+                            self.stdout.write(self.style.ERROR(f"    Error generating transparent illustration for {species}: {e}"))
+                    else:
+                        self.stdout.write(f"  Transparent illustration already exists for {species}.")
+                else:
+                    self.stdout.write(self.style.WARNING(f"  Cannot generate transparent illustration for {species} because base illustration does not exist."))
+
 
             if gen_descriptions_flag:
                 if not species.descriptions:
@@ -126,5 +154,6 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS("Content generation complete!"))
         self.stdout.write(f"  Total illustrations generated: {illustrations_generated_count}")
+        self.stdout.write(f"  Total transparent illustrations generated: {illustrations_transparent_generated_count}")
         self.stdout.write(f"  Total descriptions generated: {descriptions_generated_count}")
         self.stdout.write(f"  Total questions generated: {questions_generated_count}")
