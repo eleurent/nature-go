@@ -11,6 +11,9 @@ import Home from './screens/Home';
 import Profile from './screens/Profile';
 import CameraCapture from './screens/CameraCapture';
 import SpeciesList from './screens/SpeciesList';
+import QuizDetail from './screens/QuizDetail';
+import QuizQuestion from './screens/QuizQuestion';
+import QuizResult from './screens/QuizResult';
 
 // Contexts
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -143,9 +146,24 @@ function App() {
                     <SpeciesList />
                 </ProtectedRoute>
               } />
-               <Route path="/profile" element={
+              <Route path="/profile" element={
                 <ProtectedRoute>
                     <Profile />
+                </ProtectedRoute>
+              } />
+              <Route path="/university" element={
+                <ProtectedRoute>
+                    <QuizDetail />
+                </ProtectedRoute>
+              } />
+              <Route path="/quiz/result" element={
+                <ProtectedRoute>
+                    <QuizResult />
+                </ProtectedRoute>
+              } />
+              <Route path="/quiz/:index" element={
+                <ProtectedRoute>
+                    <QuizQuestion />
                 </ProtectedRoute>
               } />
             </Routes>

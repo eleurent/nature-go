@@ -7,7 +7,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MapIcon from '@mui/icons-material/Map';
 
 // Custom icons based on original assets
-// Ideally we would use the actual PNGs, but for now we map them to layout
 const MenuIcon = ({ src, alt, size = 100 }: { src: string, alt: string, size?: number }) => (
     <Box
         component="img"
@@ -73,7 +72,7 @@ export default function Home() {
                 <Grid item>
                      <Box
                         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', opacity: 0.9, '&:hover': { opacity: 1 } }}
-                        onClick={() => alert("University feature coming soon!")}
+                        onClick={() => navigate('/university')}
                     >
                          <MenuIcon src="/assets/images/university.png" alt="University" />
                         <Typography variant="body1" align="center" sx={{ fontFamily: '"Old Standard TT", serif' }}>UNIVERSITY</Typography>
