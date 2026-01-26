@@ -44,7 +44,7 @@
     "react-native-gesture-handler": "~2.28.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-keyboard-aware-scrollview": "^2.1.0",
-    "react-native-maps": "1.20.1",
+    "react-native-maps": "^1.26.20",
     "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
@@ -54,7 +54,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
-    "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "metro": "^0.83.3"
   },
   "overrides": {
