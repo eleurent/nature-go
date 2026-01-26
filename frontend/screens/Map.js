@@ -4,7 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Constants from 'expo-constants'
 import axios from 'axios';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker } from '../components/CustomMapView';
 
 const API_URL = Constants.expoConfig.extra.API_URL;
 const SPECIES_OBSERVATIONS_URL = API_URL + `api/species/observation/`

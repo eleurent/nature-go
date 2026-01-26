@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Modal, TouchableWithoutFeedback, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker } from './CustomMapView';
 
 export default function ObservationMapModal({ modalVisible, setModalVisible, initialRegion, coordinate, backgroundColor='rgba(0,0,0,0.5)' }) {
     return (
