@@ -17,12 +17,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: frontend-pwa/package-lock.json
 
       - name: Install dependencies
         working-directory: frontend-pwa
-        run: npm ci
+        run: npm install
 
       - name: Build static export
         working-directory: frontend-pwa
