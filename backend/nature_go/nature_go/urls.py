@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include
 from django.urls import path, re_path
-from django.views.static import serve
+from website.views import serve_pwa
 
 urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
@@ -30,15 +30,8 @@ urlpatterns = [
     path('api/auth/', include('authentication.urls')),
     path('api/profile/', include('user_profile.urls')),
     path('api/badge/', include('badge.urls')),
-    path('api-auth/', include('rest_framework.urls')),  # Is this needed?
-    # PWA routes - serve static Next.js export
-    re_path(
-        r'^app/(?P<path>.*)$',
-        serve,
-        {
-            'document_root': os.path.join(settings.BASE_DIR, 'pwa'),
-        },
-    ),
+    path('api-auth/', include('rest_framework.urls')),
+    re_path(r'^app/(?P<path>.*)$', serve_pwa),
     path('', include('website.urls')),
 ]
 
