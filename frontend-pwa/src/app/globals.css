@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Parisienne&family=Special+Elite&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --nature-brown: #331100;
+  --nature-tan: #f5f0e6;
+  --nature-dark: #660000;
+  --nature-text: #332200;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Old Standard TT', serif;
+  background-color: var(--nature-tan);
+  color: var(--nature-brown);
+}
+
+.page-background {
+  background-image: url('/images/page-background.png');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
+
+.page-background-2 {
+  background-image: url('/images/page-background-2.png');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
+
+.font-special-elite {
+  font-family: 'Special Elite', cursive;
+}
+
+.font-old-standard {
+  font-family: 'Old Standard TT', serif;
+}
+
+.font-tinos {
+  font-family: 'Tinos', serif;
+}
+
+.font-dancing {
+  font-family: 'Dancing Script', cursive;
+}
+
+.font-parisienne {
+  font-family: 'Parisienne', cursive;
+}
+
+.category-button {
+  @apply w-28 h-32 flex flex-col items-center justify-center text-center cursor-pointer transition-opacity hover:opacity-70;
+}
+
+.category-image {
+  @apply w-24 h-24 object-contain;
+}
+
+.category-label {
+  @apply font-old-standard text-sm leading-tight text-center text-black mt-1;
+}
+
+.modal-overlay {
+  @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
+}
+
+.modal-content {
+  @apply bg-white rounded-lg p-6 max-w-md w-full mx-4;
+}
+
+.btn-primary {
+  @apply bg-nature-dark text-white px-6 py-2 rounded font-old-standard hover:opacity-80 transition-opacity;
+}
+
+.input-field {
+  @apply w-full px-4 py-2 border border-gray-300 rounded font-old-standard focus:outline-none focus:border-nature-dark;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
