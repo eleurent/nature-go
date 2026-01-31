@@ -1,7 +1,14 @@
 import axios from 'axios';
 
-// Use relative URL when on same domain (production), or localhost for development
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+// Use same origin as the page to avoid CORS issues
+const getApiUrl = () => {
+  if (typeof window !== 'undefined') {
+    return window.location.origin + '/';
+  }
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/';
+};
+
+export const API_URL = getApiUrl();
 
 export const api = axios.create({
   baseURL: API_URL,
