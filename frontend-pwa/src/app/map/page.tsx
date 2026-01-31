@@ -84,9 +84,16 @@ export default function MapPage() {
 
     fetchObservations();
 
-    import('leaflet/dist/leaflet.css').then(() => {
-      setLeafletLoaded(true);
-    });
+    // Load Leaflet CSS
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    link.onload = () => setLeafletLoaded(true);
+    document.head.appendChild(link);
+
+    return () => {
+      document.head.removeChild(link);
+    };
   }, [authState.userToken]);
 
   if (!authState.userToken) return null;
