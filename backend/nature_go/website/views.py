@@ -11,7 +11,7 @@ class HomePageView(TemplateView):
 
 
 def serve_pwa(request, path=''):
-  pwa_root = os.path.join(settings.BASE_DIR, 'pwa')
+  pwa_root = '/var/www/nature-go/pwa'
 
   if not path or path.endswith('/'):
     path = path.rstrip('/') + '/index.html' if path else 'index.html'

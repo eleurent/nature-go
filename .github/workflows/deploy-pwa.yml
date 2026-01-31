@@ -37,7 +37,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           source: "frontend-pwa/out/*"
-          target: "/srv/nature-go/nature_go/pwa"
+          target: "/var/www/nature-go/pwa"
           strip_components: 2
           rm: true
 
