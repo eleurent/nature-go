@@ -59,6 +59,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+!frontend-pwa/src/lib/
 lib64/
 parts/
 sdist/

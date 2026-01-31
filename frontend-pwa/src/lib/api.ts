@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/';
+// Use relative URL when on same domain (production), or localhost for development
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -29,10 +30,14 @@ export const endpoints = {
     list: (type: string) => `api/species/${type}/`,
     detail: (id: number) => `api/species/${id}/`,
     observations: (id: number) => `api/species/${id}/observations/`,
-    generateDescriptions: (id: number) => `api/species/${id}/generate_descriptions/`,
-    generateIllustration: (id: number) => `api/species/${id}/generate_illustration/`,
-    generateTransparentIllustration: (id: number) => `api/species/${id}/generate_transparent_illustration/`,
-    generateAudioDescription: (id: number) => `api/species/${id}/generate_audio_description/`,
+    generateDescriptions: (id: number) =>
+      `api/species/${id}/generate_descriptions/`,
+    generateIllustration: (id: number) =>
+      `api/species/${id}/generate_illustration/`,
+    generateTransparentIllustration: (id: number) =>
+      `api/species/${id}/generate_transparent_illustration/`,
+    generateAudioDescription: (id: number) =>
+      `api/species/${id}/generate_audio_description/`,
   },
   observations: {
     all: 'api/species/observation/',
@@ -43,6 +48,7 @@ export const endpoints = {
   quiz: {
     random: 'api/university/quiz/random/',
     submit: 'api/university/quiz/submit/',
-    generateQuestions: (id: number) => `api/university/quiz/questions/generate/${id}/`,
+    generateQuestions: (id: number) =>
+      `api/university/quiz/questions/generate/${id}/`,
   },
 };
