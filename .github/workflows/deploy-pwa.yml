@@ -1,0 +1,57 @@
+name: Deploy PWA
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend-pwa/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend-pwa/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend-pwa
+        run: npm ci
+
+      - name: Build static export
+        working-directory: frontend-pwa
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.API_URL }}
+
+      - name: Upload PWA build to server
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "frontend-pwa/out/*"
+          target: "/srv/nature-go/nature_go/pwa"
+          strip_components: 2
+          rm: true
+
+      - name: Collect static files on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_KEY_PASSPHRASE }}
+          script: |
+            cd /srv/nature-go/
+            source venv/bin/activate
+            cd /srv/nature-go/nature_go/
+            export SECRET_KEY=${{ secrets.SECRET_KEY }}
+            python manage.py collectstatic --no-input --settings=nature_go.settings.production
+            echo ${{ secrets.SSH_PASSWORD }} | sudo -S systemctl reload apache2

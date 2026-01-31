@@ -111,7 +111,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / 'static',
+    BASE_DIR / 'pwa',  # Next.js PWA static export
 ]
 
 MEDIA_URL = '/media/'
