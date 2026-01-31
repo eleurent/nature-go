@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
@@ -13,6 +13,14 @@ export default function CharacterSelectionPage() {
   const { profileMethods } = useUserProfile();
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    if (!authState.userToken) {
+      router.replace('/');
+    }
+  }, [authState.userToken, router]);
 
   const handleSelectAvatar = async () => {
     if (!selectedAvatar) return;
@@ -28,8 +36,7 @@ export default function CharacterSelectionPage() {
     }
   };
 
-  if (!authState.userToken) {
-    router.replace('/');
+  if (!mounted || !authState.userToken) {
     return null;
   }
 

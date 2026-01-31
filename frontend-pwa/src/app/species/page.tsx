@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -22,15 +22,17 @@ const RARITY_COLORS: Record<string, string> = {
   'Legendary': 'text-orange-500',
 };
 
-export default function SpeciesListPage() {
+function SpeciesListContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { authState } = useAuth();
   const [speciesList, setSpeciesList] = useState<Species[] | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   const type = searchParams.get('type') || 'plant';
 
   useEffect(() => {
+    setMounted(true);
     if (!authState.userToken) {
       router.replace('/');
       return;
@@ -47,9 +49,9 @@ export default function SpeciesListPage() {
     };
 
     fetchSpeciesList();
-  }, [authState.userToken, type]);
+  }, [authState.userToken, type, router]);
 
-  if (!authState.userToken) return null;
+  if (!mounted || !authState.userToken) return null;
 
   const getImageUrl = (url: string) => {
     if (!url) return '/images/placeholder.png';
@@ -109,5 +111,13 @@ export default function SpeciesListPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function SpeciesListPage() {
+  return (
+    <Suspense fallback={<div className="page-background min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-4 border-nature-dark border-t-transparent" /></div>}>
+      <SpeciesListContent />
+    </Suspense>
   );
 }
