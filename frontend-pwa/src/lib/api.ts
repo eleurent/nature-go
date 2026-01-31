@@ -53,8 +53,8 @@ export const endpoints = {
     save: 'api/species/observation/save/',
   },
   quiz: {
-    random: 'api/university/quiz/random/',
-    submit: 'api/university/quiz/submit/',
+    random: 'api/university/quiz/get_or_create/',
+    update: (id: number) => `api/university/quiz/${id}/`,
     generateQuestions: (id: number) =>
       `api/university/quiz/questions/generate/${id}/`,
   },

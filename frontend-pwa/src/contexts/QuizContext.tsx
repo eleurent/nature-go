@@ -89,8 +89,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
       answerQuiz: async (state: QuizState) => {
         if (!state.quiz) return;
         try {
-          const response = await api.post(endpoints.quiz.submit, {
-            quiz_id: state.quiz.id,
+          const response = await api.patch(endpoints.quiz.update(state.quiz.id), {
             answers: state.answers,
           });
           dispatch({ type: 'SET_CORRECT_ANSWERS', correctAnswers: response.data.correct_answers });
