@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useEffect, useState, useRef, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { api, endpoints, API_URL } from '@/lib/api';
@@ -31,9 +31,9 @@ const RARITY_STYLES: Record<string, string> = {
   'Legendary': 'bg-orange-500',
 };
 
-export default function SpeciesDetailClient() {
+function SpeciesDetailContent() {
   const router = useRouter();
-  const params = useParams();
+  const searchParams = useSearchParams();
   const { authState } = useAuth();
   const [speciesDetails, setSpeciesDetails] = useState<SpeciesDetails | null>(null);
   const [observations, setObservations] = useState<Observation[]>([]);
@@ -41,13 +41,15 @@ export default function SpeciesDetailClient() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const speciesId = Number(params.id);
+  const speciesId = Number(searchParams.get('id') || 0);
 
   useEffect(() => {
     if (!authState.userToken) {
       router.replace('/');
       return;
     }
+
+    if (!speciesId) return;
 
     const fetchData = async () => {
       try {
@@ -63,7 +65,7 @@ export default function SpeciesDetailClient() {
     };
 
     fetchData();
-  }, [authState.userToken, speciesId]);
+  }, [authState.userToken, speciesId, router]);
 
   useEffect(() => {
     if (!speciesDetails) return;
@@ -225,5 +227,13 @@ export default function SpeciesDetailClient() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function SpeciesDetailPage() {
+  return (
+    <Suspense fallback={<div className="page-background min-h-screen flex items-center justify-center">Loading...</div>}>
+      <SpeciesDetailContent />
+    </Suspense>
   );
 }

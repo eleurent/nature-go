@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useQuiz } from '@/contexts/QuizContext';
 
@@ -26,14 +26,14 @@ function getRandomFeedback(positive: boolean): string {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-export default function QuizQuestionClient() {
+function QuizQuestionContent() {
   const router = useRouter();
-  const params = useParams();
+  const searchParams = useSearchParams();
   const { authState } = useAuth();
   const { quizState, quizMethods } = useQuiz();
   const [feedback, setFeedback] = useState<{ text: string; correct: boolean } | null>(null);
 
-  const questionId = Number(params.id);
+  const questionId = Number(searchParams.get('id') || 0);
 
   useEffect(() => {
     if (!authState.userToken) {
@@ -44,11 +44,13 @@ export default function QuizQuestionClient() {
       router.replace('/quiz');
       return;
     }
-  }, [authState.userToken, quizState.quiz]);
+  }, [authState.userToken, quizState.quiz, router]);
 
   if (!authState.userToken || !quizState.quiz) return null;
 
   const question = quizState.quiz.multiple_choice_questions[questionId];
+  if (!question) return null;
+  
   const hasSelected = quizState.answers[questionId] !== null;
   const hasAnswered = quizMethods.isQuestionAnswered(quizState, questionId);
   const isCorrect = quizMethods.isAnswerCorrect(quizState, questionId);
@@ -67,7 +69,7 @@ export default function QuizQuestionClient() {
       setFeedback({ text: getRandomFeedback(correct), correct });
     } else if (questionId < quizState.quiz!.multiple_choice_questions.length - 1) {
       setFeedback(null);
-      router.push(`/quiz/question/${questionId + 1}`);
+      router.push(`/quiz/question?id=${questionId + 1}`);
     } else {
       router.replace('/quiz/result');
     }
@@ -158,5 +160,13 @@ export default function QuizQuestionClient() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function QuizQuestionPage() {
+  return (
+    <Suspense fallback={<div className="page-background-2 min-h-screen flex items-center justify-center">Loading...</div>}>
+      <QuizQuestionContent />
+    </Suspense>
   );
 }

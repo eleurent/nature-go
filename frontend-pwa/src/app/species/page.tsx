@@ -88,7 +88,7 @@ export default function SpeciesListPage() {
               {speciesList.map((species) => (
                 <Link
                   key={species.id}
-                  href={`/species/${species.id}`}
+                  href={`/species/detail?id=${species.id}`}
                   className="flex flex-col items-center p-3 hover:bg-white/50 rounded-lg transition-colors"
                 >
                   <div className="w-28 h-28 relative">

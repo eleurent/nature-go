@@ -19,7 +19,7 @@ export default function QuizPage() {
 
   const handleStartQuiz = async () => {
     await quizMethods.fetchQuiz();
-    router.push('/quiz/question/0');
+    router.push('/quiz/question?id=0');
   };
 
   if (!authState.userToken) return null;
