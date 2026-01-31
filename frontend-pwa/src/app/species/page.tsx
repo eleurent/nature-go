@@ -54,7 +54,7 @@ function SpeciesListContent() {
   if (!mounted || !authState.userToken) return null;
 
   const getImageUrl = (url: string) => {
-    if (!url) return '/images/placeholder.png';
+    if (!url) return '/app/images/placeholder.png';
     return url.replace('http://localhost/', API_URL);
   };
 

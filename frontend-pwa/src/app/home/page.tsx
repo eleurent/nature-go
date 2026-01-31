@@ -66,7 +66,7 @@ export default function HomePage() {
           CONTENTS.
         </h1>
         <Image
-          src="/images/separator.png"
+          src="/app/images/separator.png"
           alt=""
           width={200}
           height={5}
@@ -78,7 +78,7 @@ export default function HomePage() {
             <div className="w-28" />
             <CategoryButton
               href="/species?type=plant"
-              imageSrc="/images/botany.png"
+              imageSrc="/app/images/botany.png"
               label="BOTANY"
             />
             <div className="w-28" />
@@ -87,13 +87,13 @@ export default function HomePage() {
           <div className="flex justify-center gap-4">
             <CategoryButton
               href="/species?type=bird"
-              imageSrc="/images/ornithology.png"
+              imageSrc="/app/images/ornithology.png"
               label="ORNITHOLOGY"
             />
             <div className="w-28" />
             <CategoryButton
               href="#"
-              imageSrc="/images/entomology.png"
+              imageSrc="/app/images/entomology.png"
               label="ENTOMOLOGY"
               disabled
             />
@@ -103,13 +103,13 @@ export default function HomePage() {
             <div className="w-28" />
             <CategoryButton
               href="/quiz"
-              imageSrc="/images/university.png"
+              imageSrc="/app/images/university.png"
               label="UNIVERSITY"
             />
             <div className="w-28" />
             <CategoryButton
               href="/map"
-              imageSrc="/images/map.png"
+              imageSrc="/app/images/map.png"
               label="MAP"
             />
             <div className="w-28" />
@@ -134,7 +134,7 @@ export default function HomePage() {
       <div className="flex justify-center pb-8">
         <Link href="/camera" className="category-button">
           <Image
-            src="/images/binoculars.png"
+            src="/app/images/binoculars.png"
             alt="Camera"
             width={80}
             height={80}

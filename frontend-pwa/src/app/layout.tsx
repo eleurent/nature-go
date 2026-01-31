@@ -8,7 +8,7 @@ import { QuizProvider } from '@/contexts/QuizContext';
 export const metadata: Metadata = {
   title: 'Nature GO',
   description: 'A wildlife identification game — become a 19th century naturalist',
-  manifest: '/manifest.json',
+  manifest: '/app/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <link rel="apple-touch-icon" href="/app/icons/icon-192.png" />
       </head>
       <body>
         <AuthProvider>

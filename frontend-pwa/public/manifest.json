@@ -2,27 +2,28 @@
   "name": "Nature GO",
   "short_name": "Nature GO",
   "description": "A wildlife identification game — become a 19th century naturalist",
-  "start_url": "/",
+  "start_url": "/app/",
   "display": "standalone",
   "background_color": "#f5f0e6",
   "theme_color": "#660000",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/icons/icon-192.png",
+      "src": "/app/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "/app/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "/app/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ]
 }
+
