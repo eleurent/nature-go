@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - 'frontend-pwa/**'
+      - '.github/workflows/deploy-pwa.yml'
+  workflow_dispatch:  # Allow manual trigger
 
 jobs:
   build-and-deploy:
