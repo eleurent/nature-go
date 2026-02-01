@@ -27,11 +27,13 @@ def generate_image(text: str) -> bytes | None:
       client = genai.Client()
 
     response = client.models.generate_images(
-        model="imagen-3.0-generate-002",
+        model="models/imagen-4.0-generate-001",
         prompt=text,
-        config=types.GenerateImageConfig(
-            aspect_ratio="1:1",
+        config=dict(
             number_of_images=1,
+            output_mime_type="image/jpeg",
+            aspect_ratio="1:1",
+            image_size="1K",
         ),
     )
 
