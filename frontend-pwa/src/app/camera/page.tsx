@@ -86,6 +86,7 @@ export default function CameraPage() {
     if (!file) return;
 
     const exifData = await extractExifData(file);
+    console.log('EXIF data extracted:', JSON.stringify(exifData, null, 2));
     
     const reader = new FileReader();
     reader.onload = () => {
@@ -99,24 +100,13 @@ export default function CameraPage() {
       }
       
       if (exifData.location) {
+        console.log('Using EXIF location:', exifData.location);
         observationMethods.setObservationLocation(exifData.location);
-        router.push('/observation/confirm');
-      } else if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            observationMethods.setObservationLocation({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            });
-            router.push('/observation/confirm');
-          },
-          () => {
-            router.push('/observation/confirm');
-          }
-        );
       } else {
-        router.push('/observation/confirm');
+        console.log('No EXIF location found');
       }
+      
+      router.push('/observation/confirm');
     };
     reader.readAsDataURL(file);
   };
