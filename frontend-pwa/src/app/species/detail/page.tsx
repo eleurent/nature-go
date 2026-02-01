@@ -42,6 +42,15 @@ function SpeciesDetailContent() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const speciesId = Number(searchParams.get('id') || 0);
+  const fromObservation = searchParams.get('fromObservation') === 'true';
+
+  const handleBack = () => {
+    if (fromObservation) {
+      router.replace('/home');
+    } else {
+      router.back();
+    }
+  };
 
   useEffect(() => {
     if (!authState.userToken) {
@@ -142,7 +151,7 @@ function SpeciesDetailContent() {
   return (
     <div className="page-background min-h-screen pb-8">
       <button
-        onClick={() => router.back()}
+        onClick={handleBack}
         className="fixed top-4 left-4 z-10 bg-white/80 px-3 py-1 rounded shadow"
       >
         ← Back

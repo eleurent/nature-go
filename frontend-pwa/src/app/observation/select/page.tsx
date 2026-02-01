@@ -92,7 +92,8 @@ export default function ObservationSelectPage() {
 
       const speciesId = response.data.species;
       observationMethods.clearObservation();
-      router.replace(`/species/detail?id=${speciesId}`);
+      // Use fromObservation param so species detail page knows to navigate home on back
+      router.replace(`/species/detail?id=${speciesId}&fromObservation=true`);
     } catch (err) {
       console.error('Failed to confirm species:', err);
       setError('Failed to save observation. Please try again.');
