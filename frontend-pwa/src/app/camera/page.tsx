@@ -4,6 +4,7 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useObservation } from '@/contexts/ObservationContext';
+import { extractExifData } from '@/lib/exif';
 
 export default function CameraPage() {
   const router = useRouter();
@@ -80,29 +81,42 @@ export default function CameraPage() {
     router.push('/observation/confirm');
   }, [observationMethods, router]);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const exifData = await extractExifData(file);
+    
     const reader = new FileReader();
     reader.onload = () => {
       const base64 = (reader.result as string).split(',')[1];
       observationMethods.setObservationImage(base64);
-      observationMethods.setObservationDatetime(new Date().toISOString());
-
-      if ('geolocation' in navigator) {
+      
+      if (exifData.datetime) {
+        observationMethods.setObservationDatetime(exifData.datetime);
+      } else {
+        observationMethods.setObservationDatetime(new Date().toISOString());
+      }
+      
+      if (exifData.location) {
+        observationMethods.setObservationLocation(exifData.location);
+        router.push('/observation/confirm');
+      } else if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             observationMethods.setObservationLocation({
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
             });
+            router.push('/observation/confirm');
           },
-          (error) => console.error('Geolocation error:', error)
+          () => {
+            router.push('/observation/confirm');
+          }
         );
+      } else {
+        router.push('/observation/confirm');
       }
-
-      router.push('/observation/confirm');
     };
     reader.readAsDataURL(file);
   };
