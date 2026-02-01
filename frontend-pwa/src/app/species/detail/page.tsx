@@ -60,6 +60,8 @@ function SpeciesDetailContent() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [leafletLoaded, setLeafletLoaded] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [mapModal, setMapModal] = useState<{ lat: number; lng: number } | null>(null);
 
   const speciesId = Number(searchParams.get('id') || 0);
   const fromObservation = searchParams.get('fromObservation') === 'true';
@@ -287,10 +289,13 @@ function SpeciesDetailContent() {
           {observations.length > 0 && (
             <div className="mt-6">
               <h2 className="text-lg font-old-standard text-center mb-4">Observations</h2>
-              <div className="flex overflow-x-auto gap-4 px-6 pb-4">
+              <div className="flex overflow-x-auto gap-4 px-6 pb-4 snap-x snap-mandatory">
                 {observations.map((obs) => (
-                  <div key={obs.id} className="flex-shrink-0 w-40">
-                    <div className="w-40 h-40 relative rounded-lg overflow-hidden">
+                  <div key={obs.id} className="flex-shrink-0 w-40 snap-start">
+                    <div
+                      className="w-40 h-40 relative rounded-lg overflow-hidden cursor-pointer"
+                      onClick={() => setPreviewImage(getImageUrl(obs.image))}
+                    >
                       <Image
                         src={getImageUrl(obs.image)}
                         alt="Observation"
@@ -299,7 +304,10 @@ function SpeciesDetailContent() {
                       />
                     </div>
                     {obs.location && leafletLoaded && (
-                      <div className="w-40 h-24 mt-2 rounded-lg overflow-hidden">
+                      <div
+                        className="w-40 h-24 mt-2 rounded-lg overflow-hidden cursor-pointer"
+                        onClick={() => setMapModal({ lat: obs.location!.latitude, lng: obs.location!.longitude })}
+                      >
                         <MapContainer
                           center={[obs.location.latitude, obs.location.longitude]}
                           zoom={13}
@@ -307,7 +315,7 @@ function SpeciesDetailContent() {
                           dragging={false}
                           zoomControl={false}
                           attributionControl={false}
-                          className="h-full w-full"
+                          className="h-full w-full pointer-events-none"
                         >
                           <TileLayer
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -328,6 +336,61 @@ function SpeciesDetailContent() {
       ) : (
         <div className="flex justify-center py-24">
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-nature-dark border-t-transparent" />
+        </div>
+      )}
+
+      {previewImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          onClick={() => setPreviewImage(null)}
+        >
+          <button
+            className="absolute top-4 right-4 text-white text-3xl font-bold z-10"
+            onClick={() => setPreviewImage(null)}
+          >
+            ×
+          </button>
+          <div className="relative w-full h-full max-w-4xl max-h-[90vh] m-4">
+            <Image
+              src={previewImage}
+              alt="Full size observation"
+              fill
+              className="object-contain"
+            />
+          </div>
+        </div>
+      )}
+
+      {mapModal && leafletLoaded && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          onClick={() => setMapModal(null)}
+        >
+          <button
+            className="absolute top-4 right-4 text-white text-3xl font-bold z-10"
+            onClick={(e) => { e.stopPropagation(); setMapModal(null); }}
+          >
+            ×
+          </button>
+          <div
+            className="w-[90vw] h-[80vh] rounded-lg overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <MapContainer
+              center={[mapModal.lat, mapModal.lng]}
+              zoom={15}
+              scrollWheelZoom={true}
+              dragging={true}
+              zoomControl={true}
+              attributionControl={true}
+              className="h-full w-full"
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={[mapModal.lat, mapModal.lng]} />
+            </MapContainer>
+          </div>
         </div>
       )}
     </div>
