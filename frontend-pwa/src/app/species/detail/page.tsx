@@ -70,19 +70,31 @@ function SpeciesDetailContent() {
   useEffect(() => {
     if (!speciesDetails) return;
 
-    const shouldGenerate = speciesDetails.descriptions && speciesDetails.descriptions.length === 0;
-    if (shouldGenerate && !isGenerating) {
-      generateDescriptions();
+    const shouldGenerateDescriptions = speciesDetails.descriptions && speciesDetails.descriptions.length === 0;
+    const shouldGenerateIllustration = !speciesDetails.illustration_url;
+
+    if ((shouldGenerateDescriptions || shouldGenerateIllustration) && !isGenerating) {
+      generateContent(shouldGenerateDescriptions, shouldGenerateIllustration);
     }
   }, [speciesDetails, isGenerating]);
 
-  const generateDescriptions = async () => {
+  const generateContent = async (generateDescriptions: boolean, generateIllustration: boolean) => {
     setIsGenerating(true);
     try {
-      const response = await api.post(endpoints.species.generateDescriptions(speciesId));
+      const promises: Promise<unknown>[] = [];
+      if (generateDescriptions) {
+        promises.push(api.post(endpoints.species.generateDescriptions(speciesId)));
+      }
+      if (generateIllustration) {
+        promises.push(api.post(endpoints.species.generateIllustration(speciesId)));
+      }
+
+      await Promise.all(promises);
+
+      const response = await api.get(endpoints.species.detail(speciesId));
       setSpeciesDetails(response.data);
     } catch (error) {
-      console.error('Failed to generate descriptions:', error);
+      console.error('Failed to generate content:', error);
     } finally {
       setIsGenerating(false);
     }
@@ -100,7 +112,16 @@ function SpeciesDetailContent() {
 
   const getImageUrl = (url: string) => {
     if (!url) return '';
-    return url.replace('http://localhost/', API_URL);
+    if (url.startsWith('http://localhost:8000/')) {
+      return url.replace('http://localhost:8000/', API_URL);
+    }
+    if (url.startsWith('http://localhost/')) {
+      return url.replace('http://localhost/', API_URL);
+    }
+    if (url.startsWith('/media/')) {
+      return API_URL + url.slice(1);
+    }
+    return url;
   };
 
   const formatObservationDate = (datetime: string) => {
