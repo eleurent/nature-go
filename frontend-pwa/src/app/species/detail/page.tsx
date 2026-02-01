@@ -305,7 +305,7 @@ function SpeciesDetailContent() {
                     </div>
                     {obs.location && leafletLoaded && (
                       <div
-                        className="w-40 h-24 mt-2 rounded-lg overflow-hidden cursor-pointer"
+                        className="w-40 h-24 mt-2 rounded-lg overflow-hidden cursor-pointer relative z-0"
                         onClick={() => setMapModal({ lat: obs.location!.latitude, lng: obs.location!.longitude })}
                       >
                         <MapContainer
@@ -341,7 +341,7 @@ function SpeciesDetailContent() {
 
       {previewImage && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          className="fixed inset-0 z-[1000] bg-black/90 flex items-center justify-center"
           onClick={() => setPreviewImage(null)}
         >
           <button
@@ -363,7 +363,7 @@ function SpeciesDetailContent() {
 
       {mapModal && leafletLoaded && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          className="fixed inset-0 z-[1000] bg-black/90 flex items-center justify-center"
           onClick={() => setMapModal(null)}
         >
           <button
