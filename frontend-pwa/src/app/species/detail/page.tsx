@@ -39,6 +39,7 @@ function SpeciesDetailContent() {
   const [speciesDetails, setSpeciesDetails] = useState<SpeciesDetails | null>(null);
   const [observations, setObservations] = useState<Observation[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [hasTriedGenerating, setHasTriedGenerating] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -78,15 +79,16 @@ function SpeciesDetailContent() {
   }, [authState.userToken, speciesId, router]);
 
   useEffect(() => {
-    if (!speciesDetails) return;
+    if (!speciesDetails || hasTriedGenerating) return;
 
     const shouldGenerateDescriptions = speciesDetails.descriptions && speciesDetails.descriptions.length === 0;
     const shouldGenerateIllustration = !speciesDetails.illustration_url;
 
     if ((shouldGenerateDescriptions || shouldGenerateIllustration) && !isGenerating) {
+      setHasTriedGenerating(true);
       generateContent(shouldGenerateDescriptions, shouldGenerateIllustration);
     }
-  }, [speciesDetails, isGenerating]);
+  }, [speciesDetails, isGenerating, hasTriedGenerating]);
 
   const generateContent = async (generateDescriptions: boolean, generateIllustration: boolean) => {
     setIsGenerating(true);
