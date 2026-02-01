@@ -8,13 +8,14 @@ import { api, endpoints, API_URL } from '@/lib/api';
 
 interface Observation {
   id: number;
-  image_url: string;
+  image: string;
   datetime: string;
   location: { latitude: number; longitude: number } | null;
 }
 
 interface SpeciesDetails {
   id: number;
+  type: string;
   display_name: string;
   scientificNameWithoutAuthor: string;
   illustration_url: string;
@@ -45,8 +46,8 @@ function SpeciesDetailContent() {
   const fromObservation = searchParams.get('fromObservation') === 'true';
 
   const handleBack = () => {
-    if (fromObservation) {
-      router.replace('/home');
+    if (fromObservation && speciesDetails?.type) {
+      router.replace(`/species?type=${speciesDetails.type}`);
     } else {
       router.back();
     }
@@ -236,7 +237,7 @@ function SpeciesDetailContent() {
                   <div key={obs.id} className="flex-shrink-0 w-40">
                     <div className="w-40 h-40 relative rounded-lg overflow-hidden">
                       <Image
-                        src={getImageUrl(obs.image_url)}
+                        src={getImageUrl(obs.image)}
                         alt="Observation"
                         fill
                         className="object-cover"
