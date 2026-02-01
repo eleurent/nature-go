@@ -31,6 +31,9 @@ def generate_image(text: str) -> bytes | None:
         contents=text,
         config=types.GenerateContentConfig(
             response_modalities=["image"],
+            image_config=types.ImageConfig(
+                aspect_ratio="1:1",
+            ),
         ),
     )
 

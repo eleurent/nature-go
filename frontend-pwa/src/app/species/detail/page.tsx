@@ -19,6 +19,7 @@ interface SpeciesDetails {
   display_name: string;
   scientificNameWithoutAuthor: string;
   illustration_url: string;
+  illustration_transparent: string | null;
   rarity: string;
   descriptions: string[];
   audio_description: string | null;
@@ -40,6 +41,8 @@ function SpeciesDetailContent() {
   const [observations, setObservations] = useState<Observation[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [hasTriedGenerating, setHasTriedGenerating] = useState(false);
+  const [isGeneratingTransparent, setIsGeneratingTransparent] = useState(false);
+  const [hasTriedGeneratingTransparent, setHasTriedGeneratingTransparent] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -89,6 +92,29 @@ function SpeciesDetailContent() {
       generateContent(shouldGenerateDescriptions, shouldGenerateIllustration);
     }
   }, [speciesDetails, isGenerating, hasTriedGenerating]);
+
+  useEffect(() => {
+    if (!speciesDetails || hasTriedGeneratingTransparent) return;
+    if (!speciesDetails.illustration_url) return;
+    if (speciesDetails.illustration_transparent) return;
+    if (isGenerating || isGeneratingTransparent) return;
+
+    setHasTriedGeneratingTransparent(true);
+    generateTransparentIllustration();
+  }, [speciesDetails, isGenerating, isGeneratingTransparent, hasTriedGeneratingTransparent]);
+
+  const generateTransparentIllustration = async () => {
+    setIsGeneratingTransparent(true);
+    try {
+      await api.post(endpoints.species.generateTransparentIllustration(speciesId));
+      const response = await api.get(endpoints.species.detail(speciesId));
+      setSpeciesDetails(response.data);
+    } catch (error) {
+      console.error('Failed to generate transparent illustration:', error);
+    } finally {
+      setIsGeneratingTransparent(false);
+    }
+  };
 
   const generateContent = async (generateDescriptions: boolean, generateIllustration: boolean) => {
     setIsGenerating(true);
