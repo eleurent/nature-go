@@ -37,7 +37,7 @@ def generate_image(text: str) -> bytes | None:
         prompt=text,
         config=dict(
             number_of_images=1,
-            output_mime_type="image/jpeg",
+            output_mime_type="image/png",
             person_generation="ALLOW_ADULT",
             aspect_ratio="1:1",
         ),
