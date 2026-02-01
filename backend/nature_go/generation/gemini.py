@@ -35,9 +35,10 @@ def generate_image(text: str) -> bytes | None:
     response = client.models.generate_images(
         model="models/imagen-4.0-generate-001",
         prompt=text,
-        config=types.GenerateImagesConfig(
+        config=dict(
             number_of_images=1,
             output_mime_type="image/jpeg",
+            person_generation="ALLOW_ADULT",
             aspect_ratio="1:1",
             image_size="1K",
         ),
