@@ -25,8 +25,6 @@ export async function extractExifData(file: File): Promise<ExifData> {
       gps: true,
     });
 
-    console.log('Raw EXIF output:', exif);
-
     if (exif) {
       if (exif.latitude !== undefined && exif.longitude !== undefined) {
         result.location = {

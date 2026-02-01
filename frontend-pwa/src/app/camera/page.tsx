@@ -86,7 +86,6 @@ export default function CameraPage() {
     if (!file) return;
 
     const exifData = await extractExifData(file);
-    console.log('EXIF data extracted:', JSON.stringify(exifData, null, 2));
     
     const reader = new FileReader();
     reader.onload = () => {
@@ -100,10 +99,7 @@ export default function CameraPage() {
       }
       
       if (exifData.location) {
-        console.log('Using EXIF location:', exifData.location);
         observationMethods.setObservationLocation(exifData.location);
-      } else {
-        console.log('No EXIF location found');
       }
       
       router.push('/observation/confirm');
