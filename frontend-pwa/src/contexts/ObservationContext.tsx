@@ -7,16 +7,44 @@ interface Location {
   longitude: number;
 }
 
+interface IdentificationResult {
+  species: {
+    id: number;
+    commonNames: string[];
+    scientificNameWithoutAuthor: string;
+  };
+  confidence: number;
+}
+
+interface ObservationData {
+  id: number;
+  type: string;
+  species: number | null;
+  xp?: {
+    xp_gained: number;
+    total_xp: number;
+    level: number;
+  };
+  identification_response?: {
+    results: IdentificationResult[];
+  };
+}
+
 interface ObservationState {
   image: string | null;
   datetime: string | null;
   location: Location | null;
+  type: 'bird' | 'plant';
+  organ: 'whole' | 'leaf' | 'flower';
+  data: ObservationData | null;
 }
 
 interface ObservationMethods {
   setObservationImage: (image: string) => void;
   setObservationDatetime: (datetime: string) => void;
   setObservationLocation: (location: Location) => void;
+  setObservationTypeOrOrgan: (typeOrOrgan: string) => void;
+  setObservationData: (data: ObservationData) => void;
   clearObservation: () => void;
 }
 
@@ -31,6 +59,8 @@ type ObservationAction =
   | { type: 'SET_IMAGE'; image: string }
   | { type: 'SET_DATETIME'; datetime: string }
   | { type: 'SET_LOCATION'; location: Location }
+  | { type: 'SET_TYPE_OR_ORGAN'; typeOrOrgan: string }
+  | { type: 'SET_DATA'; data: ObservationData }
   | { type: 'CLEAR' };
 
 const observationReducer = (prevState: ObservationState, action: ObservationAction): ObservationState => {
@@ -41,8 +71,26 @@ const observationReducer = (prevState: ObservationState, action: ObservationActi
       return { ...prevState, datetime: action.datetime };
     case 'SET_LOCATION':
       return { ...prevState, location: action.location };
+    case 'SET_TYPE_OR_ORGAN': {
+      const obsType = action.typeOrOrgan === 'bird' ? 'bird' : 'plant';
+      const organ = action.typeOrOrgan === 'bird' ? 'whole' : action.typeOrOrgan;
+      return { 
+        ...prevState, 
+        type: obsType as 'bird' | 'plant',
+        organ: organ as 'whole' | 'leaf' | 'flower'
+      };
+    }
+    case 'SET_DATA':
+      return { ...prevState, data: action.data };
     case 'CLEAR':
-      return { image: null, datetime: null, location: null };
+      return { 
+        image: null, 
+        datetime: null, 
+        location: null, 
+        type: 'bird', 
+        organ: 'whole',
+        data: null
+      };
     default:
       return prevState;
   }
@@ -52,6 +100,9 @@ const initialState: ObservationState = {
   image: null,
   datetime: null,
   location: null,
+  type: 'bird',
+  organ: 'whole',
+  data: null,
 };
 
 export function ObservationProvider({ children }: { children: ReactNode }) {
@@ -67,6 +118,12 @@ export function ObservationProvider({ children }: { children: ReactNode }) {
       },
       setObservationLocation: (location: Location) => {
         dispatch({ type: 'SET_LOCATION', location });
+      },
+      setObservationTypeOrOrgan: (typeOrOrgan: string) => {
+        dispatch({ type: 'SET_TYPE_OR_ORGAN', typeOrOrgan });
+      },
+      setObservationData: (data: ObservationData) => {
+        dispatch({ type: 'SET_DATA', data });
       },
       clearObservation: () => {
         dispatch({ type: 'CLEAR' });

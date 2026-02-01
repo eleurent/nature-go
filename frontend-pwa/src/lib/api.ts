@@ -48,9 +48,9 @@ export const endpoints = {
   },
   observations: {
     all: 'api/species/observation/',
+    create: 'api/species/observation/',
+    update: (id: number) => `api/species/observation/${id}/`,
     delete: (id: number) => `api/species/observation/${id}/delete/`,
-    identify: 'api/species/observation/identify/',
-    save: 'api/species/observation/save/',
   },
   quiz: {
     random: 'api/university/quiz/get_or_create/',
