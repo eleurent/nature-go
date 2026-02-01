@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 client = None
 
 
-def generate_text(contents, model_name="gemini-3-flash"):
+def generate_text(contents, model_name="gemini-3-flash-preview"):
   global client
   if client is None:
     client = genai.Client()
