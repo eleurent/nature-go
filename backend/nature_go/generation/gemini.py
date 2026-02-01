@@ -40,7 +40,6 @@ def generate_image(text: str) -> bytes | None:
             output_mime_type="image/jpeg",
             person_generation="ALLOW_ADULT",
             aspect_ratio="1:1",
-            image_size="1K",
         ),
     )
 
