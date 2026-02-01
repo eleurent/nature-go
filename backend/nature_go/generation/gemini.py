@@ -13,12 +13,18 @@ logger = logging.getLogger(__name__)
 # Ensure API key is configured (e.g., GOOGLE_API_KEY environment variable).
 client = None
 
-def generate_text(contents, model_name='gemini-2.0-flash'):
-    global client
-    if client is None:
-        client = genai.Client()
-    response = client.models.generate_content(model=model_name, contents=contents, config=types.GenerateContentConfig(response_mime_type="application/json"))
-    return response.text
+
+def generate_text(contents, model_name="gemini-3-flash"):
+  global client
+  if client is None:
+    client = genai.Client()
+  response = client.models.generate_content(
+      model=model_name,
+      contents=contents,
+      config=types.GenerateContentConfig(response_mime_type="application/json"),
+  )
+  return response.text
+
 
 def generate_image(text: str) -> bytes | None:
   try:
