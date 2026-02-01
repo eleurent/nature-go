@@ -3,8 +3,22 @@
 import { useEffect, useState, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { useAuth } from '@/contexts/AuthContext';
 import { api, endpoints, API_URL } from '@/lib/api';
+
+const MapContainer = dynamic(
+  () => import('react-leaflet').then((mod) => mod.MapContainer),
+  { ssr: false }
+);
+const TileLayer = dynamic(
+  () => import('react-leaflet').then((mod) => mod.TileLayer),
+  { ssr: false }
+);
+const Marker = dynamic(
+  () => import('react-leaflet').then((mod) => mod.Marker),
+  { ssr: false }
+);
 
 interface Observation {
   id: number;
@@ -45,6 +59,7 @@ function SpeciesDetailContent() {
   const [hasTriedGeneratingTransparent, setHasTriedGeneratingTransparent] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [leafletLoaded, setLeafletLoaded] = useState(false);
 
   const speciesId = Number(searchParams.get('id') || 0);
   const fromObservation = searchParams.get('fromObservation') === 'true';
@@ -79,6 +94,18 @@ function SpeciesDetailContent() {
     };
 
     fetchData();
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    link.onload = () => setLeafletLoaded(true);
+    document.head.appendChild(link);
+
+    return () => {
+      if (document.head.contains(link)) {
+        document.head.removeChild(link);
+      }
+    };
   }, [authState.userToken, speciesId, router]);
 
   useEffect(() => {
@@ -271,6 +298,24 @@ function SpeciesDetailContent() {
                         className="object-cover"
                       />
                     </div>
+                    {obs.location && leafletLoaded && (
+                      <div className="w-40 h-24 mt-2 rounded-lg overflow-hidden">
+                        <MapContainer
+                          center={[obs.location.latitude, obs.location.longitude]}
+                          zoom={13}
+                          scrollWheelZoom={false}
+                          dragging={false}
+                          zoomControl={false}
+                          attributionControl={false}
+                          className="h-full w-full"
+                        >
+                          <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                          />
+                          <Marker position={[obs.location.latitude, obs.location.longitude]} />
+                        </MapContainer>
+                      </div>
+                    )}
                     <p className="text-xs font-old-standard text-center mt-2 text-nature-brown/60">
                       {formatObservationDate(obs.datetime)}
                     </p>
