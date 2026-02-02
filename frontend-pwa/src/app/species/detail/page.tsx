@@ -160,6 +160,11 @@ function SpeciesDetailContent() {
 
       const response = await api.get(endpoints.species.detail(speciesId));
       setSpeciesDetails(response.data);
+
+      // Chain transparent illustration generation if we just generated an illustration
+      if (generateIllustration && response.data.illustration_url && !response.data.illustration_transparent) {
+        generateTransparentIllustration();
+      }
     } catch (error) {
       console.error('Failed to generate content:', error);
     } finally {
