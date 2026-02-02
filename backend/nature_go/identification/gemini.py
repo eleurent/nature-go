@@ -26,7 +26,7 @@ Be comprehensive. Return an empty list if there are no species.
 def gemini_identify_few_shot(
     image_path: str,
     location: str,
-    model_id: str = 'gemini-2.0-flash'
+    model_id: str = 'gemini-3-flash-preview'
 ):
     """Identify a species though the Gemini API
 
