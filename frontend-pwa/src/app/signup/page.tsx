@@ -101,6 +101,8 @@ export default function SignUpPage() {
               value={formData.username}
               onChange={handleChange}
               className="input-field"
+              autoCapitalize="none"
+              autoCorrect="off"
               required
             />
           </div>

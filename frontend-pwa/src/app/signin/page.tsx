@@ -42,6 +42,8 @@ export default function SignInPage() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="input-field"
+              autoCapitalize="none"
+              autoCorrect="off"
               required
             />
           </div>
