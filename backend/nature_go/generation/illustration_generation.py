@@ -12,7 +12,6 @@ from observation.models import Species
 logger = logging.getLogger(__name__)
 
 
-
 def generate_illustration(generate_image: tp.Callable, species: Species) -> bool:
     if species.illustration:
         return True
@@ -36,22 +35,23 @@ def generate_illustration(generate_image: tp.Callable, species: Species) -> bool
     return False
 
 def generate_illustration_transparent(remove_background_fn: tp.Callable, species) -> bool:
-    logger.info('Will generate transparent illustration')
-    if not species.illustration:
-        return False
-    if species.illustration_transparent:
-        return True
-    logger.info('Start background removal')
-    scientific_name = species.scientificNameWithoutAuthor
-    illustration = Image.open(species.illustration)
-    illustration_transparent = remove_background_fn(illustration)
-    bytes_io = BytesIO()
-    illustration_transparent.save(bytes_io, 'PNG')  
-    random_slug = uuid.uuid4().hex[:8]
-    file_name = f"{scientific_name.replace(' ', '_')}_{random_slug}_illustration_transparent.png"
-    species.illustration_transparent.save(file_name, File(bytes_io), save=False)
-    species.save()
+  logger.info("Will generate transparent illustration")
+  if not species.illustration:
+    return False
+  if species.illustration_transparent:
     return True
+  logger.info('Start background removal')
+  scientific_name = species.scientificNameWithoutAuthor
+  illustration = Image.open(species.illustration)
+  illustration_transparent = remove_background_fn(illustration)
+  bytes_io = BytesIO()
+  illustration_transparent.save(bytes_io, 'PNG')  
+  bytes_io.seek(0)  # Reset stream position before reading
+  random_slug = uuid.uuid4().hex[:8]
+  file_name = f"{scientific_name.replace(' ', '_')}_{random_slug}_illustration_transparent.png"
+  species.illustration_transparent.save(file_name, File(bytes_io), save=False)
+  species.save()
+  return True
 
 
 def remove_background_by_pixel(img: Image, ref_coords=(5, 5), tolerance=30) -> Image:
@@ -94,4 +94,3 @@ def remove_background_by_pixel(img: Image, ref_coords=(5, 5), tolerance=30) -> I
     # Update the image with the new pixel data
     img.putdata(new_data)
     return img
-
