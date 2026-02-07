@@ -127,26 +127,24 @@ export default function ProfilePage() {
           <div className="mb-8">
             <h3 className="text-xl font-old-standard text-center mb-4">Badges</h3>
             <div className="flex flex-wrap justify-center gap-4">
-              {profileState.badges.map((badge: any) => (
-                <div
-                  key={badge.id}
-                  className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                    badge.earned ? 'bg-yellow-100' : 'bg-gray-200 opacity-50'
-                  }`}
-                  title={badge.name}
-                >
-                  {badge.icon_url ? (
-                    <Image
-                      src={badge.icon_url}
-                      alt={badge.name}
-                      width={48}
-                      height={48}
-                    />
-                  ) : (
+              {profileState.badges.map((badge: any, index: number) => {
+                const levelColors: Record<string, string> = {
+                  'Gold': 'bg-yellow-400',
+                  'Silver': 'bg-gray-300',
+                  'Bronze': 'bg-amber-600',
+                };
+                const bgColor = badge.unlocked_level ? levelColors[badge.unlocked_level] || 'bg-gray-200' : 'bg-gray-200';
+                const isUnlocked = !!badge.unlocked_level;
+                return (
+                  <div
+                    key={index}
+                    className={`w-16 h-16 rounded-full flex items-center justify-center ${bgColor} ${!isUnlocked ? 'opacity-50' : ''}`}
+                    title={`${badge.badge?.name || 'Badge'}${badge.unlocked_level ? ` (${badge.unlocked_level})` : ''}`}
+                  >
                     <span className="text-2xl">🏅</span>
-                  )}
-                </div>
-              ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}

@@ -17,11 +17,12 @@ interface Profile {
 }
 
 interface Badge {
-  id: number;
-  name: string;
-  description: string;
-  icon_url: string;
-  earned: boolean;
+  badge: {
+    name: string;
+    description: string;
+  };
+  progress: Record<string, { unlocked: boolean; progress: number }>;
+  unlocked_level: string | null;
 }
 
 interface ProfileState {
