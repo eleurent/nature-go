@@ -1,8 +1,12 @@
 import os
+from django.http import Http404
 from django.views.static import serve
 
 
 def serve_pwa(request, path=''):
+  if path.startswith('api/') or path == 'api':
+    raise Http404('API endpoint not found')
+
   pwa_root = '/var/www/nature-go/pwa'
 
   if not path or path.endswith('/'):
