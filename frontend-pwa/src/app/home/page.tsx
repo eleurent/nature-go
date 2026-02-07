@@ -75,22 +75,16 @@ export default function HomePage() {
 
         <div className="flex flex-col gap-4 items-center">
           <div className="flex justify-center gap-4">
-            <div className="w-28" />
             <CategoryButton
               href="/species?type=plant"
               imageSrc="/images/botany.png"
               label="BOTANY"
             />
-            <div className="w-28" />
-          </div>
-
-          <div className="flex justify-center gap-4">
             <CategoryButton
               href="/species?type=bird"
               imageSrc="/images/ornithology.png"
               label="ORNITHOLOGY"
             />
-            <div className="w-28" />
             <CategoryButton
               href="#"
               imageSrc="/images/entomology.png"
@@ -100,29 +94,21 @@ export default function HomePage() {
           </div>
 
           <div className="flex justify-center gap-4">
-            <div className="w-28" />
             <CategoryButton
               href="/quiz"
               imageSrc="/images/university.png"
               label="UNIVERSITY"
             />
-            <div className="w-28" />
             <CategoryButton
               href="/map"
               imageSrc="/images/map.png"
               label="MAP"
             />
-            <div className="w-28" />
-          </div>
-
-          <div className="flex justify-center gap-4">
             <CategoryButton
               href="/poster"
-              imageSrc="/images/ornithology.png"
+              imageSrc="/images/poster.png"
               label="POSTER"
             />
-            <div className="w-28" />
-            <div className="w-28" />
           </div>
         </div>
       </div>
