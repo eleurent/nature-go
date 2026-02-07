@@ -27,14 +27,14 @@ body {
 }
 
 .page-background {
-  background-image: url('/app/images/page-background.png');
+  background-image: url('/images/page-background.png');
   background-size: cover;
   background-position: center;
   min-height: 100vh;
 }
 
 .page-background-2 {
-  background-image: url('/app/images/page-background-2.png');
+  background-image: url('/images/page-background-2.png');
   background-size: cover;
   background-position: center;
   min-height: 100vh;

@@ -116,7 +116,7 @@ export default function ProfilePage() {
 
         <div className="flex justify-center my-8">
           <Image
-            src="/app/images/separator.png"
+            src="/images/separator.png"
             alt=""
             width={200}
             height={10}
