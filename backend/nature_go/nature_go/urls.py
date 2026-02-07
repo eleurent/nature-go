@@ -19,28 +19,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include, path, re_path
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.reverse import reverse
 from website.views import serve_pwa
-
-
-@api_view(['GET'])
-def api_root(request):
-  return Response({
-      'species': reverse('species-list', request=request),
-      'auth': request.build_absolute_uri('/api/auth/'),
-      'profile': request.build_absolute_uri('/api/profile/'),
-      'badge': request.build_absolute_uri('/api/badge/'),
-      'poster': request.build_absolute_uri('/api/poster/regions/'),
-      'university': request.build_absolute_uri('/api/university/'),
-  })
 
 
 urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('admin/', admin.site.urls),
-    path('api/', api_root, name='api-root'),
     path('api/species/', include('observation.urls')),
     path('api/university/', include('university.urls')),
     path('api/auth/', include('authentication.urls')),
