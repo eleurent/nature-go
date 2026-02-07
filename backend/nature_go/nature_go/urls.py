@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/auth/', include('authentication.urls')),
     path('api/profile/', include('user_profile.urls')),
     path('api/badge/', include('badge.urls')),
+    path('api/poster/', include('poster.urls')),
     path('api-auth/', include('rest_framework.urls')),
     re_path(r'^(?P<path>.*)$', serve_pwa),
 ]

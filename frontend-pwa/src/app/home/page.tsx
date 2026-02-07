@@ -114,6 +114,16 @@ export default function HomePage() {
             />
             <div className="w-28" />
           </div>
+
+          <div className="flex justify-center gap-4">
+            <CategoryButton
+              href="/poster"
+              imageSrc="/images/ornithology.png"
+              label="POSTER"
+            />
+            <div className="w-28" />
+            <div className="w-28" />
+          </div>
         </div>
       </div>
 

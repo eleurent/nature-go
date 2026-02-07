@@ -58,4 +58,8 @@ export const endpoints = {
     generateQuestions: (id: number) =>
       `api/university/quiz/questions/generate/${id}/`,
   },
+  poster: {
+    regions: 'api/poster/regions/',
+    data: (regionId: string) => `api/poster/${regionId}/`,
+  },
 };
