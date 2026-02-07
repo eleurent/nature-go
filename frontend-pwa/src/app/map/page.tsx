@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import L from 'leaflet';
 import { useAuth } from '@/contexts/AuthContext';
 import { api, endpoints } from '@/lib/api';
 
@@ -26,6 +28,7 @@ const Popup = dynamic(
 interface Observation {
   id: number;
   type: 'bird' | 'plant';
+  species: number;
   species_display_name: string;
   datetime: string;
   location: {
@@ -34,9 +37,27 @@ interface Observation {
   } | null;
 }
 
+function createColoredIcon(color: string) {
+  return L.divIcon({
+    className: 'custom-marker',
+    html: `<div style="
+      background-color: ${color};
+      width: 24px;
+      height: 24px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      border: 2px solid white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    "></div>`,
+    iconSize: [24, 24],
+    iconAnchor: [12, 24],
+    popupAnchor: [0, -24],
+  });
+}
+
 const SPECIES_TYPE_TO_COLOR: Record<string, string> = {
-  bird: '#ef4444',
-  plant: '#22c55e',
+  bird: '#3b82f6',
+  plant: '#ef4444',
 };
 
 function formatDate(datetime: string): string {
@@ -137,9 +158,15 @@ export default function MapPage() {
               <Marker
                 key={obs.id}
                 position={[obs.location!.latitude, obs.location!.longitude]}
+                icon={createColoredIcon(SPECIES_TYPE_TO_COLOR[obs.type] || '#666666')}
               >
                 <Popup>
-                  <strong>{obs.species_display_name}</strong>
+                  <Link
+                    href={`/species/detail?id=${obs.species}`}
+                    className="font-bold text-nature-dark hover:underline"
+                  >
+                    {obs.species_display_name}
+                  </Link>
                   <br />
                   <span className="text-sm text-gray-600">{formatDate(obs.datetime)}</span>
                 </Popup>
