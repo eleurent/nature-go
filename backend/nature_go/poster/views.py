@@ -23,57 +23,53 @@ class RegionListView(APIView):
 
 
 class PosterDataView(APIView):
-    """Get poster data for a specific region.
+  """Get poster data for a specific region.
 
     Returns all species for the region with size data and seen status.
     """
 
-    permission_classes = [permissions.IsAuthenticated]
+  permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, region_id):
-        region = get_region(region_id)
-        if not region:
-            return Response(
+  def get(self, request, region_id):
+    region = get_region(region_id)
+    if not region:
+      return Response(
                 {"error": f"Region '{region_id}' not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        user_species_ids = set(
+    user_species_ids = set(
             Species.objects.filter(
                 observation__user=request.user, type=Species.BIRD_TYPE
             ).values_list("id", flat=True)
         )
 
-        poster_species = []
-        for bird_name in region["common_birds"]:
-            species = Species.objects.filter(
-                commonNames__contains=[bird_name], type=Species.BIRD_TYPE
-            ).first()
+    poster_species = []
+    for bird_name in region["common_birds"]:
+      # Use icontains for SQLite compatibility (JSON __contains not supported)
+      species = Species.objects.filter(
+          commonNames__icontains=bird_name, type=Species.BIRD_TYPE
+      ).first()
 
-            if not species:
-                species = Species.objects.filter(
-                    commonNames__icontains=bird_name, type=Species.BIRD_TYPE
-                ).first()
+      if species:
+        if species.body_length_cm is None:
+          size = generate_bird_size(str(species))
+          if size:
+            species.body_length_cm = size
+            species.save(update_fields=["body_length_cm"])
+            logger.info(f"Generated size for {species}: {size}cm")
 
-            if species:
-                if species.body_length_cm is None:
-                    size = generate_bird_size(str(species))
-                    if size:
-                        species.body_length_cm = size
-                        species.save(update_fields=["body_length_cm"])
-                        logger.info(f"Generated size for {species}: {size}cm")
-
-                illustration_url = None
-                if species.illustration_transparent:
-                    illustration_url = request.build_absolute_uri(
+        illustration_url = None
+        if species.illustration_transparent:
+          illustration_url = request.build_absolute_uri(
                         species.illustration_transparent.url
                     )
-                elif species.illustration:
-                    illustration_url = request.build_absolute_uri(
+        elif species.illustration:
+          illustration_url = request.build_absolute_uri(
                         species.illustration.url
                     )
 
-                poster_species.append(
+        poster_species.append(
                     {
                         "id": species.id,
                         "name": str(species),
@@ -83,8 +79,8 @@ class PosterDataView(APIView):
                         "is_seen": species.id in user_species_ids,
                     }
                 )
-            else:
-                poster_species.append(
+      else:
+        poster_species.append(
                     {
                         "id": None,
                         "name": bird_name,
@@ -95,9 +91,9 @@ class PosterDataView(APIView):
                     }
                 )
 
-        poster_species.sort(key=lambda x: x["body_length_cm"] or 0, reverse=True)
+    poster_species.sort(key=lambda x: x["body_length_cm"] or 0, reverse=True)
 
-        return Response(
+    return Response(
             {
                 "region_id": region_id,
                 "region_name": region["name"],
