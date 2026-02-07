@@ -47,6 +47,18 @@ class SpeciesSmallSerializer(serializers.ModelSerializer):
         return str(obj)
 
 
+class SpeciesListSerializer(SpeciesSmallSerializer):
+    class Meta:
+        model = Species
+        fields = [
+            'id',
+            'scientificNameWithoutAuthor',
+            'illustration_url',
+            'display_name',
+            'rarity',
+        ]
+
+
 class SpeciesSerializer(SpeciesSmallSerializer):
     illustration = Base64ImageField()
     illustration_transparent = Base64ImageField()

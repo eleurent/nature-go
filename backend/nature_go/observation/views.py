@@ -9,7 +9,7 @@ from generation.replicate import remove_background
 from identification import gemini, plantnet
 from observation.models import Observation, Species
 from observation.permissions import IsAdminOrReadOnly, IsOwner
-from observation.serializers import ObservationSerializer, SpeciesSerializer, serialize_identification_response
+from observation.serializers import ObservationSerializer, SpeciesSerializer, SpeciesListSerializer, serialize_identification_response
 from rest_framework import filters, generics, pagination, permissions, status
 from rest_framework import serializers
 from rest_framework.response import Response
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class SpeciesList(generics.ListAPIView):
-  serializer_class = SpeciesSerializer
+  serializer_class = SpeciesListSerializer
 
   def get_queryset(self):
     user = self.request.user
