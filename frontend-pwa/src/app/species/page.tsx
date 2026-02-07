@@ -49,7 +49,7 @@ function SpeciesListContent() {
     };
 
     fetchSpeciesList();
-  }, [authState.userToken, type, router]);
+  }, [authState.userToken, type]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!mounted || !authState.userToken) return null;
 
