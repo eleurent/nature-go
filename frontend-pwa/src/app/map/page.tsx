@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import L from 'leaflet';
 import { useAuth } from '@/contexts/AuthContext';
 import { api, endpoints } from '@/lib/api';
 
@@ -37,24 +36,6 @@ interface Observation {
   } | null;
 }
 
-function createColoredIcon(color: string) {
-  return L.divIcon({
-    className: 'custom-marker',
-    html: `<div style="
-      background-color: ${color};
-      width: 24px;
-      height: 24px;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      border: 2px solid white;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    "></div>`,
-    iconSize: [24, 24],
-    iconAnchor: [12, 24],
-    popupAnchor: [0, -24],
-  });
-}
-
 const SPECIES_TYPE_TO_COLOR: Record<string, string> = {
   bird: '#3b82f6',
   plant: '#ef4444',
@@ -85,6 +66,28 @@ export default function MapPage() {
   const [observations, setObservations] = useState<Observation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [leafletLoaded, setLeafletLoaded] = useState(false);
+  const [leafletModule, setLeafletModule] = useState<typeof import('leaflet') | null>(null);
+
+  const createColoredIcon = useMemo(() => {
+    if (!leafletModule) return () => undefined;
+    return (color: string) => {
+      return leafletModule.divIcon({
+        className: 'custom-marker',
+        html: `<div style="
+          background-color: ${color};
+          width: 24px;
+          height: 24px;
+          border-radius: 50% 50% 50% 0;
+          transform: rotate(-45deg);
+          border: 2px solid white;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        "></div>`,
+        iconSize: [24, 24] as [number, number],
+        iconAnchor: [12, 24] as [number, number],
+        popupAnchor: [0, -24] as [number, number],
+      });
+    };
+  }, [leafletModule]);
 
   useEffect(() => {
     if (!authState.userToken) {
@@ -105,12 +108,17 @@ export default function MapPage() {
 
     fetchObservations();
 
-    // Load Leaflet CSS
+    // Load Leaflet CSS and module
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
     link.onload = () => setLeafletLoaded(true);
     document.head.appendChild(link);
+
+    // Dynamically import Leaflet
+    import('leaflet').then((L) => {
+      setLeafletModule(L);
+    });
 
     return () => {
       document.head.removeChild(link);
@@ -143,7 +151,7 @@ export default function MapPage() {
           </div>
         )}
 
-        {leafletLoaded && (
+        {leafletLoaded && leafletModule && (
           <MapContainer
             center={defaultCenter}
             zoom={10}
