@@ -248,7 +248,7 @@ function PosterDetailContent() {
                       className="text-[8px] text-center font-old-standard leading-tight mt-1"
                       style={{ maxWidth: 70, wordWrap: 'break-word', color: species.is_seen ? '#4a3f35' : '#888' }}
                     >
-                      {species.is_seen ? species.name : '?'}
+                      {species.is_seen ? species.name : ''}
                     </span>
                   </div>
                 );

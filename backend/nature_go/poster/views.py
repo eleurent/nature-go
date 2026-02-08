@@ -36,26 +36,18 @@ class PosterListView(APIView):
 
     for poster_id, poster in POSTERS.items():
       species_list = poster["species"]
-      poster_type = poster.get("type", "regional")
+      poster_type = poster.get("type", "bird")
 
-      if poster_type == "regional":
-        seen_count = Species.objects.filter(
-            observation__user=user,
-            type=Species.BIRD_TYPE,
-            commonNames__icontains=species_list[0] if species_list else "",
-        ).count()
-        for name in species_list[1:]:
-          seen_count += Species.objects.filter(
-              observation__user=user,
-              type=Species.BIRD_TYPE,
-              commonNames__icontains=name,
-          ).exists()
-      else:
-        seen_count = Species.objects.filter(
-            observation__user=user,
-            type=Species.BIRD_TYPE,
-            scientificNameWithoutAuthor__in=species_list,
-        ).count()
+      # Map poster type to Species model type
+      species_model_type = (
+          Species.PLANT_TYPE if poster_type == "plant" else Species.BIRD_TYPE
+      )
+
+      seen_count = Species.objects.filter(
+          observation__user=user,
+          type=species_model_type,
+          scientificNameWithoutAuthor__in=species_list,
+      ).count()
 
       total = len(species_list)
       level = calculate_level(seen_count, total)
@@ -90,10 +82,16 @@ class PosterDataView(APIView):
       )
 
     species_list = poster["species"]
+    poster_type = poster.get("type", "bird")
+
+    # Map poster type to Species model type
+    species_model_type = (
+        Species.PLANT_TYPE if poster_type == "plant" else Species.BIRD_TYPE
+    )
 
     user_observed_species = set(
         Observation.objects.filter(
-            user=request.user, species__type=Species.BIRD_TYPE
+            user=request.user, species__type=species_model_type
         ).values_list("species_id", flat=True)
     )
 
@@ -101,11 +99,11 @@ class PosterDataView(APIView):
     for species_name in species_list:
       species = Species.objects.filter(
           scientificNameWithoutAuthor=species_name,
-          type=Species.BIRD_TYPE,
+          type=species_model_type,
       ).first()
 
       if species:
-        if species.body_length_cm is None:
+        if species.body_length_cm is None and poster_type == "bird":
           size = generate_bird_size(str(species))
           if size:
             species.body_length_cm = size
