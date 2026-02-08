@@ -70,7 +70,7 @@ export default function HomePage() {
   const radius = 110;
 
   return (
-    <div className="page-background fixed inset-0 overflow-hidden flex flex-col">
+    <div className="page-background fixed inset-0 overflow-hidden flex flex-col" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <div className="flex-1 flex flex-col items-center pt-8 px-4">
         <h1 className="text-3xl font-old-standard tracking-widest mb-2">
           CONTENTS.
@@ -105,7 +105,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="flex justify-between items-end px-4 pb-6" style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}>
+      <div className="flex justify-between items-end px-4 pb-4">
         <Link href="/profile">
           {profileState.avatar?.bubble && (
             <Image
