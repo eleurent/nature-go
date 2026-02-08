@@ -1,56 +1,13 @@
-"""Predefined region configurations for regional bird posters."""
+"""Poster configurations including regional and species-group posters."""
 
-REGIONS = {
-    "california": {
-        "name": "California",
-        "bounds": {
-            "lat_min": 32.5,
-            "lat_max": 42.0,
-            "lon_min": -124.4,
-            "lon_max": -114.1,
-        },
-        "common_birds": [
-            "American Robin",
-            "House Finch",
-            "Anna's Hummingbird",
-            "California Quail",
-            "American Crow",
-            "Northern Mockingbird",
-            "Mourning Dove",
-            "Red-tailed Hawk",
-            "House Sparrow",
-            "European Starling",
-            "Western Scrub-Jay",
-            "Black Phoebe",
-            "Yellow-rumped Warbler",
-            "White-crowned Sparrow",
-            "Bushtit",
-            "Dark-eyed Junco",
-            "Lesser Goldfinch",
-            "American Goldfinch",
-            "Red-winged Blackbird",
-            "Brewer's Blackbird",
-            "California Towhee",
-            "Spotted Towhee",
-            "Song Sparrow",
-            "Acorn Woodpecker",
-            "Nuttall's Woodpecker",
-            "Cooper's Hawk",
-            "Turkey Vulture",
-            "Great Blue Heron",
-            "Mallard",
-            "Canada Goose",
-        ],
-    },
+# Poster types: "regional" uses common names, "species_group" uses scientific names
+POSTERS = {
+    # Regional Posters
     "western_us": {
         "name": "Western United States",
-        "bounds": {
-            "lat_min": 31.0,
-            "lat_max": 49.0,
-            "lon_min": -125.0,
-            "lon_max": -102.0,
-        },
-        "common_birds": [
+        "type": "regional",
+        "icon": "🌄",
+        "species": [
             "American Robin",
             "House Finch",
             "Anna's Hummingbird",
@@ -85,13 +42,9 @@ REGIONS = {
     },
     "uk": {
         "name": "United Kingdom",
-        "bounds": {
-            "lat_min": 49.9,
-            "lat_max": 60.9,
-            "lon_min": -8.6,
-            "lon_max": 1.8,
-        },
-        "common_birds": [
+        "type": "regional",
+        "icon": "🇬🇧",
+        "species": [
             "European Robin",
             "House Sparrow",
             "Blue Tit",
@@ -126,13 +79,9 @@ REGIONS = {
     },
     "france": {
         "name": "France",
-        "bounds": {
-            "lat_min": 41.3,
-            "lat_max": 51.1,
-            "lon_min": -5.1,
-            "lon_max": 9.6,
-        },
-        "common_birds": [
+        "type": "regional",
+        "icon": "🇫🇷",
+        "species": [
             "European Robin",
             "House Sparrow",
             "Blue Tit",
@@ -165,17 +114,206 @@ REGIONS = {
             "Black-headed Gull",
         ],
     },
+    # Species Group Posters (from badges)
+    "corvids": {
+        "name": "Corvid Connoisseur",
+        "type": "species_group",
+        "icon": "🪶",
+        "species": [
+            "Corvus corax",
+            "Corvus corone",
+            "Corvus cornix",
+            "Pica pica",
+            "Nucifraga caryocatactes",
+            "Pyrrhocorax pyrrhocorax",
+            "Pyrrhocorax graculus",
+            "Coloeus monedula",
+            "Corvus frugilegus",
+            "Garrulus glandarius",
+        ],
+    },
+    "owls": {
+        "name": "Owl Observer",
+        "type": "species_group",
+        "icon": "🦉",
+        "species": [
+            "Tyto alba",
+            "Bubo bubo",
+            "Otus scops",
+            "Athene noctua",
+            "Strix aluco",
+            "Asio otus",
+            "Asio flammeus",
+        ],
+    },
+    "waterfowl": {
+        "name": "Waterfowl Whisperer",
+        "type": "species_group",
+        "icon": "🦆",
+        "species": [
+            "Anser anser",
+            "Branta bernicla",
+            "Branta leucopsis",
+            "Branta canadensis",
+            "Cygnus olor",
+            "Cygnus cygnus",
+            "Tadorna tadorna",
+            "Anas platyrhynchos",
+            "Anas crecca",
+            "Aythya ferina",
+            "Aythya fuligula",
+            "Bucephala clangula",
+            "Mergus merganser",
+        ],
+    },
+    "waders": {
+        "name": "Wading Wonderer",
+        "type": "species_group",
+        "icon": "🦩",
+        "species": [
+            "Ardea cinerea",
+            "Ardea alba",
+            "Egretta garzetta",
+            "Bubulcus ibis",
+            "Nycticorax nycticorax",
+            "Botaurus stellaris",
+            "Grus grus",
+            "Himantopus himantopus",
+            "Recurvirostra avosetta",
+            "Haematopus ostralegus",
+            "Vanellus vanellus",
+            "Pluvialis apricaria",
+        ],
+    },
+    "raptors": {
+        "name": "Raptor Ranger",
+        "type": "species_group",
+        "icon": "🦅",
+        "species": [
+            "Buteo buteo",
+            "Milvus milvus",
+            "Milvus migrans",
+            "Accipiter nisus",
+            "Accipiter gentilis",
+            "Circus aeruginosus",
+            "Circus cyaneus",
+            "Pernis apivorus",
+            "Haliaeetus albicilla",
+            "Aquila chrysaetos",
+            "Falco tinnunculus",
+            "Falco peregrinus",
+            "Pandion haliaetus",
+        ],
+    },
+    "woodland": {
+        "name": "Woodland Wanderer",
+        "type": "species_group",
+        "icon": "🌲",
+        "species": [
+            "Dendrocopos major",
+            "Picus viridis",
+            "Sitta europaea",
+            "Certhia familiaris",
+            "Garrulus glandarius",
+            "Parus major",
+            "Cyanistes caeruleus",
+            "Poecile palustris",
+            "Aegithalos caudatus",
+            "Regulus regulus",
+            "Phylloscopus collybita",
+            "Sylvia atricapilla",
+        ],
+    },
+    "coastal": {
+        "name": "Coastal Connoisseur",
+        "type": "species_group",
+        "icon": "🌊",
+        "species": [
+            "Larus argentatus",
+            "Larus fuscus",
+            "Larus marinus",
+            "Larus canus",
+            "Rissa tridactyla",
+            "Sterna hirundo",
+            "Sterna paradisaea",
+            "Fratercula arctica",
+            "Alca torda",
+            "Uria aalge",
+            "Phalacrocorax carbo",
+            "Morus bassanus",
+        ],
+    },
+    "songbirds": {
+        "name": "Songbird Specialist",
+        "type": "species_group",
+        "icon": "🎵",
+        "species": [
+            "Erithacus rubecula",
+            "Turdus merula",
+            "Turdus philomelos",
+            "Luscinia megarhynchos",
+            "Fringilla coelebs",
+            "Carduelis carduelis",
+            "Chloris chloris",
+            "Emberiza citrinella",
+            "Alauda arvensis",
+            "Hirundo rustica",
+            "Delichon urbicum",
+            "Sturnus vulgaris",
+        ],
+    },
+    "backyard": {
+        "name": "Backyard Birder",
+        "type": "species_group",
+        "icon": "🏡",
+        "species": [
+            "Passer domesticus",
+            "Columba livia",
+            "Streptopelia decaocto",
+            "Pica pica",
+            "Turdus merula",
+            "Erithacus rubecula",
+            "Parus major",
+            "Cyanistes caeruleus",
+            "Fringilla coelebs",
+            "Carduelis carduelis",
+            "Sturnus vulgaris",
+            "Motacilla alba",
+        ],
+    },
 }
 
 
+def get_poster_list():
+  """Return list of all posters with basic info."""
+  return [
+      {
+          "id": poster_id,
+          "name": poster["name"],
+          "icon": poster.get("icon", "🐦"),
+      }
+      for poster_id, poster in POSTERS.items()
+  ]
+
+
+def get_poster(poster_id: str):
+  """Get a specific poster by ID."""
+  return POSTERS.get(poster_id)
+
+
+# Legacy compatibility
 def get_region_list():
-    """Return list of available regions with basic info."""
-    return [
-        {"id": region_id, "name": region["name"]}
-        for region_id, region in REGIONS.items()
-    ]
+  """Legacy: return list of posters."""
+  return get_poster_list()
 
 
 def get_region(region_id: str):
-    """Get a specific region by ID."""
-    return REGIONS.get(region_id)
+  """Legacy: get a poster by ID, adapting keys for compatibility."""
+  poster = POSTERS.get(region_id)
+  if poster:
+    return {
+        "name": poster["name"],
+        "common_birds": poster["species"],
+        "type": poster.get("type", "regional"),
+    }
+  return None

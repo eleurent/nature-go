@@ -104,11 +104,6 @@ export default function HomePage() {
               imageSrc="/images/map.png"
               label="MAP"
             />
-            <CategoryButton
-              href="/poster"
-              imageSrc="/images/poster.png"
-              label="POSTER"
-            />
           </div>
         </div>
       </div>

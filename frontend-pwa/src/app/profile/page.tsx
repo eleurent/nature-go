@@ -1,10 +1,22 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUserProfile } from '@/contexts/UserProfileContext';
+import { api, endpoints } from '@/lib/api';
+
+interface Poster {
+  id: string;
+  name: string;
+  icon: string;
+  type: string;
+  seen_count: number;
+  total_count: number;
+  level: string | null;
+}
 
 const TITLES: Record<number, string> = {
   1: 'Scout',
@@ -19,6 +31,12 @@ const TITLES: Record<number, string> = {
   10: 'Distinguished Professor',
 };
 
+const LEVEL_COLORS: Record<string, string> = {
+  'Gold': 'bg-yellow-400 ring-2 ring-yellow-600',
+  'Silver': 'bg-gray-300 ring-2 ring-gray-500',
+  'Bronze': 'bg-amber-600 ring-2 ring-amber-800',
+};
+
 function getTitle(level: number): string {
   return TITLES[level] || TITLES[10];
 }
@@ -27,6 +45,7 @@ export default function ProfilePage() {
   const router = useRouter();
   const { authState, authMethods } = useAuth();
   const { profileState, profileMethods } = useUserProfile();
+  const [posters, setPosters] = useState<Poster[]>([]);
 
   useEffect(() => {
     if (!authState.userToken) {
@@ -34,8 +53,17 @@ export default function ProfilePage() {
       return;
     }
     profileMethods.fetchProfile();
-    profileMethods.fetchBadges();
-  }, [authState.userToken]);
+
+    const fetchPosters = async () => {
+      try {
+        const response = await api.get(endpoints.poster.list);
+        setPosters(response.data);
+      } catch (error) {
+        console.error('Failed to fetch posters:', error);
+      }
+    };
+    fetchPosters();
+  }, [authState.userToken]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!authState.userToken) return null;
 
@@ -91,10 +119,6 @@ export default function ProfilePage() {
 
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="font-bold">Major</span>
-                <span>Botany</span>
-              </div>
-              <div className="flex justify-between">
                 <span className="font-bold">Observations made</span>
                 <span>{profile?.observations_count || 0}</span>
               </div>
@@ -105,10 +129,6 @@ export default function ProfilePage() {
               <div className="flex justify-between">
                 <span className="font-bold">Exams taken</span>
                 <span>{profile?.quiz_count || 0}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-bold">Mean exam score</span>
-                <span>{profile ? `${Math.round((profile.quiz_mean_score || 0) * 100)}%` : '0%'}</span>
               </div>
             </div>
           </div>
@@ -123,26 +143,28 @@ export default function ProfilePage() {
           />
         </div>
 
-        {profileState.badges && profileState.badges.length > 0 && (
+        {posters.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-xl font-old-standard text-center mb-4">Badges</h3>
-            <div className="flex flex-wrap justify-center gap-4">
-              {profileState.badges.map((badge: any, index: number) => {
-                const levelColors: Record<string, string> = {
-                  'Gold': 'bg-yellow-400',
-                  'Silver': 'bg-gray-300',
-                  'Bronze': 'bg-amber-600',
-                };
-                const bgColor = badge.unlocked_level ? levelColors[badge.unlocked_level] || 'bg-gray-200' : 'bg-gray-200';
-                const isUnlocked = !!badge.unlocked_level;
+            <h3 className="text-xl font-old-standard text-center mb-4">Posters</h3>
+            <div className="grid grid-cols-4 gap-3">
+              {posters.map((poster) => {
+                const bgColor = poster.level ? LEVEL_COLORS[poster.level] : 'bg-gray-200';
                 return (
-                  <div
-                    key={index}
-                    className={`w-16 h-16 rounded-full flex items-center justify-center ${bgColor} ${!isUnlocked ? 'opacity-50' : ''}`}
-                    title={`${badge.badge?.name || 'Badge'}${badge.unlocked_level ? ` (${badge.unlocked_level})` : ''}`}
+                  <Link
+                    key={poster.id}
+                    href={`/poster/detail?id=${poster.id}`}
+                    className="flex flex-col items-center"
                   >
-                    <span className="text-2xl">🏅</span>
-                  </div>
+                    <div
+                      className={`w-16 h-16 rounded-lg flex items-center justify-center ${bgColor} ${!poster.level ? 'opacity-50' : ''}`}
+                      title={`${poster.name} (${poster.seen_count}/${poster.total_count})`}
+                    >
+                      <span className="text-2xl">{poster.icon}</span>
+                    </div>
+                    <span className="text-xs font-old-standard text-center mt-1 line-clamp-2">
+                      {poster.name}
+                    </span>
+                  </Link>
                 );
               })}
             </div>

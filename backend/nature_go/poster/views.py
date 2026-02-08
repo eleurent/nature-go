@@ -1,55 +1,126 @@
-"""Views for the regional bird poster feature."""
+"""Views for the poster feature."""
 
 import logging
+from django.db.models import Q
+from generation.species_data_generation import generate_bird_size
+from observation.models import Observation, Species
+from poster.regions import POSTERS, get_poster, get_poster_list
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from generation.species_data_generation import generate_bird_size
-from observation.models import Species
-from poster.regions import get_region, get_region_list
-
 logger = logging.getLogger(__name__)
 
 
+def calculate_level(seen_count, total_count):
+  """Calculate poster level based on progress percentage."""
+  if total_count == 0:
+    return None
+  percentage = (seen_count / total_count) * 100
+  if percentage >= 80:
+    return "Gold"
+  elif percentage >= 50:
+    return "Silver"
+  elif percentage >= 20:
+    return "Bronze"
+  return None
+
+
+class PosterListView(APIView):
+  """List all available posters with user progress."""
+
+  permission_classes = [permissions.IsAuthenticated]
+
+  def get(self, request):
+    posters = []
+    user = request.user
+
+    for poster_id, poster in POSTERS.items():
+      species_list = poster["species"]
+      poster_type = poster.get("type", "regional")
+
+      if poster_type == "regional":
+        seen_count = Species.objects.filter(
+            observation__user=user,
+            type=Species.BIRD_TYPE,
+            commonNames__icontains=species_list[0] if species_list else "",
+        ).count()
+        for name in species_list[1:]:
+          seen_count += Species.objects.filter(
+              observation__user=user,
+              type=Species.BIRD_TYPE,
+              commonNames__icontains=name,
+          ).exists()
+      else:
+        seen_count = Species.objects.filter(
+            observation__user=user,
+            type=Species.BIRD_TYPE,
+            scientificNameWithoutAuthor__in=species_list,
+        ).count()
+
+      total = len(species_list)
+      level = calculate_level(seen_count, total)
+
+      posters.append({
+          "id": poster_id,
+          "name": poster["name"],
+          "icon": poster.get("icon", "🐦"),
+          "type": poster_type,
+          "seen_count": seen_count,
+          "total_count": total,
+          "level": level,
+      })
+
+    return Response(posters)
+
+
 class RegionListView(APIView):
-    """List all available regions for bird posters."""
+  """Legacy: List all available regions for bird posters."""
 
-    permission_classes = [permissions.IsAuthenticated]
+  permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
-        regions = get_region_list()
-        return Response(regions)
+  def get(self, request):
+    posters = get_poster_list()
+    return Response(posters)
 
 
 class PosterDataView(APIView):
-  """Get poster data for a specific region.
+  """Get poster data for a specific poster.
 
-    Returns all species for the region with size data and seen status.
-    """
+  Returns all species for the poster with size data and seen status.
+  """
 
   permission_classes = [permissions.IsAuthenticated]
 
   def get(self, request, region_id):
-    region = get_region(region_id)
-    if not region:
+    poster = get_poster(region_id)
+    if not poster:
       return Response(
-                {"error": f"Region '{region_id}' not found"},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+          {"error": f"Poster '{region_id}' not found"},
+          status=status.HTTP_404_NOT_FOUND,
+      )
 
-    user_species_ids = set(
-            Species.objects.filter(
-                observation__user=request.user, type=Species.BIRD_TYPE
-            ).values_list("id", flat=True)
-        )
+    poster_type = poster.get("type", "regional")
+    species_list = poster["common_birds"]  # get_region adapts this key
+
+    user_observed_species = set(
+        Observation.objects.filter(
+            user=request.user, species__type=Species.BIRD_TYPE
+        ).values_list("species_id", flat=True)
+    )
 
     poster_species = []
-    for bird_name in region["common_birds"]:
-      # Use icontains for SQLite compatibility (JSON __contains not supported)
-      species = Species.objects.filter(
-          commonNames__icontains=bird_name, type=Species.BIRD_TYPE
-      ).first()
+    for species_name in species_list:
+      if poster_type == "regional":
+        species = Species.objects.filter(
+            commonNames__icontains=species_name, type=Species.BIRD_TYPE
+        ).first()
+      else:
+        species = Species.objects.filter(
+            Q(scientificNameWithoutAuthor=species_name)
+            | Q(protonyms__contains=[species_name]),
+            type=Species.BIRD_TYPE,
+        ).first()
 
       if species:
         if species.body_length_cm is None:
@@ -57,46 +128,50 @@ class PosterDataView(APIView):
           if size:
             species.body_length_cm = size
             species.save(update_fields=["body_length_cm"])
-            logger.info(f"Generated size for {species}: {size}cm")
+            logger.info("Generated size for %s: %scm", species, size)
 
         illustration_url = None
         if species.illustration_transparent:
           illustration_url = request.build_absolute_uri(
-                        species.illustration_transparent.url
-                    )
+              species.illustration_transparent.url
+          )
         elif species.illustration:
           illustration_url = request.build_absolute_uri(
-                        species.illustration.url
-                    )
+              species.illustration.url
+          )
 
-        poster_species.append(
-                    {
-                        "id": species.id,
-                        "name": str(species),
-                        "scientific_name": species.scientificNameWithoutAuthor,
-                        "body_length_cm": species.body_length_cm,
-                        "illustration_url": illustration_url,
-                        "is_seen": species.id in user_species_ids,
-                    }
-                )
+        poster_species.append({
+            "id": species.id,
+            "name": str(species),
+            "scientific_name": species.scientificNameWithoutAuthor,
+            "body_length_cm": species.body_length_cm,
+            "illustration_url": illustration_url,
+            "has_illustration": bool(species.illustration_transparent),
+            "is_seen": species.id in user_observed_species,
+        })
       else:
-        poster_species.append(
-                    {
-                        "id": None,
-                        "name": bird_name,
-                        "scientific_name": None,
-                        "body_length_cm": None,
-                        "illustration_url": None,
-                        "is_seen": False,
-                    }
-                )
+        poster_species.append({
+            "id": None,
+            "name": species_name,
+            "scientific_name": (
+                species_name if poster_type != "regional" else None
+            ),
+            "body_length_cm": None,
+            "illustration_url": None,
+            "has_illustration": False,
+            "is_seen": False,
+        })
 
     poster_species.sort(key=lambda x: x["body_length_cm"] or 0, reverse=True)
 
-    return Response(
-            {
-                "region_id": region_id,
-                "region_name": region["name"],
-                "species": poster_species,
-            }
-        )
+    seen_count = sum(1 for s in poster_species if s["is_seen"])
+    total_count = len(poster_species)
+
+    return Response({
+        "poster_id": region_id,
+        "poster_name": poster["name"],
+        "level": calculate_level(seen_count, total_count),
+        "seen_count": seen_count,
+        "total_count": total_count,
+        "species": poster_species,
+    })
