@@ -50,9 +50,9 @@ Nature GO is a Progressive Web App that can be installed on your device for a na
 - Bird data from [Avibase](https://avibase.bsc-eoc.org/avibase.jsp)
 - Species details from [Wikipedia](https://en.wikipedia.org)
 - Plant identification with [Pl@ntNet API](https://my.plantnet.org/)
-- Bird identification with [Gemini 2.0 Flash](https://deepmind.google/technologies/gemini/)
+- Bird identification with [Gemini 3 Flash](https://deepmind.google/technologies/gemini/)
 - Illustration generation with [Imagen 3](https://deepmind.google/technologies/imagen-3/)
-- Description and quiz generation with [Gemini 2.0 Flash](https://deepmind.google/technologies/gemini/)
+- Description and quiz generation with [Gemini 3 Flash](https://deepmind.google/technologies/gemini/)
 - Backend with [Django](https://www.djangoproject.com/), frontend with [Next.js](https://nextjs.org/)
 
 Support your local community — [:uk:](https://www.rspb.org.uk), [:fr:](https://www.lpo.fr/).
