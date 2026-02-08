@@ -1,5 +1,5 @@
-name: Deploy frontend
-on: push
+name: Deploy frontend (DEPRECATED - use PWA)
+on: workflow_dispatch
 
 jobs:
   update:

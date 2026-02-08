@@ -1,7 +1,7 @@
 # <img src="resources/logo/logo.png" height=32> Nature GO
 
 [![Deploy backend](https://github.com/eleurent/nature-go/actions/workflows/deploy-backend.yml/badge.svg)](https://github.com/eleurent/nature-go/actions/workflows/deploy-backend.yml)
-[![Deploy frontend](https://github.com/eleurent/nature-go/actions/workflows/deploy-frontend.yml/badge.svg)](https://github.com/eleurent/nature-go/actions/workflows/deploy-frontend.yml)
+[![Deploy PWA](https://github.com/eleurent/nature-go/actions/workflows/deploy-pwa.yml/badge.svg)](https://github.com/eleurent/nature-go/actions/workflows/deploy-pwa.yml)
 
 <h4 align="center">A wildlife identification game — become a 19th century naturalist</h4>
 
@@ -23,17 +23,25 @@ This project experiments with generative AI to create an engaging and educationa
 <img src="resources/screens/thumbnails/map.jpg" width="32%">
 </p>
 
-## Install
+## Try it
 
-This project is still in development, and not available on App Stores yet.
+🌐 **Web App**: [edouardleurent.com/nature-go](https://edouardleurent.com/nature-go/)
 
-You can preview the latest development version on Android & iOS using the [Expo Go](https://expo.dev/go) sandbox app, with this QR code
+### Install as an App (PWA)
 
-<p align="center">
-<a href="https://expo.dev/@eleurent/nature-go?serviceType=eas&distribution=expo-go&scheme=exp%2Bnature-go&channel=main">
-  <img src="https://qr.expo.dev/eas-update?projectId=1b735d98-b598-406c-9235-ab43e10a0755&runtimeVersion=exposdk%3A51.0.0&channel=main" width="200" height="200">
-</a>
-</p>
+Nature GO is a Progressive Web App that can be installed on your device for a native app-like experience:
+
+**iOS (Safari)**
+1. Open the web app in Safari
+2. Tap the **Share** button (square with arrow)
+3. Scroll down and tap **Add to Home Screen**
+4. Tap **Add** to confirm
+
+**Android (Chrome)**
+1. Open the web app in Chrome
+2. Tap the **three-dot menu** (⋮)
+3. Tap **Install app** or **Add to Home Screen**
+4. Tap **Install** to confirm
 
 ## Credit
 
@@ -43,8 +51,9 @@ You can preview the latest development version on Android & iOS using the [Expo 
 - Species details from [Wikipedia](https://en.wikipedia.org)
 - Plant identification with [Pl@ntNet API](https://my.plantnet.org/)
 - Bird identification with [Gemini 1.5 Flash](https://deepmind.google/technologies/gemini/)
-- Illustration generation with [Stable Diffusion XL](https://stability.ai/stable-image)
+- Illustration generation with [Imagen 3](https://deepmind.google/technologies/imagen-3/)
 - Description and quiz generation with [Gemini 1.5 Flash](https://deepmind.google/technologies/gemini/)
-- Backend with [django](https://www.djangoproject.com/), frontend with [React Native](https://reactnative.dev/)
+- Backend with [Django](https://www.djangoproject.com/), frontend with [Next.js](https://nextjs.org/)
 
 Support your local community — [:uk:](https://www.rspb.org.uk), [:fr:](https://www.lpo.fr/).
+
