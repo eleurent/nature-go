@@ -254,12 +254,12 @@ function SpeciesDetailContent() {
             )}
           </div>
 
-          <div className="px-6 mt-6 relative">
+          <div className="px-6 mt-6">
             {speciesDetails.audio_description && (
-              <>
+              <div className="flex justify-end mb-2">
                 <button
                   onClick={handlePlayPause}
-                  className="absolute top-0 right-6 p-2"
+                  className="p-2"
                   title={isPlaying ? 'Pause' : 'Play'}
                 >
                   {isPlaying ? (
@@ -278,7 +278,7 @@ function SpeciesDetailContent() {
                   src={getImageUrl(speciesDetails.audio_description)}
                   onEnded={() => setIsPlaying(false)}
                 />
-              </>
+              </div>
             )}
 
             {unlockedDescriptions.map((desc, index) => (
