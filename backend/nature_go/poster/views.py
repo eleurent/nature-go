@@ -135,9 +135,7 @@ class PosterDataView(APIView):
         poster_species.append({
             "id": None,
             "name": species_name,
-            "scientific_name": (
-                species_name if poster_type != "regional" else None
-            ),
+            "scientific_name": species_name,
             "body_length_cm": None,
             "illustration_url": None,
             "has_illustration": False,
