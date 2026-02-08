@@ -89,7 +89,6 @@ class PosterDataView(APIView):
           status=status.HTTP_404_NOT_FOUND,
       )
 
-    poster_type = poster.get("type", "regional")
     species_list = poster["species"]
 
     user_observed_species = set(
@@ -100,15 +99,10 @@ class PosterDataView(APIView):
 
     poster_species = []
     for species_name in species_list:
-      if poster_type == "regional":
-        species = Species.objects.filter(
-            commonNames__icontains=species_name, type=Species.BIRD_TYPE
-        ).first()
-      else:
-        species = Species.objects.filter(
-            scientificNameWithoutAuthor=species_name,
-            type=Species.BIRD_TYPE,
-        ).first()
+      species = Species.objects.filter(
+          scientificNameWithoutAuthor=species_name,
+          type=Species.BIRD_TYPE,
+      ).first()
 
       if species:
         if species.body_length_cm is None:

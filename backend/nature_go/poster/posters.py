@@ -1,123 +1,118 @@
-"""Poster configurations including regional and species-group posters."""
+"""Poster configurations - all use scientific names for species lookup."""
 
-# Poster types: "regional" uses common names, "species_group" uses scientific names
 POSTERS = {
     # Regional Posters
     "western_us": {
         "name": "Western United States",
-        "type": "regional",
         "icon": "🌄",
         "species": [
-            "American Robin",
-            "House Finch",
-            "Anna's Hummingbird",
-            "Black-capped Chickadee",
-            "American Crow",
-            "Northern Mockingbird",
-            "Mourning Dove",
-            "Red-tailed Hawk",
-            "House Sparrow",
-            "European Starling",
-            "Steller's Jay",
-            "Black Phoebe",
-            "Yellow-rumped Warbler",
-            "White-crowned Sparrow",
-            "Dark-eyed Junco",
-            "Lesser Goldfinch",
-            "American Goldfinch",
-            "Red-winged Blackbird",
-            "Song Sparrow",
-            "Downy Woodpecker",
-            "Hairy Woodpecker",
-            "Cooper's Hawk",
-            "Turkey Vulture",
-            "Great Blue Heron",
-            "Mallard",
-            "Canada Goose",
-            "Bald Eagle",
-            "Western Meadowlark",
-            "Mountain Chickadee",
-            "Rufous Hummingbird",
+            "Turdus migratorius",  # American Robin
+            "Haemorhous mexicanus",  # House Finch
+            "Calypte anna",  # Anna's Hummingbird
+            "Poecile atricapillus",  # Black-capped Chickadee
+            "Corvus brachyrhynchos",  # American Crow
+            "Mimus polyglottos",  # Northern Mockingbird
+            "Zenaida macroura",  # Mourning Dove
+            "Buteo jamaicensis",  # Red-tailed Hawk
+            "Passer domesticus",  # House Sparrow
+            "Sturnus vulgaris",  # European Starling
+            "Cyanocitta stelleri",  # Steller's Jay
+            "Sayornis nigricans",  # Black Phoebe
+            "Setophaga coronata",  # Yellow-rumped Warbler
+            "Zonotrichia leucophrys",  # White-crowned Sparrow
+            "Junco hyemalis",  # Dark-eyed Junco
+            "Spinus psaltria",  # Lesser Goldfinch
+            "Spinus tristis",  # American Goldfinch
+            "Agelaius phoeniceus",  # Red-winged Blackbird
+            "Melospiza melodia",  # Song Sparrow
+            "Dryobates pubescens",  # Downy Woodpecker
+            "Dryobates villosus",  # Hairy Woodpecker
+            "Accipiter cooperii",  # Cooper's Hawk
+            "Cathartes aura",  # Turkey Vulture
+            "Ardea herodias",  # Great Blue Heron
+            "Anas platyrhynchos",  # Mallard
+            "Branta canadensis",  # Canada Goose
+            "Haliaeetus leucocephalus",  # Bald Eagle
+            "Sturnella neglecta",  # Western Meadowlark
+            "Poecile gambeli",  # Mountain Chickadee
+            "Selasphorus rufus",  # Rufous Hummingbird
         ],
     },
     "uk": {
         "name": "United Kingdom",
-        "type": "regional",
         "icon": "🇬🇧",
         "species": [
-            "European Robin",
-            "House Sparrow",
-            "Blue Tit",
-            "Great Tit",
-            "Blackbird",
-            "Chaffinch",
-            "Woodpigeon",
-            "Magpie",
-            "Carrion Crow",
-            "Goldfinch",
-            "Long-tailed Tit",
-            "Wren",
-            "Dunnock",
-            "Coal Tit",
-            "Greenfinch",
-            "Great Spotted Woodpecker",
-            "Nuthatch",
-            "Jay",
-            "Collared Dove",
-            "Starling",
-            "Song Thrush",
-            "Mistle Thrush",
-            "Pheasant",
-            "Red Kite",
-            "Buzzard",
-            "Kestrel",
-            "Grey Heron",
-            "Mallard",
-            "Mute Swan",
-            "Canada Goose",
+            "Erithacus rubecula",  # European Robin
+            "Passer domesticus",  # House Sparrow
+            "Cyanistes caeruleus",  # Blue Tit
+            "Parus major",  # Great Tit
+            "Turdus merula",  # Blackbird
+            "Fringilla coelebs",  # Chaffinch
+            "Columba palumbus",  # Woodpigeon
+            "Pica pica",  # Magpie
+            "Corvus corone",  # Carrion Crow
+            "Carduelis carduelis",  # Goldfinch
+            "Aegithalos caudatus",  # Long-tailed Tit
+            "Troglodytes troglodytes",  # Wren
+            "Prunella modularis",  # Dunnock
+            "Periparus ater",  # Coal Tit
+            "Chloris chloris",  # Greenfinch
+            "Dendrocopos major",  # Great Spotted Woodpecker
+            "Sitta europaea",  # Nuthatch
+            "Garrulus glandarius",  # Jay
+            "Streptopelia decaocto",  # Collared Dove
+            "Sturnus vulgaris",  # Starling
+            "Turdus philomelos",  # Song Thrush
+            "Turdus viscivorus",  # Mistle Thrush
+            "Phasianus colchicus",  # Pheasant
+            "Milvus milvus",  # Red Kite
+            "Buteo buteo",  # Buzzard
+            "Falco tinnunculus",  # Kestrel
+            "Ardea cinerea",  # Grey Heron
+            "Anas platyrhynchos",  # Mallard
+            "Cygnus olor",  # Mute Swan
+            "Branta canadensis",  # Canada Goose
         ],
     },
     "france": {
         "name": "France",
-        "type": "regional",
         "icon": "🇫🇷",
         "species": [
-            "European Robin",
-            "House Sparrow",
-            "Blue Tit",
-            "Great Tit",
-            "Blackbird",
-            "Chaffinch",
-            "Woodpigeon",
-            "Magpie",
-            "Carrion Crow",
-            "Goldfinch",
-            "Long-tailed Tit",
-            "Wren",
-            "Serin",
-            "Greenfinch",
-            "Great Spotted Woodpecker",
-            "Nuthatch",
-            "Jay",
-            "Collared Dove",
-            "Starling",
-            "Song Thrush",
-            "Hoopoe",
-            "Bee-eater",
-            "Red Kite",
-            "Buzzard",
-            "Kestrel",
-            "Grey Heron",
-            "Mallard",
-            "Mute Swan",
-            "Great Egret",
-            "Black-headed Gull",
+            "Erithacus rubecula",  # European Robin
+            "Passer domesticus",  # House Sparrow
+            "Cyanistes caeruleus",  # Blue Tit
+            "Parus major",  # Great Tit
+            "Turdus merula",  # Blackbird
+            "Fringilla coelebs",  # Chaffinch
+            "Columba palumbus",  # Woodpigeon
+            "Pica pica",  # Magpie
+            "Corvus corone",  # Carrion Crow
+            "Carduelis carduelis",  # Goldfinch
+            "Aegithalos caudatus",  # Long-tailed Tit
+            "Troglodytes troglodytes",  # Wren
+            "Serinus serinus",  # Serin
+            "Chloris chloris",  # Greenfinch
+            "Dendrocopos major",  # Great Spotted Woodpecker
+            "Sitta europaea",  # Nuthatch
+            "Garrulus glandarius",  # Jay
+            "Streptopelia decaocto",  # Collared Dove
+            "Sturnus vulgaris",  # Starling
+            "Turdus philomelos",  # Song Thrush
+            "Upupa epops",  # Hoopoe
+            "Merops apiaster",  # Bee-eater
+            "Milvus milvus",  # Red Kite
+            "Buteo buteo",  # Buzzard
+            "Falco tinnunculus",  # Kestrel
+            "Ardea cinerea",  # Grey Heron
+            "Anas platyrhynchos",  # Mallard
+            "Cygnus olor",  # Mute Swan
+            "Ardea alba",  # Great Egret
+            "Chroicocephalus ridibundus",  # Black-headed Gull
         ],
     },
-    # Species Group Posters (from badges)
+    # Species Group Posters
     "corvids": {
         "name": "Corvid Connoisseur",
-        "type": "species_group",
         "icon": "🪶",
         "species": [
             "Corvus corax",
@@ -134,7 +129,6 @@ POSTERS = {
     },
     "owls": {
         "name": "Owl Observer",
-        "type": "species_group",
         "icon": "🦉",
         "species": [
             "Tyto alba",
@@ -148,7 +142,6 @@ POSTERS = {
     },
     "waterfowl": {
         "name": "Waterfowl Whisperer",
-        "type": "species_group",
         "icon": "🦆",
         "species": [
             "Anser anser",
@@ -168,7 +161,6 @@ POSTERS = {
     },
     "waders": {
         "name": "Wading Wonderer",
-        "type": "species_group",
         "icon": "🦩",
         "species": [
             "Ardea cinerea",
@@ -187,7 +179,6 @@ POSTERS = {
     },
     "raptors": {
         "name": "Raptor Ranger",
-        "type": "species_group",
         "icon": "🦅",
         "species": [
             "Buteo buteo",
@@ -207,7 +198,6 @@ POSTERS = {
     },
     "woodland": {
         "name": "Woodland Wanderer",
-        "type": "species_group",
         "icon": "🌲",
         "species": [
             "Dendrocopos major",
@@ -226,7 +216,6 @@ POSTERS = {
     },
     "coastal": {
         "name": "Coastal Connoisseur",
-        "type": "species_group",
         "icon": "🌊",
         "species": [
             "Larus argentatus",
@@ -245,7 +234,6 @@ POSTERS = {
     },
     "songbirds": {
         "name": "Songbird Specialist",
-        "type": "species_group",
         "icon": "🎵",
         "species": [
             "Erithacus rubecula",
@@ -264,7 +252,6 @@ POSTERS = {
     },
     "backyard": {
         "name": "Backyard Birder",
-        "type": "species_group",
         "icon": "🏡",
         "species": [
             "Passer domesticus",
