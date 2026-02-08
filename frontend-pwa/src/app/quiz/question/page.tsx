@@ -114,14 +114,14 @@ function QuizQuestionContent() {
                 key={index}
                 onClick={() => handleSelectAnswer(index)}
                 disabled={hasAnswered}
-                className={`w-full p-4 rounded-lg text-left transition-all font-old-standard ${
+                className={`w-full p-4 rounded-full text-center transition-all font-old-standard border ${
                   showCorrect
-                    ? 'bg-green-100 ring-2 ring-green-500'
+                    ? 'bg-green-50 border-green-500 text-green-700'
                     : showWrong
-                    ? 'bg-red-100 ring-2 ring-red-500'
+                    ? 'bg-red-50 border-red-500 text-red-700'
                     : isSelected
-                    ? 'bg-nature-dark/20 ring-2 ring-nature-dark'
-                    : 'bg-white/70 hover:bg-white'
+                    ? 'bg-blue-50 border-blue-400 text-blue-700'
+                    : 'bg-white/80 border-gray-300 hover:bg-white'
                 }`}
               >
                 {choice}
@@ -130,32 +130,47 @@ function QuizQuestionContent() {
           })}
         </div>
 
-        <div className="mt-auto pt-8">
-          <button
-            onClick={handleCheck}
-            disabled={!hasSelected}
-            className={`w-full max-w-md mx-auto block btn-primary text-xl py-4 ${
-              !hasSelected ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-          >
-            {buttonLabel.toUpperCase()}
-          </button>
-        </div>
+        {!feedback && (
+          <div className="mt-auto pt-8">
+            <button
+              onClick={handleCheck}
+              disabled={!hasSelected}
+              className={`w-full max-w-md mx-auto block btn-primary text-xl py-4 rounded-full ${
+                !hasSelected ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+            >
+              CHECK
+            </button>
+          </div>
+        )}
       </div>
 
       {feedback && (
         <div
-          className={`fixed bottom-0 left-0 right-0 p-6 ${
+          className={`fixed bottom-0 left-0 right-0 p-6 pb-10 ${
             feedback.correct ? 'bg-green-100' : 'bg-red-100'
           }`}
+          style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 24px), 24px)' }}
         >
-          <div className="flex items-start gap-3 max-w-md mx-auto">
-            <span className="text-2xl">{feedback.correct ? '✓' : '✗'}</span>
-            <p className={`font-old-standard text-lg ${
-              feedback.correct ? 'text-green-700' : 'text-red-700'
-            }`}>
-              {feedback.text}
-            </p>
+          <div className="max-w-md mx-auto">
+            <div className="flex items-start gap-3 mb-4">
+              <span className={`text-2xl ${feedback.correct ? 'text-green-600' : 'text-red-600'}`}>
+                {feedback.correct ? '✓' : '✗'}
+              </span>
+              <p className={`font-old-standard text-lg font-bold ${
+                feedback.correct ? 'text-green-700' : 'text-red-700'
+              }`}>
+                {feedback.text}
+              </p>
+            </div>
+            <button
+              onClick={handleCheck}
+              className={`w-full py-4 rounded-full text-white text-xl font-bold ${
+                feedback.correct ? 'bg-green-500' : 'bg-red-500'
+              }`}
+            >
+              {isCorrect ? 'CONTINUE' : 'GOT IT'}
+            </button>
           </div>
         </div>
       )}

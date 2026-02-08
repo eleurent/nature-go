@@ -120,13 +120,17 @@ export default function HomePage() {
 
         <div className="grid grid-cols-3 items-end px-4 pb-4">
           <Link href="/profile" className="justify-self-start">
-            <Image
-              src={profileState.avatar?.bubble || '/images/profile-placeholder.png'}
-              alt="Profile"
-              width={85}
-              height={85}
-              className="object-contain"
-            />
+            {profileState.avatar?.bubble ? (
+              <Image
+                src={profileState.avatar.bubble}
+                alt="Profile"
+                width={85}
+                height={85}
+                className="object-contain"
+              />
+            ) : (
+              <div className="w-[85px] h-[85px] rounded-full bg-nature-brown/20 border-2 border-nature-brown/30" />
+            )}
           </Link>
 
           <Link href="/camera" className="category-button justify-self-center">
