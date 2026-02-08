@@ -143,42 +143,72 @@ export default function ProfilePage() {
           />
         </div>
 
-        {posters.length > 0 && (
-          <div className="mb-8">
-            <h3 className="text-xl font-old-standard text-center mb-4">Specimen Collection</h3>
-            <div className="grid grid-cols-4 gap-3">
-              {posters.map((poster) => {
-                const initials = poster.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-                const levelStyle = poster.level === 'Gold' 
-                  ? 'bg-gradient-to-br from-yellow-100 to-amber-200 border-2 border-yellow-600 shadow-md'
-                  : poster.level === 'Silver'
-                  ? 'bg-gradient-to-br from-gray-100 to-gray-300 border-2 border-gray-500 shadow-md'
-                  : poster.level === 'Bronze'
-                  ? 'bg-gradient-to-br from-amber-100 to-amber-300 border-2 border-amber-700 shadow-md'
-                  : 'bg-stone-100 border border-stone-300';
-                const textColor = poster.level ? 'text-stone-800' : 'text-stone-400';
-                return (
-                  <Link
-                    key={poster.id}
-                    href={`/poster/detail?id=${poster.id}`}
-                    className="flex flex-col items-center"
-                  >
-                    <div
-                      className={`w-14 h-14 rounded flex items-center justify-center ${levelStyle} ${!poster.level ? 'opacity-70' : ''}`}
-                      title={`${poster.name} (${poster.seen_count}/${poster.total_count})`}
-                      style={{ fontFamily: 'Georgia, serif' }}
-                    >
-                      <span className={`text-lg font-semibold italic ${textColor}`}>{initials}</span>
-                    </div>
-                    <span className="text-[10px] font-old-standard text-center mt-1 line-clamp-2 leading-tight">
-                      {poster.name}
-                    </span>
-                  </Link>
-                );
-              })}
+        {posters.length > 0 && (() => {
+          const birdPosters = posters.filter(p => p.type === 'bird');
+          const plantPosters = posters.filter(p => p.type === 'plant');
+          
+          const renderPoster = (poster: Poster) => {
+            const initials = poster.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+            const levelStyle = poster.level === 'Gold' 
+              ? 'bg-gradient-to-br from-yellow-100 to-amber-200 border-2 border-yellow-600 shadow-md'
+              : poster.level === 'Silver'
+              ? 'bg-gradient-to-br from-gray-100 to-gray-300 border-2 border-gray-500 shadow-md'
+              : poster.level === 'Bronze'
+              ? 'bg-gradient-to-br from-amber-100 to-amber-300 border-2 border-amber-700 shadow-md'
+              : 'bg-stone-100 border border-stone-300';
+            const textColor = poster.level ? 'text-stone-800' : 'text-stone-400';
+            return (
+              <Link
+                key={poster.id}
+                href={`/poster/detail?id=${poster.id}`}
+                className="flex flex-col items-center"
+              >
+                <div
+                  className={`w-12 h-12 rounded flex items-center justify-center ${levelStyle} ${!poster.level ? 'opacity-70' : ''}`}
+                  title={`${poster.name} (${poster.seen_count}/${poster.total_count})`}
+                  style={{ fontFamily: 'Georgia, serif' }}
+                >
+                  <span className={`text-sm font-semibold italic ${textColor}`}>{initials}</span>
+                </div>
+                <span className="text-[9px] font-old-standard text-center mt-1 line-clamp-2 leading-tight w-14">
+                  {poster.name}
+                </span>
+              </Link>
+            );
+          };
+
+          return (
+            <div className="mb-8">
+              <h3 className="text-xl font-old-standard text-center mb-6" style={{ fontFamily: 'Georgia, serif' }}>
+                ❧ Field Guides ❧
+              </h3>
+              
+              {/* Birds Section */}
+              <div className="mb-6">
+                <h4 className="text-sm font-old-standard text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <span className="flex-1 h-px bg-stone-300"></span>
+                  <span>🐦 Birds</span>
+                  <span className="flex-1 h-px bg-stone-300"></span>
+                </h4>
+                <div className="grid grid-cols-5 gap-2">
+                  {birdPosters.map(renderPoster)}
+                </div>
+              </div>
+
+              {/* Plants Section */}
+              <div>
+                <h4 className="text-sm font-old-standard text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <span className="flex-1 h-px bg-stone-300"></span>
+                  <span>🌿 Plants</span>
+                  <span className="flex-1 h-px bg-stone-300"></span>
+                </h4>
+                <div className="grid grid-cols-5 gap-2">
+                  {plantPosters.map(renderPoster)}
+                </div>
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         <div className="text-center">
           <button
