@@ -23,9 +23,10 @@ export default function QuizResultPage() {
 
   if (!authState.userToken || !quizState.quiz) return null;
 
-  const totalQuestions = quizState.correctAnswers.length;
-  const correctCount = quizState.correctAnswers.filter(Boolean).length;
-  const percentage = Math.round((correctCount / totalQuestions) * 100);
+  const correctAnswersArray = Object.values(quizState.correctAnswers || {});
+  const totalQuestions = quizState.quiz?.multiple_choice_questions?.length || correctAnswersArray.length || 0;
+  const correctCount = correctAnswersArray.filter(Boolean).length;
+  const percentage = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
 
   const getMessage = () => {
     if (percentage === 100) return "Perfect score! You are a true scholar!";
