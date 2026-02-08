@@ -179,15 +179,6 @@ function PosterDetailContent() {
         ← Back
       </button>
 
-      <div className="fixed top-4 right-4 z-10 flex gap-1 items-center">
-        {posterList.map((_, i) => (
-          <div
-            key={i}
-            className={`w-2 h-2 rounded-full ${i === currentIndex ? 'bg-nature-dark' : 'bg-gray-300'}`}
-          />
-        ))}
-      </div>
-
       <div className="pt-12 px-2 pb-8 overflow-auto">
         {posterData && (
           <>
