@@ -4,6 +4,7 @@ import React, { createContext, useContext, useReducer, useMemo, ReactNode } from
 import { api, endpoints } from '@/lib/api';
 
 interface Question {
+  id: number;
   question: string;
   choices: string[];
   correct_answer: number;
@@ -23,7 +24,7 @@ interface QuizState {
 interface QuizMethods {
   fetchQuiz: () => Promise<void>;
   selectQuestion: (questionId: number, answerId: number) => void;
-  answerQuiz: (state: QuizState) => Promise<void>;
+  answerQuiz: (state: QuizState) => Promise<boolean[] | null>;
   isQuestionSelected: (state: QuizState, questionId: number, answerId: number) => boolean;
   isQuestionAnswered: (state: QuizState, questionId: number) => boolean;
   isAnswerCorrect: (state: QuizState, questionId: number) => boolean;
@@ -86,15 +87,27 @@ export function QuizProvider({ children }: { children: ReactNode }) {
       selectQuestion: (questionId: number, answerId: number) => {
         dispatch({ type: 'SELECT_ANSWER', questionId, answerId });
       },
-      answerQuiz: async (state: QuizState) => {
-        if (!state.quiz) return;
+      answerQuiz: async (state: QuizState): Promise<boolean[] | null> => {
+        if (!state.quiz) return null;
         try {
+          const multiplechoiceuseranswer_set = state.quiz.multiple_choice_questions.map((q, i) => ({
+            quiz: state.quiz!.id,
+            question: q.id,
+            user_answer: state.answers[i],
+          })).filter(a => a.user_answer !== null);
+          
           const response = await api.patch(endpoints.quiz.update(state.quiz.id), {
-            answers: state.answers,
+            multiplechoiceuseranswer_set,
           });
-          dispatch({ type: 'SET_CORRECT_ANSWERS', correctAnswers: response.data.correct_answers });
+          
+          const correctAnswers = response.data.multiplechoiceuseranswer_set?.map(
+            (a: { is_correct: boolean }) => a.is_correct
+          ) || [];
+          dispatch({ type: 'SET_CORRECT_ANSWERS', correctAnswers });
+          return correctAnswers;
         } catch (error) {
           console.error('Failed to submit quiz', error);
+          return null;
         }
       },
       isQuestionSelected: (state: QuizState, questionId: number, answerId: number) => {

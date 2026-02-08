@@ -76,9 +76,11 @@ function QuizQuestionContent() {
 
     // Otherwise, submit the answer
     if (!hasAnswered) {
-      await quizMethods.answerQuiz(quizState);
-      const correct = quizState.quiz!.multiple_choice_questions[questionId].correct_answer === quizState.answers[questionId];
-      setFeedback({ text: getRandomFeedback(correct), correct });
+      const correctAnswers = await quizMethods.answerQuiz(quizState);
+      if (correctAnswers) {
+        const isRight = correctAnswers[questionId] === true;
+        setFeedback({ text: getRandomFeedback(isRight), correct: isRight });
+      }
     }
   };
 
