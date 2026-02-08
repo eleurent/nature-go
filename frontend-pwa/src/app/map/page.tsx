@@ -67,6 +67,7 @@ export default function MapPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [leafletLoaded, setLeafletLoaded] = useState(false);
   const [leafletModule, setLeafletModule] = useState<typeof import('leaflet') | null>(null);
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
 
   const createColoredIcon = useMemo(() => {
     if (!leafletModule) return () => undefined;
@@ -108,14 +109,23 @@ export default function MapPage() {
 
     fetchObservations();
 
-    // Load Leaflet CSS and module
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation([position.coords.latitude, position.coords.longitude]);
+        },
+        () => {
+          console.log('Could not get user location');
+        }
+      );
+    }
+
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
     link.onload = () => setLeafletLoaded(true);
     document.head.appendChild(link);
 
-    // Dynamically import Leaflet
     import('leaflet').then((L) => {
       setLeafletModule(L);
     });
@@ -131,9 +141,11 @@ export default function MapPage() {
     (obs) => obs.location?.latitude && obs.location?.longitude
   );
 
-  const defaultCenter: [number, number] = validObservations.length > 0
-    ? [validObservations[0].location!.latitude, validObservations[0].location!.longitude]
-    : [48.8566, 2.3522];
+  const defaultCenter: [number, number] = userLocation
+    ? userLocation
+    : validObservations.length > 0
+      ? [validObservations[0].location!.latitude, validObservations[0].location!.longitude]
+      : [48.8566, 2.3522];
 
   return (
     <div className="page-background min-h-screen">

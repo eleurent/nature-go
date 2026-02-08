@@ -262,7 +262,16 @@ function SpeciesDetailContent() {
                   className="absolute top-0 right-6 p-2"
                   title={isPlaying ? 'Pause' : 'Play'}
                 >
-                  {isPlaying ? '⏸' : '▶️'}
+                  {isPlaying ? (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
+                      <rect x="6" y="4" width="4" height="16" />
+                      <rect x="14" y="4" width="4" height="16" />
+                    </svg>
+                  ) : (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
+                      <polygon points="5,3 19,12 5,21" />
+                    </svg>
+                  )}
                 </button>
                 <audio
                   ref={audioRef}

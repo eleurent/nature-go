@@ -224,7 +224,7 @@ function PosterDetailContent() {
                           alt={species.name}
                           width={size}
                           height={size}
-                          className={`object-contain ${!species.is_seen ? 'grayscale' : ''}`}
+                          className={`object-contain ${!species.is_seen ? 'grayscale brightness-50' : ''}`}
                         />
                       ) : (
                         <div

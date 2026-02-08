@@ -36,15 +36,17 @@ body {
 
 .page-background {
   background-image: url('/images/page-background.png');
-  background-size: cover;
-  background-position: center;
+  background-size: 100% auto;
+  background-repeat: repeat-y;
+  background-position: top center;
   min-height: 100vh;
 }
 
 .page-background-2 {
   background-image: url('/images/page-background-2.png');
-  background-size: cover;
-  background-position: center;
+  background-size: 100% auto;
+  background-repeat: repeat-y;
+  background-position: top center;
   min-height: 100vh;
 }
 

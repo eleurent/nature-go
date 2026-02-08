@@ -101,7 +101,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
         return state.answers[questionId] === answerId;
       },
       isQuestionAnswered: (state: QuizState, questionId: number) => {
-        return state.correctAnswers[questionId] !== null;
+        return state.correctAnswers?.[questionId] !== undefined && state.correctAnswers[questionId] !== null;
       },
       isAnswerCorrect: (state: QuizState, questionId: number) => {
         return state.correctAnswers[questionId] === true;
