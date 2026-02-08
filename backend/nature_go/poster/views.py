@@ -1,7 +1,6 @@
 """Views for the poster feature."""
 
 import logging
-from django.db.models import Q
 from generation.species_data_generation import generate_bird_size
 from observation.models import Observation, Species
 from poster.posters import POSTERS, get_poster
@@ -107,8 +106,7 @@ class PosterDataView(APIView):
         ).first()
       else:
         species = Species.objects.filter(
-            Q(scientificNameWithoutAuthor=species_name)
-            | Q(protonyms__contains=[species_name]),
+            scientificNameWithoutAuthor=species_name,
             type=Species.BIRD_TYPE,
         ).first()
 
