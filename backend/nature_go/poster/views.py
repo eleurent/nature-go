@@ -3,7 +3,7 @@
 import logging
 from generation.species_data_generation import generate_bird_size
 from observation.models import Observation, Species
-from poster.posters import POSTERS, get_all_species_for_poster, get_poster
+from poster.posters import POSTERS, get_poster
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -85,7 +85,6 @@ class PosterDataView(APIView):
       )
 
     core_species = poster["species"]
-    all_species = get_all_species_for_poster(poster_id)
     poster_type = poster.get("type", "bird")
 
     # Map poster type to Species model type
@@ -192,16 +191,20 @@ class PosterDataView(APIView):
 
     poster_species.sort(key=lambda x: x["body_length_cm"] or 0, reverse=True)
 
-    # Count seen from ALL species (core + extended) for progress
-    seen_count = len(user_observed_sci_names & set(all_species))
-    # Display count is just core species
-    display_count = len(core_species)
+    # Count observed bonus species
+    observed_bonus_count = len(observed_extended)
+    # Core seen + bonus seen
+    seen_count = (
+        len(user_observed_sci_names & set(core_species)) + observed_bonus_count
+    )
+    # Core total + observed bonus (total expands as you find bonus species)
+    total_count = len(core_species) + observed_bonus_count
 
     return Response({
         "poster_id": poster_id,
         "poster_name": poster["name"],
-        "level": calculate_level(seen_count, display_count),
+        "level": calculate_level(seen_count, total_count),
         "seen_count": seen_count,
-        "total_count": display_count,
+        "total_count": total_count,
         "species": poster_species,
     })
