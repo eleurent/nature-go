@@ -91,8 +91,8 @@ export default function ObservationSelectPage() {
       observationMethods.setObservationData(response.data);
 
       const speciesId = response.data.species;
-      observationMethods.clearObservation();
-      // Use fromObservation param so species detail page knows to navigate home on back
+      // Don't clear observation here - it causes a race condition where useEffect
+      // redirects to /camera before router.replace completes
       router.replace(`/species/detail?id=${speciesId}&fromObservation=true`);
     } catch (err) {
       console.error('Failed to confirm species:', err);
