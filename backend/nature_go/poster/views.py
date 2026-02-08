@@ -74,16 +74,6 @@ class PosterListView(APIView):
     return Response(posters)
 
 
-class RegionListView(APIView):
-  """Legacy: List all available regions for bird posters."""
-
-  permission_classes = [permissions.IsAuthenticated]
-
-  def get(self, request):
-    posters = get_poster_list()
-    return Response(posters)
-
-
 class PosterDataView(APIView):
   """Get poster data for a specific poster.
 
@@ -92,11 +82,11 @@ class PosterDataView(APIView):
 
   permission_classes = [permissions.IsAuthenticated]
 
-  def get(self, request, region_id):
-    poster = get_poster(region_id)
+  def get(self, request, poster_id):
+    poster = get_poster(poster_id)
     if not poster:
       return Response(
-          {"error": f"Poster '{region_id}' not found"},
+          {"error": f"Poster '{poster_id}' not found"},
           status=status.HTTP_404_NOT_FOUND,
       )
 
@@ -168,7 +158,7 @@ class PosterDataView(APIView):
     total_count = len(poster_species)
 
     return Response({
-        "poster_id": region_id,
+        "poster_id": poster_id,
         "poster_name": poster["name"],
         "level": calculate_level(seen_count, total_count),
         "seen_count": seen_count,
