@@ -187,7 +187,7 @@ export default function ProfilePage() {
               <div className="mb-6">
                 <h4 className="text-sm font-old-standard text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                   <span className="flex-1 h-px bg-stone-300"></span>
-                  <span>🐦 Birds</span>
+                  <span>Birds</span>
                   <span className="flex-1 h-px bg-stone-300"></span>
                 </h4>
                 <div className="grid grid-cols-5 gap-2">
@@ -199,7 +199,7 @@ export default function ProfilePage() {
               <div>
                 <h4 className="text-sm font-old-standard text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                   <span className="flex-1 h-px bg-stone-300"></span>
-                  <span>🌿 Plants</span>
+                  <span>Plants</span>
                   <span className="flex-1 h-px bg-stone-300"></span>
                 </h4>
                 <div className="grid grid-cols-5 gap-2">

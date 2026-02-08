@@ -141,6 +141,7 @@ class PosterDataView(APIView):
             "illustration_url": illustration_url,
             "has_illustration": bool(species.illustration_transparent),
             "is_seen": species.id in user_observed_species,
+            "is_bonus": False,
         })
       else:
         poster_species.append({
@@ -151,6 +152,39 @@ class PosterDataView(APIView):
             "illustration_url": None,
             "has_illustration": False,
             "is_seen": False,
+            "is_bonus": False,
+        })
+
+    # Add observed extended species as bonus entries
+    extended_species_list = poster.get("species_extended", [])
+    observed_extended = user_observed_sci_names & set(extended_species_list)
+
+    for species_name in observed_extended:
+      species = Species.objects.filter(
+          scientificNameWithoutAuthor=species_name,
+          type=species_model_type,
+      ).first()
+
+      if species:
+        illustration_url = None
+        if species.illustration_transparent:
+          illustration_url = request.build_absolute_uri(
+              species.illustration_transparent.url
+          )
+        elif species.illustration:
+          illustration_url = request.build_absolute_uri(
+              species.illustration.url
+          )
+
+        poster_species.append({
+            "id": species.id,
+            "name": str(species),
+            "scientific_name": species.scientificNameWithoutAuthor,
+            "body_length_cm": species.body_length_cm,
+            "illustration_url": illustration_url,
+            "has_illustration": bool(species.illustration_transparent),
+            "is_seen": True,
+            "is_bonus": True,
         })
 
     poster_species.sort(key=lambda x: x["body_length_cm"] or 0, reverse=True)

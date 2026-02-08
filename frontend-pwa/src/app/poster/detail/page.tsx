@@ -14,6 +14,7 @@ interface PosterSpecies {
   illustration_url: string | null;
   has_illustration: boolean;
   is_seen: boolean;
+  is_bonus?: boolean;
 }
 
 interface PosterData {
@@ -225,7 +226,7 @@ function PosterDetailContent() {
                     onClick={() => handleSpeciesClick(species)}
                   >
                     <div
-                      className="relative flex items-center justify-center"
+                      className={`relative flex items-center justify-center ${species.is_bonus ? 'ring-2 ring-amber-400 ring-offset-1 rounded-full' : ''}`}
                       style={{ width: pos.size, height: pos.size }}
                     >
                       {imgUrl ? (
@@ -243,10 +244,13 @@ function PosterDetailContent() {
                           style={{ width: pos.size * 0.7, height: pos.size * 0.7 }}
                         />
                       )}
+                      {species.is_bonus && (
+                        <span className="absolute -top-1 -right-1 text-[10px]">⭐</span>
+                      )}
                     </div>
                     <span 
                       className="text-[8px] text-center font-old-standard leading-tight mt-1"
-                      style={{ maxWidth: 70, wordWrap: 'break-word', color: species.is_seen ? '#4a3f35' : '#888' }}
+                      style={{ maxWidth: 70, wordWrap: 'break-word', color: species.is_seen ? (species.is_bonus ? '#b45309' : '#4a3f35') : '#888' }}
                     >
                       {species.is_seen ? species.name : ''}
                     </span>
