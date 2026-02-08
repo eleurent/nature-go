@@ -194,20 +194,29 @@ function PosterDetailContent() {
               </div>
             )}
 
-            <div className="grid grid-cols-5 gap-2">
+            <div className="flex flex-wrap justify-center" style={{ margin: '-10px' }}>
               {posterData.species.map((species, i) => {
-                const scale = species.body_length_cm ? (species.body_length_cm / maxSize) : 0.3;
-                const size = Math.max(40, Math.min(80, 80 * scale));
+                const scale = species.body_length_cm ? (species.body_length_cm / maxSize) : 0.4;
+                const size = Math.max(60, Math.min(120, 120 * scale));
                 const imgUrl = getImageUrl(species.illustration_url);
+                // Stagger every other row for hexagonal effect
+                const row = Math.floor(i / 4);
+                const isOffsetRow = row % 2 === 1;
 
                 return (
                   <div
                     key={i}
                     className={`flex flex-col items-center ${!species.is_seen ? 'opacity-40' : ''}`}
+                    style={{
+                      width: 85,
+                      marginTop: i < 4 ? 0 : -15,
+                      marginLeft: isOffsetRow && (i % 4 === 0) ? 42 : -5,
+                      marginRight: -5,
+                    }}
                   >
                     <div
                       className="relative flex items-center justify-center"
-                      style={{ width: 80, height: 80 }}
+                      style={{ width: 90, height: 90 }}
                     >
                       {imgUrl ? (
                         <Image
@@ -220,11 +229,11 @@ function PosterDetailContent() {
                       ) : (
                         <div
                           className="bg-gray-400 rounded-full"
-                          style={{ width: size * 0.8, height: size * 0.8 }}
+                          style={{ width: size * 0.7, height: size * 0.7 }}
                         />
                       )}
                     </div>
-                    <span className="text-xs text-center line-clamp-2 font-old-standard">
+                    <span className="text-[10px] text-center line-clamp-1 font-old-standard leading-tight" style={{ maxWidth: 70 }}>
                       {species.name}
                     </span>
                   </div>
