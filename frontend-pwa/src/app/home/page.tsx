@@ -59,8 +59,18 @@ export default function HomePage() {
     return null;
   }
 
+  const categories = [
+    { href: '/species?type=plant', imageSrc: '/images/botany.png', label: 'BOTANY' },
+    { href: '/species?type=bird', imageSrc: '/images/ornithology.png', label: 'ORNITHOLOGY' },
+    { href: '#', imageSrc: '/images/entomology.png', label: 'ENTOMOLOGY', disabled: true },
+    { href: '/quiz', imageSrc: '/images/university.png', label: 'UNIVERSITY' },
+    { href: '/map', imageSrc: '/images/map.png', label: 'MAP' },
+  ];
+
+  const radius = 110;
+
   return (
-    <div className="page-background flex flex-col min-h-screen">
+    <div className="page-background fixed inset-0 overflow-hidden flex flex-col">
       <div className="flex-1 flex flex-col items-center pt-8 px-4">
         <h1 className="text-3xl font-old-standard tracking-widest mb-2">
           CONTENTS.
@@ -73,42 +83,29 @@ export default function HomePage() {
           className="mb-6"
         />
 
-        <div className="flex flex-col gap-4 items-center">
-          <div className="flex justify-center gap-4">
-            <CategoryButton
-              href="/species?type=plant"
-              imageSrc="/images/botany.png"
-              label="BOTANY"
-            />
-            <CategoryButton
-              href="/species?type=bird"
-              imageSrc="/images/ornithology.png"
-              label="ORNITHOLOGY"
-            />
-            <CategoryButton
-              href="#"
-              imageSrc="/images/entomology.png"
-              label="ENTOMOLOGY"
-              disabled
-            />
-          </div>
-
-          <div className="flex justify-center gap-4">
-            <CategoryButton
-              href="/quiz"
-              imageSrc="/images/university.png"
-              label="UNIVERSITY"
-            />
-            <CategoryButton
-              href="/map"
-              imageSrc="/images/map.png"
-              label="MAP"
-            />
-          </div>
+        <div className="relative w-72 h-72 mt-4">
+          {categories.map((cat, index) => {
+            const angle = (2 * Math.PI * index) / categories.length - Math.PI / 2;
+            const x = radius * Math.cos(angle);
+            const y = radius * Math.sin(angle);
+            return (
+              <div
+                key={cat.label}
+                className="absolute"
+                style={{
+                  left: `calc(50% + ${x}px)`,
+                  top: `calc(50% + ${y}px)`,
+                  transform: 'translate(-50%, -50%)',
+                }}
+              >
+                <CategoryButton {...cat} />
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      <div className="fixed bottom-4 left-4">
+      <div className="flex justify-between items-end px-4 pb-6">
         <Link href="/profile">
           {profileState.avatar?.bubble && (
             <Image
@@ -120,9 +117,7 @@ export default function HomePage() {
             />
           )}
         </Link>
-      </div>
 
-      <div className="flex justify-center pb-8">
         <Link href="/camera" className="category-button">
           <Image
             src="/images/binoculars.png"
