@@ -32,6 +32,13 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
 .page-background {
   background-image: url('/images/page-background.png');
   background-size: cover;

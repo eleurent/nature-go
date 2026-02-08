@@ -105,7 +105,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="flex justify-between items-end px-4 pb-6">
+      <div className="flex justify-between items-end px-4 pb-6" style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}>
         <Link href="/profile">
           {profileState.avatar?.bubble && (
             <Image
