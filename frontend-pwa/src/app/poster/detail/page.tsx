@@ -46,8 +46,6 @@ function PosterDetailContent() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [scale, setScale] = useState(1);
-  const [lastDistance, setLastDistance] = useState<number | null>(null);
 
   const posterId = searchParams.get('id') || '';
 
@@ -116,33 +114,14 @@ function PosterDetailContent() {
     }
   }, [posterData]); // eslint-disable-line react-hooks/exhaustive-deps
 
-
-  const handlePinchStart = (e: React.TouchEvent) => {
-    if (e.touches.length === 2) {
-      const dx = e.touches[0].clientX - e.touches[1].clientX;
-      const dy = e.touches[0].clientY - e.touches[1].clientY;
-      setLastDistance(Math.sqrt(dx * dx + dy * dy));
-    } else if (e.touches.length === 1) {
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
       setTouchStart(e.touches[0].clientX);
     }
   };
 
-  const handlePinchMove = (e: React.TouchEvent) => {
-    if (e.touches.length === 2 && lastDistance !== null) {
-      const dx = e.touches[0].clientX - e.touches[1].clientX;
-      const dy = e.touches[0].clientY - e.touches[1].clientY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      const newScale = Math.max(0.5, Math.min(3, scale * (distance / lastDistance)));
-      setScale(newScale);
-      setLastDistance(distance);
-    }
-  };
-
-  const handlePinchEnd = (e: React.TouchEvent) => {
-    if (e.touches.length < 2) {
-      setLastDistance(null);
-    }
-    if (e.changedTouches.length === 1 && touchStart !== null && lastDistance === null) {
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart !== null && e.changedTouches.length === 1) {
       const diff = touchStart - e.changedTouches[0].clientX;
       if (Math.abs(diff) > 50) {
         if (diff > 0 && currentIndex < posterList.length - 1) {
@@ -155,9 +134,14 @@ function PosterDetailContent() {
     }
   };
 
+  const handleSpeciesClick = (species: PosterSpecies) => {
+    if (species.is_seen && species.id) {
+      router.push(`/species/detail?id=${species.id}`);
+    }
+  };
+
   const computePositions = (species: PosterSpecies[], maxSize: number) => {
     const positions: { x: number; y: number; size: number }[] = [];
-    const containerWidth = 340;
     
     species.forEach((s, i) => {
       const sizeScale = s.body_length_cm ? (s.body_length_cm / maxSize) : 0.4;
@@ -192,9 +176,8 @@ function PosterDetailContent() {
   return (
     <div
       className="page-background min-h-screen"
-      onTouchStart={handlePinchStart}
-      onTouchMove={handlePinchMove}
-      onTouchEnd={handlePinchEnd}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <button
         onClick={() => router.back()}
@@ -212,7 +195,7 @@ function PosterDetailContent() {
         ))}
       </div>
 
-      <div className="pt-12 px-2 overflow-auto" style={{ height: '100vh' }}>
+      <div className="pt-12 px-2 pb-8 overflow-auto">
         {posterData && (
           <>
             <div className="text-center mb-2">
@@ -229,12 +212,10 @@ function PosterDetailContent() {
             )}
 
             <div 
-              className="relative mx-auto touch-pan-x touch-pan-y"
+              className="relative mx-auto"
               style={{ 
                 width: 340, 
                 height: contentHeight,
-                transform: `scale(${scale})`,
-                transformOrigin: 'top center',
               }}
             >
               {posterData.species.map((species, i) => {
@@ -245,13 +226,14 @@ function PosterDetailContent() {
                 return (
                   <div
                     key={i}
-                    className="absolute flex flex-col items-center"
+                    className={`absolute flex flex-col items-center ${species.is_seen ? 'cursor-pointer' : ''}`}
                     style={{
                       left: pos.x,
                       top: pos.y,
                       transform: 'translate(-50%, -50%)',
                       width: 80,
                     }}
+                    onClick={() => handleSpeciesClick(species)}
                   >
                     <div
                       className="relative flex items-center justify-center"
