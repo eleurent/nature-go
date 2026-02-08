@@ -3,7 +3,7 @@
 import logging
 from generation.species_data_generation import generate_bird_size
 from observation.models import Observation, Species
-from poster.posters import POSTERS, get_poster
+from poster.posters import POSTERS, get_all_species_for_poster, get_poster
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -35,7 +35,8 @@ class PosterListView(APIView):
     user = request.user
 
     for poster_id, poster in POSTERS.items():
-      species_list = poster["species"]
+      core_species = poster["species"]
+      all_species = core_species + poster.get("species_extended", [])
       poster_type = poster.get("type", "bird")
 
       # Map poster type to Species model type
@@ -43,13 +44,15 @@ class PosterListView(APIView):
           Species.PLANT_TYPE if poster_type == "plant" else Species.BIRD_TYPE
       )
 
+      # Count seen from ALL species (core + extended)
       seen_count = Species.objects.filter(
           observation__user=user,
           type=species_model_type,
-          scientificNameWithoutAuthor__in=species_list,
+          scientificNameWithoutAuthor__in=all_species,
       ).count()
 
-      total = len(species_list)
+      # Total is just core species (what's displayed)
+      total = len(core_species)
       level = calculate_level(seen_count, total)
 
       posters.append({
@@ -81,7 +84,8 @@ class PosterDataView(APIView):
           status=status.HTTP_404_NOT_FOUND,
       )
 
-    species_list = poster["species"]
+    core_species = poster["species"]
+    all_species = get_all_species_for_poster(poster_id)
     poster_type = poster.get("type", "bird")
 
     # Map poster type to Species model type
@@ -89,14 +93,23 @@ class PosterDataView(APIView):
         Species.PLANT_TYPE if poster_type == "plant" else Species.BIRD_TYPE
     )
 
+    # Get all user observations for this species type
     user_observed_species = set(
         Observation.objects.filter(
             user=request.user, species__type=species_model_type
         ).values_list("species_id", flat=True)
     )
 
+    # Also get scientific names of observed species for extended matching
+    user_observed_sci_names = set(
+        Species.objects.filter(id__in=user_observed_species).values_list(
+            "scientificNameWithoutAuthor", flat=True
+        )
+    )
+
+    # Only display core species in the poster
     poster_species = []
-    for species_name in species_list:
+    for species_name in core_species:
       species = Species.objects.filter(
           scientificNameWithoutAuthor=species_name,
           type=species_model_type,
@@ -142,14 +155,16 @@ class PosterDataView(APIView):
 
     poster_species.sort(key=lambda x: x["body_length_cm"] or 0, reverse=True)
 
-    seen_count = sum(1 for s in poster_species if s["is_seen"])
-    total_count = len(poster_species)
+    # Count seen from ALL species (core + extended) for progress
+    seen_count = len(user_observed_sci_names & set(all_species))
+    # Display count is just core species
+    display_count = len(core_species)
 
     return Response({
         "poster_id": poster_id,
         "poster_name": poster["name"],
-        "level": calculate_level(seen_count, total_count),
+        "level": calculate_level(seen_count, display_count),
         "seen_count": seen_count,
-        "total_count": total_count,
+        "total_count": display_count,
         "species": poster_species,
     })

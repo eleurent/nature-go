@@ -1,4 +1,11 @@
-"""Poster configurations - all use scientific names for species lookup."""
+"""Poster configurations - all use scientific names for species lookup.
+
+Each poster has:
+- species: Core species displayed in the poster UI (Europe-focused for type
+posters)
+- species_extended: Additional worldwide species that count for progress but
+aren't displayed
+"""
 
 POSTERS = {
     # ============================================================
@@ -27,6 +34,28 @@ POSTERS = {
             "Anas platyrhynchos",  # Mallard
             "Branta canadensis",  # Canada Goose
         ],
+        "species_extended": [
+            "Sialia sialis",  # Eastern Bluebird
+            "Thryothorus ludovicianus",  # Carolina Wren
+            "Baeolophus bicolor",  # Tufted Titmouse
+            "Sitta carolinensis",  # White-breasted Nuthatch
+            "Picoides pubescens",  # Downy Woodpecker
+            "Melanerpes carolinus",  # Red-bellied Woodpecker
+            "Quiscalus quiscula",  # Common Grackle
+            "Molothrus ater",  # Brown-headed Cowbird
+            "Sturnus vulgaris",  # European Starling
+            "Passer domesticus",  # House Sparrow
+            "Setophaga petechia",  # Yellow Warbler
+            "Spizella passerina",  # Chipping Sparrow
+            "Zonotrichia albicollis",  # White-throated Sparrow
+            "Pipilo erythrophthalmus",  # Eastern Towhee
+            "Icterus galbula",  # Baltimore Oriole
+            "Archilochus colubris",  # Ruby-throated Hummingbird
+            "Calypte anna",  # Anna's Hummingbird
+            "Selasphorus rufus",  # Rufous Hummingbird
+            "Accipiter cooperii",  # Cooper's Hawk
+            "Haliaeetus leucocephalus",  # Bald Eagle
+        ],
     },
     "birds_uk": {
         "name": "United Kingdom",
@@ -49,6 +78,28 @@ POSTERS = {
             "Buteo buteo",  # Buzzard
             "Ardea cinerea",  # Grey Heron
             "Anas platyrhynchos",  # Mallard
+        ],
+        "species_extended": [
+            "Aegithalos caudatus",  # Long-tailed Tit
+            "Periparus ater",  # Coal Tit
+            "Poecile palustris",  # Marsh Tit
+            "Certhia familiaris",  # Treecreeper
+            "Dendrocopos major",  # Great Spotted Woodpecker
+            "Picus viridis",  # Green Woodpecker
+            "Garrulus glandarius",  # Jay
+            "Coloeus monedula",  # Jackdaw
+            "Corvus frugilegus",  # Rook
+            "Sturnus vulgaris",  # Starling
+            "Turdus philomelos",  # Song Thrush
+            "Turdus viscivorus",  # Mistle Thrush
+            "Prunella modularis",  # Dunnock
+            "Chloris chloris",  # Greenfinch
+            "Pyrrhula pyrrhula",  # Bullfinch
+            "Streptopelia decaocto",  # Collared Dove
+            "Falco tinnunculus",  # Kestrel
+            "Cygnus olor",  # Mute Swan
+            "Branta canadensis",  # Canada Goose
+            "Phasianus colchicus",  # Pheasant
         ],
     },
     "birds_france": {
@@ -73,6 +124,24 @@ POSTERS = {
             "Chroicocephalus ridibundus",  # Black-headed Gull
             "Serinus serinus",  # Serin
         ],
+        "species_extended": [
+            "Corvus corone",  # Carrion Crow
+            "Garrulus glandarius",  # Jay
+            "Sturnus vulgaris",  # Starling
+            "Turdus philomelos",  # Song Thrush
+            "Phoenicurus ochruros",  # Black Redstart
+            "Motacilla alba",  # White Wagtail
+            "Hirundo rustica",  # Barn Swallow
+            "Delichon urbicum",  # House Martin
+            "Apus apus",  # Common Swift
+            "Streptopelia turtur",  # Turtle Dove
+            "Falco tinnunculus",  # Kestrel
+            "Circus aeruginosus",  # Marsh Harrier
+            "Ardea alba",  # Great Egret
+            "Egretta garzetta",  # Little Egret
+            "Cygnus olor",  # Mute Swan
+            "Anas platyrhynchos",  # Mallard
+        ],
     },
     # --- Birds: Types ---
     "birds_corvids": {
@@ -89,6 +158,21 @@ POSTERS = {
             "Pyrrhocorax pyrrhocorax",  # Red-billed Chough
             "Nucifraga caryocatactes",  # Spotted Nutcracker
         ],
+        "species_extended": [
+            "Corvus cornix",  # Hooded Crow
+            "Corvus monedula",  # Jackdaw (alt)
+            "Pyrrhocorax graculus",  # Alpine Chough
+            "Cyanopica cyanus",  # Azure-winged Magpie
+            "Perisoreus infaustus",  # Siberian Jay
+            # American corvids
+            "Corvus brachyrhynchos",  # American Crow
+            "Corvus ossifragus",  # Fish Crow
+            "Corvus cryptoleucus",  # Chihuahuan Raven
+            "Cyanocitta cristata",  # Blue Jay
+            "Cyanocitta stelleri",  # Steller's Jay
+            "Aphelocoma californica",  # California Scrub-Jay
+            "Nucifraga columbiana",  # Clark's Nutcracker
+        ],
     },
     "birds_owls": {
         "name": "Owl Observer",
@@ -101,6 +185,21 @@ POSTERS = {
             "Strix aluco",  # Tawny Owl
             "Asio otus",  # Long-eared Owl
             "Asio flammeus",  # Short-eared Owl
+        ],
+        "species_extended": [
+            "Otus scops",  # Eurasian Scops Owl
+            "Glaucidium passerinum",  # Eurasian Pygmy Owl
+            "Aegolius funereus",  # Boreal Owl
+            "Strix uralensis",  # Ural Owl
+            "Strix nebulosa",  # Great Grey Owl
+            "Surnia ulula",  # Northern Hawk-owl
+            "Nyctea scandiaca",  # Snowy Owl
+            # American owls
+            "Bubo virginianus",  # Great Horned Owl
+            "Strix varia",  # Barred Owl
+            "Megascops asio",  # Eastern Screech-owl
+            "Bubo scandiacus",  # Snowy Owl (US)
+            "Aegolius acadicus",  # Northern Saw-whet Owl
         ],
     },
     "birds_waterfowl": {
@@ -117,6 +216,25 @@ POSTERS = {
             "Mergus merganser",  # Goosander
             "Anas crecca",  # Eurasian Teal
         ],
+        "species_extended": [
+            "Cygnus cygnus",  # Whooper Swan
+            "Cygnus columbianus",  # Tundra Swan
+            "Anser albifrons",  # Greater White-fronted Goose
+            "Branta bernicla",  # Brent Goose
+            "Branta leucopsis",  # Barnacle Goose
+            "Aythya ferina",  # Common Pochard
+            "Aythya marila",  # Greater Scaup
+            "Bucephala clangula",  # Common Goldeneye
+            "Somateria mollissima",  # Common Eider
+            "Anas strepera",  # Gadwall
+            "Anas acuta",  # Northern Pintail
+            "Spatula clypeata",  # Northern Shoveler
+            # American waterfowl
+            "Aix sponsa",  # Wood Duck
+            "Anas rubripes",  # American Black Duck
+            "Bucephala albeola",  # Bufflehead
+            "Lophodytes cucullatus",  # Hooded Merganser
+        ],
     },
     "birds_raptors": {
         "name": "Raptors",
@@ -131,6 +249,25 @@ POSTERS = {
             "Haliaeetus albicilla",  # White-tailed Eagle
             "Aquila chrysaetos",  # Golden Eagle
             "Pandion haliaetus",  # Osprey
+        ],
+        "species_extended": [
+            "Milvus migrans",  # Black Kite
+            "Accipiter gentilis",  # Northern Goshawk
+            "Circus aeruginosus",  # Marsh Harrier
+            "Circus cyaneus",  # Hen Harrier
+            "Pernis apivorus",  # Honey Buzzard
+            "Buteo lagopus",  # Rough-legged Buzzard
+            "Falco subbuteo",  # Hobby
+            "Falco columbarius",  # Merlin
+            "Gyps fulvus",  # Griffon Vulture
+            "Neophron percnopterus",  # Egyptian Vulture
+            # American raptors
+            "Buteo jamaicensis",  # Red-tailed Hawk
+            "Buteo lineatus",  # Red-shouldered Hawk
+            "Accipiter cooperii",  # Cooper's Hawk
+            "Haliaeetus leucocephalus",  # Bald Eagle
+            "Cathartes aura",  # Turkey Vulture
+            "Falco sparverius",  # American Kestrel
         ],
     },
     "birds_waders": {
@@ -147,6 +284,28 @@ POSTERS = {
             "Grus grus",  # Common Crane
             "Numenius arquata",  # Curlew
         ],
+        "species_extended": [
+            "Bubulcus ibis",  # Cattle Egret
+            "Nycticorax nycticorax",  # Night Heron
+            "Botaurus stellaris",  # Bittern
+            "Ciconia ciconia",  # White Stork
+            "Pluvialis apricaria",  # Golden Plover
+            "Charadrius hiaticula",  # Ringed Plover
+            "Tringa totanus",  # Redshank
+            "Tringa nebularia",  # Greenshank
+            "Actitis hypoleucos",  # Common Sandpiper
+            "Gallinago gallinago",  # Common Snipe
+            "Limosa limosa",  # Black-tailed Godwit
+            "Himantopus himantopus",  # Black-winged Stilt
+            # American waders
+            "Ardea herodias",  # Great Blue Heron
+            "Egretta thula",  # Snowy Egret
+            "Butorides virescens",  # Green Heron
+            "Charadrius vociferus",  # Killdeer
+            "Actitis macularius",  # Spotted Sandpiper
+            "Tringa melanoleuca",  # Greater Yellowlegs
+            "Grus canadensis",  # Sandhill Crane
+        ],
     },
     "birds_songbirds": {
         "name": "Songbirds",
@@ -161,6 +320,26 @@ POSTERS = {
             "Carduelis carduelis",  # Goldfinch
             "Alauda arvensis",  # Skylark
             "Sylvia atricapilla",  # Blackcap
+        ],
+        "species_extended": [
+            "Phoenicurus phoenicurus",  # Common Redstart
+            "Saxicola rubicola",  # European Stonechat
+            "Oenanthe oenanthe",  # Northern Wheatear
+            "Acrocephalus scirpaceus",  # Reed Warbler
+            "Phylloscopus collybita",  # Chiffchaff
+            "Phylloscopus trochilus",  # Willow Warbler
+            "Regulus regulus",  # Goldcrest
+            "Emberiza citrinella",  # Yellowhammer
+            "Anthus pratensis",  # Meadow Pipit
+            "Hirundo rustica",  # Barn Swallow
+            # American songbirds
+            "Turdus migratorius",  # American Robin
+            "Sialia sialis",  # Eastern Bluebird
+            "Mimus polyglottos",  # Northern Mockingbird
+            "Cardinalis cardinalis",  # Northern Cardinal
+            "Spinus tristis",  # American Goldfinch
+            "Melospiza melodia",  # Song Sparrow
+            "Setophaga petechia",  # Yellow Warbler
         ],
     },
     # ============================================================
@@ -183,6 +362,20 @@ POSTERS = {
             "Geranium robertianum",  # Herb Robert
             "Silene dioica",  # Red Campion
         ],
+        "species_extended": [
+            "Anemone nemorosa",  # Wood Anemone
+            "Allium ursinum",  # Wild Garlic
+            "Galanthus nivalis",  # Snowdrop
+            "Crocus vernus",  # Spring Crocus
+            "Narcissus pseudonarcissus",  # Wild Daffodil
+            "Viola riviniana",  # Common Dog-violet
+            "Ajuga reptans",  # Bugle
+            "Geum urbanum",  # Wood Avens
+            "Filipendula ulmaria",  # Meadowsweet
+            "Lychnis flos-cuculi",  # Ragged Robin
+            "Knautia arvensis",  # Field Scabious
+            "Succisa pratensis",  # Devil's-bit Scabious
+        ],
     },
     "plants_france": {
         "name": "French Wildflowers",
@@ -199,6 +392,20 @@ POSTERS = {
             "Cichorium intybus",  # Chicory
             "Dianthus carthusianorum",  # Carthusian Pink
             "Salvia pratensis",  # Meadow Clary
+        ],
+        "species_extended": [
+            "Cistus albidus",  # Grey-leaved Cistus
+            "Thymus vulgaris",  # Thyme
+            "Rosmarinus officinalis",  # Rosemary
+            "Santolina chamaecyparissus",  # Cotton Lavender
+            "Iris germanica",  # Bearded Iris
+            "Narcissus poeticus",  # Poet's Narcissus
+            "Muscari neglectum",  # Grape Hyacinth
+            "Orchis purpurea",  # Lady Orchid
+            "Ophrys insectifera",  # Fly Orchid
+            "Gentiana lutea",  # Yellow Gentian
+            "Leontopodium alpinum",  # Edelweiss
+            "Eryngium campestre",  # Field Eryngo
         ],
     },
     "plants_us": {
@@ -217,6 +424,20 @@ POSTERS = {
             "Aquilegia caerulea",  # Colorado Columbine
             "Castilleja coccinea",  # Indian Paintbrush
         ],
+        "species_extended": [
+            "Trillium grandiflorum",  # Large-flowered Trillium
+            "Sanguinaria canadensis",  # Bloodroot
+            "Claytonia virginica",  # Spring Beauty
+            "Mertensia virginica",  # Virginia Bluebells
+            "Penstemon digitalis",  # Foxglove Beardtongue
+            "Oenothera biennis",  # Evening Primrose
+            "Symphyotrichum novae-angliae",  # New England Aster
+            "Liatris spicata",  # Blazing Star
+            "Lobelia cardinalis",  # Cardinal Flower
+            "Eupatorium purpureum",  # Joe-Pye Weed
+            "Iris versicolor",  # Blue Flag Iris
+            "Lilium superbum",  # Turk's Cap Lily
+        ],
     },
     # --- Plants: Types ---
     "plants_orchids": {
@@ -233,6 +454,18 @@ POSTERS = {
             "Epipactis helleborine",  # Broad-leaved Helleborine
             "Neottia ovata",  # Common Twayblade
         ],
+        "species_extended": [
+            "Orchis purpurea",  # Lady Orchid
+            "Orchis simia",  # Monkey Orchid
+            "Ophrys insectifera",  # Fly Orchid
+            "Ophrys sphegodes",  # Early Spider Orchid
+            "Himantoglossum hircinum",  # Lizard Orchid
+            "Cephalanthera damasonium",  # White Helleborine
+            "Platanthera bifolia",  # Lesser Butterfly Orchid
+            "Cypripedium calceolus",  # Lady's Slipper Orchid
+            "Spiranthes spiralis",  # Autumn Lady's-tresses
+            "Dactylorhiza maculata",  # Heath Spotted-orchid
+        ],
     },
     "plants_roses": {
         "name": "Rose Garden",
@@ -245,6 +478,16 @@ POSTERS = {
             "Rosa gallica",  # French Rose
             "Rosa spinosissima",  # Burnet Rose
             "Rosa rugosa",  # Rugosa Rose
+        ],
+        "species_extended": [
+            "Rosa centifolia",  # Cabbage Rose
+            "Rosa damascena",  # Damask Rose
+            "Rosa moschata",  # Musk Rose
+            "Rosa multiflora",  # Multiflora Rose
+            "Rosa glauca",  # Red-leaved Rose
+            "Rosa moyesii",  # Moyes Rose
+            "Rosa foetida",  # Austrian Briar
+            "Rosa villosa",  # Apple Rose
         ],
     },
     "plants_garden": {
@@ -260,6 +503,18 @@ POSTERS = {
             "Lamium purpureum",  # Red Dead-nettle
             "Veronica persica",  # Persian Speedwell
             "Stellaria media",  # Chickweed
+        ],
+        "species_extended": [
+            "Capsella bursa-pastoris",  # Shepherd's Purse
+            "Senecio vulgaris",  # Groundsel
+            "Cardamine hirsuta",  # Hairy Bittercress
+            "Oxalis corniculata",  # Creeping Wood-sorrel
+            "Euphorbia peplus",  # Petty Spurge
+            "Poa annua",  # Annual Meadow-grass
+            "Cerastium fontanum",  # Common Mouse-ear
+            "Geranium molle",  # Dove's-foot Crane's-bill
+            "Medicago lupulina",  # Black Medick
+            "Lotus corniculatus",  # Bird's-foot Trefoil
         ],
     },
 }
@@ -280,3 +535,11 @@ def get_poster_list():
 def get_poster(poster_id: str):
   """Get a specific poster by ID."""
   return POSTERS.get(poster_id)
+
+
+def get_all_species_for_poster(poster_id: str) -> list[str]:
+  """Get all species (core + extended) that count for a poster."""
+  poster = POSTERS.get(poster_id)
+  if not poster:
+    return []
+  return poster.get("species", []) + poster.get("species_extended", [])
