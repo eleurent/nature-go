@@ -20,6 +20,7 @@ POSTERS = {
             "Turdus migratorius",  # American Robin
             "Cardinalis cardinalis",  # Northern Cardinal
             "Cyanocitta cristata",  # Blue Jay
+            "Sialia sialis",  # Eastern Bluebird
             "Haemorhous mexicanus",  # House Finch
             "Poecile atricapillus",  # Black-capped Chickadee
             "Corvus brachyrhynchos",  # American Crow
@@ -29,13 +30,13 @@ POSTERS = {
             "Junco hyemalis",  # Dark-eyed Junco
             "Spinus tristis",  # American Goldfinch
             "Agelaius phoeniceus",  # Red-winged Blackbird
-            "Melospiza melodia",  # Song Sparrow
-            "Cathartes aura",  # Turkey Vulture
+            "Archilochus colubris",  # Ruby-throated Hummingbird
             "Anas platyrhynchos",  # Mallard
             "Branta canadensis",  # Canada Goose
         ],
         "species_extended": [
-            "Sialia sialis",  # Eastern Bluebird
+            "Melospiza melodia",  # Song Sparrow
+            "Cathartes aura",  # Turkey Vulture
             "Thryothorus ludovicianus",  # Carolina Wren
             "Baeolophus bicolor",  # Tufted Titmouse
             "Sitta carolinensis",  # White-breasted Nuthatch
@@ -50,7 +51,6 @@ POSTERS = {
             "Zonotrichia albicollis",  # White-throated Sparrow
             "Pipilo erythrophthalmus",  # Eastern Towhee
             "Icterus galbula",  # Baltimore Oriole
-            "Archilochus colubris",  # Ruby-throated Hummingbird
             "Calypte anna",  # Anna's Hummingbird
             "Selasphorus rufus",  # Rufous Hummingbird
             "Accipiter cooperii",  # Cooper's Hawk
@@ -72,15 +72,17 @@ POSTERS = {
             "Pica pica",  # Magpie
             "Corvus corone",  # Carrion Crow
             "Carduelis carduelis",  # Goldfinch
+            "Aegithalos caudatus",  # Long-tailed Tit
             "Troglodytes troglodytes",  # Wren
-            "Sitta europaea",  # Nuthatch
+            "Sturnus vulgaris",  # Starling
+            "Turdus philomelos",  # Song Thrush
             "Milvus milvus",  # Red Kite
             "Buteo buteo",  # Buzzard
-            "Ardea cinerea",  # Grey Heron
-            "Anas platyrhynchos",  # Mallard
         ],
         "species_extended": [
-            "Aegithalos caudatus",  # Long-tailed Tit
+            "Sitta europaea",  # Nuthatch
+            "Ardea cinerea",  # Grey Heron
+            "Anas platyrhynchos",  # Mallard
             "Periparus ater",  # Coal Tit
             "Poecile palustris",  # Marsh Tit
             "Certhia familiaris",  # Treecreeper
@@ -89,8 +91,6 @@ POSTERS = {
             "Garrulus glandarius",  # Jay
             "Coloeus monedula",  # Jackdaw
             "Corvus frugilegus",  # Rook
-            "Sturnus vulgaris",  # Starling
-            "Turdus philomelos",  # Song Thrush
             "Turdus viscivorus",  # Mistle Thrush
             "Prunella modularis",  # Dunnock
             "Chloris chloris",  # Greenfinch
@@ -118,25 +118,25 @@ POSTERS = {
             "Carduelis carduelis",  # Goldfinch
             "Upupa epops",  # Hoopoe
             "Merops apiaster",  # Bee-eater
+            "Hirundo rustica",  # Barn Swallow
+            "Apus apus",  # Common Swift
             "Milvus milvus",  # Red Kite
             "Buteo buteo",  # Buzzard
-            "Ardea cinerea",  # Grey Heron
-            "Chroicocephalus ridibundus",  # Black-headed Gull
             "Serinus serinus",  # Serin
         ],
         "species_extended": [
+            "Chroicocephalus ridibundus",  # Black-headed Gull
             "Corvus corone",  # Carrion Crow
             "Garrulus glandarius",  # Jay
             "Sturnus vulgaris",  # Starling
             "Turdus philomelos",  # Song Thrush
             "Phoenicurus ochruros",  # Black Redstart
             "Motacilla alba",  # White Wagtail
-            "Hirundo rustica",  # Barn Swallow
             "Delichon urbicum",  # House Martin
-            "Apus apus",  # Common Swift
             "Streptopelia turtur",  # Turtle Dove
             "Falco tinnunculus",  # Kestrel
             "Circus aeruginosus",  # Marsh Harrier
+            "Ardea cinerea",  # Grey Heron
             "Ardea alba",  # Great Egret
             "Egretta garzetta",  # Little Egret
             "Cygnus olor",  # Mute Swan
@@ -151,17 +151,16 @@ POSTERS = {
         "species": [
             "Corvus corax",  # Common Raven
             "Corvus corone",  # Carrion Crow
+            "Corvus cornix",  # Hooded Crow
             "Pica pica",  # Magpie
             "Garrulus glandarius",  # Jay
             "Coloeus monedula",  # Jackdaw
             "Corvus frugilegus",  # Rook
             "Pyrrhocorax pyrrhocorax",  # Red-billed Chough
+            "Pyrrhocorax graculus",  # Alpine Chough
             "Nucifraga caryocatactes",  # Spotted Nutcracker
         ],
         "species_extended": [
-            "Corvus cornix",  # Hooded Crow
-            "Corvus monedula",  # Jackdaw (alt)
-            "Pyrrhocorax graculus",  # Alpine Chough
             "Cyanopica cyanus",  # Azure-winged Magpie
             "Perisoreus infaustus",  # Siberian Jay
             # American corvids
@@ -172,6 +171,7 @@ POSTERS = {
             "Cyanocitta stelleri",  # Steller's Jay
             "Aphelocoma californica",  # California Scrub-Jay
             "Nucifraga columbiana",  # Clark's Nutcracker
+            "Pica hudsonia",  # Black-billed Magpie
         ],
     },
     "birds_owls": {
@@ -185,21 +185,21 @@ POSTERS = {
             "Strix aluco",  # Tawny Owl
             "Asio otus",  # Long-eared Owl
             "Asio flammeus",  # Short-eared Owl
+            "Glaucidium passerinum",  # Eurasian Pygmy Owl
+            "Bubo scandiacus",  # Snowy Owl
         ],
         "species_extended": [
             "Otus scops",  # Eurasian Scops Owl
-            "Glaucidium passerinum",  # Eurasian Pygmy Owl
             "Aegolius funereus",  # Boreal Owl
             "Strix uralensis",  # Ural Owl
             "Strix nebulosa",  # Great Grey Owl
             "Surnia ulula",  # Northern Hawk-owl
-            "Nyctea scandiaca",  # Snowy Owl
             # American owls
             "Bubo virginianus",  # Great Horned Owl
             "Strix varia",  # Barred Owl
             "Megascops asio",  # Eastern Screech-owl
-            "Bubo scandiacus",  # Snowy Owl (US)
             "Aegolius acadicus",  # Northern Saw-whet Owl
+            "Athene cunicularia",  # Burrowing Owl
         ],
     },
     "birds_waterfowl": {
@@ -209,22 +209,22 @@ POSTERS = {
         "species": [
             "Anas platyrhynchos",  # Mallard
             "Cygnus olor",  # Mute Swan
+            "Cygnus cygnus",  # Whooper Swan
             "Branta canadensis",  # Canada Goose
             "Anser anser",  # Greylag Goose
             "Aythya fuligula",  # Tufted Duck
+            "Aythya ferina",  # Common Pochard
             "Tadorna tadorna",  # Shelduck
+            "Bucephala clangula",  # Common Goldeneye
             "Mergus merganser",  # Goosander
-            "Anas crecca",  # Eurasian Teal
         ],
         "species_extended": [
-            "Cygnus cygnus",  # Whooper Swan
+            "Anas crecca",  # Eurasian Teal
             "Cygnus columbianus",  # Tundra Swan
             "Anser albifrons",  # Greater White-fronted Goose
             "Branta bernicla",  # Brent Goose
             "Branta leucopsis",  # Barnacle Goose
-            "Aythya ferina",  # Common Pochard
             "Aythya marila",  # Greater Scaup
-            "Bucephala clangula",  # Common Goldeneye
             "Somateria mollissima",  # Common Eider
             "Anas strepera",  # Gadwall
             "Anas acuta",  # Northern Pintail
@@ -244,16 +244,16 @@ POSTERS = {
             "Buteo buteo",  # Common Buzzard
             "Milvus milvus",  # Red Kite
             "Accipiter nisus",  # Sparrowhawk
+            "Accipiter gentilis",  # Northern Goshawk
             "Falco tinnunculus",  # Kestrel
             "Falco peregrinus",  # Peregrine Falcon
+            "Circus aeruginosus",  # Marsh Harrier
             "Haliaeetus albicilla",  # White-tailed Eagle
             "Aquila chrysaetos",  # Golden Eagle
             "Pandion haliaetus",  # Osprey
         ],
         "species_extended": [
             "Milvus migrans",  # Black Kite
-            "Accipiter gentilis",  # Northern Goshawk
-            "Circus aeruginosus",  # Marsh Harrier
             "Circus cyaneus",  # Hen Harrier
             "Pernis apivorus",  # Honey Buzzard
             "Buteo lagopus",  # Rough-legged Buzzard
@@ -271,32 +271,33 @@ POSTERS = {
         ],
     },
     "birds_waders": {
-        "name": "Waders",
+        "name": "Waders & Herons",
         "type": "bird",
         "icon": "🦩",
         "species": [
             "Ardea cinerea",  # Grey Heron
             "Ardea alba",  # Great Egret
             "Egretta garzetta",  # Little Egret
+            "Ciconia ciconia",  # White Stork
+            "Grus grus",  # Common Crane
             "Vanellus vanellus",  # Lapwing
             "Haematopus ostralegus",  # Oystercatcher
             "Recurvirostra avosetta",  # Avocet
-            "Grus grus",  # Common Crane
             "Numenius arquata",  # Curlew
+            "Limosa limosa",  # Black-tailed Godwit
+            "Botaurus stellaris",  # Bittern
         ],
         "species_extended": [
             "Bubulcus ibis",  # Cattle Egret
             "Nycticorax nycticorax",  # Night Heron
-            "Botaurus stellaris",  # Bittern
-            "Ciconia ciconia",  # White Stork
             "Pluvialis apricaria",  # Golden Plover
             "Charadrius hiaticula",  # Ringed Plover
             "Tringa totanus",  # Redshank
             "Tringa nebularia",  # Greenshank
             "Actitis hypoleucos",  # Common Sandpiper
             "Gallinago gallinago",  # Common Snipe
-            "Limosa limosa",  # Black-tailed Godwit
             "Himantopus himantopus",  # Black-winged Stilt
+            "Ciconia nigra",  # Black Stork
             # American waders
             "Ardea herodias",  # Great Blue Heron
             "Egretta thula",  # Snowy Egret
@@ -316,6 +317,8 @@ POSTERS = {
             "Turdus merula",  # Blackbird
             "Turdus philomelos",  # Song Thrush
             "Luscinia megarhynchos",  # Nightingale
+            "Troglodytes troglodytes",  # Wren
+            "Prunella modularis",  # Dunnock
             "Fringilla coelebs",  # Chaffinch
             "Carduelis carduelis",  # Goldfinch
             "Alauda arvensis",  # Skylark
@@ -342,6 +345,74 @@ POSTERS = {
             "Setophaga petechia",  # Yellow Warbler
         ],
     },
+    # --- Birds: NEW Type Posters ---
+    "birds_seabirds": {
+        "name": "Seabirds",
+        "type": "bird",
+        "icon": "🌊",
+        "species": [
+            "Fratercula arctica",  # Atlantic Puffin
+            "Morus bassanus",  # Northern Gannet
+            "Uria aalge",  # Common Guillemot
+            "Alca torda",  # Razorbill
+            "Rissa tridactyla",  # Black-legged Kittiwake
+            "Fulmarus glacialis",  # Northern Fulmar
+            "Phalacrocorax carbo",  # Great Cormorant
+            "Phalacrocorax aristotelis",  # European Shag
+            "Sterna hirundo",  # Common Tern
+            "Sterna paradisaea",  # Arctic Tern
+        ],
+        "species_extended": [
+            "Larus argentatus",  # Herring Gull
+            "Larus fuscus",  # Lesser Black-backed Gull
+            "Larus marinus",  # Great Black-backed Gull
+            "Larus canus",  # Common Gull
+            "Chroicocephalus ridibundus",  # Black-headed Gull
+            "Cepphus grylle",  # Black Guillemot
+            "Alle alle",  # Little Auk
+            "Hydrobates pelagicus",  # European Storm Petrel
+            "Stercorarius skua",  # Great Skua
+            "Stercorarius parasiticus",  # Arctic Skua
+            # American seabirds
+            "Pelecanus occidentalis",  # Brown Pelican
+            "Larus delawarensis",  # Ring-billed Gull
+            "Sterna maxima",  # Royal Tern
+        ],
+    },
+    "birds_colorful": {
+        "name": "Colorful Birds",
+        "type": "bird",
+        "icon": "🌈",
+        "species": [
+            "Alcedo atthis",  # Common Kingfisher
+            "Merops apiaster",  # European Bee-eater
+            "Upupa epops",  # Hoopoe
+            "Coracias garrulus",  # European Roller
+            "Picus viridis",  # Green Woodpecker
+            "Garrulus glandarius",  # Jay
+            "Carduelis carduelis",  # Goldfinch
+            "Pyrrhula pyrrhula",  # Bullfinch
+            "Phoenicurus phoenicurus",  # Common Redstart
+            "Oriolus oriolus",  # Golden Oriole
+        ],
+        "species_extended": [
+            "Sitta europaea",  # Nuthatch
+            "Chloris chloris",  # Greenfinch
+            "Linaria cannabina",  # Common Linnet
+            "Loxia curvirostra",  # Red Crossbill
+            "Emberiza citrinella",  # Yellowhammer
+            "Motacilla cinerea",  # Grey Wagtail
+            "Motacilla flava",  # Yellow Wagtail
+            "Dendrocopos major",  # Great Spotted Woodpecker
+            # American colorful birds
+            "Cardinalis cardinalis",  # Northern Cardinal
+            "Cyanocitta cristata",  # Blue Jay
+            "Sialia sialis",  # Eastern Bluebird
+            "Icterus galbula",  # Baltimore Oriole
+            "Setophaga petechia",  # Yellow Warbler
+            "Piranga olivacea",  # Scarlet Tanager
+        ],
+    },
     # ============================================================
     # PLANTS
     # ============================================================
@@ -357,17 +428,15 @@ POSTERS = {
             "Papaver rhoeas",  # Common Poppy
             "Leucanthemum vulgare",  # Oxeye Daisy
             "Ranunculus acris",  # Meadow Buttercup
+            "Allium ursinum",  # Wild Garlic
+            "Galanthus nivalis",  # Snowdrop
+            "Anemone nemorosa",  # Wood Anemone
             "Trifolium pratense",  # Red Clover
             "Centaurea cyanus",  # Cornflower
-            "Geranium robertianum",  # Herb Robert
             "Silene dioica",  # Red Campion
         ],
         "species_extended": [
-            "Anemone nemorosa",  # Wood Anemone
-            "Allium ursinum",  # Wild Garlic
-            "Galanthus nivalis",  # Snowdrop
-            "Crocus vernus",  # Spring Crocus
-            "Narcissus pseudonarcissus",  # Wild Daffodil
+            "Geranium robertianum",  # Herb Robert
             "Viola riviniana",  # Common Dog-violet
             "Ajuga reptans",  # Bugle
             "Geum urbanum",  # Wood Avens
@@ -375,6 +444,8 @@ POSTERS = {
             "Lychnis flos-cuculi",  # Ragged Robin
             "Knautia arvensis",  # Field Scabious
             "Succisa pratensis",  # Devil's-bit Scabious
+            "Crocus vernus",  # Spring Crocus
+            "Narcissus pseudonarcissus",  # Wild Daffodil
         ],
     },
     "plants_france": {
@@ -383,20 +454,20 @@ POSTERS = {
         "icon": "🇫🇷",
         "species": [
             "Lavandula angustifolia",  # Lavender
+            "Thymus vulgaris",  # Thyme
+            "Rosmarinus officinalis",  # Rosemary
             "Papaver rhoeas",  # Common Poppy
             "Centaurea cyanus",  # Cornflower
             "Leucanthemum vulgare",  # Oxeye Daisy
             "Viola tricolor",  # Wild Pansy
-            "Convolvulus arvensis",  # Field Bindweed
             "Echium vulgare",  # Viper's Bugloss
             "Cichorium intybus",  # Chicory
             "Dianthus carthusianorum",  # Carthusian Pink
             "Salvia pratensis",  # Meadow Clary
         ],
         "species_extended": [
+            "Convolvulus arvensis",  # Field Bindweed
             "Cistus albidus",  # Grey-leaved Cistus
-            "Thymus vulgaris",  # Thyme
-            "Rosmarinus officinalis",  # Rosemary
             "Santolina chamaecyparissus",  # Cotton Lavender
             "Iris germanica",  # Bearded Iris
             "Narcissus poeticus",  # Poet's Narcissus
@@ -404,7 +475,6 @@ POSTERS = {
             "Orchis purpurea",  # Lady Orchid
             "Ophrys insectifera",  # Fly Orchid
             "Gentiana lutea",  # Yellow Gentian
-            "Leontopodium alpinum",  # Edelweiss
             "Eryngium campestre",  # Field Eryngo
         ],
     },
@@ -418,6 +488,7 @@ POSTERS = {
             "Lupinus polyphyllus",  # Large-leaved Lupine
             "Asclepias tuberosa",  # Butterfly Milkweed
             "Helianthus annuus",  # Common Sunflower
+            "Trillium grandiflorum",  # Large-flowered Trillium
             "Monarda didyma",  # Scarlet Beebalm
             "Phlox paniculata",  # Garden Phlox
             "Solidago canadensis",  # Canada Goldenrod
@@ -425,7 +496,6 @@ POSTERS = {
             "Castilleja coccinea",  # Indian Paintbrush
         ],
         "species_extended": [
-            "Trillium grandiflorum",  # Large-flowered Trillium
             "Sanguinaria canadensis",  # Bloodroot
             "Claytonia virginica",  # Spring Beauty
             "Mertensia virginica",  # Virginia Bluebells
@@ -446,6 +516,7 @@ POSTERS = {
         "icon": "🌸",
         "species": [
             "Orchis mascula",  # Early-purple Orchid
+            "Orchis purpurea",  # Lady Orchid
             "Dactylorhiza fuchsii",  # Common Spotted Orchid
             "Anacamptis pyramidalis",  # Pyramidal Orchid
             "Ophrys apifera",  # Bee Orchid
@@ -453,64 +524,73 @@ POSTERS = {
             "Gymnadenia conopsea",  # Fragrant Orchid
             "Epipactis helleborine",  # Broad-leaved Helleborine
             "Neottia ovata",  # Common Twayblade
+            "Cypripedium calceolus",  # Lady's Slipper Orchid
         ],
         "species_extended": [
-            "Orchis purpurea",  # Lady Orchid
             "Orchis simia",  # Monkey Orchid
             "Ophrys insectifera",  # Fly Orchid
             "Ophrys sphegodes",  # Early Spider Orchid
             "Himantoglossum hircinum",  # Lizard Orchid
             "Cephalanthera damasonium",  # White Helleborine
             "Platanthera bifolia",  # Lesser Butterfly Orchid
-            "Cypripedium calceolus",  # Lady's Slipper Orchid
             "Spiranthes spiralis",  # Autumn Lady's-tresses
             "Dactylorhiza maculata",  # Heath Spotted-orchid
+            "Listera cordata",  # Lesser Twayblade
+            "Goodyera repens",  # Creeping Lady's-tresses
         ],
     },
-    "plants_roses": {
-        "name": "Rose Garden",
+    "plants_hedgerow": {
+        "name": "Hedgerow & Shrubs",
         "type": "plant",
-        "icon": "🌹",
+        "icon": "�",
         "species": [
             "Rosa canina",  # Dog Rose
-            "Rosa rubiginosa",  # Sweet Briar
-            "Rosa arvensis",  # Field Rose
-            "Rosa gallica",  # French Rose
-            "Rosa spinosissima",  # Burnet Rose
-            "Rosa rugosa",  # Rugosa Rose
+            "Crataegus monogyna",  # Hawthorn
+            "Prunus spinosa",  # Blackthorn
+            "Sambucus nigra",  # Elder
+            "Corylus avellana",  # Hazel
+            "Rubus fruticosus",  # Blackberry
+            "Ilex aquifolium",  # Holly
+            "Viburnum opulus",  # Guelder Rose
+            "Lonicera periclymenum",  # Honeysuckle
+            "Hedera helix",  # Ivy
         ],
         "species_extended": [
-            "Rosa centifolia",  # Cabbage Rose
-            "Rosa damascena",  # Damask Rose
-            "Rosa moschata",  # Musk Rose
-            "Rosa multiflora",  # Multiflora Rose
-            "Rosa glauca",  # Red-leaved Rose
-            "Rosa moyesii",  # Moyes Rose
-            "Rosa foetida",  # Austrian Briar
-            "Rosa villosa",  # Apple Rose
+            "Rosa rubiginosa",  # Sweet Briar
+            "Rosa arvensis",  # Field Rose
+            "Euonymus europaeus",  # Spindle
+            "Ligustrum vulgare",  # Wild Privet
+            "Cornus sanguinea",  # Dogwood
+            "Rhamnus cathartica",  # Buckthorn
+            "Viburnum lantana",  # Wayfaring Tree
+            "Clematis vitalba",  # Old Man's Beard
+            "Bryonia dioica",  # White Bryony
+            "Humulus lupulus",  # Hop
         ],
     },
-    "plants_garden": {
-        "name": "Garden Classics",
+    "plants_lawn": {
+        "name": "Lawn & Garden",
         "type": "plant",
-        "icon": "🌷",
+        "icon": "�",
         "species": [
             "Bellis perennis",  # Common Daisy
             "Taraxacum officinale",  # Dandelion
-            "Plantago major",  # Greater Plantain
             "Trifolium repens",  # White Clover
+            "Ranunculus repens",  # Creeping Buttercup
+            "Plantago major",  # Greater Plantain
+            "Prunella vulgaris",  # Selfheal
+            "Veronica chamaedrys",  # Germander Speedwell
             "Glechoma hederacea",  # Ground Ivy
             "Lamium purpureum",  # Red Dead-nettle
-            "Veronica persica",  # Persian Speedwell
             "Stellaria media",  # Chickweed
         ],
         "species_extended": [
+            "Veronica persica",  # Persian Speedwell
             "Capsella bursa-pastoris",  # Shepherd's Purse
             "Senecio vulgaris",  # Groundsel
             "Cardamine hirsuta",  # Hairy Bittercress
             "Oxalis corniculata",  # Creeping Wood-sorrel
             "Euphorbia peplus",  # Petty Spurge
-            "Poa annua",  # Annual Meadow-grass
             "Cerastium fontanum",  # Common Mouse-ear
             "Geranium molle",  # Dove's-foot Crane's-bill
             "Medicago lupulina",  # Black Medick
