@@ -30,6 +30,7 @@ interface Observation {
   species: number;
   species_display_name: string;
   datetime: string;
+  image: string;
   location: {
     latitude: number;
     longitude: number;
@@ -158,8 +159,9 @@ export default function MapPage() {
         </button>
 
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center z-[999] bg-white/50">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-nature-dark border-t-transparent" />
+          <div className="absolute top-4 right-4 z-[1000] bg-white/90 px-3 py-2 rounded shadow flex items-center gap-2">
+            <div className="animate-spin rounded-full h-4 w-4 border-2 border-nature-dark border-t-transparent" />
+            <span className="text-sm">Loading observations...</span>
           </div>
         )}
 
@@ -181,14 +183,24 @@ export default function MapPage() {
                 icon={createColoredIcon(SPECIES_TYPE_TO_COLOR[obs.type] || '#666666')}
               >
                 <Popup>
-                  <Link
-                    href={`/species/detail?id=${obs.species}`}
-                    className="font-bold text-nature-dark hover:underline"
-                  >
-                    {obs.species_display_name}
-                  </Link>
-                  <br />
-                  <span className="text-sm text-gray-600">{formatDate(obs.datetime)}</span>
+                  <div className="flex flex-col items-center" style={{ minWidth: '120px' }}>
+                    {obs.image && (
+                      <div className="w-20 h-20 mb-2 rounded overflow-hidden">
+                        <img
+                          src={obs.image.replace('http://localhost/', process.env.NEXT_PUBLIC_API_URL || '/')}
+                          alt={obs.species_display_name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    <Link
+                      href={`/species/detail?id=${obs.species}`}
+                      className="font-bold text-nature-dark hover:underline text-center"
+                    >
+                      {obs.species_display_name}
+                    </Link>
+                    <span className="text-xs text-gray-600 mt-1">{formatDate(obs.datetime)}</span>
+                  </div>
                 </Popup>
               </Marker>
             ))}

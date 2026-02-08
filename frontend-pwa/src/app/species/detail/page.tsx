@@ -303,9 +303,9 @@ function SpeciesDetailContent() {
           {observations.length > 0 && (
             <div className="mt-6">
               <h2 className="text-lg font-old-standard text-center mb-4">Observations</h2>
-              <div className="flex overflow-x-auto gap-4 px-6 pb-4 snap-x snap-mandatory">
+              <div className="flex flex-wrap justify-center gap-4 px-6 pb-4">
                 {observations.map((obs) => (
-                  <div key={obs.id} className="flex-shrink-0 w-40 snap-start">
+                  <div key={obs.id} className="w-40">
                     <div
                       className="w-40 h-40 relative rounded-lg overflow-hidden cursor-pointer"
                       onClick={() => setPreviewImage(getImageUrl(obs.image))}

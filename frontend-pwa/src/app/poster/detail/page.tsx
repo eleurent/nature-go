@@ -156,7 +156,11 @@ function PosterDetailContent() {
 
   return (
     <div
-      className="page-background min-h-screen"
+      className="min-h-screen"
+      style={{
+        background: '#f5f0e6',
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
+      }}
     >
       <button
         onClick={() => router.back()}
@@ -177,11 +181,17 @@ function PosterDetailContent() {
       <div className="pt-12 px-2 pb-8 overflow-auto">
         {posterData && (
           <>
-            <div className="text-center mb-2">
-              <h1 className="text-lg font-old-standard">{posterData.poster_name}</h1>
-              <p className={`text-sm font-old-standard ${posterData.level ? LEVEL_COLORS[posterData.level] : 'text-gray-400'}`}>
-                {posterData.seen_count}/{posterData.total_count}
-              </p>
+            <div className="text-center mb-4">
+              <h1 className="text-2xl font-old-standard tracking-wide" style={{ color: '#4a3f35', textShadow: '0 1px 0 rgba(255,255,255,0.5)' }}>
+                ❧ {posterData.poster_name} ❧
+              </h1>
+              <div className="flex items-center justify-center gap-2 mt-1">
+                <div className="h-px bg-amber-800/30 w-12" />
+                <p className={`text-sm font-old-standard ${posterData.level ? LEVEL_COLORS[posterData.level] : 'text-gray-500'}`}>
+                  {posterData.seen_count} of {posterData.total_count} observed
+                </p>
+                <div className="h-px bg-amber-800/30 w-12" />
+              </div>
             </div>
 
             {isGenerating && (
@@ -236,9 +246,9 @@ function PosterDetailContent() {
                     </div>
                     <span 
                       className="text-[8px] text-center font-old-standard leading-tight mt-1"
-                      style={{ maxWidth: 70, wordWrap: 'break-word' }}
+                      style={{ maxWidth: 70, wordWrap: 'break-word', color: species.is_seen ? '#4a3f35' : '#888' }}
                     >
-                      {species.name}
+                      {species.is_seen ? species.name : '?'}
                     </span>
                   </div>
                 );

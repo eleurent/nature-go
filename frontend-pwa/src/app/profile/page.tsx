@@ -145,10 +145,18 @@ export default function ProfilePage() {
 
         {posters.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-xl font-old-standard text-center mb-4">Posters</h3>
+            <h3 className="text-xl font-old-standard text-center mb-4">Specimen Collection</h3>
             <div className="grid grid-cols-4 gap-3">
               {posters.map((poster) => {
-                const bgColor = poster.level ? LEVEL_COLORS[poster.level] : 'bg-gray-200';
+                const initials = poster.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+                const levelStyle = poster.level === 'Gold' 
+                  ? 'bg-gradient-to-br from-yellow-100 to-amber-200 border-2 border-yellow-600 shadow-md'
+                  : poster.level === 'Silver'
+                  ? 'bg-gradient-to-br from-gray-100 to-gray-300 border-2 border-gray-500 shadow-md'
+                  : poster.level === 'Bronze'
+                  ? 'bg-gradient-to-br from-amber-100 to-amber-300 border-2 border-amber-700 shadow-md'
+                  : 'bg-stone-100 border border-stone-300';
+                const textColor = poster.level ? 'text-stone-800' : 'text-stone-400';
                 return (
                   <Link
                     key={poster.id}
@@ -156,17 +164,13 @@ export default function ProfilePage() {
                     className="flex flex-col items-center"
                   >
                     <div
-                      className={`w-16 h-16 rounded-lg flex items-center justify-center bg-nature-tan/50 ${
-                        poster.level === 'Gold' ? 'ring-2 ring-yellow-500' :
-                        poster.level === 'Silver' ? 'ring-2 ring-gray-400' :
-                        poster.level === 'Bronze' ? 'ring-2 ring-amber-600' :
-                        'ring-1 ring-gray-300'
-                      } ${!poster.level ? 'opacity-60' : ''}`}
+                      className={`w-14 h-14 rounded flex items-center justify-center ${levelStyle} ${!poster.level ? 'opacity-70' : ''}`}
                       title={`${poster.name} (${poster.seen_count}/${poster.total_count})`}
+                      style={{ fontFamily: 'Georgia, serif' }}
                     >
-                      <span className="text-2xl">{poster.icon}</span>
+                      <span className={`text-lg font-semibold italic ${textColor}`}>{initials}</span>
                     </div>
-                    <span className="text-xs font-old-standard text-center mt-1 line-clamp-2">
+                    <span className="text-[10px] font-old-standard text-center mt-1 line-clamp-2 leading-tight">
                       {poster.name}
                     </span>
                   </Link>

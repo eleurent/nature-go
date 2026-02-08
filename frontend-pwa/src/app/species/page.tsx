@@ -86,14 +86,14 @@ function SpeciesListContent() {
             <p className="text-2xl font-old-standard text-center mb-6">
               {speciesList.length} species discovered.
             </p>
-            <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
+            <div className="grid grid-cols-3 gap-2 max-w-2xl mx-auto">
               {speciesList.map((species) => (
                 <Link
                   key={species.id}
                   href={`/species/detail?id=${species.id}`}
-                  className="flex flex-col items-center p-3 hover:bg-white/50 rounded-lg transition-colors"
+                  className="flex flex-col items-center p-2 hover:bg-white/50 rounded-lg transition-colors"
                 >
-                  <div className="w-28 h-28 relative">
+                  <div className="w-24 h-24 relative">
                     <Image
                       src={getImageUrl(species.illustration_url)}
                       alt={species.display_name}
@@ -101,7 +101,7 @@ function SpeciesListContent() {
                       className="object-contain"
                     />
                   </div>
-                  <span className={`font-special-elite text-lg text-center mt-2 ${RARITY_COLORS[species.rarity] || ''}`}>
+                  <span className={`font-special-elite text-sm text-center mt-1 leading-tight ${RARITY_COLORS[species.rarity] || ''}`}>
                     {species.display_name}
                   </span>
                 </Link>
