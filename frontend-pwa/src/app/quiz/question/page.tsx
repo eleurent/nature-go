@@ -115,7 +115,8 @@ function QuizQuestionContent() {
         <div className="space-y-3 max-w-md mx-auto w-full">
           {question.choices.map((choice, index) => {
             const isSelected = quizMethods.isQuestionSelected(quizState, questionId, index);
-            const showCorrect = feedback && question.correct_answer === index;
+            const correctChoice = quizState.correctChoices?.[questionId];
+            const showCorrect = feedback && correctChoice === index;
             const showWrong = feedback && isSelected && !feedback.correct;
 
             return (

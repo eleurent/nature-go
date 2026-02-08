@@ -21,13 +21,22 @@ class AdminMultipleChoiceQuestionSerializer(MultipleChoiceQuestionSerializer):
 
 
 class MultipleChoiceUserAnswerSerializer(serializers.ModelSerializer):
-    is_correct = serializers.ReadOnlyField()
+  is_correct = serializers.ReadOnlyField()
+  correct_choice = serializers.IntegerField(
+      source='question.correct_choice', read_only=True
+  )
 
-    class Meta:
-        model = MultipleChoiceUserAnswer
-        fields = ['id', 'quiz', 'question', 'user_answer', 'is_correct']
+  class Meta:
+    model = MultipleChoiceUserAnswer
+    fields = [
+        'id',
+        'quiz',
+        'question',
+        'user_answer',
+        'is_correct',
+        'correct_choice',
+    ]
 
-    
 
 class QuizSerializer(serializers.ModelSerializer):
     multiple_choice_questions = MultipleChoiceQuestionSerializer(many=True, read_only=True)

@@ -5,6 +5,8 @@ import { api, endpoints } from '@/lib/api';
 
 interface Question {
   id: number;
+  species: number;
+  species_name: string;
   question: string;
   choices: string[];
   correct_answer: number;
@@ -19,6 +21,7 @@ interface QuizState {
   quiz: Quiz | null;
   answers: (number | null)[];
   correctAnswers: (boolean | null)[];
+  correctChoices: (number | null)[];
 }
 
 interface QuizMethods {
@@ -41,7 +44,7 @@ const QuizContext = createContext<QuizContextType | undefined>(undefined);
 type QuizAction =
   | { type: 'SET_QUIZ'; quiz: Quiz }
   | { type: 'SELECT_ANSWER'; questionId: number; answerId: number }
-  | { type: 'SET_CORRECT_ANSWERS'; correctAnswers: boolean[] }
+  | { type: 'SET_CORRECT_ANSWERS'; correctAnswers: boolean[]; correctChoices: number[] }
   | { type: 'CLEAR' };
 
 const quizReducer = (prevState: QuizState, action: QuizAction): QuizState => {
@@ -51,15 +54,16 @@ const quizReducer = (prevState: QuizState, action: QuizAction): QuizState => {
         quiz: action.quiz,
         answers: new Array(action.quiz.multiple_choice_questions.length).fill(null),
         correctAnswers: new Array(action.quiz.multiple_choice_questions.length).fill(null),
+        correctChoices: new Array(action.quiz.multiple_choice_questions.length).fill(null),
       };
     case 'SELECT_ANSWER':
       const newAnswers = [...prevState.answers];
       newAnswers[action.questionId] = action.answerId;
       return { ...prevState, answers: newAnswers };
     case 'SET_CORRECT_ANSWERS':
-      return { ...prevState, correctAnswers: action.correctAnswers };
+      return { ...prevState, correctAnswers: action.correctAnswers, correctChoices: action.correctChoices };
     case 'CLEAR':
-      return { quiz: null, answers: [], correctAnswers: [] };
+      return { quiz: null, answers: [], correctAnswers: [], correctChoices: [] };
     default:
       return prevState;
   }
@@ -69,6 +73,7 @@ const initialState: QuizState = {
   quiz: null,
   answers: [],
   correctAnswers: [],
+  correctChoices: [],
 };
 
 export function QuizProvider({ children }: { children: ReactNode }) {
@@ -100,10 +105,14 @@ export function QuizProvider({ children }: { children: ReactNode }) {
             multiplechoiceuseranswer_set,
           });
           
-          const correctAnswers = response.data.multiplechoiceuseranswer_set?.map(
+          const answerData = response.data.multiplechoiceuseranswer_set || [];
+          const correctAnswers = answerData.map(
             (a: { is_correct: boolean }) => a.is_correct
-          ) || [];
-          dispatch({ type: 'SET_CORRECT_ANSWERS', correctAnswers });
+          );
+          const correctChoices = answerData.map(
+            (a: { correct_choice: number }) => a.correct_choice
+          );
+          dispatch({ type: 'SET_CORRECT_ANSWERS', correctAnswers, correctChoices });
           return correctAnswers;
         } catch (error) {
           console.error('Failed to submit quiz', error);
