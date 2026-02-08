@@ -4,7 +4,7 @@ import logging
 from django.db.models import Q
 from generation.species_data_generation import generate_bird_size
 from observation.models import Observation, Species
-from poster.regions import POSTERS, get_poster, get_poster_list
+from poster.posters import POSTERS, get_poster
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
