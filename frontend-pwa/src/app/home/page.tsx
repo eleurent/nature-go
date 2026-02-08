@@ -118,8 +118,8 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="flex justify-between items-end px-4 pb-4">
-          <Link href="/profile">
+        <div className="grid grid-cols-3 items-end px-4 pb-4">
+          <Link href="/profile" className="justify-self-start">
             {profileState.avatar?.bubble && (
               <Image
                 src={profileState.avatar.bubble}
@@ -131,7 +131,7 @@ export default function HomePage() {
             )}
           </Link>
 
-          <Link href="/camera" className="category-button">
+          <Link href="/camera" className="category-button justify-self-center">
             <Image
               src="/images/binoculars.png"
               alt="Camera"
@@ -140,6 +140,8 @@ export default function HomePage() {
               className="rounded-full border-2 border-black"
             />
           </Link>
+
+          <div />
         </div>
       </div>
     </>
