@@ -17,14 +17,16 @@
   margin: 0;
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+html {
   font-family: 'Old Standard TT', serif;
   background-color: var(--nature-tan);
   color: var(--nature-brown);
-  overscroll-behavior-y: contain;
+}
+
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
 @supports (padding: env(safe-area-inset-bottom)) {

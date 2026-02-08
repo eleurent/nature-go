@@ -156,7 +156,12 @@ export default function ProfilePage() {
                     className="flex flex-col items-center"
                   >
                     <div
-                      className={`w-16 h-16 rounded-lg flex items-center justify-center ${bgColor} ${!poster.level ? 'opacity-50' : ''}`}
+                      className={`w-16 h-16 rounded-lg flex items-center justify-center bg-nature-tan/50 ${
+                        poster.level === 'Gold' ? 'ring-2 ring-yellow-500' :
+                        poster.level === 'Silver' ? 'ring-2 ring-gray-400' :
+                        poster.level === 'Bronze' ? 'ring-2 ring-amber-600' :
+                        'ring-1 ring-gray-300'
+                      } ${!poster.level ? 'opacity-60' : ''}`}
                       title={`${poster.name} (${poster.seen_count}/${poster.total_count})`}
                     >
                       <span className="text-2xl">{poster.icon}</span>

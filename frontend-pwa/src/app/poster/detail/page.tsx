@@ -206,7 +206,7 @@ function PosterDetailContent() {
                 return (
                   <div
                     key={i}
-                    className={`flex flex-col items-center ${!species.is_seen ? 'opacity-40' : ''}`}
+                    className="flex flex-col items-center"
                     style={{
                       width: 85,
                       marginTop: i < 4 ? 0 : -15,
@@ -224,7 +224,8 @@ function PosterDetailContent() {
                           alt={species.name}
                           width={size}
                           height={size}
-                          className={`object-contain ${!species.is_seen ? 'grayscale brightness-50' : ''}`}
+                          className="object-contain"
+                          style={!species.is_seen ? { filter: 'brightness(0) opacity(0.7)' } : undefined}
                         />
                       ) : (
                         <div

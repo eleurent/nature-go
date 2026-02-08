@@ -104,7 +104,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
         return state.correctAnswers?.[questionId] !== undefined && state.correctAnswers[questionId] !== null;
       },
       isAnswerCorrect: (state: QuizState, questionId: number) => {
-        return state.correctAnswers[questionId] === true;
+        return state.correctAnswers?.[questionId] === true;
       },
       clearQuiz: () => {
         dispatch({ type: 'CLEAR' });

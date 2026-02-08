@@ -60,11 +60,11 @@ export default function HomePage() {
   }
 
   const categories = [
-    { href: '/species?type=plant', imageSrc: '/images/botany.png', label: 'BOTANY' },
     { href: '/species?type=bird', imageSrc: '/images/ornithology.png', label: 'ORNITHOLOGY' },
     { href: '#', imageSrc: '/images/entomology.png', label: 'ENTOMOLOGY', disabled: true },
-    { href: '/quiz', imageSrc: '/images/university.png', label: 'UNIVERSITY' },
     { href: '/map', imageSrc: '/images/map.png', label: 'MAP' },
+    { href: '/quiz', imageSrc: '/images/university.png', label: 'UNIVERSITY' },
+    { href: '/species?type=plant', imageSrc: '/images/botany.png', label: 'BOTANY' },
   ];
 
   const radius = 110;
@@ -120,15 +120,13 @@ export default function HomePage() {
 
         <div className="grid grid-cols-3 items-end px-4 pb-4">
           <Link href="/profile" className="justify-self-start">
-            {profileState.avatar?.bubble && (
-              <Image
-                src={profileState.avatar.bubble}
-                alt="Profile"
-                width={85}
-                height={85}
-                className="object-contain"
-              />
-            )}
+            <Image
+              src={profileState.avatar?.bubble || '/images/profile-placeholder.png'}
+              alt="Profile"
+              width={85}
+              height={85}
+              className="object-contain"
+            />
           </Link>
 
           <Link href="/camera" className="category-button justify-self-center">
