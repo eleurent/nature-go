@@ -24,7 +24,7 @@ body {
   font-family: 'Old Standard TT', serif;
   background-color: var(--nature-tan);
   color: var(--nature-brown);
-  overscroll-behavior: none;
+  overscroll-behavior-y: contain;
 }
 
 @supports (padding: env(safe-area-inset-bottom)) {
