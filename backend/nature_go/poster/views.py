@@ -142,6 +142,7 @@ class PosterDataView(APIView):
             "has_illustration": bool(species.illustration_transparent),
             "is_seen": species.id in user_observed_species,
             "is_bonus": False,
+            "rarity": species.rarity,
         })
       else:
         poster_species.append({
@@ -153,6 +154,7 @@ class PosterDataView(APIView):
             "has_illustration": False,
             "is_seen": False,
             "is_bonus": False,
+            "rarity": None,
         })
 
     # Add observed extended species as bonus entries
@@ -185,6 +187,7 @@ class PosterDataView(APIView):
             "has_illustration": bool(species.illustration_transparent),
             "is_seen": True,
             "is_bonus": True,
+            "rarity": species.rarity,
         })
 
     poster_species.sort(key=lambda x: x["body_length_cm"] or 0, reverse=True)
