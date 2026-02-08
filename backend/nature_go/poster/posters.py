@@ -56,6 +56,12 @@ POSTERS = {
             "Ardea herodias",  # Great Blue Heron
             "Regulus satrapa",  # Golden-crowned Kinglet
             "Vireo olivaceus",  # Red-eyed Vireo
+            "Melanerpes formicivorus",  # Acorn Woodpecker
+            "Bombycilla cedrorum",  # Cedar Waxwing
+            "Meleagris gallopavo",  # Wild Turkey
+            "Callipepla californica",  # California Quail
+            "Sialia mexicana",  # Western Bluebird
+            "Cyanocitta stelleri",  # Steller's Jay
         ],
     },
     "birds_uk": {
