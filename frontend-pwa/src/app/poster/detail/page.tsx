@@ -45,7 +45,6 @@ function PosterDetailContent() {
   const [posterList, setPosterList] = useState<PosterListItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
 
   const posterId = searchParams.get('id') || '';
 
@@ -114,25 +113,7 @@ function PosterDetailContent() {
     }
   }, [posterData]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (e.touches.length === 1) {
-      setTouchStart(e.touches[0].clientX);
-    }
-  };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStart !== null && e.changedTouches.length === 1) {
-      const diff = touchStart - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 50) {
-        if (diff > 0 && currentIndex < posterList.length - 1) {
-          navigateToPoster(currentIndex + 1);
-        } else if (diff < 0 && currentIndex > 0) {
-          navigateToPoster(currentIndex - 1);
-        }
-      }
-      setTouchStart(null);
-    }
-  };
 
   const handleSpeciesClick = (species: PosterSpecies) => {
     if (species.is_seen && species.id) {
@@ -176,8 +157,6 @@ function PosterDetailContent() {
   return (
     <div
       className="page-background min-h-screen"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
     >
       <button
         onClick={() => router.back()}
