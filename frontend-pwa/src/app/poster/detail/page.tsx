@@ -46,6 +46,8 @@ function PosterDetailContent() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [scale, setScale] = useState(1);
+  const [lastDistance, setLastDistance] = useState<number | null>(null);
 
   const posterId = searchParams.get('id') || '';
 
@@ -88,23 +90,6 @@ function PosterDetailContent() {
     }
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.touches[0].clientX);
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStart === null) return;
-    const diff = touchStart - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0 && currentIndex < posterList.length - 1) {
-        navigateToPoster(currentIndex + 1);
-      } else if (diff < 0 && currentIndex > 0) {
-        navigateToPoster(currentIndex - 1);
-      }
-    }
-    setTouchStart(null);
-  };
-
   const generateMissingIllustration = async () => {
     if (!posterData || isGenerating) return;
 
@@ -131,6 +116,68 @@ function PosterDetailContent() {
     }
   }, [posterData]); // eslint-disable-line react-hooks/exhaustive-deps
 
+
+  const handlePinchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      setLastDistance(Math.sqrt(dx * dx + dy * dy));
+    } else if (e.touches.length === 1) {
+      setTouchStart(e.touches[0].clientX);
+    }
+  };
+
+  const handlePinchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2 && lastDistance !== null) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const newScale = Math.max(0.5, Math.min(3, scale * (distance / lastDistance)));
+      setScale(newScale);
+      setLastDistance(distance);
+    }
+  };
+
+  const handlePinchEnd = (e: React.TouchEvent) => {
+    if (e.touches.length < 2) {
+      setLastDistance(null);
+    }
+    if (e.changedTouches.length === 1 && touchStart !== null && lastDistance === null) {
+      const diff = touchStart - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0 && currentIndex < posterList.length - 1) {
+          navigateToPoster(currentIndex + 1);
+        } else if (diff < 0 && currentIndex > 0) {
+          navigateToPoster(currentIndex - 1);
+        }
+      }
+      setTouchStart(null);
+    }
+  };
+
+  const computePositions = (species: PosterSpecies[], maxSize: number) => {
+    const positions: { x: number; y: number; size: number }[] = [];
+    const containerWidth = 340;
+    
+    species.forEach((s, i) => {
+      const sizeScale = s.body_length_cm ? (s.body_length_cm / maxSize) : 0.4;
+      const size = Math.max(50, Math.min(100, 100 * sizeScale));
+      
+      const cols = 4;
+      const row = Math.floor(i / cols);
+      const col = i % cols;
+      const isOffsetRow = row % 2 === 1;
+      
+      const baseSpacing = 80;
+      const x = col * baseSpacing + (isOffsetRow ? baseSpacing / 2 : 0) + 40;
+      const y = row * 70 + 50;
+      
+      positions.push({ x, y, size });
+    });
+    
+    return positions;
+  };
+
   if (!authState.userToken) return null;
 
   const getImageUrl = (url: string | null) => {
@@ -139,12 +186,15 @@ function PosterDetailContent() {
   };
 
   const maxSize = posterData?.species.reduce((max, s) => Math.max(max, s.body_length_cm || 0), 0) || 1;
+  const positions = posterData ? computePositions(posterData.species, maxSize) : [];
+  const contentHeight = positions.length > 0 ? Math.max(...positions.map(p => p.y)) + 120 : 400;
 
   return (
     <div
-      className="page-background min-h-screen pb-8"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      className="page-background min-h-screen"
+      onTouchStart={handlePinchStart}
+      onTouchMove={handlePinchMove}
+      onTouchEnd={handlePinchEnd}
     >
       <button
         onClick={() => router.back()}
@@ -153,88 +203,80 @@ function PosterDetailContent() {
         ← Back
       </button>
 
-      <div className="pt-16 px-4">
+      <div className="fixed top-4 right-4 z-10 flex gap-1 items-center">
+        {posterList.map((_, i) => (
+          <div
+            key={i}
+            className={`w-2 h-2 rounded-full ${i === currentIndex ? 'bg-nature-dark' : 'bg-gray-300'}`}
+          />
+        ))}
+      </div>
+
+      <div className="pt-12 px-2 overflow-auto" style={{ height: '100vh' }}>
         {posterData && (
           <>
-            <div className="text-center mb-4">
-              <h1 className="text-2xl font-old-standard">{posterData.poster_name}</h1>
-              <p className={`text-lg font-old-standard ${posterData.level ? LEVEL_COLORS[posterData.level] : 'text-gray-400'}`}>
-                {posterData.level || 'No level'} • {posterData.seen_count}/{posterData.total_count} species
+            <div className="text-center mb-2">
+              <h1 className="text-lg font-old-standard">{posterData.poster_name}</h1>
+              <p className={`text-sm font-old-standard ${posterData.level ? LEVEL_COLORS[posterData.level] : 'text-gray-400'}`}>
+                {posterData.seen_count}/{posterData.total_count}
               </p>
             </div>
 
-            <div className="flex justify-center gap-2 mb-6">
-              <button
-                onClick={() => navigateToPoster(currentIndex - 1)}
-                disabled={currentIndex === 0}
-                className="px-3 py-1 bg-white/80 rounded shadow disabled:opacity-30"
-              >
-                ←
-              </button>
-              <div className="flex gap-1 items-center">
-                {posterList.map((_, i) => (
-                  <div
-                    key={i}
-                    className={`w-2 h-2 rounded-full ${i === currentIndex ? 'bg-nature-dark' : 'bg-gray-300'}`}
-                  />
-                ))}
-              </div>
-              <button
-                onClick={() => navigateToPoster(currentIndex + 1)}
-                disabled={currentIndex === posterList.length - 1}
-                className="px-3 py-1 bg-white/80 rounded shadow disabled:opacity-30"
-              >
-                →
-              </button>
-            </div>
-
             {isGenerating && (
-              <div className="text-center mb-4 text-sm text-gray-600">
-                Generating illustration...
+              <div className="text-center mb-2 text-xs text-gray-600">
+                Generating...
               </div>
             )}
 
-            <div className="flex flex-wrap justify-center" style={{ margin: '-10px' }}>
+            <div 
+              className="relative mx-auto touch-pan-x touch-pan-y"
+              style={{ 
+                width: 340, 
+                height: contentHeight,
+                transform: `scale(${scale})`,
+                transformOrigin: 'top center',
+              }}
+            >
               {posterData.species.map((species, i) => {
-                const scale = species.body_length_cm ? (species.body_length_cm / maxSize) : 0.4;
-                const size = Math.max(60, Math.min(120, 120 * scale));
+                const pos = positions[i];
+                if (!pos) return null;
                 const imgUrl = getImageUrl(species.illustration_url);
-                // Stagger every other row for hexagonal effect
-                const row = Math.floor(i / 4);
-                const isOffsetRow = row % 2 === 1;
 
                 return (
                   <div
                     key={i}
-                    className="flex flex-col items-center"
+                    className="absolute flex flex-col items-center"
                     style={{
-                      width: 85,
-                      marginTop: i < 4 ? 0 : -15,
-                      marginLeft: isOffsetRow && (i % 4 === 0) ? 42 : -5,
-                      marginRight: -5,
+                      left: pos.x,
+                      top: pos.y,
+                      transform: 'translate(-50%, -50%)',
+                      width: 80,
                     }}
                   >
                     <div
                       className="relative flex items-center justify-center"
-                      style={{ width: 90, height: 90 }}
+                      style={{ width: pos.size, height: pos.size }}
                     >
                       {imgUrl ? (
                         <Image
                           src={imgUrl}
                           alt={species.name}
-                          width={size}
-                          height={size}
+                          width={pos.size}
+                          height={pos.size}
                           className="object-contain"
                           style={!species.is_seen ? { filter: 'brightness(0) opacity(0.7)' } : undefined}
                         />
                       ) : (
                         <div
                           className="bg-gray-400 rounded-full"
-                          style={{ width: size * 0.7, height: size * 0.7 }}
+                          style={{ width: pos.size * 0.7, height: pos.size * 0.7 }}
                         />
                       )}
                     </div>
-                    <span className="text-[10px] text-center line-clamp-1 font-old-standard leading-tight" style={{ maxWidth: 70 }}>
+                    <span 
+                      className="text-[8px] text-center font-old-standard leading-tight mt-1"
+                      style={{ maxWidth: 70, wordWrap: 'break-word' }}
+                    >
                       {species.name}
                     </span>
                   </div>
