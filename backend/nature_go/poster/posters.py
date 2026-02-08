@@ -299,21 +299,3 @@ def get_poster_list():
 def get_poster(poster_id: str):
   """Get a specific poster by ID."""
   return POSTERS.get(poster_id)
-
-
-# Legacy compatibility
-def get_region_list():
-  """Legacy: return list of posters."""
-  return get_poster_list()
-
-
-def get_region(region_id: str):
-  """Legacy: get a poster by ID, adapting keys for compatibility."""
-  poster = POSTERS.get(region_id)
-  if poster:
-    return {
-        "name": poster["name"],
-        "common_birds": poster["species"],
-        "type": poster.get("type", "regional"),
-    }
-  return None
