@@ -63,15 +63,22 @@ function QuizQuestionContent() {
   const handleCheck = async () => {
     if (!hasSelected) return;
 
+    // If feedback is already shown, navigate to next question
+    if (feedback) {
+      if (questionId < quizState.quiz!.multiple_choice_questions.length - 1) {
+        setFeedback(null);
+        router.push(`/quiz/question?id=${questionId + 1}`);
+      } else {
+        router.replace('/quiz/result');
+      }
+      return;
+    }
+
+    // Otherwise, submit the answer
     if (!hasAnswered) {
       await quizMethods.answerQuiz(quizState);
       const correct = quizState.quiz!.multiple_choice_questions[questionId].correct_answer === quizState.answers[questionId];
       setFeedback({ text: getRandomFeedback(correct), correct });
-    } else if (questionId < quizState.quiz!.multiple_choice_questions.length - 1) {
-      setFeedback(null);
-      router.push(`/quiz/question?id=${questionId + 1}`);
-    } else {
-      router.replace('/quiz/result');
     }
   };
 
