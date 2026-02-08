@@ -101,7 +101,7 @@ class PosterDataView(APIView):
       )
 
     poster_type = poster.get("type", "regional")
-    species_list = poster["common_birds"]  # get_region adapts this key
+    species_list = poster["species"]
 
     user_observed_species = set(
         Observation.objects.filter(
