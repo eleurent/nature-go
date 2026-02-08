@@ -147,7 +147,7 @@ function PosterDetailContent() {
       onTouchEnd={handleTouchEnd}
     >
       <button
-        onClick={() => router.push('/profile')}
+        onClick={() => router.back()}
         className="fixed top-4 left-4 z-10 bg-white/80 px-3 py-1 rounded shadow"
       >
         ← Back
