@@ -22,7 +22,8 @@ interface ObservationData {
   species: number | null;
   xp?: {
     xp_gained: number;
-    total_xp: number;
+    total: number;
+    breakdown: { value: number; reason: Record<string, string> }[];
     level: number;
   };
   identification_response?: {

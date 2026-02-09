@@ -26,6 +26,7 @@ export default function ObservationSelectPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isConfirming, setIsConfirming] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [xpModalVisible, setXpModalVisible] = useState(false);
 
   useEffect(() => {
     if (!authState.userToken) {
@@ -89,15 +90,40 @@ export default function ObservationSelectPage() {
       );
 
       observationMethods.setObservationData(response.data);
-
-      const speciesId = response.data.species;
-      // Don't clear observation here - it causes a race condition where useEffect
-      // redirects to /camera before router.replace completes
-      router.replace(`/species/detail?id=${speciesId}&fromObservation=true`);
+      setXpModalVisible(true);
     } catch (err) {
       console.error('Failed to confirm species:', err);
       setError('Failed to save observation. Please try again.');
       setIsConfirming(false);
+    }
+  };
+
+  const parseReason = (reason: Record<string, string>) => {
+    if ('Rarity' in reason) {
+      if (reason.Rarity === 'Common' || reason.Rarity === 'Very Common') return 'Common species';
+      if (reason.Rarity === 'Uncommon') return 'Uncommon species';
+      if (reason.Rarity === 'Rare') return 'Rare species';
+      if (reason.Rarity === 'Legendary') return 'Legendary species';
+    } else if ('Familiarity' in reason) {
+      if (reason.Familiarity === 'New') return 'New species discovered!';
+      if (reason.Familiarity === 'Unfamiliar') return 'Unfamiliar';
+      if (reason.Familiarity === 'Familiar') return 'Familiar';
+      if (reason.Familiarity === 'Expert') return 'Expert';
+    }
+    return JSON.stringify(reason);
+  };
+
+  const onXPModalClose = () => {
+    setXpModalVisible(false);
+    const speciesId = observationState.data?.species;
+    const speciesType = observationState.data?.type;
+    observationMethods.clearObservation();
+    if (speciesId) {
+      window.history.replaceState(null, '', '/home');
+      window.history.pushState(null, '', `/species?type=${speciesType || 'bird'}`);
+      router.replace(`/species/detail?id=${speciesId}&fromObservation=true`);
+    } else {
+      router.replace('/home');
     }
   };
 
@@ -204,6 +230,30 @@ export default function ObservationSelectPage() {
           )}
         </div>
       </div>
+
+      {xpModalVisible && observationState.data?.xp && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-[#fdf4e3] rounded-xl p-6 w-[80%] max-w-sm shadow-lg">
+            {observationState.data.xp.breakdown?.map((item: { value: number; reason: Record<string, string> }, index: number) => (
+              <div key={index} className="flex justify-between mb-2">
+                <span className="text-sm text-gray-700">{parseReason(item.reason).toUpperCase()}</span>
+                <span className="text-sm text-rose-500">{item.value} XP</span>
+              </div>
+            ))}
+            <hr className="my-3 border-gray-300" />
+            <div className="flex justify-between mb-4">
+              <span className="text-2xl text-gray-700">TOTAL</span>
+              <span className="text-2xl text-rose-500">{observationState.data.xp.total} XP</span>
+            </div>
+            <button
+              onClick={onXPModalClose}
+              className="w-full btn-primary text-lg py-3 rounded-full"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
