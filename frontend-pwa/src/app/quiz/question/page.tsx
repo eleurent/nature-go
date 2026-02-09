@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useQuiz } from '@/contexts/QuizContext';
+import { useHtmlBackground } from '@/lib/useHtmlBackground';
 
 const POSITIVE_FEEDBACK = [
   "Splendid! You've displayed remarkable knowledge!",
@@ -32,6 +33,7 @@ function QuizQuestionContent() {
   const { authState } = useAuth();
   const { quizState, quizMethods } = useQuiz();
   const [feedback, setFeedback] = useState<{ text: string; correct: boolean } | null>(null);
+  useHtmlBackground('2');
 
   const questionId = Number(searchParams.get('id') || 0);
 

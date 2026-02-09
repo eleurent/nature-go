@@ -20,13 +20,29 @@
 html {
   font-family: 'Old Standard TT', serif;
   background-color: var(--nature-tan);
+  background-image: url('/images/page-background.png');
+  background-size: 100% auto;
+  background-repeat: repeat-y;
+  background-position: top center;
   color: var(--nature-brown);
+}
+
+html.bg-variant-2 {
+  background-image: url('/images/page-background-2.png');
 }
 
 body {
   max-width: 100vw;
   overflow-x: hidden;
   min-height: 100vh;
+  background-image: url('/images/page-background.png');
+  background-size: 100% auto;
+  background-repeat: repeat-y;
+  background-position: top center;
+}
+
+body.bg-variant-2 {
+  background-image: url('/images/page-background-2.png');
 }
 
 @supports (padding: env(safe-area-inset-bottom)) {
@@ -37,18 +53,10 @@ body {
 }
 
 .page-background {
-  background-image: url('/images/page-background.png');
-  background-size: 100% auto;
-  background-repeat: repeat-y;
-  background-position: top center;
   min-height: 100vh;
 }
 
 .page-background-2 {
-  background-image: url('/images/page-background-2.png');
-  background-size: 100% auto;
-  background-repeat: repeat-y;
-  background-position: top center;
   min-height: 100vh;
 }
 
