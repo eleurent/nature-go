@@ -111,26 +111,15 @@ export default function ObservationSelectPage() {
     observationMethods.clearObservation();
 
     if (speciesId) {
-      const detailUrl = `/species/detail?id=${speciesId}&type=${speciesType || 'bird'}&fromObservation=true`;
-      // Clean up history stack.
-      // Current: ... → /home → /camera → /observation/select
-      // Goal:    ... → /home → /species?type=... → /species/detail
-      //
-      // Step 1: history.back() to go to /camera (async, triggers popstate)
-      // Step 2: on popstate, replaceState /camera → /home
-      // Step 3: pushState species list and detail
-      // Step 4: router.replace to render
-      const onPopState = () => {
-        window.removeEventListener('popstate', onPopState);
-        window.history.replaceState(null, '', '/home');
-        window.history.pushState(null, '', `/species?type=${speciesType || 'bird'}`);
-        window.history.pushState(null, '', detailUrl);
-        router.replace(detailUrl);
-      };
-      window.addEventListener('popstate', onPopState);
-      window.history.back();
+      // Hard navigate to species detail — replaces the current history entry
+      // and starts a fresh page load, breaking the SPA history chain.
+      // The species detail page's handleBack (fromObservation) will go to /home,
+      // cleanly skipping all observation flow entries still in history.
+      window.location.replace(
+        `/species/detail?id=${speciesId}&type=${speciesType || 'bird'}&fromObservation=true`
+      );
     } else {
-      router.replace('/home');
+      window.location.replace('/home');
     }
   };
 

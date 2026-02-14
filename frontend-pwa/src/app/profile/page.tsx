@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUserProfile } from '@/contexts/UserProfileContext';
 import { api, endpoints } from '@/lib/api';
+import PosterIcon from '@/components/PosterIcon';
 
 interface Poster {
   id: string;
@@ -29,12 +30,6 @@ const TITLES: Record<number, string> = {
   8: 'Associate Professor',
   9: 'Professor',
   10: 'Distinguished Professor',
-};
-
-const LEVEL_COLORS: Record<string, string> = {
-  'Gold': 'bg-yellow-400 ring-2 ring-yellow-600',
-  'Silver': 'bg-gray-300 ring-2 ring-gray-500',
-  'Bronze': 'bg-amber-600 ring-2 ring-amber-800',
 };
 
 function getTitle(level: number): string {
@@ -146,36 +141,24 @@ export default function ProfilePage() {
         {posters.length > 0 && (() => {
           const birdPosters = posters.filter(p => p.type === 'bird');
           const plantPosters = posters.filter(p => p.type === 'plant');
-          
-          const renderPoster = (poster: Poster) => {
-            const initials = poster.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-            const levelStyle = poster.level === 'Gold' 
-              ? 'bg-gradient-to-br from-yellow-100 to-amber-200 border-2 border-yellow-600 shadow-md'
-              : poster.level === 'Silver'
-              ? 'bg-gradient-to-br from-gray-100 to-gray-300 border-2 border-gray-500 shadow-md'
-              : poster.level === 'Bronze'
-              ? 'bg-gradient-to-br from-amber-100 to-amber-300 border-2 border-amber-700 shadow-md'
-              : 'bg-stone-100 border border-stone-300';
-            const textColor = poster.level ? 'text-stone-800' : 'text-stone-400';
-            return (
-              <Link
-                key={poster.id}
-                href={`/poster/detail?id=${poster.id}`}
-                className="flex flex-col items-center"
-              >
-                <div
-                  className={`w-12 h-12 rounded flex items-center justify-center ${levelStyle} ${!poster.level ? 'opacity-70' : ''}`}
-                  title={`${poster.name} (${poster.seen_count}/${poster.total_count})`}
-                  style={{ fontFamily: 'Georgia, serif' }}
-                >
-                  <span className={`text-sm font-semibold italic ${textColor}`}>{initials}</span>
-                </div>
-                <span className="text-[9px] font-old-standard text-center mt-1 line-clamp-2 leading-tight w-14">
-                  {poster.name}
-                </span>
-              </Link>
-            );
-          };
+
+          const renderPoster = (poster: Poster) => (
+            <Link
+              key={poster.id}
+              href={`/poster/detail?id=${poster.id}`}
+              className="flex flex-col items-center"
+              title={`${poster.name} (${poster.seen_count}/${poster.total_count})`}
+            >
+              <PosterIcon
+                posterId={poster.id}
+                posterName={poster.name}
+                level={poster.level}
+                seenCount={poster.seen_count}
+                totalCount={poster.total_count}
+                size={48}
+              />
+            </Link>
+          );
 
           return (
             <div className="mb-8">
@@ -190,7 +173,7 @@ export default function ProfilePage() {
                   <span>Birds</span>
                   <span className="flex-1 h-px bg-stone-300"></span>
                 </h4>
-                <div className="grid grid-cols-5 gap-2">
+                <div className="grid grid-cols-5 gap-x-1 gap-y-3 justify-items-center">
                   {birdPosters.map(renderPoster)}
                 </div>
               </div>
@@ -202,7 +185,7 @@ export default function ProfilePage() {
                   <span>Plants</span>
                   <span className="flex-1 h-px bg-stone-300"></span>
                 </h4>
-                <div className="grid grid-cols-5 gap-2">
+                <div className="grid grid-cols-5 gap-x-1 gap-y-3 justify-items-center">
                   {plantPosters.map(renderPoster)}
                 </div>
               </div>

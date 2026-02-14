@@ -80,11 +80,11 @@ const RARITY_COLORS: Record<string, string> = {
 };
 
 const RARITY_BG: Record<string, string> = {
-  'Very Common': 'from-gray-500 to-gray-400',
-  'Common': 'from-green-700 to-green-600',
-  'Uncommon': 'from-blue-700 to-blue-500',
-  'Rare': 'from-purple-700 to-purple-500',
-  'Legendary': 'from-amber-600 to-yellow-500',
+  'Very Common': 'bg-gray-600',
+  'Common': 'bg-gray-600',
+  'Uncommon': 'bg-green-600',
+  'Rare': 'bg-blue-500',
+  'Legendary': 'bg-orange-500',
 };
 
 // ─── Pokémon-style Species Reveal Slide ───────────────────────────
@@ -227,7 +227,7 @@ function SpeciesRevealSlide({
       {/* Rarity badge on reveal */}
       {phase === 3 && (
         <div className="animate-fade-up">
-          <span className={`inline-block mt-2 px-3 py-0.5 rounded-full text-xs font-old-standard font-bold text-white bg-gradient-to-r ${rarityBg}`}>
+          <span className={`inline-block mt-2 px-3 py-1 rounded text-sm font-old-standard font-bold text-white ${rarityBg}`}>
             {rarity}
           </span>
           <p className="text-sm text-gray-500 font-old-standard italic mt-2">

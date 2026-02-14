@@ -67,8 +67,9 @@ function SpeciesDetailContent() {
   const fromObservation = searchParams.get('fromObservation') === 'true';
 
   const handleBack = () => {
-    if (fromObservation && speciesDetails?.type) {
-      router.replace(`/species?type=${speciesDetails.type}`);
+    if (fromObservation) {
+      // Go straight to home, skipping observation flow entries in history
+      window.location.replace('/home');
     } else {
       router.back();
     }
