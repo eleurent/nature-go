@@ -106,20 +106,18 @@ export default function ObservationSelectPage() {
   const onXPModalClose = () => {
     navigatingAwayRef.current = true;
     setXpModalVisible(false);
-
     const speciesId = observationState.data?.species;
     const speciesType = observationState.data?.type;
-
-    // DEBUG: alert pauses execution so you can read before page reload
-    alert(`[NAV DEBUG]\nspeciesId: ${speciesId} (${typeof speciesId})\nspeciesType: ${speciesType}\nhas data: ${!!observationState.data}\ndata keys: ${observationState.data ? Object.keys(observationState.data).join(', ') : 'none'}`);
-
     observationMethods.clearObservation();
 
     if (speciesId) {
-      const detailUrl = `/species/detail?id=${speciesId}&type=${speciesType || 'bird'}&fromObservation=true`;
-      window.location.replace(detailUrl);
+      // Use SPA navigation (router.replace) — NOT window.location.replace.
+      // A full page reload loses the auth token (it's restored async in AuthContext)
+      // causing the species detail page to redirect to login before auth is ready.
+      // navigatingAwayRef prevents this page's useEffect from redirecting to /camera.
+      router.replace(`/species/detail?id=${speciesId}&type=${speciesType || 'bird'}&fromObservation=true`);
     } else {
-      window.location.replace('/home');
+      router.replace('/home');
     }
   };
 

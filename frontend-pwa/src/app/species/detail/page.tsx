@@ -69,7 +69,7 @@ function SpeciesDetailContent() {
   const handleBack = () => {
     if (fromObservation) {
       // Go straight to home, skipping observation flow entries in history
-      window.location.replace('/home');
+      router.replace('/home');
     } else {
       router.back();
     }
