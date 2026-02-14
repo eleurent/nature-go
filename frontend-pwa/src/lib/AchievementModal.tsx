@@ -80,11 +80,11 @@ const RARITY_COLORS: Record<string, string> = {
 };
 
 const RARITY_BG: Record<string, string> = {
-  'Very Common': 'from-gray-400 to-gray-300',
-  'Common': 'from-green-500 to-green-400',
-  'Uncommon': 'from-blue-500 to-blue-400',
-  'Rare': 'from-purple-500 to-purple-400',
-  'Legendary': 'from-amber-500 to-yellow-400',
+  'Very Common': 'from-gray-500 to-gray-400',
+  'Common': 'from-green-700 to-green-600',
+  'Uncommon': 'from-blue-700 to-blue-500',
+  'Rare': 'from-purple-700 to-purple-500',
+  'Legendary': 'from-amber-600 to-yellow-500',
 };
 
 // ─── Pokémon-style Species Reveal Slide ───────────────────────────
@@ -402,7 +402,7 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
             {/* Decorative top bar */}
             <div className="h-1.5 bg-gradient-to-r from-amber-800 via-amber-600 to-amber-800" />
 
-            <div className="p-6">
+            <div className="px-8 pt-6 pb-2">
               {slide.type === 'xp' && (
                 <div>
                   <h3 className="text-center font-old-standard text-lg text-amber-900/70 uppercase tracking-widest mb-4">
@@ -438,20 +438,36 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
 
               {slide.type === 'level_up' && (
                 <div className="text-center py-4">
-                  <div className="text-5xl mb-4 animate-bounce">⬆️</div>
-                  <h3 className="font-old-standard text-lg text-amber-900/70 uppercase tracking-widest mb-2">
-                    Promotion!
-                  </h3>
-                  <p className="text-sm text-gray-500 font-old-standard mb-2">
-                    {getTitle(slide.old_level)}
+                  {/* Ornamental top */}
+                  <div className="font-old-standard text-amber-800/40 text-2xl tracking-[0.5em] mb-3">⁂</div>
+
+                  <p className="font-old-standard text-xs text-amber-800/50 uppercase tracking-[0.3em] mb-4">
+                    By order of the Royal Society of Naturalists
                   </p>
-                  <div className="text-gray-400 mb-2">↓</div>
-                  <p className="text-2xl font-special-elite text-gray-800">
+
+                  <h3 className="font-old-standard text-lg text-amber-900/80 uppercase tracking-widest mb-4">
+                    Official Promotion
+                  </h3>
+
+                  <div className="border-t border-b border-amber-800/20 py-3 mb-4">
+                    <p className="text-xs text-amber-800/50 font-old-standard italic mb-1">formerly</p>
+                    <p className="text-sm text-amber-800/60 font-old-standard">
+                      {getTitle(slide.old_level)}
+                    </p>
+                  </div>
+
+                  <p className="text-xs text-amber-800/50 font-old-standard italic mb-2">
+                    is hereby elevated to the rank of
+                  </p>
+                  <p className="text-2xl font-old-standard font-bold text-amber-900 mb-1">
                     {getTitle(slide.new_level)}
                   </p>
-                  <p className="text-sm text-amber-700 font-old-standard mt-2">
+                  <p className="text-sm text-amber-700/80 font-old-standard">
                     Level {slide.new_level}
                   </p>
+
+                  {/* Ornamental bottom */}
+                  <div className="font-old-standard text-amber-800/30 text-lg tracking-[0.3em] mt-4">— ✦ —</div>
                 </div>
               )}
 
@@ -476,7 +492,7 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
             </div>
 
             {/* Bottom action area */}
-            <div className="px-6 pb-5">
+            <div className="px-8 pb-6">
               <button
                 onClick={advance}
                 disabled={!revealComplete}
