@@ -492,7 +492,7 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
             </div>
 
             {/* Bottom action area */}
-            <div className="px-8 pb-6">
+            <div className="px-8 pb-8">
               <button
                 onClick={advance}
                 disabled={!revealComplete}

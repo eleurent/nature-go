@@ -112,12 +112,23 @@ export default function ObservationSelectPage() {
 
     if (speciesId) {
       const detailUrl = `/species/detail?id=${speciesId}&type=${speciesType || 'bird'}&fromObservation=true`;
-      // Clean up history: current stack is .../home → /camera → /observation/select
-      // Goal: .../home → /species?type=... → /species/detail
-      window.history.replaceState(null, '', '/home');
-      window.history.pushState(null, '', `/species?type=${speciesType || 'bird'}`);
-      window.history.pushState(null, '', detailUrl);
-      router.replace(detailUrl);
+      // Clean up history stack.
+      // Current: ... → /home → /camera → /observation/select
+      // Goal:    ... → /home → /species?type=... → /species/detail
+      //
+      // Step 1: history.back() to go to /camera (async, triggers popstate)
+      // Step 2: on popstate, replaceState /camera → /home
+      // Step 3: pushState species list and detail
+      // Step 4: router.replace to render
+      const onPopState = () => {
+        window.removeEventListener('popstate', onPopState);
+        window.history.replaceState(null, '', '/home');
+        window.history.pushState(null, '', `/species?type=${speciesType || 'bird'}`);
+        window.history.pushState(null, '', detailUrl);
+        router.replace(detailUrl);
+      };
+      window.addEventListener('popstate', onPopState);
+      window.history.back();
     } else {
       router.replace('/home');
     }
