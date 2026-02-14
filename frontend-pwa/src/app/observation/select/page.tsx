@@ -106,19 +106,24 @@ export default function ObservationSelectPage() {
   const onXPModalClose = () => {
     navigatingAwayRef.current = true;
     setXpModalVisible(false);
+
+    // DEBUG: log full observation state before reading
+    console.log('[NAV DEBUG] observationState.data:', JSON.stringify(observationState.data, null, 2));
+
     const speciesId = observationState.data?.species;
     const speciesType = observationState.data?.type;
+
+    console.log('[NAV DEBUG] speciesId:', speciesId, 'type:', typeof speciesId);
+    console.log('[NAV DEBUG] speciesType:', speciesType);
+
     observationMethods.clearObservation();
 
     if (speciesId) {
-      // Hard navigate to species detail — replaces the current history entry
-      // and starts a fresh page load, breaking the SPA history chain.
-      // The species detail page's handleBack (fromObservation) will go to /home,
-      // cleanly skipping all observation flow entries still in history.
-      window.location.replace(
-        `/species/detail?id=${speciesId}&type=${speciesType || 'bird'}&fromObservation=true`
-      );
+      const detailUrl = `/species/detail?id=${speciesId}&type=${speciesType || 'bird'}&fromObservation=true`;
+      console.log('[NAV DEBUG] → navigating to species detail:', detailUrl);
+      window.location.replace(detailUrl);
     } else {
+      console.log('[NAV DEBUG] → No speciesId! Falling back to /home');
       window.location.replace('/home');
     }
   };

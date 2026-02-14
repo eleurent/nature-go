@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { api, endpoints, API_URL } from '@/lib/api';
+import PosterIcon, { LEVEL_PALETTE } from '@/components/PosterIcon';
 
 interface PosterSpecies {
   id: number | null;
@@ -32,12 +33,6 @@ interface PosterListItem {
   name: string;
   icon: string;
 }
-
-const LEVEL_COLORS: Record<string, string> = {
-  'Gold': 'text-yellow-600',
-  'Silver': 'text-gray-500',
-  'Bronze': 'text-amber-700',
-};
 
 const RARITY_COLORS: Record<string, string> = {
   'Very Common': '#555',
@@ -164,6 +159,13 @@ function PosterDetailContent() {
   const positions = posterData ? computePositions(posterData.species, maxSize) : [];
   const contentHeight = positions.length > 0 ? Math.max(...positions.map(p => p.y)) + 120 : 400;
 
+  const levelPalette = posterData?.level
+    ? LEVEL_PALETTE[posterData.level as keyof typeof LEVEL_PALETTE]
+    : LEVEL_PALETTE.none;
+  const progressPct = posterData && posterData.total_count > 0
+    ? (posterData.seen_count / posterData.total_count) * 100
+    : 0;
+
   return (
     <div
       className="min-h-screen"
@@ -183,15 +185,55 @@ function PosterDetailContent() {
         {posterData && (
           <>
             <div className="text-center mb-4">
+              {/* Level badge */}
+              <div className="flex justify-center mb-3">
+                <PosterIcon
+                  posterId={posterData.poster_id}
+                  posterName={posterData.poster_name}
+                  level={posterData.level}
+                  seenCount={posterData.seen_count}
+                  totalCount={posterData.total_count}
+                  size={64}
+                  showLabel={false}
+                />
+              </div>
+
               <h1 className="text-2xl font-old-standard tracking-wide" style={{ color: '#4a3f35', textShadow: '0 1px 0 rgba(255,255,255,0.5)' }}>
                 ❧ {posterData.poster_name} ❧
               </h1>
-              <div className="flex items-center justify-center gap-2 mt-1">
+
+              {/* Level name */}
+              {posterData.level && (
+                <p
+                  className="text-xs font-old-standard uppercase tracking-widest mt-1 font-bold"
+                  style={{ color: levelPalette.ring }}
+                >
+                  {posterData.level}
+                </p>
+              )}
+
+              <div className="flex items-center justify-center gap-2 mt-2">
                 <div className="h-px bg-amber-800/30 w-12" />
-                <p className={`text-sm font-old-standard ${posterData.level ? LEVEL_COLORS[posterData.level] : 'text-gray-500'}`}>
+                <p className="text-sm font-old-standard" style={{ color: '#4a3f35' }}>
                   {posterData.seen_count} of {posterData.total_count} observed
                 </p>
                 <div className="h-px bg-amber-800/30 w-12" />
+              </div>
+
+              {/* Progress bar */}
+              <div className="max-w-[200px] mx-auto mt-2">
+                <div
+                  className="h-1.5 rounded-full overflow-hidden"
+                  style={{ backgroundColor: `${levelPalette.ring}20` }}
+                >
+                  <div
+                    className="h-full rounded-full transition-all duration-700"
+                    style={{
+                      width: `${progressPct}%`,
+                      backgroundColor: levelPalette.ring,
+                    }}
+                  />
+                </div>
               </div>
             </div>
 

@@ -409,7 +409,7 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
                     Experience Gained
                   </h3>
                   {xp.breakdown?.map((item, index) => (
-                    <div key={index} className="flex justify-between mb-2">
+                    <div key={index} className="flex justify-between mb-3">
                       <span className="text-sm text-gray-700 font-old-standard">
                         {parseReason(item.reason).toUpperCase()}
                       </span>
@@ -418,8 +418,8 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
                       </span>
                     </div>
                   ))}
-                  <hr className="my-3 border-amber-800/20" />
-                  <div className="flex justify-between items-center">
+                  <hr className="my-4 border-amber-800/20" />
+                  <div className="flex justify-between items-center mt-1">
                     <span className="text-2xl text-gray-800 font-old-standard">TOTAL</span>
                     <span className="text-3xl text-rose-600 font-old-standard font-bold">
                       +{xpCountUp} XP
