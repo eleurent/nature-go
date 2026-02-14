@@ -105,12 +105,15 @@ export default function ObservationSelectPage() {
     setXpModalVisible(false);
     const speciesId = observationState.data?.species;
     const speciesType = observationState.data?.type;
-    observationMethods.clearObservation();
+    // Navigate FIRST, then clear observation after a tick.
+    // If we clear first, the useEffect guard sees !observationState.image
+    // and redirects to /camera before router.push can complete.
     if (speciesId) {
       router.push(`/species/detail?id=${speciesId}&type=${speciesType || 'bird'}&fromObservation=true`);
     } else {
       router.push('/home');
     }
+    setTimeout(() => observationMethods.clearObservation(), 100);
   };
 
   if (!authState.userToken) return null;

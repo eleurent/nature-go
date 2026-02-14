@@ -316,8 +316,8 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
   const [xpCountUp, setXpCountUp] = useState(0);
   const [revealComplete, setRevealComplete] = useState(false);
 
-  // Build slides
-  const slides: Slide[] = [{ type: 'xp' }];
+  // Build slides: new species reveal first (most exciting), then XP, level up, poster
+  const slides: Slide[] = [];
   if (achievements?.new_species && achievements.species_name) {
     slides.push({
       type: 'new_species',
@@ -326,10 +326,10 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
       rarity: achievements.species_rarity || 'Common',
     });
   }
+  slides.push({ type: 'xp' });
   if (achievements?.level_up) {
     slides.push({ type: 'level_up', old_level: achievements.level_up.old_level, new_level: achievements.level_up.new_level });
   }
-
   if (achievements?.poster_updates) {
     for (const poster of achievements.poster_updates) {
       slides.push({ type: 'poster', poster_name: poster.poster_name, old_level: poster.old_level, new_level: poster.new_level });
