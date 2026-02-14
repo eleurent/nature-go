@@ -157,7 +157,7 @@ POSTERS = {
     },
     # --- Birds: Types ---
     "birds_corvids": {
-        "name": "Corvid Connoisseur",
+        "name": "Corvids",
         "type": "bird",
         "icon": "🪶",
         "species": [
@@ -190,7 +190,7 @@ POSTERS = {
         ],
     },
     "birds_owls": {
-        "name": "Owl Observer",
+        "name": "Owls",
         "type": "bird",
         "icon": "🦉",
         "species": [
@@ -455,6 +455,120 @@ POSTERS = {
             "Colaptes auratus",  # Northern Flicker
         ],
     },
+    "birds_rails_grebes": {
+        "name": "Rails & Grebes",
+        "type": "bird",
+        "icon": "🪿",
+        "species": [
+            "Fulica atra",  # Eurasian Coot
+            "Fulica cristata",  # Red-knobbed Coot
+            "Gallinula chloropus",  # Common Moorhen
+            "Rallus aquaticus",  # Water Rail
+            "Porzana porzana",  # Spotted Crake
+            "Zapornia parva",  # Little Crake
+            "Zapornia pusilla",  # Baillon's Crake
+            "Crex crex",  # Corncrake
+            "Porphyrio porphyrio",  # Purple Swamphen
+            "Podiceps cristatus",  # Great Crested Grebe
+            "Podiceps grisegena",  # Red-necked Grebe
+            "Podiceps nigricollis",  # Black-necked Grebe
+            "Podiceps auritus",  # Slavonian Grebe
+            "Tachybaptus ruficollis",  # Little Grebe
+        ],
+        "species_extended": [
+            # American rails & grebes
+            "Fulica americana",  # American Coot
+            "Gallinula galeata",  # Common Gallinule
+            "Rallus crepitans",  # Clapper Rail
+            "Rallus elegans",  # King Rail
+            "Rallus limicola",  # Virginia Rail
+            "Porzana carolina",  # Sora
+            "Podilymbus podiceps",  # Pied-billed Grebe
+            "Aechmophorus occidentalis",  # Western Grebe
+            "Aechmophorus clarkii",  # Clark's Grebe
+            "Podiceps major",  # Great Grebe
+        ],
+    },
+    "birds_backyard": {
+        "name": "Backyard Birds",
+        "type": "bird",
+        "icon": "🏡",
+        "species": [
+            "Passer domesticus",  # House Sparrow
+            "Passer montanus",  # Eurasian Tree Sparrow
+            "Erithacus rubecula",  # European Robin
+            "Turdus merula",  # Blackbird
+            "Turdus philomelos",  # Song Thrush
+            "Fringilla coelebs",  # Chaffinch
+            "Carduelis carduelis",  # Goldfinch
+            "Chloris chloris",  # Greenfinch
+            "Cyanistes caeruleus",  # Blue Tit
+            "Parus major",  # Great Tit
+            "Columba livia",  # Rock Dove / Feral Pigeon
+            "Streptopelia decaocto",  # Collared Dove
+            "Sturnus vulgaris",  # Starling
+            "Motacilla alba",  # White Wagtail
+            "Pica pica",  # Magpie
+            "Corvus corone",  # Carrion Crow
+            "Troglodytes troglodytes",  # Wren
+            "Sylvia atricapilla",  # Blackcap
+            "Pyrrhula pyrrhula",  # Bullfinch
+            "Aegithalos caudatus",  # Long-tailed Tit
+        ],
+        "species_extended": [
+            # American backyard birds
+            "Cardinalis cardinalis",  # Northern Cardinal
+            "Cyanocitta cristata",  # Blue Jay
+            "Turdus migratorius",  # American Robin
+            "Poecile atricapillus",  # Black-capped Chickadee
+            "Sitta carolinensis",  # White-breasted Nuthatch
+            "Junco hyemalis",  # Dark-eyed Junco
+            "Zenaida macroura",  # Mourning Dove
+            "Haemorhous mexicanus",  # House Finch
+            "Spinus tristis",  # American Goldfinch
+            "Melospiza melodia",  # Song Sparrow
+        ],
+    },
+    "birds_woodland": {
+        "name": "Woodland Birds",
+        "type": "bird",
+        "icon": "🌲",
+        "species": [
+            "Dendrocopos major",  # Great Spotted Woodpecker
+            "Dryobates minor",  # Lesser Spotted Woodpecker
+            "Picus viridis",  # Green Woodpecker
+            "Dryocopus martius",  # Black Woodpecker
+            "Jynx torquilla",  # Wryneck
+            "Sitta europaea",  # Nuthatch
+            "Certhia familiaris",  # Treecreeper
+            "Garrulus glandarius",  # Jay
+            "Columba palumbus",  # Woodpigeon
+            "Cuculus canorus",  # Cuckoo
+            "Strix aluco",  # Tawny Owl
+            "Pernis apivorus",  # Honey Buzzard
+            "Accipiter gentilis",  # Northern Goshawk
+            "Accipiter nisus",  # Sparrowhawk
+            "Tetrao urogallus",  # Capercaillie
+            "Lyrurus tetrix",  # Black Grouse
+            "Phylloscopus sibilatrix",  # Wood Warbler
+            "Ficedula hypoleuca",  # Pied Flycatcher
+            "Lophophanes cristatus",  # Crested Tit
+            "Poecile palustris",  # Marsh Tit
+        ],
+        "species_extended": [
+            # American woodland birds
+            "Dryobates pubescens",  # Downy Woodpecker
+            "Melanerpes carolinus",  # Red-bellied Woodpecker
+            "Dryocopus pileatus",  # Pileated Woodpecker
+            "Sitta canadensis",  # Red-breasted Nuthatch
+            "Baeolophus bicolor",  # Tufted Titmouse
+            "Poecile carolinensis",  # Carolina Chickadee
+            "Mniotilta varia",  # Black-and-white Warbler
+            "Setophaga virens",  # Black-throated Green Warbler
+            "Hylocichla mustelina",  # Wood Thrush
+            "Piranga olivacea",  # Scarlet Tanager
+        ],
+    },
     # ============================================================
     # PLANTS
     # ============================================================
@@ -568,7 +682,7 @@ POSTERS = {
     },
     # --- Plants: Types ---
     "plants_orchids": {
-        "name": "Orchid Hunter",
+        "name": "Orchids",
         "type": "plant",
         "icon": "🌸",
         "species": [

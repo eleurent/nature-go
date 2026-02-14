@@ -46,7 +46,6 @@ export default function HomePage() {
       return;
     }
     profileMethods.fetchProfile();
-    profileMethods.fetchBadges();
   }, [authState.userToken]);
 
   useEffect(() => {

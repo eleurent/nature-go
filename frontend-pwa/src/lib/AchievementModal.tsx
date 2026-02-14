@@ -30,7 +30,6 @@ interface Achievements {
   species_illustration_url?: string | null;
   species_rarity?: string;
   level_up?: { old_level: number; new_level: number };
-  badge_updates?: { name: string; old_level: string | null; new_level: string | null }[];
   poster_updates?: { poster_name: string; poster_id: string; old_level: string | null; new_level: string | null }[];
 }
 
@@ -47,7 +46,6 @@ type Slide =
   | { type: 'xp' }
   | { type: 'new_species'; name: string; illustrationUrl: string | null; rarity: string }
   | { type: 'level_up'; old_level: number; new_level: number }
-  | { type: 'badge'; name: string; old_level: string | null; new_level: string | null }
   | { type: 'poster'; poster_name: string; old_level: string | null; new_level: string | null };
 
 function parseReason(reason: Record<string, string>): string {
@@ -65,11 +63,7 @@ function parseReason(reason: Record<string, string>): string {
   return JSON.stringify(reason);
 }
 
-const BADGE_LEVEL_EMOJI: Record<string, string> = {
-  'Bronze': '🥉',
-  'Silver': '🥈',
-  'Gold': '🥇',
-};
+
 
 const POSTER_LEVEL_COLORS: Record<string, string> = {
   'Bronze': 'from-amber-600 to-amber-400',
@@ -335,11 +329,7 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
   if (achievements?.level_up) {
     slides.push({ type: 'level_up', old_level: achievements.level_up.old_level, new_level: achievements.level_up.new_level });
   }
-  if (achievements?.badge_updates) {
-    for (const badge of achievements.badge_updates) {
-      slides.push({ type: 'badge', name: badge.name, old_level: badge.old_level, new_level: badge.new_level });
-    }
-  }
+
   if (achievements?.poster_updates) {
     for (const poster of achievements.poster_updates) {
       slides.push({ type: 'poster', poster_name: poster.poster_name, old_level: poster.old_level, new_level: poster.new_level });
@@ -465,30 +455,7 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
                 </div>
               )}
 
-              {slide.type === 'badge' && (
-                <div className="text-center py-4">
-                  <div className="text-5xl mb-4">
-                    {BADGE_LEVEL_EMOJI[slide.new_level || ''] || '🏅'}
-                  </div>
-                  <h3 className="font-old-standard text-lg text-amber-900/70 uppercase tracking-widest mb-2">
-                    Badge Earned!
-                  </h3>
-                  <p className="text-xl font-special-elite text-gray-800 mb-1">
-                    {slide.name}
-                  </p>
-                  <div className="flex items-center justify-center gap-2 mt-2">
-                    {slide.old_level && (
-                      <>
-                        <span className="text-sm text-gray-400 font-old-standard">{slide.old_level}</span>
-                        <span className="text-gray-400">→</span>
-                      </>
-                    )}
-                    <span className="text-lg font-old-standard font-bold text-amber-700">
-                      {slide.new_level}
-                    </span>
-                  </div>
-                </div>
-              )}
+
 
               {slide.type === 'poster' && (
                 <div className="text-center py-4">

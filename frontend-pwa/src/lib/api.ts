@@ -32,7 +32,6 @@ export const endpoints = {
     get: 'api/profile/',
     update: 'api/profile/',
   },
-  badges: 'api/badge/badges/',
   species: {
     list: (type: string) => `api/species/${type}/`,
     detail: (id: number) => `api/species/${id}/`,

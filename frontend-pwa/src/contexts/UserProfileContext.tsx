@@ -16,24 +16,13 @@ interface Profile {
   avatar: string | null;
 }
 
-interface Badge {
-  badge: {
-    name: string;
-    description: string;
-  };
-  progress: Record<string, { unlocked: boolean; progress: number }>;
-  unlocked_level: string | null;
-}
-
 interface ProfileState {
   profile: Profile | null;
   avatar: { full?: string; bubble?: string };
-  badges: Badge[];
 }
 
 interface ProfileMethods {
   fetchProfile: () => Promise<void>;
-  fetchBadges: () => Promise<void>;
   updateAvatarAsync: (avatarName: string) => Promise<void>;
   maybeSelectCharacter: (router: any) => void;
 }
@@ -46,8 +35,7 @@ interface ProfileContextType {
 const UserProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 type ProfileAction =
-  | { type: 'SET_PROFILE'; profile: Profile | null }
-  | { type: 'SET_BADGES'; badges: Badge[] };
+  | { type: 'SET_PROFILE'; profile: Profile | null };
 
 const profileReducer = (prevState: ProfileState, action: ProfileAction): ProfileState => {
   switch (action.type) {
@@ -57,8 +45,7 @@ const profileReducer = (prevState: ProfileState, action: ProfileAction): Profile
         profile: action.profile,
         avatar: action.profile?.avatar ? AVATAR_PATHS[action.profile.avatar] || {} : {},
       };
-    case 'SET_BADGES':
-      return { ...prevState, badges: action.badges };
+
     default:
       return prevState;
   }
@@ -67,7 +54,6 @@ const profileReducer = (prevState: ProfileState, action: ProfileAction): Profile
 const initialState: ProfileState = {
   profile: null,
   avatar: {},
-  badges: [],
 };
 
 export function UserProfileProvider({ children }: { children: ReactNode }) {
@@ -84,14 +70,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
           dispatch({ type: 'SET_PROFILE', profile: null });
         }
       },
-      fetchBadges: async () => {
-        try {
-          const response = await api.get(endpoints.badges);
-          dispatch({ type: 'SET_BADGES', badges: response.data });
-        } catch (error) {
-          console.error(error);
-        }
-      },
+
       updateAvatarAsync: async (avatarName: string) => {
         const formData = new FormData();
         formData.append('avatar', avatarName);

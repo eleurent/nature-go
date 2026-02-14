@@ -250,7 +250,6 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
 
   def _compute_achievements(self, instance):
     """Capture state before/after XP gain and compute achievement deltas."""
-    from badge.models import UserBadge, update_user_badges
     from poster.posters import POSTERS
     from poster.views import calculate_level
     from user_profile.models import Profile
@@ -260,10 +259,6 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
     # --- Snapshot BEFORE ---
     profile, _ = Profile.objects.get_or_create(user=user)
     old_level = profile.level
-    old_badge_levels = {
-        ub.badge.name: ub.unlocked_level
-        for ub in UserBadge.objects.filter(user=user)
-    }
     is_new_species = (
         Observation.objects.filter(user=user, species=instance.species).count()
         <= 1
@@ -275,7 +270,6 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
     # --- Refresh and snapshot AFTER ---
     profile.refresh_from_db()
     instance.refresh_from_db()
-    update_user_badges(user)
 
     achievements = {}
 
@@ -302,19 +296,6 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
           'old_level': old_level,
           'new_level': profile.level,
       }
-
-    # Badge updates?
-    badge_updates = []
-    for ub in UserBadge.objects.filter(user=user):
-      old = old_badge_levels.get(ub.badge.name)
-      if ub.unlocked_level != old:
-        badge_updates.append({
-            'name': ub.badge.name,
-            'old_level': old,
-            'new_level': ub.unlocked_level,
-        })
-    if badge_updates:
-      achievements['badge_updates'] = badge_updates
 
     # Poster updates?
     poster_updates = []
