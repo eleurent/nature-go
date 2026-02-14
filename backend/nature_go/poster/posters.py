@@ -35,7 +35,7 @@ POSTERS = {
             "Thryothorus ludovicianus",  # Carolina Wren
             "Baeolophus bicolor",  # Tufted Titmouse
             "Sitta carolinensis",  # White-breasted Nuthatch
-            "Picoides pubescens",  # Downy Woodpecker
+            "Dryobates pubescens",  # Downy Woodpecker
             "Melanerpes carolinus",  # Red-bellied Woodpecker
             "Sturnus vulgaris",  # European Starling
             "Passer domesticus",  # House Sparrow
@@ -173,7 +173,6 @@ POSTERS = {
             "Nucifraga caryocatactes",  # Spotted Nutcracker
             "Cyanopica cyanus",  # Azure-winged Magpie
             "Perisoreus infaustus",  # Siberian Jay
-            "Corvus monedula",  # Eurasian Jackdaw
             "Corvus splendens",  # House Crow
         ],
         "species_extended": [
@@ -244,7 +243,7 @@ POSTERS = {
             "Branta leucopsis",  # Barnacle Goose
             "Aythya marila",  # Greater Scaup
             "Somateria mollissima",  # Common Eider
-            "Anas strepera",  # Gadwall
+            "Mareca strepera",  # Gadwall
             "Anas acuta",  # Northern Pintail
             "Spatula clypeata",  # Northern Shoveler
         ],
@@ -254,7 +253,7 @@ POSTERS = {
             "Anas rubripes",  # American Black Duck
             "Bucephala albeola",  # Bufflehead
             "Lophodytes cucullatus",  # Hooded Merganser
-            "Oxyura jamaicensis",  # Ruddy Duck
+            "Oxyura jamaicensis jamaicensis",  # Ruddy Duck
             "Aix galericulata",  # Mandarin Duck
             "Mergellus albellus",  # Smew
             "Clangula hyemalis",  # Long-tailed Duck
@@ -336,8 +335,8 @@ POSTERS = {
             "Charadrius vociferus",  # Killdeer
             "Actitis macularius",  # Spotted Sandpiper
             "Tringa melanoleuca",  # Greater Yellowlegs
-            "Grus canadensis",  # Sandhill Crane
-            "Nycticorax violaceus",  # Yellow-crowned Night Heron
+            "Antigone canadensis",  # Sandhill Crane
+            "Nyctanassa violacea",  # Yellow-crowned Night Heron
             "Eudocimus albus",  # White Ibis
             "Plegadis falcinellus",  # Glossy Ibis
         ],
@@ -413,7 +412,7 @@ POSTERS = {
             # American seabirds
             "Pelecanus occidentalis",  # Brown Pelican
             "Larus delawarensis",  # Ring-billed Gull
-            "Sterna maxima",  # Royal Tern
+            "Thalasseus maximus",  # Royal Tern
             "Pelecanus erythrorhynchos",  # American White Pelican
             "Sula leucogaster",  # Brown Booby
             "Puffinus puffinus",  # Manx Shearwater
@@ -484,7 +483,7 @@ POSTERS = {
             "Ajuga reptans",  # Bugle
             "Geum urbanum",  # Wood Avens
             "Filipendula ulmaria",  # Meadowsweet
-            "Lychnis flos-cuculi",  # Ragged Robin
+            "Silene flos-cuculi",  # Ragged Robin
             "Knautia arvensis",  # Field Scabious
             "Succisa pratensis",  # Devil's-bit Scabious
         ],
@@ -561,7 +560,7 @@ POSTERS = {
             "Iris versicolor",  # Blue Flag Iris
         ],
         "species_extended": [
-            "Eupatorium purpureum",  # Joe-Pye Weed
+            "Eutrochium purpureum",  # Joe-Pye Weed
             "Lilium superbum",  # Turk's Cap Lily
             "Dodecatheon meadia",  # Shooting Star
             "Podophyllum peltatum",  # Mayapple
@@ -597,7 +596,7 @@ POSTERS = {
             "Epipactis palustris",  # Marsh Helleborine
         ],
         "species_extended": [
-            "Listera cordata",  # Lesser Twayblade
+            "Neottia cordata",  # Lesser Twayblade
             "Goodyera repens",  # Creeping Lady's-tresses
             "Cephalanthera rubra",  # Red Helleborine
             "Epipogium aphyllum",  # Ghost Orchid
