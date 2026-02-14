@@ -281,8 +281,20 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
 
     # New species?
     if is_new_species:
+      species = instance.species
+      # Build illustration URL for the reveal animation
+      illustration_url = None
+      request = self.request
+      if species.illustration_transparent:
+        illustration_url = request.build_absolute_uri(
+            species.illustration_transparent.url
+        )
+      elif species.illustration:
+        illustration_url = request.build_absolute_uri(species.illustration.url)
       achievements['new_species'] = True
-      achievements['species_name'] = str(instance.species)
+      achievements['species_name'] = str(species)
+      achievements['species_illustration_url'] = illustration_url
+      achievements['species_rarity'] = species.rarity
 
     # Level up?
     if profile.level > old_level:
