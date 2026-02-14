@@ -107,23 +107,18 @@ export default function ObservationSelectPage() {
     navigatingAwayRef.current = true;
     setXpModalVisible(false);
 
-    // DEBUG: log full observation state before reading
-    console.log('[NAV DEBUG] observationState.data:', JSON.stringify(observationState.data, null, 2));
-
     const speciesId = observationState.data?.species;
     const speciesType = observationState.data?.type;
 
-    console.log('[NAV DEBUG] speciesId:', speciesId, 'type:', typeof speciesId);
-    console.log('[NAV DEBUG] speciesType:', speciesType);
+    // DEBUG: alert pauses execution so you can read before page reload
+    alert(`[NAV DEBUG]\nspeciesId: ${speciesId} (${typeof speciesId})\nspeciesType: ${speciesType}\nhas data: ${!!observationState.data}\ndata keys: ${observationState.data ? Object.keys(observationState.data).join(', ') : 'none'}`);
 
     observationMethods.clearObservation();
 
     if (speciesId) {
       const detailUrl = `/species/detail?id=${speciesId}&type=${speciesType || 'bird'}&fromObservation=true`;
-      console.log('[NAV DEBUG] → navigating to species detail:', detailUrl);
       window.location.replace(detailUrl);
     } else {
-      console.log('[NAV DEBUG] → No speciesId! Falling back to /home');
       window.location.replace('/home');
     }
   };
