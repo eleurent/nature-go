@@ -26,6 +26,13 @@ interface ObservationData {
     breakdown: { value: number; reason: Record<string, string> }[];
     level: number;
   };
+  achievements?: {
+    new_species?: boolean;
+    species_name?: string;
+    level_up?: { old_level: number; new_level: number };
+    badge_updates?: { name: string; old_level: string | null; new_level: string | null }[];
+    poster_updates?: { poster_name: string; poster_id: string; old_level: string | null; new_level: string | null }[];
+  };
   identification_response?: {
     results: IdentificationResult[];
   };

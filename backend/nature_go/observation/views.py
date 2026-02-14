@@ -9,7 +9,7 @@ from generation.replicate import remove_background
 from identification import gemini, plantnet
 from observation.models import Observation, Species
 from observation.permissions import IsAdminOrReadOnly, IsOwner
-from observation.serializers import ObservationSerializer, SpeciesSerializer, SpeciesListSerializer, serialize_identification_response
+from observation.serializers import ObservationSerializer, SpeciesListSerializer, SpeciesSerializer, serialize_identification_response
 from rest_framework import filters, generics, pagination, permissions, status
 from rest_framework import serializers
 from rest_framework.response import Response
@@ -238,10 +238,110 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
     ]
     instance.species = Species.objects.get(pk=species_id)
     instance.save()
-    if not instance.xp and instance.species:
-      xp_gained.send(sender=instance.__class__, instance=instance)
 
-    return Response(ObservationSerializer(instance).data)
+    achievements = {}
+    if not instance.xp and instance.species:
+      achievements = self._compute_achievements(instance)
+
+    data = ObservationSerializer(instance).data
+    if achievements:
+      data['achievements'] = achievements
+    return Response(data)
+
+  def _compute_achievements(self, instance):
+    """Capture state before/after XP gain and compute achievement deltas."""
+    from badge.models import UserBadge, update_user_badges
+    from poster.posters import POSTERS
+    from poster.views import calculate_level
+    from user_profile.models import Profile
+
+    user = instance.user
+
+    # --- Snapshot BEFORE ---
+    profile, _ = Profile.objects.get_or_create(user=user)
+    old_level = profile.level
+    old_badge_levels = {
+        ub.badge.name: ub.unlocked_level
+        for ub in UserBadge.objects.filter(user=user)
+    }
+    is_new_species = (
+        Observation.objects.filter(user=user, species=instance.species).count()
+        <= 1
+    )
+
+    # --- Trigger XP gain ---
+    xp_gained.send(sender=instance.__class__, instance=instance)
+
+    # --- Refresh and snapshot AFTER ---
+    profile.refresh_from_db()
+    instance.refresh_from_db()
+    update_user_badges(user)
+
+    achievements = {}
+
+    # New species?
+    if is_new_species:
+      achievements['new_species'] = True
+      achievements['species_name'] = str(instance.species)
+
+    # Level up?
+    if profile.level > old_level:
+      achievements['level_up'] = {
+          'old_level': old_level,
+          'new_level': profile.level,
+      }
+
+    # Badge updates?
+    badge_updates = []
+    for ub in UserBadge.objects.filter(user=user):
+      old = old_badge_levels.get(ub.badge.name)
+      if ub.unlocked_level != old:
+        badge_updates.append({
+            'name': ub.badge.name,
+            'old_level': old,
+            'new_level': ub.unlocked_level,
+        })
+    if badge_updates:
+      achievements['badge_updates'] = badge_updates
+
+    # Poster updates?
+    poster_updates = []
+    species_type = instance.species.type
+    for poster_id, poster in POSTERS.items():
+      if poster.get('type', 'bird') != (
+          'plant' if species_type == Species.PLANT_TYPE else 'bird'
+      ):
+        continue
+      # Check if observed species is in this poster
+      all_poster_species = poster['species'] + poster.get(
+          'species_extended', []
+      )
+      if instance.species.scientificNameWithoutAuthor not in all_poster_species:
+        continue
+      # Compute old and new levels
+      core_species = poster['species']
+      all_species = core_species + poster.get('species_extended', [])
+      seen_count_new = Species.objects.filter(
+          observation__user=user,
+          type=species_type,
+          scientificNameWithoutAuthor__in=all_species,
+      ).count()
+      # Old count is one less if this was a new observation of this species
+      seen_count_old = seen_count_new - (1 if is_new_species else 0)
+      total = len(core_species)
+      old_poster_level = calculate_level(seen_count_old, total)
+      new_poster_level = calculate_level(seen_count_new, total)
+      if new_poster_level != old_poster_level:
+        poster_updates.append({
+            'poster_name': poster['name'],
+            'poster_id': poster_id,
+            'old_level': old_poster_level,
+            'new_level': new_poster_level,
+        })
+    if poster_updates:
+      achievements['poster_updates'] = poster_updates
+
+    return achievements
 
 
 class ObservationDelete(generics.DestroyAPIView):
