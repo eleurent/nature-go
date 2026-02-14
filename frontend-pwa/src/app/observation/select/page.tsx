@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
@@ -28,8 +28,10 @@ export default function ObservationSelectPage() {
   const [isConfirming, setIsConfirming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [xpModalVisible, setXpModalVisible] = useState(false);
+  const navigatingAwayRef = useRef(false);
 
   useEffect(() => {
+    if (navigatingAwayRef.current) return;
     if (!authState.userToken) {
       router.replace('/');
       return;
@@ -102,18 +104,23 @@ export default function ObservationSelectPage() {
 
 
   const onXPModalClose = () => {
+    navigatingAwayRef.current = true;
     setXpModalVisible(false);
     const speciesId = observationState.data?.species;
     const speciesType = observationState.data?.type;
-    // Navigate FIRST, then clear observation after a tick.
-    // If we clear first, the useEffect guard sees !observationState.image
-    // and redirects to /camera before router.push can complete.
+    observationMethods.clearObservation();
+
     if (speciesId) {
-      router.push(`/species/detail?id=${speciesId}&type=${speciesType || 'bird'}&fromObservation=true`);
+      const detailUrl = `/species/detail?id=${speciesId}&type=${speciesType || 'bird'}&fromObservation=true`;
+      // Clean up history: current stack is .../home → /camera → /observation/select
+      // Goal: .../home → /species?type=... → /species/detail
+      window.history.replaceState(null, '', '/home');
+      window.history.pushState(null, '', `/species?type=${speciesType || 'bird'}`);
+      window.history.pushState(null, '', detailUrl);
+      router.replace(detailUrl);
     } else {
-      router.push('/home');
+      router.replace('/home');
     }
-    setTimeout(() => observationMethods.clearObservation(), 100);
   };
 
   if (!authState.userToken) return null;
