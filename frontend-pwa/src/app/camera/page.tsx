@@ -4,12 +4,14 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useObservation } from '@/contexts/ObservationContext';
+import { useLocation } from '@/contexts/LocationContext';
 import { extractExifData } from '@/lib/exif';
 
 export default function CameraPage() {
   const router = useRouter();
   const { authState } = useAuth();
   const { observationMethods } = useObservation();
+  const { locationState } = useLocation();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -66,20 +68,15 @@ export default function CameraPage() {
     observationMethods.setObservationImage(base64);
     observationMethods.setObservationDatetime(new Date().toISOString());
 
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          observationMethods.setObservationLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        },
-        (error) => console.error('Geolocation error:', error)
-      );
+    if (locationState.location) {
+      observationMethods.setObservationLocation({
+        latitude: locationState.location.latitude,
+        longitude: locationState.location.longitude,
+      });
     }
 
     router.push('/observation/confirm');
-  }, [observationMethods, router]);
+  }, [observationMethods, router, locationState]);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

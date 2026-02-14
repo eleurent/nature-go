@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLocation } from '@/contexts/LocationContext';
 import { api, endpoints } from '@/lib/api';
 
 const MapContainer = dynamic(
@@ -21,6 +22,26 @@ const Marker = dynamic(
 );
 const Popup = dynamic(
   () => import('react-leaflet').then((mod) => mod.Popup),
+  { ssr: false }
+);
+
+// This component lives *inside* MapContainer and uses the useMap() hook
+// to imperatively re-center the map when the target position changes.
+// MapContainer only reads its `center` prop on first render, so this is required.
+const ChangeView = dynamic(
+  () =>
+    import('react-leaflet').then((mod) => {
+      const { useMap } = mod;
+      function ChangeViewInner({ center, zoom }: { center: [number, number]; zoom: number }) {
+        const map = useMap();
+        useEffect(() => {
+          map.setView(center, zoom);
+        }, [center, zoom, map]);
+        return null;
+      }
+      ChangeViewInner.displayName = 'ChangeView';
+      return ChangeViewInner;
+    }),
   { ssr: false }
 );
 
@@ -64,11 +85,11 @@ function formatDate(datetime: string): string {
 export default function MapPage() {
   const router = useRouter();
   const { authState } = useAuth();
+  const { locationState } = useLocation();
   const [observations, setObservations] = useState<Observation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [leafletLoaded, setLeafletLoaded] = useState(false);
   const [leafletModule, setLeafletModule] = useState<typeof import('leaflet') | null>(null);
-  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
 
   const createColoredIcon = useMemo(() => {
     if (!leafletModule) return () => undefined;
@@ -110,17 +131,6 @@ export default function MapPage() {
 
     fetchObservations();
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation([position.coords.latitude, position.coords.longitude]);
-        },
-        () => {
-          console.log('Could not get user location');
-        }
-      );
-    }
-
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
@@ -141,6 +151,11 @@ export default function MapPage() {
   const validObservations = observations.filter(
     (obs) => obs.location?.latitude && obs.location?.longitude
   );
+
+  // Use device location if available, otherwise first observation, otherwise Paris fallback
+  const userLocation: [number, number] | null = locationState.location
+    ? [locationState.location.latitude, locationState.location.longitude]
+    : null;
 
   const defaultCenter: [number, number] = userLocation
     ? userLocation
@@ -172,6 +187,12 @@ export default function MapPage() {
             scrollWheelZoom={true}
             className="h-full w-full"
           >
+            {userLocation && (
+              <ChangeView
+                center={userLocation}
+                zoom={10}
+              />
+            )}
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
