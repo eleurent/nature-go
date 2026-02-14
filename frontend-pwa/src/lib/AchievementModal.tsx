@@ -388,7 +388,7 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
     <>
       <AnimationStyles />
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
         onClick={advance}
       >
         <div
@@ -397,8 +397,8 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
           }`}
           onClick={e => e.stopPropagation()}
         >
-          {/* Parchment card */}
-          <div className="bg-[#fdf4e3] rounded-2xl shadow-2xl overflow-hidden border-2 border-amber-800/20">
+          {/* Parchment card — fully opaque */}
+          <div className="rounded-2xl shadow-2xl overflow-hidden border-2 border-amber-800/20" style={{ backgroundColor: '#fdf4e3' }}>
             {/* Decorative top bar */}
             <div className="h-1.5 bg-gradient-to-r from-amber-800 via-amber-600 to-amber-800" />
 

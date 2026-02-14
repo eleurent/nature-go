@@ -107,11 +107,9 @@ export default function ObservationSelectPage() {
     const speciesType = observationState.data?.type;
     observationMethods.clearObservation();
     if (speciesId) {
-      window.history.replaceState(null, '', '/home');
-      window.history.pushState(null, '', `/species?type=${speciesType || 'bird'}`);
-      router.replace(`/species/detail?id=${speciesId}&fromObservation=true`);
+      router.push(`/species/detail?id=${speciesId}&type=${speciesType || 'bird'}&fromObservation=true`);
     } else {
-      router.replace('/home');
+      router.push('/home');
     }
   };
 
