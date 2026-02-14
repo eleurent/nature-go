@@ -171,7 +171,7 @@ POSTERS = {
             "Pyrrhocorax pyrrhocorax",  # Red-billed Chough
             "Pyrrhocorax graculus",  # Alpine Chough
             "Nucifraga caryocatactes",  # Spotted Nutcracker
-            "Cyanopica cyanus",  # Azure-winged Magpie
+            "Cyanopica cooki",  # Iberian Magpie
             "Perisoreus infaustus",  # Siberian Jay
             "Corvus splendens",  # House Crow
         ],
@@ -215,7 +215,6 @@ POSTERS = {
             "Megascops asio",  # Eastern Screech-owl
             "Aegolius acadicus",  # Northern Saw-whet Owl
             "Athene cunicularia",  # Burrowing Owl
-            "Tyto furcata",  # American Barn Owl
             "Megascops kennicottii",  # Western Screech Owl
             "Glaucidium gnoma",  # Northern Pygmy Owl
             "Strix occidentalis",  # Spotted Owl
@@ -296,7 +295,7 @@ POSTERS = {
             "Falco sparverius",  # American Kestrel
             "Buteo swainsoni",  # Swainson's Hawk
             "Circus hudsonius",  # Northern Harrier
-            "Aquila audax",  # Wedge-tailed Eagle
+            "Aquila heliaca",  # Imperial Eagle
         ],
     },
     "birds_waders": {
@@ -416,7 +415,6 @@ POSTERS = {
             "Pelecanus erythrorhynchos",  # American White Pelican
             "Sula leucogaster",  # Brown Booby
             "Puffinus puffinus",  # Manx Shearwater
-            "Morus serrator",  # Australasian Gannet
         ],
     },
     "birds_colorful": {
