@@ -78,6 +78,7 @@ function SpeciesDetailContent() {
   };
 
   useEffect(() => {
+    if (authState.isLoading) return;
     if (!authState.userToken) {
       router.replace('/');
       return;
@@ -111,7 +112,7 @@ function SpeciesDetailContent() {
         document.head.removeChild(link);
       }
     };
-  }, [authState.userToken, speciesId, router]);
+  }, [authState.isLoading, authState.userToken, speciesId, router]);
 
   useEffect(() => {
     if (!speciesDetails || hasTriedGenerating) return;
@@ -232,7 +233,7 @@ function SpeciesDetailContent() {
     });
   };
 
-  if (!authState.userToken) return null;
+  if (authState.isLoading || !authState.userToken) return null;
 
   const unlockedDescriptions = speciesDetails?.descriptions?.slice(0, observations.length) || [];
 

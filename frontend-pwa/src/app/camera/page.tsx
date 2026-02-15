@@ -20,6 +20,7 @@ export default function CameraPage() {
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
 
   useEffect(() => {
+    if (authState.isLoading) return;
     if (!authState.userToken) {
       router.replace('/');
       return;
@@ -32,7 +33,7 @@ export default function CameraPage() {
         stream.getTracks().forEach(track => track.stop());
       }
     };
-  }, [authState.userToken]);
+  }, [authState.isLoading, authState.userToken]);
 
   const startCamera = async () => {
     try {
@@ -104,7 +105,7 @@ export default function CameraPage() {
     reader.readAsDataURL(file);
   };
 
-  if (!authState.userToken) return null;
+  if (authState.isLoading || !authState.userToken) return null;
 
   return (
     <div className="relative min-h-screen bg-black">

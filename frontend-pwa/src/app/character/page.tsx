@@ -17,10 +17,11 @@ export default function CharacterSelectionPage() {
 
   useEffect(() => {
     setMounted(true);
+    if (authState.isLoading) return;
     if (!authState.userToken) {
       router.replace('/');
     }
-  }, [authState.userToken, router]);
+  }, [authState.isLoading, authState.userToken, router]);
 
   const handleSelectAvatar = async () => {
     if (!selectedAvatar) return;
@@ -36,7 +37,7 @@ export default function CharacterSelectionPage() {
     }
   };
 
-  if (!mounted || !authState.userToken) {
+  if (!mounted || authState.isLoading || !authState.userToken) {
     return null;
   }
 

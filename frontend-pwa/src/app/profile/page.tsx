@@ -43,6 +43,7 @@ export default function ProfilePage() {
   const [posters, setPosters] = useState<Poster[]>([]);
 
   useEffect(() => {
+    if (authState.isLoading) return;
     if (!authState.userToken) {
       router.replace('/');
       return;
@@ -58,9 +59,9 @@ export default function ProfilePage() {
       }
     };
     fetchPosters();
-  }, [authState.userToken]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [authState.isLoading, authState.userToken]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!authState.userToken) return null;
+  if (authState.isLoading || !authState.userToken) return null;
 
   const profile = profileState.profile;
   const xpProgress = profile

@@ -113,6 +113,7 @@ export default function MapPage() {
   }, [leafletModule]);
 
   useEffect(() => {
+    if (authState.isLoading) return;
     if (!authState.userToken) {
       router.replace('/');
       return;
@@ -144,9 +145,9 @@ export default function MapPage() {
     return () => {
       document.head.removeChild(link);
     };
-  }, [authState.userToken]);
+  }, [authState.isLoading, authState.userToken]);
 
-  if (!authState.userToken) return null;
+  if (authState.isLoading || !authState.userToken) return null;
 
   const validObservations = observations.filter(
     (obs) => obs.location?.latitude && obs.location?.longitude

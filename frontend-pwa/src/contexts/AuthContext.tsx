@@ -34,11 +34,11 @@ const authReducer = (prevState: AuthState, action: AuthAction): AuthState => {
     case 'RESTORE_TOKEN':
       return { ...prevState, userToken: action.token, isLoading: false };
     case 'SIGN_IN':
-      return { ...prevState, userToken: action.token, signInErrorMessage: null };
+      return { ...prevState, isLoading: false, userToken: action.token, signInErrorMessage: null };
     case 'SIGN_IN_ERROR':
       return { ...prevState, signInErrorMessage: action.message };
     case 'SIGN_OUT':
-      return { ...prevState, userToken: null };
+      return { ...prevState, isLoading: false, userToken: null };
     default:
       return prevState;
   }

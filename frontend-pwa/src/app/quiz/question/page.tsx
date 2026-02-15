@@ -38,6 +38,7 @@ function QuizQuestionContent() {
   const questionId = Number(searchParams.get('id') || 0);
 
   useEffect(() => {
+    if (authState.isLoading) return;
     if (!authState.userToken) {
       router.replace('/');
       return;
@@ -46,9 +47,9 @@ function QuizQuestionContent() {
       router.replace('/quiz');
       return;
     }
-  }, [authState.userToken, quizState.quiz, router]);
+  }, [authState.isLoading, authState.userToken, quizState.quiz, router]);
 
-  if (!authState.userToken || !quizState.quiz) return null;
+  if (authState.isLoading || !authState.userToken || !quizState.quiz) return null;
 
   const question = quizState.quiz.multiple_choice_questions[questionId];
   if (!question) return null;

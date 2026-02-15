@@ -57,6 +57,7 @@ export default function ObservationConfirmPage() {
   const [editingLocation, setEditingLocation] = useState(false);
 
   useEffect(() => {
+    if (authState.isLoading) return;
     if (!authState.userToken) {
       router.replace('/');
       return;
@@ -78,9 +79,9 @@ export default function ObservationConfirmPage() {
         document.head.removeChild(link);
       }
     };
-  }, [authState.userToken, observationState.image, router]);
+  }, [authState.isLoading, authState.userToken, observationState.image, router]);
 
-  if (!authState.userToken || !observationState.image) return null;
+  if (authState.isLoading || !authState.userToken || !observationState.image) return null;
 
   const handleConfirm = () => {
     router.push('/observation/select');

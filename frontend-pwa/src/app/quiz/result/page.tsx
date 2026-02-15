@@ -11,6 +11,7 @@ export default function QuizResultPage() {
   const { quizState, quizMethods } = useQuiz();
 
   useEffect(() => {
+    if (authState.isLoading) return;
     if (!authState.userToken) {
       router.replace('/');
       return;
@@ -19,9 +20,9 @@ export default function QuizResultPage() {
       router.replace('/quiz');
       return;
     }
-  }, [authState.userToken, quizState.quiz]);
+  }, [authState.isLoading, authState.userToken, quizState.quiz]);
 
-  if (!authState.userToken || !quizState.quiz) return null;
+  if (authState.isLoading || !authState.userToken || !quizState.quiz) return null;
 
   const correctAnswersArray = Object.values(quizState.correctAnswers || {});
   const totalQuestions = quizState.quiz?.multiple_choice_questions?.length || correctAnswersArray.length || 0;

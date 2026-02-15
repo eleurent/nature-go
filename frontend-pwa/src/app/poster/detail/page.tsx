@@ -63,6 +63,7 @@ function PosterDetailContent() {
   }, []);
 
   useEffect(() => {
+    if (authState.isLoading) return;
     if (!authState.userToken) {
       router.replace('/');
       return;
@@ -81,7 +82,7 @@ function PosterDetailContent() {
 
     fetchPosters();
     if (posterId) fetchPosterData(posterId);
-  }, [authState.userToken, posterId, router, fetchPosterData]);
+  }, [authState.isLoading, authState.userToken, posterId, router, fetchPosterData]);
 
   const navigateToPoster = (index: number) => {
     if (index >= 0 && index < posterList.length) {
@@ -148,7 +149,7 @@ function PosterDetailContent() {
     return positions;
   };
 
-  if (!authState.userToken) return null;
+  if (authState.isLoading || !authState.userToken) return null;
 
   const getImageUrl = (url: string | null) => {
     if (!url) return null;

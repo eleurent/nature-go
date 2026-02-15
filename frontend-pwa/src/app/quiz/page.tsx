@@ -30,18 +30,19 @@ export default function QuizPage() {
   const { quizState, quizMethods } = useQuiz();
 
   useEffect(() => {
+    if (authState.isLoading) return;
     if (!authState.userToken) {
       router.replace('/');
       return;
     }
     quizMethods.fetchQuiz();
-  }, [authState.userToken]);
+  }, [authState.isLoading, authState.userToken]);
 
   const handleStartQuiz = () => {
     router.push('/quiz/question?id=0');
   };
 
-  if (!authState.userToken) return null;
+  if (authState.isLoading || !authState.userToken) return null;
 
   const syllabusSpecies: SyllabusSpecies[] = quizState.quiz?.multiple_choice_questions
     ?.map(q => ({ species: q.species, species_name: q.species_name }))

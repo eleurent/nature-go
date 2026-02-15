@@ -41,12 +41,13 @@ export default function HomePage() {
   const { profileState, profileMethods } = useUserProfile();
 
   useEffect(() => {
+    if (authState.isLoading) return;
     if (!authState.userToken) {
       router.replace('/');
       return;
     }
     profileMethods.fetchProfile();
-  }, [authState.userToken]);
+  }, [authState.isLoading, authState.userToken]);
 
   useEffect(() => {
     if (profileState.profile) {
@@ -54,7 +55,7 @@ export default function HomePage() {
     }
   }, [profileState.profile]);
 
-  if (!authState.userToken) {
+  if (authState.isLoading || !authState.userToken) {
     return null;
   }
 

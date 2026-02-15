@@ -32,6 +32,7 @@ export default function ObservationSelectPage() {
 
   useEffect(() => {
     if (navigatingAwayRef.current) return;
+    if (authState.isLoading) return;
     if (!authState.userToken) {
       router.replace('/');
       return;
@@ -47,7 +48,7 @@ export default function ObservationSelectPage() {
     } else {
       setIsLoading(false);
     }
-  }, [authState.userToken, observationState.image]);
+  }, [authState.isLoading, authState.userToken, observationState.image]);
 
   const sendObservation = async () => {
     try {
@@ -121,7 +122,7 @@ export default function ObservationSelectPage() {
     }
   };
 
-  if (!authState.userToken) return null;
+  if (authState.isLoading || !authState.userToken) return null;
 
   const hasResults = observationState.data?.identification_response?.results;
   const candidates = hasResults

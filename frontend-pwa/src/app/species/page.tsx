@@ -33,6 +33,7 @@ function SpeciesListContent() {
 
   useEffect(() => {
     setMounted(true);
+    if (authState.isLoading) return;
     if (!authState.userToken) {
       router.replace('/');
       return;
@@ -49,9 +50,9 @@ function SpeciesListContent() {
     };
 
     fetchSpeciesList();
-  }, [authState.userToken, type]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [authState.isLoading, authState.userToken, type]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!mounted || !authState.userToken) return null;
+  if (!mounted || authState.isLoading || !authState.userToken) return null;
 
   const getImageUrl = (url: string) => {
     if (!url) return '/images/placeholder.png';
