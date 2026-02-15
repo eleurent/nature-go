@@ -57,6 +57,8 @@ function SpeciesDetailContent() {
   const [hasTriedGenerating, setHasTriedGenerating] = useState(false);
   const [isGeneratingTransparent, setIsGeneratingTransparent] = useState(false);
   const [hasTriedGeneratingTransparent, setHasTriedGeneratingTransparent] = useState(false);
+  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  const [hasTriedGeneratingAudio, setHasTriedGeneratingAudio] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [leafletLoaded, setLeafletLoaded] = useState(false);
@@ -133,6 +135,15 @@ function SpeciesDetailContent() {
     generateTransparentIllustration();
   }, [speciesDetails, isGenerating, isGeneratingTransparent, hasTriedGeneratingTransparent]);
 
+  useEffect(() => {
+    if (!speciesDetails || hasTriedGeneratingAudio) return;
+    if (speciesDetails.audio_description) return;
+    if (isGenerating || isGeneratingTransparent || isGeneratingAudio) return;
+
+    setHasTriedGeneratingAudio(true);
+    generateAudioDescription();
+  }, [speciesDetails, isGenerating, isGeneratingTransparent, isGeneratingAudio, hasTriedGeneratingAudio]);
+
   const generateTransparentIllustration = async () => {
     setIsGeneratingTransparent(true);
     try {
@@ -143,6 +154,19 @@ function SpeciesDetailContent() {
       console.error('Failed to generate transparent illustration:', error);
     } finally {
       setIsGeneratingTransparent(false);
+    }
+  };
+
+  const generateAudioDescription = async () => {
+    setIsGeneratingAudio(true);
+    try {
+      await api.post(endpoints.species.generateAudioDescription(speciesId));
+      const response = await api.get(endpoints.species.detail(speciesId));
+      setSpeciesDetails(response.data);
+    } catch (error) {
+      console.error('Failed to generate audio description:', error);
+    } finally {
+      setIsGeneratingAudio(false);
     }
   };
 
@@ -256,31 +280,37 @@ function SpeciesDetailContent() {
           </div>
 
           <div className="px-6 mt-6">
-            {speciesDetails.audio_description && (
-              <div className="flex justify-end mb-2">
-                <button
-                  onClick={handlePlayPause}
-                  className="p-2"
-                  title={isPlaying ? 'Pause' : 'Play'}
-                >
-                  {isPlaying ? (
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
-                      <rect x="6" y="4" width="4" height="16" />
-                      <rect x="14" y="4" width="4" height="16" />
-                    </svg>
-                  ) : (
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
-                      <polygon points="5,3 19,12 5,21" />
-                    </svg>
-                  )}
-                </button>
-                <audio
-                  ref={audioRef}
-                  src={getImageUrl(speciesDetails.audio_description)}
-                  onEnded={() => setIsPlaying(false)}
-                />
-              </div>
-            )}
+            <div className="flex justify-end mb-2">
+              {isGeneratingAudio ? (
+                <div className="p-2">
+                  <div className="animate-spin rounded-full h-6 w-6 border-2 border-nature-dark border-t-transparent" />
+                </div>
+              ) : speciesDetails.audio_description ? (
+                <>
+                  <button
+                    onClick={handlePlayPause}
+                    className="p-2"
+                    title={isPlaying ? 'Pause' : 'Play'}
+                  >
+                    {isPlaying ? (
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
+                        <rect x="6" y="4" width="4" height="16" />
+                        <rect x="14" y="4" width="4" height="16" />
+                      </svg>
+                    ) : (
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
+                        <polygon points="5,3 19,12 5,21" />
+                      </svg>
+                    )}
+                  </button>
+                  <audio
+                    ref={audioRef}
+                    src={getImageUrl(speciesDetails.audio_description)}
+                    onEnded={() => setIsPlaying(false)}
+                  />
+                </>
+              ) : null}
+            </div>
 
             {unlockedDescriptions.map((desc, index) => (
               <p key={index} className="font-special-elite text-sm text-nature-brown/70 mb-4 text-justify">
