@@ -203,7 +203,7 @@ class PosterDataView(APIView):
     return Response({
         "poster_id": poster_id,
         "poster_name": poster["name"],
-        "level": calculate_level(seen_count, total_count),
+        "level": calculate_level(seen_count, len(core_species)),
         "seen_count": seen_count,
         "total_count": total_count,
         "species": poster_species,
