@@ -7,7 +7,7 @@ export const LEVEL_PALETTE = {
   Gold: {
     ring: '#b8860b',
     bg: '#fef9e7',
-    icon: '#92400e',
+    icon: '#b8860b',
     label: '#78350f',
   },
   Silver: {
