@@ -128,6 +128,13 @@ const POSTER_ICONS: Record<string, React.ReactNode> = {
       <rect x="6" y="2" width="4" height="20" rx="1" fill="currentColor" opacity="0.7" />
     </g>
   ),
+  birds_pigeons: (
+    <g>
+      {/* Pigeon standing profile */}
+      <path d="M15 4c-1.5 0-2.5 1-3 2.5-.5 0-1.5.5-2 1s-1 1.5-.5 2.5l.5.5c-.5.5-1 1.5-1 2.5 0 2 1.5 3.5 3.5 3.5h1l-.5 2.5c0 .5.2 1 .7 1s.8-.5.8-1l.5-2.5h1.5l.5 2.5c0 .5.2 1 .7 1s.8-.5.8-1L18 16c1-.5 1.5-1.5 1.5-3 0-1.5-1-3-2.5-3.5l-.5-1c.5-.5 1-1.5.5-2.5-.5-1-1-1.5-2-2zM14 6c.3 0 .5.2.5.5s-.2.5-.5.5-.5-.2-.5-.5.2-.5.5-.5z" fill="currentColor" />
+      <path d="M7 12c-1 0-2.5.5-3.5 1-.5.5-.5 1 0 1 1 0 2.5 0 3.5-.5l1-1c-.2-.3-.5-.5-1-.5z" fill="currentColor" opacity="0.5" />
+    </g>
+  ),
   // Plants
   plants_uk: (
     <g>

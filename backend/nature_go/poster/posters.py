@@ -569,6 +569,39 @@ POSTERS = {
             "Piranga olivacea",  # Scarlet Tanager
         ],
     },
+    "birds_pigeons": {
+        "name": "Pigeons",
+        "type": "bird",
+        "icon": "🕊️",
+        "species": [
+            "Columba livia",  # Rock Pigeon (Pigeon biset)
+            "Columba oenas",  # Stock Dove (Pigeon colombin)
+            "Columba palumbus",  # Common Wood-Pigeon (Pigeon ramier)
+        ],
+        "species_extended": [
+            # European doves
+            "Streptopelia turtur",  # European Turtle-Dove
+            "Streptopelia decaocto",  # Eurasian Collared-Dove
+            "Spilopelia senegalensis",  # Laughing Dove
+            # Macaronesian pigeons
+            "Columba bollii",  # Bolle's Pigeon
+            "Columba junoniae",  # Laurel Pigeon
+            "Columba trocaz",  # Trocaz Pigeon
+            # Asian/African doves
+            "Spilopelia chinensis",  # Spotted Dove
+            "Geopelia striata",  # Zebra Dove
+            "Streptopelia roseogrisea",  # African Collared-Dove
+            # American doves & pigeons
+            "Zenaida macroura",  # Mourning Dove
+            "Zenaida asiatica",  # White-winged Dove
+            "Columbina passerina",  # Common Ground Dove
+            "Columbina inca",  # Inca Dove
+            "Columbina talpacoti",  # Ruddy Ground Dove
+            "Patagioenas fasciata",  # Band-tailed Pigeon
+            "Zenaida aurita",  # Zenaida Dove
+            "Zenaida auriculata",  # Eared Dove
+        ],
+    },
     # ============================================================
     # PLANTS
     # ============================================================
