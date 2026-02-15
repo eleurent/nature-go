@@ -6,6 +6,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useAuth } from '@/contexts/AuthContext';
 import { api, endpoints, API_URL } from '@/lib/api';
+import { useSettings } from '@/contexts/SettingsContext';
 
 const MapContainer = dynamic(
   () => import('react-leaflet').then((mod) => mod.MapContainer),
@@ -51,6 +52,7 @@ function SpeciesDetailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { authState } = useAuth();
+  const { settings } = useSettings();
   const [speciesDetails, setSpeciesDetails] = useState<SpeciesDetails | null>(null);
   const [observations, setObservations] = useState<Observation[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -60,6 +62,7 @@ function SpeciesDetailContent() {
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [hasTriedGeneratingAudio, setHasTriedGeneratingAudio] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const hasAutoPlayed = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [leafletLoaded, setLeafletLoaded] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -144,6 +147,21 @@ function SpeciesDetailContent() {
     setHasTriedGeneratingAudio(true);
     generateAudioDescription();
   }, [speciesDetails, isGenerating, isGeneratingTransparent, isGeneratingAudio, hasTriedGeneratingAudio]);
+
+  // Auto-play audio description once when available
+  useEffect(() => {
+    if (!settings.autoPlayAudio) return;
+    if (!speciesDetails?.audio_description) return;
+    if (hasAutoPlayed.current) return;
+    if (!audioRef.current) return;
+
+    hasAutoPlayed.current = true;
+    audioRef.current.play().then(() => {
+      setIsPlaying(true);
+    }).catch(() => {
+      // Browser may block autoplay; user can still press play manually
+    });
+  }, [speciesDetails?.audio_description, settings.autoPlayAudio]);
 
   const generateTransparentIllustration = async () => {
     setIsGeneratingTransparent(true);

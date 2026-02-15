@@ -194,7 +194,13 @@ export default function ProfilePage() {
           );
         })()}
 
-        <div className="text-center">
+        <div className="text-center space-y-4">
+          <button
+            onClick={() => router.push('/settings')}
+            className="font-tinos text-xl text-nature-brown hover:underline flex items-center justify-center gap-2 mx-auto"
+          >
+            ⚙ Settings
+          </button>
           <button
             onClick={() => authMethods.signOut()}
             className="font-tinos text-xl text-nature-brown hover:underline"

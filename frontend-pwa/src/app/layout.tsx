@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import { SettingsProvider } from '@/contexts/SettingsContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { UserProfileProvider } from '@/contexts/UserProfileContext';
 import { ObservationProvider } from '@/contexts/ObservationContext';
@@ -37,17 +38,19 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
       </head>
       <body>
-        <AuthProvider>
-          <LocationProvider>
-            <UserProfileProvider>
-              <ObservationProvider>
-                <QuizProvider>
-                  {children}
-                </QuizProvider>
-              </ObservationProvider>
-            </UserProfileProvider>
-          </LocationProvider>
-        </AuthProvider>
+        <SettingsProvider>
+          <AuthProvider>
+            <LocationProvider>
+              <UserProfileProvider>
+                <ObservationProvider>
+                  <QuizProvider>
+                    {children}
+                  </QuizProvider>
+                </ObservationProvider>
+              </UserProfileProvider>
+            </LocationProvider>
+          </AuthProvider>
+        </SettingsProvider>
       </body>
     </html>
   );
