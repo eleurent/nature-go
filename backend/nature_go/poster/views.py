@@ -34,24 +34,22 @@ class PosterListView(APIView):
     posters = []
     user = request.user
 
+    # Get all scientific names of species the user has observed (once)
+    user_observed_sci_names = set(
+        Species.objects.filter(
+            observation__user=user,
+        ).values_list("scientificNameWithoutAuthor", flat=True)
+    )
+
     for poster_id, poster in POSTERS.items():
       core_species = poster["species"]
-      all_species = core_species + poster.get("species_extended", [])
-      poster_type = poster.get("type", "bird")
+      extended_species = poster.get("species_extended", [])
 
-      # Map poster type to Species model type
-      species_model_type = (
-          Species.PLANT_TYPE if poster_type == "plant" else Species.BIRD_TYPE
-      )
+      # Count seen from core + extended, exactly as PosterDataView does
+      core_seen = len(user_observed_sci_names & set(core_species))
+      extended_seen = len(user_observed_sci_names & set(extended_species))
+      seen_count = core_seen + extended_seen
 
-      # Count seen from ALL species (core + extended)
-      seen_count = Species.objects.filter(
-          observation__user=user,
-          type=species_model_type,
-          scientificNameWithoutAuthor__in=all_species,
-      ).count()
-
-      # Total is just core species (what's displayed)
       total = len(core_species)
       level = calculate_level(seen_count, total)
 
@@ -59,7 +57,7 @@ class PosterListView(APIView):
           "id": poster_id,
           "name": poster["name"],
           "icon": poster.get("icon", "🐦"),
-          "type": poster_type,
+          "type": poster.get("type", "bird"),
           "seen_count": seen_count,
           "total_count": total,
           "level": level,
