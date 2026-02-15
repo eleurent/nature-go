@@ -35,9 +35,9 @@
 
 
 
-<path d="M 529.003 1333.72 C 537.636 1328.83 548.02 1323.73 556.929 1319.1 L 557.399 1321.43 C 548.323 1326.12 539.234 1330.93 529.972 1335.22 L 529.003 1333.72 z" fill="rgb(185,188,190)" transform="translate(0,0)"></path>
-<path d="M 630.986 1266.08 C 621.575 1271.3 612.989 1277.94 603.593 1282.68 C 607.494 1277.09 623.673 1268.08 629.587 1264.72 L 630.986 1266.08 z" fill="rgb(185,188,190)" transform="translate(0,0)"></path>
-<path d="M 578.632 1190.81 L 579.414 1192.31 C 577.257 1197.08 572.44 1203.06 569.226 1207.44 L 568.527 1206.53 C 570.596 1200.81 574.064 1194.89 578.632 1190.81 z" fill="rgb(223,224,227)" transform="translate(0,0)"></path>
-<path d="M 676.226 1227.26 C 671.22 1230.16 663.734 1233.63 658.402 1236.31 C 663.741 1231.35 667.764 1229.38 674.091 1225.8 L 676.226 1227.26 z" fill="rgb(223,224,227)" transform="translate(0,0)"></path>
-<path d="M 619.399 1094.37 C 623.004 1088.4 624.691 1085.34 629.39 1080.17 C 626.435 1085.95 623.536 1091.76 620.337 1097.41 L 619.399 1094.37 z" fill="rgb(185,188,190)" transform="translate(0,0)"></path>
+
+
+
+
+
 <metadata><recraft-signature>{"signed_by": "recraft", "signature_b64": "ktWnTKJXvqAHby7NV4DbyD3E8ViPc1BbK1aekEGVAWyxCXqwa8f/Wf0Jk23OmeOcgU2R9IeMdi2vbieR89HwBg==", "signing_algo": "Ed25519", "generation_timestamp": 1771171934, "identifier": "5381b1a3-96a1-4ede-97e9-39dc9da40b9d"}</recraft-signature></metadata></svg>

@@ -37,7 +37,7 @@
 
 <path d="M 1204.06 1853.94 C 1184.67 1851.42 1167.13 1850.47 1147.26 1847.31 C 1153.47 1846.56 1197.2 1850.45 1203.95 1851.91 L 1204.06 1853.94 z" fill="rgb(117,114,115)" transform="translate(0,0)"></path>
 
-<path d="M 724.941 1304 L 756.961 1287.05 C 751.498 1292.42 734.37 1301.85 726.992 1305.78 L 724.941 1304 z" fill="rgb(208,208,211)" transform="translate(0,0)"></path>
+
 <path d="M 1126.47 343.976 C 1125.79 338.311 1129.69 325.939 1131.62 320.366 L 1133.19 321.119 C 1131.93 325.247 1127.65 336.979 1129.33 340.54 L 1126.47 343.976 z" fill="rgb(117,114,115)" transform="translate(0,0)"></path>
 <path d="M 1393.45 1764.92 C 1402.31 1763.38 1405.06 1763 1414.05 1763.02 L 1412.64 1764.45 L 1412.96 1765.11 C 1409.76 1765.97 1397.51 1765.1 1393.45 1764.92 z" fill="rgb(159,161,160)" transform="translate(0,0)"></path>
 <metadata><recraft-signature>{"signed_by": "recraft", "signature_b64": "c30yi4UXLhA1+UyduTZKm0qC0N/AHZYXlwEP1hoqMFngwSsNN+9uwJy5Cp6jReeXrldGEF//0FDCIm8BXSArDw==", "signing_algo": "Ed25519", "generation_timestamp": 1771171893, "identifier": "32ea4a92-991d-4b2f-bd20-6401876a2fa6"}</recraft-signature></metadata></svg>

@@ -71,6 +71,7 @@ export default function PosterIcon({
   showProgress = true,
   showLabel = true,
 }: PosterIconProps) {
+  const [iconLoaded, setIconLoaded] = React.useState(false);
   const palette = level ? LEVEL_PALETTE[level as keyof typeof LEVEL_PALETTE] : LEVEL_PALETTE.none;
   const progress = totalCount > 0 ? seenCount / totalCount : 0;
 
@@ -80,8 +81,8 @@ export default function PosterIcon({
   const circumference = 2 * Math.PI * radius;
   const dashOffset = circumference * (1 - progress);
 
-  // Icon sizing: leave room for the ring
-  const iconInset = strokeWidth + 2;
+  // Icon sizing: extra padding to avoid cropping at circle edge
+  const iconInset = strokeWidth + 4;
   const iconSize = size - iconInset * 2;
 
   // SVG icon file path
@@ -107,8 +108,10 @@ export default function PosterIcon({
             opacity={0.5}
           />
 
-          {/* Lettrine fallback (hidden when image loads) */}
-          <LettrineIcon name={posterName} color={palette.icon} size={size} />
+          {/* Lettrine fallback — only shown when SVG icon hasn't loaded */}
+          {!iconLoaded && (
+            <LettrineIcon name={posterName} color={palette.icon} size={size} />
+          )}
 
           {/* Progress ring (background track) */}
           {showProgress && (
@@ -141,26 +144,36 @@ export default function PosterIcon({
           )}
         </svg>
 
-        {/* AI-generated SVG icon, tinted with badge color via CSS mask */}
-        <div
-          style={{
-            position: 'absolute',
-            top: iconInset,
-            left: iconInset,
-            width: iconSize,
-            height: iconSize,
-            borderRadius: '50%',
-            backgroundColor: palette.icon,
-            WebkitMaskImage: `url(${iconSrc})`,
-            WebkitMaskSize: 'contain',
-            WebkitMaskRepeat: 'no-repeat',
-            WebkitMaskPosition: 'center',
-            maskImage: `url(${iconSrc})`,
-            maskSize: 'contain',
-            maskRepeat: 'no-repeat',
-            maskPosition: 'center',
-          }}
+        {/* Invisible preload to detect if SVG icon file exists */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={iconSrc}
+          alt=""
+          onLoad={() => setIconLoaded(true)}
+          style={{ display: 'none' }}
         />
+
+        {/* AI-generated SVG icon, tinted with badge color via CSS mask */}
+        {iconLoaded && (
+          <div
+            style={{
+              position: 'absolute',
+              top: iconInset,
+              left: iconInset,
+              width: iconSize,
+              height: iconSize,
+              backgroundColor: palette.icon,
+              WebkitMaskImage: `url(${iconSrc})`,
+              WebkitMaskSize: 'contain',
+              WebkitMaskRepeat: 'no-repeat',
+              WebkitMaskPosition: 'center',
+              maskImage: `url(${iconSrc})`,
+              maskSize: 'contain',
+              maskRepeat: 'no-repeat',
+              maskPosition: 'center',
+            }}
+          />
+        )}
       </div>
 
       {showLabel && (
