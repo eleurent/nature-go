@@ -318,7 +318,7 @@ function SpeciesDetailContent() {
                         className="object-cover"
                       />
                     </div>
-                    {obs.location && leafletLoaded && (
+                    {obs.location && obs.location.latitude != null && obs.location.longitude != null && leafletLoaded && (
                       <div
                         className="w-40 h-24 mt-2 rounded-lg overflow-hidden cursor-pointer relative z-0"
                         onClick={() => setMapModal({ lat: obs.location!.latitude, lng: obs.location!.longitude })}
