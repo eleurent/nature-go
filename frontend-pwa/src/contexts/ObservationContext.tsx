@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useReducer, useMemo, ReactNode } from 'react';
+import { GameNotification } from '@/contexts/NotificationContext';
 
 interface Location {
   latitude: number;
@@ -21,10 +22,10 @@ interface ObservationData {
   type: string;
   species: number | null;
   xp?: {
-    xp_gained: number;
+    xp_gained?: number;
     total: number;
     breakdown: { value: number; reason: Record<string, string> }[];
-    level: number;
+    level?: number;
   };
   achievements?: {
     new_species?: boolean;
@@ -32,8 +33,21 @@ interface ObservationData {
     species_illustration_url?: string | null;
     species_rarity?: string;
     level_up?: { old_level: number; new_level: number };
-    poster_updates?: { poster_name: string; poster_id: string; old_level: string | null; new_level: string | null }[];
+    poster_updates?: {
+      poster_name: string;
+      poster_id: string;
+      old_level: string | null;
+      new_level: string | null;
+      seen_count?: number;
+      total_count?: number;
+    }[];
+    milestones?: {
+      title: string;
+      message: string;
+      milestone_key?: string;
+    }[];
   };
+  notifications?: GameNotification[];
   identification_response?: {
     results: IdentificationResult[];
   };

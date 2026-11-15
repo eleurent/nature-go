@@ -286,16 +286,26 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
     instance.save()
 
     achievements = {}
+    created_notifications = []
     if not instance.xp and instance.species:
-      achievements = self._compute_achievements(instance)
+      achievements, created_notifications = self._compute_achievements(instance)
 
     data = ObservationSerializer(instance, context={'request': request}).data
     if achievements:
       data['achievements'] = achievements
+    if created_notifications:
+      data['notifications'] = created_notifications
     return Response(data)
 
   def _compute_achievements(self, instance):
     """Capture state before/after XP gain and compute achievement deltas."""
+    from notifications.models import Notification
+    from notifications.serializers import NotificationSerializer
+    from notifications.services import (
+        check_observation_milestones,
+        notify_badge_unlocked,
+        notify_new_species,
+    )
     from poster.posters import POSTERS
     from poster.views import calculate_level
     from user_profile.models import Profile
@@ -305,12 +315,16 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
     # --- Snapshot BEFORE ---
     profile, _ = Profile.objects.get_or_create(user=user)
     old_level = profile.level
+    last_notif = (
+        Notification.objects.filter(user=user).order_by('-id').first()
+    )
+    last_notif_id = last_notif.id if last_notif else 0
     is_new_species = (
         Observation.objects.filter(user=user, species=instance.species).count()
         <= 1
     )
 
-    # --- Trigger XP gain ---
+    # --- Trigger XP gain (also triggers level_up notification via signal) ---
     xp_gained.send(sender=instance.__class__, instance=instance)
 
     # --- Refresh and snapshot AFTER ---
@@ -335,6 +349,7 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
       achievements['species_name'] = str(species)
       achievements['species_illustration_url'] = illustration_url
       achievements['species_rarity'] = species.rarity
+      notify_new_species(user, species, illustration_url=illustration_url)
 
     # Level up?
     if profile.level > old_level:
@@ -343,7 +358,7 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
           'new_level': profile.level,
       }
 
-    # Poster updates?
+    # Poster / Field Guide badge updates?
     poster_updates = []
     species_type = instance.species.type
     for poster_id, poster in POSTERS.items():
@@ -380,11 +395,42 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
             'poster_id': poster_id,
             'old_level': old_poster_level,
             'new_level': new_poster_level,
+            'seen_count': seen_count_new,
+            'total_count': total,
         })
+        if new_poster_level:
+          notify_badge_unlocked(
+              user=user,
+              poster_id=poster_id,
+              poster_name=poster['name'],
+              old_level=old_poster_level,
+              new_level=new_poster_level,
+              seen_count=seen_count_new,
+              total_count=total,
+          )
     if poster_updates:
       achievements['poster_updates'] = poster_updates
 
-    return achievements
+    # Observation milestones?
+    milestone_notifs = check_observation_milestones(user)
+    if milestone_notifs:
+      achievements['milestones'] = [
+          {
+              'title': m.title,
+              'message': m.message,
+              'milestone_key': m.data.get('milestone_key'),
+          }
+          for m in milestone_notifs
+      ]
+
+    created_notifications = NotificationSerializer(
+        Notification.objects.filter(
+            user=user, id__gt=last_notif_id
+        ).order_by('id'),
+        many=True,
+    ).data
+
+    return achievements, created_notifications
 
 
 class ObservationDelete(generics.DestroyAPIView):

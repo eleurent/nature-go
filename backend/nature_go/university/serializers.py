@@ -65,5 +65,59 @@ class QuizSerializer(serializers.ModelSerializer):
                 answer['quiz'] = instance
                 MultipleChoiceUserAnswer.objects.create(**answer)
         if not instance.xp and instance.is_answered:
+            from notifications.models import Notification
+            from notifications.serializers import NotificationSerializer
+            from notifications.services import notify_quiz_completed
+            from user_profile.models import Profile
+
+            profile, _ = Profile.objects.get_or_create(user=instance.user)
+            old_level = profile.level
+            last_notif = (
+                Notification.objects.filter(user=instance.user)
+                .order_by('-id')
+                .first()
+            )
+            last_notif_id = last_notif.id if last_notif else 0
+
             xp_gained.send(sender=instance.__class__, instance=instance)
+            instance.refresh_from_db()
+            profile.refresh_from_db()
+
+            xp_total = int((instance.xp or {}).get('total', 0))
+            user_answers = list(instance.multiplechoiceuseranswer_set.select_related('question'))
+            correct_count = sum(1 for a in user_answers if a.is_correct)
+            total_count = instance.multiple_choice_questions.count()
+            notify_quiz_completed(
+                user=instance.user,
+                quiz=instance,
+                xp_total=xp_total,
+                correct_count=correct_count,
+                total_count=total_count,
+            )
+
+            achievements = {}
+            if profile.level > old_level:
+                achievements['level_up'] = {
+                    'old_level': old_level,
+                    'new_level': profile.level,
+                }
+            if achievements:
+                instance._achievements = achievements
+
+            created_notifs = Notification.objects.filter(
+                user=instance.user, id__gt=last_notif_id
+            ).order_by('id')
+            if created_notifs.exists():
+                instance._notifications = NotificationSerializer(
+                    created_notifs, many=True
+                ).data
+
         return instance
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if hasattr(instance, '_achievements'):
+            data['achievements'] = instance._achievements
+        if hasattr(instance, '_notifications'):
+            data['notifications'] = instance._notifications
+        return data

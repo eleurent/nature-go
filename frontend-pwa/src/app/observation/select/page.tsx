@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useObservation } from '@/contexts/ObservationContext';
+import { useNotifications } from '@/contexts/NotificationContext';
+import { useUserProfile } from '@/contexts/UserProfileContext';
 import { api, endpoints } from '@/lib/api';
 import AchievementModal from '@/lib/AchievementModal';
 
@@ -24,6 +26,8 @@ export default function ObservationSelectPage() {
   const router = useRouter();
   const { authState } = useAuth();
   const { observationState, observationMethods } = useObservation();
+  const { enqueueNotifications, markAsRead } = useNotifications();
+  const { profileMethods } = useUserProfile();
   const [isLoading, setIsLoading] = useState(true);
   const [isConfirming, setIsConfirming] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -93,6 +97,9 @@ export default function ObservationSelectPage() {
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
 
+      if (response.data?.notifications?.length) {
+        enqueueNotifications(response.data.notifications, { showToast: false });
+      }
       observationMethods.setObservationData(response.data);
       setXpModalVisible(true);
     } catch (err) {
@@ -107,6 +114,12 @@ export default function ObservationSelectPage() {
   const onXPModalClose = () => {
     navigatingAwayRef.current = true;
     setXpModalVisible(false);
+    const notifIds = (observationState.data?.notifications || []).map((n) => n.id);
+    if (notifIds.length > 0) {
+      markAsRead(notifIds);
+    }
+    profileMethods.fetchProfile();
+
     const speciesId = observationState.data?.species;
     const speciesType = observationState.data?.type;
     observationMethods.clearObservation();

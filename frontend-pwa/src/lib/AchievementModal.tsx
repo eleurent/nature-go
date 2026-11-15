@@ -1,42 +1,44 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import PosterIcon from '@/components/PosterIcon';
+import { getTitle } from '@/lib/titles';
 
-const TITLES: Record<number, string> = {
-  1: 'Scout',
-  2: 'Field Assistant',
-  3: 'Apprentice Naturalist',
-  4: 'Undergraduate',
-  5: 'PhD Candidate',
-  6: 'Postdoctoral Fellow',
-  7: 'Assistant Professor',
-  8: 'Associate Professor',
-  9: 'Professor',
-  10: 'Distinguished Professor',
-};
-
-function getTitle(level: number): string {
-  return TITLES[level] || TITLES[10];
-}
-
-interface XpBreakdownItem {
+interface ObservationXpBreakdownItem {
   value: number;
   reason: Record<string, string>;
 }
 
-interface Achievements {
+interface QuizXpBreakdownItem {
+  total: number;
+  breakdown: ObservationXpBreakdownItem[];
+}
+
+export interface Achievements {
   new_species?: boolean;
   species_name?: string;
   species_illustration_url?: string | null;
   species_rarity?: string;
   level_up?: { old_level: number; new_level: number };
-  poster_updates?: { poster_name: string; poster_id: string; old_level: string | null; new_level: string | null }[];
+  poster_updates?: {
+    poster_name: string;
+    poster_id: string;
+    old_level: string | null;
+    new_level: string | null;
+    seen_count?: number;
+    total_count?: number;
+  }[];
+  milestones?: {
+    title: string;
+    message: string;
+    milestone_key?: string;
+  }[];
 }
 
 interface AchievementModalProps {
-  xp: {
+  xp?: {
     total: number;
-    breakdown: XpBreakdownItem[];
+    breakdown: (ObservationXpBreakdownItem | QuizXpBreakdownItem)[];
   };
   achievements?: Achievements;
   onClose: () => void;
@@ -46,7 +48,16 @@ type Slide =
   | { type: 'xp' }
   | { type: 'new_species'; name: string; illustrationUrl: string | null; rarity: string }
   | { type: 'level_up'; old_level: number; new_level: number }
-  | { type: 'poster'; poster_name: string; old_level: string | null; new_level: string | null };
+  | {
+      type: 'poster';
+      poster_id: string;
+      poster_name: string;
+      old_level: string | null;
+      new_level: string | null;
+      seen_count?: number;
+      total_count?: number;
+    }
+  | { type: 'milestone'; title: string; message: string };
 
 function parseReason(reason: Record<string, string>): string {
   if ('Rarity' in reason) {
@@ -61,6 +72,25 @@ function parseReason(reason: Record<string, string>): string {
     if (reason.Familiarity === 'Expert') return 'Expert';
   }
   return JSON.stringify(reason);
+}
+
+function normalizeXpBreakdown(
+  breakdown?: (ObservationXpBreakdownItem | QuizXpBreakdownItem)[]
+): { label: string; value: number }[] {
+  if (!breakdown) return [];
+  return breakdown.map((item, idx) => {
+    if ('reason' in item && item.reason) {
+      return {
+        label: parseReason(item.reason).toUpperCase(),
+        value: item.value,
+      };
+    }
+    const quizItem = item as QuizXpBreakdownItem;
+    return {
+      label: `QUESTION ${idx + 1}`,
+      value: quizItem.total ?? 0,
+    };
+  });
 }
 
 
@@ -316,7 +346,7 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
   const [xpCountUp, setXpCountUp] = useState(0);
   const [revealComplete, setRevealComplete] = useState(false);
 
-  // Build slides: new species reveal first (most exciting), then XP, level up, poster
+  // Build slides: new species reveal first (most exciting), then XP, level up, poster, milestone
   const slides: Slide[] = [];
   if (achievements?.new_species && achievements.species_name) {
     slides.push({
@@ -326,18 +356,38 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
       rarity: achievements.species_rarity || 'Common',
     });
   }
-  slides.push({ type: 'xp' });
+  if (xp) {
+    slides.push({ type: 'xp' });
+  }
   if (achievements?.level_up) {
     slides.push({ type: 'level_up', old_level: achievements.level_up.old_level, new_level: achievements.level_up.new_level });
   }
   if (achievements?.poster_updates) {
     for (const poster of achievements.poster_updates) {
-      slides.push({ type: 'poster', poster_name: poster.poster_name, old_level: poster.old_level, new_level: poster.new_level });
+      slides.push({
+        type: 'poster',
+        poster_id: poster.poster_id,
+        poster_name: poster.poster_name,
+        old_level: poster.old_level,
+        new_level: poster.new_level,
+        seen_count: poster.seen_count,
+        total_count: poster.total_count,
+      });
+    }
+  }
+  if (achievements?.milestones) {
+    for (const milestone of achievements.milestones) {
+      slides.push({
+        type: 'milestone',
+        title: milestone.title,
+        message: milestone.message,
+      });
     }
   }
 
   const isLastSlide = currentSlide >= slides.length - 1;
   const slide = slides[currentSlide];
+  const xpRows = normalizeXpBreakdown(xp?.breakdown);
 
   // For new_species slide: mark reveal complete after animation finishes (3.4s)
   useEffect(() => {
@@ -352,8 +402,12 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
 
   // XP count-up animation
   useEffect(() => {
-    if (slide?.type !== 'xp') return;
+    if (slide?.type !== 'xp' || !xp) return;
     const target = xp.total;
+    if (target <= 0) {
+      setXpCountUp(0);
+      return;
+    }
     const duration = 800;
     const steps = 20;
     const increment = target / steps;
@@ -384,6 +438,8 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
     }, 200);
   }, [isLastSlide, onClose, revealComplete]);
 
+  if (!slide) return null;
+
   return (
     <>
       <AnimationStyles />
@@ -408,10 +464,10 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
                   <h3 className="text-center font-old-standard text-lg text-amber-900/70 uppercase tracking-widest mb-4">
                     Experience Gained
                   </h3>
-                  {xp.breakdown?.map((item, index) => (
+                  {xpRows.map((item, index) => (
                     <div key={index} className="flex justify-between mb-3">
                       <span className="text-sm text-gray-700 font-old-standard">
-                        {parseReason(item.reason).toUpperCase()}
+                        {item.label}
                       </span>
                       <span className="text-sm text-rose-600 font-old-standard font-bold">
                         +{item.value} XP
@@ -471,22 +527,52 @@ export default function AchievementModal({ xp, achievements, onClose }: Achievem
                 </div>
               )}
 
-
-
               {slide.type === 'poster' && (
                 <div className="text-center py-4">
-                  <div className="text-5xl mb-4">📋</div>
+                  <div className="flex justify-center mb-4">
+                    <PosterIcon
+                      posterId={slide.poster_id}
+                      posterName={slide.poster_name}
+                      level={slide.new_level}
+                      seenCount={slide.seen_count ?? 1}
+                      totalCount={slide.total_count ?? 1}
+                      size={84}
+                      showLabel={false}
+                    />
+                  </div>
                   <h3 className="font-old-standard text-lg text-amber-900/70 uppercase tracking-widest mb-2">
-                    Field Guide Progress!
+                    {slide.old_level ? 'Badge Upgraded!' : 'Badge Unlocked!'}
                   </h3>
                   <p className="text-xl font-special-elite text-gray-800 mb-3">
                     {slide.poster_name}
                   </p>
-                  <div className={`inline-block px-4 py-1.5 rounded-full bg-gradient-to-r ${POSTER_LEVEL_COLORS[slide.new_level || ''] || 'from-gray-300 to-gray-200'}`}>
-                    <span className="text-sm font-old-standard font-bold text-white drop-shadow">
-                      {slide.new_level} Rank
-                    </span>
+                  <div className="flex items-center justify-center gap-2">
+                    {slide.old_level && (
+                      <>
+                        <span className="text-sm text-gray-500 font-old-standard">
+                          {slide.old_level}
+                        </span>
+                        <span className="text-gray-400">→</span>
+                      </>
+                    )}
+                    <div className={`inline-block px-4 py-1.5 rounded-full bg-gradient-to-r ${POSTER_LEVEL_COLORS[slide.new_level || ''] || 'from-gray-400 to-gray-300'}`}>
+                      <span className="text-sm font-old-standard font-bold text-white drop-shadow">
+                        {slide.new_level} Rank
+                      </span>
+                    </div>
                   </div>
+                </div>
+              )}
+
+              {slide.type === 'milestone' && (
+                <div className="text-center py-4">
+                  <div className="text-5xl mb-4">🧭</div>
+                  <h3 className="font-old-standard text-lg text-amber-900/70 uppercase tracking-widest mb-2">
+                    {slide.title}
+                  </h3>
+                  <p className="font-old-standard text-base text-gray-700 leading-relaxed">
+                    {slide.message}
+                  </p>
                 </div>
               )}
             </div>

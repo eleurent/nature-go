@@ -1,14 +1,21 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useQuiz } from '@/contexts/QuizContext';
+import { useNotifications } from '@/contexts/NotificationContext';
+import { useUserProfile } from '@/contexts/UserProfileContext';
+import AchievementModal from '@/lib/AchievementModal';
 
 export default function QuizResultPage() {
   const router = useRouter();
   const { authState } = useAuth();
   const { quizState, quizMethods } = useQuiz();
+  const { enqueueNotifications, markAsRead } = useNotifications();
+  const { profileMethods } = useUserProfile();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [hasShownModal, setHasShownModal] = useState(false);
 
   useEffect(() => {
     if (authState.isLoading) return;
@@ -20,7 +27,17 @@ export default function QuizResultPage() {
       router.replace('/quiz');
       return;
     }
-  }, [authState.isLoading, authState.userToken, quizState.quiz]);
+  }, [authState.isLoading, authState.userToken, quizState.quiz, router]);
+
+  useEffect(() => {
+    if (!hasShownModal && (quizState.xp || quizState.achievements)) {
+      if (quizState.notifications?.length) {
+        enqueueNotifications(quizState.notifications, { showToast: false });
+      }
+      setModalVisible(true);
+      setHasShownModal(true);
+    }
+  }, [hasShownModal, quizState.xp, quizState.achievements, quizState.notifications, enqueueNotifications]);
 
   if (authState.isLoading || !authState.userToken || !quizState.quiz) return null;
 
@@ -35,6 +52,15 @@ export default function QuizResultPage() {
     if (percentage >= 60) return "Good effort! Keep studying and you'll improve.";
     if (percentage >= 40) return "More practice is needed. Return to your studies!";
     return "I'm afraid more research is required. Back to the field!";
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+    const notifIds = (quizState.notifications || []).map((n) => n.id);
+    if (notifIds.length > 0) {
+      markAsRead(notifIds);
+    }
+    profileMethods.fetchProfile();
   };
 
   const handleFinish = () => {
@@ -55,6 +81,11 @@ export default function QuizResultPage() {
         <p className="text-xl font-old-standard">
           {correctCount} out of {totalQuestions} correct
         </p>
+        {quizState.xp && (
+          <p className="text-lg font-old-standard text-rose-700 font-bold mt-3">
+            +{quizState.xp.total} XP earned
+          </p>
+        )}
       </div>
 
       <p className="text-xl font-old-standard text-center max-w-md mb-12 text-nature-brown/70">
@@ -78,6 +109,14 @@ export default function QuizResultPage() {
           Try Again
         </button>
       </div>
+
+      {modalVisible && (quizState.xp || quizState.achievements) && (
+        <AchievementModal
+          xp={quizState.xp || undefined}
+          achievements={quizState.achievements || undefined}
+          onClose={handleModalClose}
+        />
+      )}
     </div>
   );
 }

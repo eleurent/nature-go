@@ -6,6 +6,8 @@ import { UserProfileProvider } from '@/contexts/UserProfileContext';
 import { ObservationProvider } from '@/contexts/ObservationContext';
 import { QuizProvider } from '@/contexts/QuizContext';
 import { LocationProvider } from '@/contexts/LocationContext';
+import { NotificationProvider } from '@/contexts/NotificationContext';
+import NotificationToast from '@/components/NotificationToast';
 
 export const metadata: Metadata = {
   title: 'Nature GO',
@@ -38,15 +40,18 @@ export default function RootLayout({
       <body>
         <SettingsProvider>
           <AuthProvider>
-            <LocationProvider>
-              <UserProfileProvider>
-                <ObservationProvider>
-                  <QuizProvider>
-                    {children}
-                  </QuizProvider>
-                </ObservationProvider>
-              </UserProfileProvider>
-            </LocationProvider>
+            <NotificationProvider>
+              <LocationProvider>
+                <UserProfileProvider>
+                  <ObservationProvider>
+                    <QuizProvider>
+                      <NotificationToast />
+                      {children}
+                    </QuizProvider>
+                  </ObservationProvider>
+                </UserProfileProvider>
+              </LocationProvider>
+            </NotificationProvider>
           </AuthProvider>
         </SettingsProvider>
       </body>
