@@ -27,6 +27,7 @@ class MultipleChoiceQuestionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroy
 class MultipleChoiceQuestionGeneration(generics.GenericAPIView):
   queryset = Species.objects.all()
   serializer_class = MultipleChoiceQuestionSerializer
+  permission_classes = [permissions.IsAdminUser]
 
   def post(self, request, *args, **kwargs):
     del request, args, kwargs
@@ -60,11 +61,14 @@ class QuizCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         user = self.request.user
         observed_species = Observation.objects.filter(user=user).values_list('species__id', flat=True)
-        questions = MultipleChoiceQuestion.objects.filter(species__id__in=observed_species)
-        num_questions = min(5, questions.count())
-        questions = random.sample(list(questions), num_questions)
-        if not len(questions) > 0:
+        question_ids = list(
+            MultipleChoiceQuestion.objects.filter(species__id__in=observed_species)
+            .values_list('id', flat=True)
+        )
+        if not question_ids:
             raise serializers.ValidationError('Cannot create a quiz because no species with questions have been observed.')
+        sampled_ids = random.sample(question_ids, min(5, len(question_ids)))
+        questions = list(MultipleChoiceQuestion.objects.filter(id__in=sampled_ids))
         serializer.save(user=self.request.user, multiple_choice_questions=questions)
         
     def get(self, request, *args, **kwargs):

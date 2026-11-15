@@ -38,7 +38,12 @@ class ProfileSerializer(serializers.ModelSerializer):
          return instance.level_xp(instance.level + 1)
     
     def get_species_count(self, instance):
-        return len(set(obs.species for obs in instance.user.observation_set.all() if obs.species is not None))
+        return (
+            instance.user.observation_set.exclude(species=None)
+            .values('species')
+            .distinct()
+            .count()
+        )
 
     def get_observations_count(self, instance):
         return instance.user.observation_set.exclude(species=None).count()

@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSettings } from '@/contexts/SettingsContext';
@@ -8,6 +9,12 @@ export default function SettingsPage() {
   const router = useRouter();
   const { authState } = useAuth();
   const { settings, setAutoPlayAudio } = useSettings();
+
+  useEffect(() => {
+    if (!authState.isLoading && !authState.userToken) {
+      router.replace('/');
+    }
+  }, [authState.isLoading, authState.userToken, router]);
 
   if (authState.isLoading || !authState.userToken) return null;
 

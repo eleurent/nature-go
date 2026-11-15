@@ -13,6 +13,7 @@ from observation.serializers import ObservationSerializer, SpeciesListSerializer
 from rest_framework import filters, generics, pagination, permissions, status
 from rest_framework import serializers
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from user_profile.signals import xp_gained
 
 logger = logging.getLogger(__name__)
@@ -76,7 +77,11 @@ class SpeciesAllList(generics.ListCreateAPIView):
     for param, value in self.request.query_params.items():
       if param not in [f.name for f in Species._meta.get_fields()]:
         continue
-      filters &= Q(**{param: ast.literal_eval(value)})
+      try:
+        parsed_value = ast.literal_eval(value)
+      except (ValueError, SyntaxError):
+        parsed_value = value
+      filters &= Q(**{param: parsed_value})
     queryset = queryset.filter(filters)
     return queryset
 
@@ -97,6 +102,16 @@ class SpeciesLabeledList(generics.ListCreateAPIView):
   serializer_class = SpeciesSerializer
   permission_classes = [permissions.IsAdminUser]
   pagination_class = pagination.LimitOffsetPagination
+  ALLOWED_ORDERING_FIELDS = {
+      'observation_count',
+      '-observation_count',
+      'occurences_cdf',
+      '-occurences_cdf',
+      'rarity_gpt',
+      '-rarity_gpt',
+      'id',
+      '-id',
+  }
 
   def get_queryset(self):
     queryset = Species.objects.all()
@@ -130,9 +145,12 @@ class SpeciesLabeledList(generics.ListCreateAPIView):
           Q(multiplechoicequestion__isnull=not has_questions)
       )
 
-    ordering = self.request.GET.getlist(
+    raw_ordering = self.request.GET.getlist(
         'ordering', ['-observation_count', '-occurences_cdf']
     )
+    ordering = [f for f in raw_ordering if f in self.ALLOWED_ORDERING_FIELDS]
+    if not ordering:
+      ordering = ['-observation_count', '-occurences_cdf']
     queryset = queryset.annotate(
         observation_count=Count('observation')
     ).order_by(*ordering)
@@ -187,10 +205,14 @@ class ObservationListCreate(generics.ListCreateAPIView):
 
   def get_queryset(self):
     user = self.request.user
-    return Observation.objects.filter(user=user, species__isnull=False)
+    return Observation.objects.filter(
+        user=user, species__isnull=False
+    ).select_related('species')
 
   def create(self, request, *args, **kwargs):
-    serializer = ObservationSerializer(data=request.data)
+    serializer = ObservationSerializer(
+        data=request.data, context={'request': request}
+    )
     try:
       serializer.is_valid(raise_exception=True)
     except serializers.ValidationError as e:
@@ -200,24 +222,34 @@ class ObservationListCreate(generics.ListCreateAPIView):
     observation = serializer.save(user=self.request.user)
 
     # Run identification service
-    if observation.type == Species.PLANT_TYPE:
-      response = plantnet.plantnet_identify(
-          image_path=observation.image.path, organ=observation.organ
+    try:
+      if observation.type == Species.PLANT_TYPE:
+        response = plantnet.plantnet_identify(
+            image_path=observation.image.path, organ=observation.organ
+        )
+        observation.identification_response = serialize_identification_response(
+            response, request=request
+        )
+        observation.save()
+      elif observation.type == Species.BIRD_TYPE:
+        response = gemini.gemini_identify_few_shot(
+            image_path=observation.image.path, location=observation.location
+        )
+        observation.identification_response = serialize_identification_response(
+            response, request=request
+        )
+        observation.save()
+    except Exception as e:
+      logger.exception('Identification failed for observation %s', observation.pk)
+      observation.delete()
+      return Response(
+          {'error': 'Species identification failed. Please try again.'},
+          status=status.HTTP_502_BAD_GATEWAY,
       )
-      observation.identification_response = serialize_identification_response(
-          response
-      )
-      observation.save()
-    elif observation.type == Species.BIRD_TYPE:
-      response = gemini.gemini_identify_few_shot(
-          image_path=observation.image.path, location=observation.location
-      )
-      observation.identification_response = serialize_identification_response(
-          response
-      )
-      observation.save()
 
-    serializer = ObservationSerializer(instance=observation)
+    serializer = ObservationSerializer(
+        instance=observation, context={'request': request}
+    )
     return Response(serializer.data)
 
 
@@ -230,20 +262,34 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
     if 'species' not in request.data:
       return super().update(request, *args, **kwargs)
     instance = self.get_object()
-    idx = int(
-        request.data['species']
-    )  # index of the correct species in the identification response, not species pk
-    species_id = instance.identification_response['results'][idx]['species'][
-        'id'
-    ]
-    instance.species = Species.objects.get(pk=species_id)
+    try:
+      idx = int(request.data['species'])
+    except (TypeError, ValueError):
+      return Response(
+          {'error': 'Invalid species candidate index.'},
+          status=status.HTTP_400_BAD_REQUEST,
+      )
+    results = (instance.identification_response or {}).get('results', [])
+    if idx < 0 or idx >= len(results):
+      return Response(
+          {'error': 'Species candidate index out of range.'},
+          status=status.HTTP_400_BAD_REQUEST,
+      )
+    try:
+      species_id = results[idx]['species']['id']
+      instance.species = Species.objects.get(pk=species_id)
+    except (KeyError, TypeError, Species.DoesNotExist):
+      return Response(
+          {'error': 'Selected species does not exist.'},
+          status=status.HTTP_400_BAD_REQUEST,
+      )
     instance.save()
 
     achievements = {}
     if not instance.xp and instance.species:
       achievements = self._compute_achievements(instance)
 
-    data = ObservationSerializer(instance).data
+    data = ObservationSerializer(instance, context={'request': request}).data
     if achievements:
       data['achievements'] = achievements
     return Response(data)
@@ -314,11 +360,15 @@ class ObservationUpdate(generics.RetrieveUpdateAPIView):
       # Compute old and new levels
       core_species = poster['species']
       all_species = core_species + poster.get('species_extended', [])
-      seen_count_new = Species.objects.filter(
-          observation__user=user,
-          type=species_type,
-          scientificNameWithoutAuthor__in=all_species,
-      ).count()
+      seen_count_new = (
+          Species.objects.filter(
+              observation__user=user,
+              type=species_type,
+              scientificNameWithoutAuthor__in=all_species,
+          )
+          .distinct()
+          .count()
+      )
       # Old count is one less if this was a new observation of this species
       seen_count_old = seen_count_new - (1 if is_new_species else 0)
       total = len(core_species)
@@ -349,6 +399,8 @@ class GenerateIllustrationView(generics.GenericAPIView):
   queryset = Species.objects.all()
   serializer_class = SpeciesSerializer
   permission_classes = [permissions.IsAuthenticated]
+  throttle_classes = [ScopedRateThrottle]
+  throttle_scope = 'ai_generation'
 
   def post(self, request, *args, **kwargs):
     species = self.get_object()
@@ -369,6 +421,8 @@ class GenerateTransparentIllustrationView(generics.GenericAPIView):
   queryset = Species.objects.all()
   serializer_class = SpeciesSerializer
   permission_classes = [permissions.IsAuthenticated]
+  throttle_classes = [ScopedRateThrottle]
+  throttle_scope = 'ai_generation'
 
   def post(self, request, *args, **kwargs):
     species = self.get_object()
@@ -391,6 +445,8 @@ class GenerateAudioDescriptionView(generics.GenericAPIView):
   permission_classes = [
       permissions.IsAuthenticated
   ]  # Or IsAuthenticated, based on actual requirements
+  throttle_classes = [ScopedRateThrottle]
+  throttle_scope = 'ai_generation'
 
   def post(self, request, *args, **kwargs):
     species = self.get_object()

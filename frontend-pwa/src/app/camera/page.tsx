@@ -15,9 +15,37 @@ export default function CameraPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
+
+  const stopCamera = useCallback(() => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+  }, []);
+
+  const startCamera = useCallback(
+    async (mode: 'user' | 'environment') => {
+      stopCamera();
+      try {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: mode },
+          audio: false,
+        });
+        streamRef.current = mediaStream;
+        setHasPermission(true);
+        if (videoRef.current) {
+          videoRef.current.srcObject = mediaStream;
+        }
+      } catch (error) {
+        console.error('Camera access denied:', error);
+        setHasPermission(false);
+      }
+    },
+    [stopCamera]
+  );
 
   useEffect(() => {
     if (authState.isLoading) return;
@@ -26,31 +54,12 @@ export default function CameraPage() {
       return;
     }
     observationMethods.clearObservation();
-    startCamera();
+    startCamera('environment');
 
     return () => {
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-      }
+      stopCamera();
     };
-  }, [authState.isLoading, authState.userToken]);
-
-  const startCamera = async () => {
-    try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode },
-        audio: false,
-      });
-      setStream(mediaStream);
-      setHasPermission(true);
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-      }
-    } catch (error) {
-      console.error('Camera access denied:', error);
-      setHasPermission(false);
-    }
-  };
+  }, [authState.isLoading, authState.userToken, router, observationMethods, startCamera, stopCamera]);
 
   const capturePhoto = useCallback(async () => {
     if (!videoRef.current || !canvasRef.current) return;
@@ -84,23 +93,41 @@ export default function CameraPage() {
     if (!file) return;
 
     const exifData = await extractExifData(file);
-    
+
     const reader = new FileReader();
     reader.onload = () => {
-      const base64 = (reader.result as string).split(',')[1];
-      observationMethods.setObservationImage(base64);
-      
-      if (exifData.datetime) {
-        observationMethods.setObservationDatetime(exifData.datetime);
-      } else {
-        observationMethods.setObservationDatetime(new Date().toISOString());
-      }
-      
-      if (exifData.location) {
-        observationMethods.setObservationLocation(exifData.location);
-      }
-      
-      router.push('/observation/confirm');
+      const dataUrl = reader.result as string;
+      const img = new window.Image();
+      img.onload = () => {
+        const maxDim = 1600;
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          const scale = maxDim / Math.max(width, height);
+          width = Math.round(width * scale);
+          height = Math.round(height * scale);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        let base64 = dataUrl.split(',')[1];
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          base64 = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+        }
+
+        observationMethods.setObservationImage(base64);
+        if (exifData.datetime) {
+          observationMethods.setObservationDatetime(exifData.datetime);
+        } else {
+          observationMethods.setObservationDatetime(new Date().toISOString());
+        }
+        if (exifData.location) {
+          observationMethods.setObservationLocation(exifData.location);
+        }
+        router.push('/observation/confirm');
+      };
+      img.src = dataUrl;
     };
     reader.readAsDataURL(file);
   };
@@ -111,6 +138,7 @@ export default function CameraPage() {
     <div className="relative min-h-screen bg-black">
       <button
         onClick={() => router.back()}
+        aria-label="Go back"
         className="absolute top-4 left-4 z-10 text-white text-2xl"
       >
         ←
@@ -145,6 +173,7 @@ export default function CameraPage() {
               onClick={() => fileInputRef.current?.click()}
               className="text-white p-3"
               title="Gallery"
+              aria-label="Choose photo from gallery"
             >
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -155,18 +184,18 @@ export default function CameraPage() {
               onClick={capturePhoto}
               className="w-20 h-20 rounded-full border-4 border-white bg-white/20 hover:bg-white/40 transition-colors"
               title="Take Photo"
+              aria-label="Take photo"
             />
 
             <button
               onClick={() => {
-                if (stream) {
-                  stream.getTracks().forEach(track => track.stop());
-                }
-                setFacingMode(f => f === 'user' ? 'environment' : 'user');
-                setTimeout(startCamera, 100);
+                const nextMode = facingMode === 'user' ? 'environment' : 'user';
+                setFacingMode(nextMode);
+                startCamera(nextMode);
               }}
               className="text-white p-3"
               title="Switch Camera"
+              aria-label="Switch camera"
             >
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

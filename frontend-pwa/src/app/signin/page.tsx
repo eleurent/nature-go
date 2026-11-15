@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
@@ -12,6 +12,16 @@ export default function SignInPage() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    authMethods.clearError();
+  }, [authMethods]);
+
+  useEffect(() => {
+    if (authState.userToken) {
+      router.replace('/home');
+    }
+  }, [authState.userToken, router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -20,7 +30,6 @@ export default function SignInPage() {
   };
 
   if (authState.userToken) {
-    router.replace('/home');
     return null;
   }
 

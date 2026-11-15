@@ -216,14 +216,18 @@ function SpeciesDetailContent() {
     }
   };
 
-  const handlePlayPause = () => {
+  const handlePlayPause = async () => {
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();
     } else {
-      audioRef.current.play();
+      try {
+        await audioRef.current.play();
+      } catch (err) {
+        console.error('Audio playback failed:', err);
+        setIsPlaying(false);
+      }
     }
-    setIsPlaying(!isPlaying);
   };
 
   const getImageUrl = (url: string) => {
@@ -310,6 +314,7 @@ function SpeciesDetailContent() {
                     onClick={handlePlayPause}
                     className="p-2"
                     title={isPlaying ? 'Pause' : 'Play'}
+                    aria-label={isPlaying ? 'Pause audio description' : 'Play audio description'}
                   >
                     {isPlaying ? (
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
@@ -325,6 +330,8 @@ function SpeciesDetailContent() {
                   <audio
                     ref={audioRef}
                     src={getImageUrl(speciesDetails.audio_description)}
+                    onPlay={() => setIsPlaying(true)}
+                    onPause={() => setIsPlaying(false)}
                     onEnded={() => setIsPlaying(false)}
                   />
                 </>
@@ -343,11 +350,14 @@ function SpeciesDetailContent() {
               </p>
             )}
 
-            {speciesDetails.descriptions && speciesDetails.descriptions.length > observations.length && (
-              <p className="font-old-standard text-center text-nature-brown/60 py-4">
-                <strong>1</strong> more observation needed.
-              </p>
-            )}
+            {speciesDetails.descriptions && speciesDetails.descriptions.length > observations.length && (() => {
+              const remaining = speciesDetails.descriptions.length - observations.length;
+              return (
+                <p className="font-old-standard text-center text-nature-brown/60 py-4">
+                  <strong>{remaining}</strong> more {remaining === 1 ? 'observation' : 'observations'} needed.
+                </p>
+              );
+            })()}
           </div>
 
           {observations.length > 0 && (

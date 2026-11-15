@@ -45,14 +45,25 @@ class QuizSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quiz
         fields = ['id', 'user', 'multiple_choice_questions', 'datetime', 'multiplechoiceuseranswer_set', 'xp']
-        read_only_fields = ('user', 'multiple_choice_questions', 'datetime')
+        read_only_fields = ('user', 'multiple_choice_questions', 'datetime', 'xp')
 
     def update(self, instance, validated_data):
         # the serializer can only update the user answers
-        if validated_data.get('multiplechoiceuseranswer_set'):
+        answers = validated_data.get('multiplechoiceuseranswer_set')
+        if answers is not None:
+            valid_question_ids = set(
+                instance.multiple_choice_questions.values_list('id', flat=True)
+            )
+            for answer in answers:
+                if answer['question'].id not in valid_question_ids:
+                    raise serializers.ValidationError(
+                        'Question does not belong to this quiz.'
+                    )
             instance.multiplechoiceuseranswer_set.all().delete()
-            [MultipleChoiceUserAnswer.objects.create(**answer)
-             for answer in validated_data.get('multiplechoiceuseranswer_set')]
+            for answer in answers:
+                answer = dict(answer)
+                answer['quiz'] = instance
+                MultipleChoiceUserAnswer.objects.create(**answer)
         if not instance.xp and instance.is_answered:
             xp_gained.send(sender=instance.__class__, instance=instance)
         return instance

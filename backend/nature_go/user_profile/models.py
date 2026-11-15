@@ -28,13 +28,15 @@ class Profile(models.Model):
         else:
             raise ValueError(f'Unkown XP source: {instance}')
         instance.save()
-        self.xp += instance.xp['total']
-        if self.xp > self.level_xp(self.level + 1):
+        self.xp += int(instance.xp['total'])
+        while self.xp >= self.level_xp(self.level + 1):
             self.level += 1
         self.save()
 
 
 def compute_observation_xp(obs: Observation) -> dict:
+    if obs.species is None:
+        return {'total': 0, 'breakdown': []}
     rarity_xp_values = {
         'Very Common' : 5,
         'Common' : 5,
@@ -72,9 +74,10 @@ def compute_observation_xp(obs: Observation) -> dict:
 
 
 def compute_quiz_xp(quiz: Quiz) -> dict:
-    per_question_xp = [compute_user_answer_xp(mcua) for mcua in quiz.multiplechoiceuseranswer_set.all()]
+    answers = quiz.multiplechoiceuseranswer_set.select_related('question').all()
+    per_question_xp = [compute_user_answer_xp(mcua) for mcua in answers]
     return {
-        'total': sum(q['total'] for q in per_question_xp),
+        'total': int(round(sum(q['total'] for q in per_question_xp))),
         'breakdown': per_question_xp
     }
 
@@ -101,16 +104,16 @@ def compute_user_answer_xp(user_answer) -> dict:
         'Expert' 
     )
     familiarity_xp = {
-        'value': np.exp((1-n_correct_answers) / 3),
+        'value': float(np.exp((1 - n_correct_answers) / 3)),
         'reason': {'Familiarity ratio': familiarity_reason}
     }
 
     correctness_xp = {
-        'value': user_answer.is_correct,
-        'reason': {'Correctness': user_answer.is_correct}
+        'value': bool(user_answer.is_correct),
+        'reason': {'Correctness': bool(user_answer.is_correct)}
     }
     
-    total = difficulty_xp['value'] * familiarity_xp['value'] * correctness_xp['value']
+    total = int(round(difficulty_xp['value'] * familiarity_xp['value'] * (1 if correctness_xp['value'] else 0)))
     return {
         'total': total,
         'breakdown': [difficulty_xp, familiarity_xp, correctness_xp]

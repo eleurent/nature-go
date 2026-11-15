@@ -12,6 +12,7 @@ def parse_plantnet(plantnet_response: dict) -> IdentificationResponse:
     for result in plantnet_response['results']:
         species_data = result['species']
         species_data = dict(
+            type=Species.PLANT_TYPE,
             scientificNameWithoutAuthor=species_data['scientificNameWithoutAuthor'],
             scientificNameAuthorship=species_data['scientificNameAuthorship'],
             commonNames=species_data['commonNames'],
@@ -39,10 +40,6 @@ def plantnet_identify(image_path: str, organ: str, mock: bool = False):
     if mock:
         return plantnet_identify_mock()
     url = 'https://my-api.plantnet.org/v2/identify/all'
-    image_data =  open(image_path, 'rb')
-    files = [
-        ('images', (image_path, image_data))
-    ]
     params = {
         'include-related-images': True,
         'lang': 'en',
@@ -50,12 +47,16 @@ def plantnet_identify(image_path: str, organ: str, mock: bool = False):
     }
     data = {'organs': [organ]}
     try:
-        response = requests.post(url, files=files, data=data, params=params)
+        with open(image_path, 'rb') as image_data:
+            files = [
+                ('images', (image_path, image_data))
+            ]
+            response = requests.post(url, files=files, data=data, params=params, timeout=30)
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
         if e.response.status_code == 404:
             # No result found, see https://my.plantnet.org/doc/faq#Rejection
-            return {"results": []}
+            return IdentificationResponse(candidates=[])
         else:
             raise e
 
