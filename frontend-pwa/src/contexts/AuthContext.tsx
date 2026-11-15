@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import React, { createContext, useContext, useReducer, useEffect, useMemo, ReactNode } from 'react';
-import { api, endpoints, setAuthToken } from '@/lib/api';
+import { api, endpoints, setAuthToken, setOnUnauthorized } from '@/lib/api';
 import { storage } from '@/lib/storage';
 
 interface AuthState {
@@ -126,6 +126,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
+    setOnUnauthorized(() => {
+      dispatch({ type: 'SIGN_OUT' });
+    });
+
     const restoreToken = async () => {
       const userToken = storage.get('userToken');
       if (userToken) {
@@ -144,6 +148,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     };
     restoreToken();
+
+    return () => {
+      setOnUnauthorized(null);
+    };
   }, []);
 
   return (
