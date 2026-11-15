@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'authentication',
     'generation',
+    'notifications',
     'observation',
     'university',
     'user_profile',

@@ -4,17 +4,20 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 
 interface SettingsState {
   autoPlayAudio: boolean;
+  browserNotifications: boolean;
 }
 
 interface SettingsContextType {
   settings: SettingsState;
   setAutoPlayAudio: (enabled: boolean) => void;
+  setBrowserNotifications: (enabled: boolean) => void;
 }
 
 const STORAGE_KEY = 'natureGoSettings';
 
 const DEFAULT_SETTINGS: SettingsState = {
   autoPlayAudio: true,
+  browserNotifications: false,
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -48,8 +51,12 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     setSettings((prev) => ({ ...prev, autoPlayAudio: enabled }));
   };
 
+  const setBrowserNotifications = (enabled: boolean) => {
+    setSettings((prev) => ({ ...prev, browserNotifications: enabled }));
+  };
+
   return (
-    <SettingsContext.Provider value={{ settings, setAutoPlayAudio }}>
+    <SettingsContext.Provider value={{ settings, setAutoPlayAudio, setBrowserNotifications }}>
       {children}
     </SettingsContext.Provider>
   );

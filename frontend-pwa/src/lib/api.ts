@@ -81,4 +81,11 @@ export const endpoints = {
     regions: 'api/poster/regions/',
     data: (posterId: string) => `api/poster/${posterId}/`,
   },
+  notifications: {
+    list: 'api/notifications/',
+    unreadCount: 'api/notifications/unread_count/',
+    markRead: 'api/notifications/mark_read/',
+    markSingleRead: (id: number) => `api/notifications/${id}/read/`,
+    delete: (id: number) => `api/notifications/${id}/`,
+  },
 };

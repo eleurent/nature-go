@@ -2,6 +2,7 @@ from django.dispatch import Signal
 from .models import Profile
 
 xp_gained = Signal()
+level_up = Signal()
 
 
 def update_profile_xp(sender, **kwargs):

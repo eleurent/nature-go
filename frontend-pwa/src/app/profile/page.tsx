@@ -8,6 +8,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useUserProfile } from '@/contexts/UserProfileContext';
 import { api, endpoints } from '@/lib/api';
 import PosterIcon from '@/components/PosterIcon';
+import NotificationBell from '@/components/NotificationBell';
+import { getTitle } from '@/lib/titles';
 
 interface Poster {
   id: string;
@@ -17,23 +19,6 @@ interface Poster {
   seen_count: number;
   total_count: number;
   level: string | null;
-}
-
-const TITLES: Record<number, string> = {
-  1: 'Scout',
-  2: 'Field Assistant',
-  3: 'Apprentice Naturalist',
-  4: 'Undergraduate',
-  5: 'PhD Candidate',
-  6: 'Postdoctoral Fellow',
-  7: 'Assistant Professor',
-  8: 'Associate Professor',
-  9: 'Professor',
-  10: 'Distinguished Professor',
-};
-
-function getTitle(level: number): string {
-  return TITLES[level] || TITLES[10];
 }
 
 export default function ProfilePage() {
@@ -80,6 +65,10 @@ export default function ProfilePage() {
       >
         ← Back
       </button>
+
+      <div className="fixed top-4 right-4 z-10">
+        <NotificationBell />
+      </div>
 
       <div className="pt-20 px-6">
         <div className="flex gap-6">

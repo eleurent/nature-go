@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/auth/', include('authentication.urls')),
     path('api/profile/', include('user_profile.urls')),
     path('api/poster/', include('poster.urls')),
+    path('api/notifications/', include('notifications.urls')),
     path('api-auth/', include('rest_framework.urls')),
 ]
 

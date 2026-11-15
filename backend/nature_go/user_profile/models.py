@@ -28,10 +28,19 @@ class Profile(models.Model):
         else:
             raise ValueError(f'Unkown XP source: {instance}')
         instance.save()
+        old_level = self.level
         self.xp += int(instance.xp['total'])
         while self.xp >= self.level_xp(self.level + 1):
             self.level += 1
         self.save()
+        if self.level > old_level:
+            from .signals import level_up
+            level_up.send(
+                sender=self.__class__,
+                user=self.user,
+                old_level=old_level,
+                new_level=self.level,
+            )
 
 
 def compute_observation_xp(obs: Observation) -> dict:

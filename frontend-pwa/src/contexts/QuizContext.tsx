@@ -2,6 +2,8 @@
 
 import React, { createContext, useContext, useReducer, useMemo, ReactNode } from 'react';
 import { api, endpoints } from '@/lib/api';
+import { GameNotification } from '@/contexts/NotificationContext';
+import { Achievements } from '@/lib/AchievementModal';
 
 interface Question {
   id: number;
@@ -17,11 +19,19 @@ interface Quiz {
   multiple_choice_questions: Question[];
 }
 
+interface QuizXp {
+  total: number;
+  breakdown: any[];
+}
+
 interface QuizState {
   quiz: Quiz | null;
   answers: (number | null)[];
   correctAnswers: (boolean | null)[];
   correctChoices: (number | null)[];
+  xp: QuizXp | null;
+  achievements: Achievements | null;
+  notifications: GameNotification[];
 }
 
 interface QuizMethods {
@@ -44,7 +54,14 @@ const QuizContext = createContext<QuizContextType | undefined>(undefined);
 type QuizAction =
   | { type: 'SET_QUIZ'; quiz: Quiz }
   | { type: 'SELECT_ANSWER'; questionId: number; answerId: number }
-  | { type: 'SET_CORRECT_ANSWERS'; correctAnswers: boolean[]; correctChoices: number[] }
+  | {
+      type: 'SET_CORRECT_ANSWERS';
+      correctAnswers: boolean[];
+      correctChoices: number[];
+      xp?: QuizXp | null;
+      achievements?: Achievements | null;
+      notifications?: GameNotification[];
+    }
   | { type: 'CLEAR' };
 
 const quizReducer = (prevState: QuizState, action: QuizAction): QuizState => {
@@ -55,15 +72,33 @@ const quizReducer = (prevState: QuizState, action: QuizAction): QuizState => {
         answers: new Array(action.quiz.multiple_choice_questions.length).fill(null),
         correctAnswers: new Array(action.quiz.multiple_choice_questions.length).fill(null),
         correctChoices: new Array(action.quiz.multiple_choice_questions.length).fill(null),
+        xp: null,
+        achievements: null,
+        notifications: [],
       };
     case 'SELECT_ANSWER':
       const newAnswers = [...prevState.answers];
       newAnswers[action.questionId] = action.answerId;
       return { ...prevState, answers: newAnswers };
     case 'SET_CORRECT_ANSWERS':
-      return { ...prevState, correctAnswers: action.correctAnswers, correctChoices: action.correctChoices };
+      return {
+        ...prevState,
+        correctAnswers: action.correctAnswers,
+        correctChoices: action.correctChoices,
+        xp: action.xp !== undefined ? action.xp : prevState.xp,
+        achievements: action.achievements !== undefined ? action.achievements : prevState.achievements,
+        notifications: action.notifications !== undefined ? action.notifications : prevState.notifications,
+      };
     case 'CLEAR':
-      return { quiz: null, answers: [], correctAnswers: [], correctChoices: [] };
+      return {
+        quiz: null,
+        answers: [],
+        correctAnswers: [],
+        correctChoices: [],
+        xp: null,
+        achievements: null,
+        notifications: [],
+      };
     default:
       return prevState;
   }
@@ -74,6 +109,9 @@ const initialState: QuizState = {
   answers: [],
   correctAnswers: [],
   correctChoices: [],
+  xp: null,
+  achievements: null,
+  notifications: [],
 };
 
 export function QuizProvider({ children }: { children: ReactNode }) {
@@ -112,7 +150,19 @@ export function QuizProvider({ children }: { children: ReactNode }) {
           const correctChoices = answerData.map(
             (a: { correct_choice: number }) => a.correct_choice
           );
-          dispatch({ type: 'SET_CORRECT_ANSWERS', correctAnswers, correctChoices });
+          const xpData = response.data.xp && typeof response.data.xp.total === 'number'
+            ? response.data.xp
+            : null;
+          const achievementsData = response.data.achievements || null;
+          const notificationsData = response.data.notifications || [];
+          dispatch({
+            type: 'SET_CORRECT_ANSWERS',
+            correctAnswers,
+            correctChoices,
+            xp: xpData,
+            achievements: achievementsData,
+            notifications: notificationsData,
+          });
           return correctAnswers;
         } catch (error) {
           console.error('Failed to submit quiz', error);

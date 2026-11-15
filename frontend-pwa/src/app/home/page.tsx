@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUserProfile } from '@/contexts/UserProfileContext';
+import NotificationBell from '@/components/NotificationBell';
 
 interface CategoryButtonProps {
   href: string;
@@ -84,6 +85,10 @@ export default function HomePage() {
           paddingRight: 'env(safe-area-inset-right, 0px)',
         }}
       >
+        <div className="absolute top-4 right-4 z-10" style={{ top: 'max(env(safe-area-inset-top, 16px), 16px)' }}>
+          <NotificationBell />
+        </div>
+
         <div className="flex-1 flex flex-col items-center pt-8 px-4">
           <h1 className="text-3xl font-old-standard tracking-widest mb-2">
             CONTENTS.
