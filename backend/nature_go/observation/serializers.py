@@ -15,7 +15,7 @@ class ObservationSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'image', 'type', 'organ', 'species', 'species_display_name', 'location', 'datetime', 'identification_response', 'xp']
 
     def get_species_display_name(self, obj):
-        return str(obj.species)
+        return str(obj.species) if obj.species else ''
 
 
 class SpeciesSmallSerializer(serializers.ModelSerializer):
@@ -106,14 +106,19 @@ class SpeciesSerializer(SpeciesSmallSerializer):
 
 
 
-def serialize_identification_response(response: IdentificationResponse):
+def serialize_identification_response(response: IdentificationResponse, request=None):
     return {
-        'results': [serialize_identification_candidate(candidate) for candidate in response.candidates],
+        'results': [
+            serialize_identification_candidate(candidate, request=request)
+            for candidate in response.candidates
+        ],
         'raw_response': response.raw_response,
     }
 
-def serialize_identification_candidate(candidate: IdentificationCandidate):
+
+def serialize_identification_candidate(candidate: IdentificationCandidate, request=None):
+    context = {'request': request} if request is not None else {}
     return {
         'confidence': candidate.confidence,
-        'species': SpeciesSerializer(instance=Species.objects.get(pk=candidate.species.id)).data
+        'species': SpeciesSerializer(instance=candidate.species, context=context).data,
     }

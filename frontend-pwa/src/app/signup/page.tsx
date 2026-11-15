@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
@@ -17,6 +17,16 @@ export default function SignUpPage() {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    authMethods.clearError();
+  }, [authMethods]);
+
+  useEffect(() => {
+    if (authState.userToken) {
+      router.replace('/character');
+    }
+  }, [authState.userToken, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -47,7 +57,6 @@ export default function SignUpPage() {
   };
 
   if (authState.userToken) {
-    router.replace('/character');
     return null;
   }
 

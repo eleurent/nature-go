@@ -104,13 +104,22 @@ class PosterDataView(APIView):
         )
     )
 
+    # Bulk-fetch all core and observed extended species in a single query
+    extended_species_list = poster.get("species_extended", [])
+    observed_extended = user_observed_sci_names & set(extended_species_list)
+    all_needed_names = set(core_species) | observed_extended
+    species_by_name = {
+        s.scientificNameWithoutAuthor: s
+        for s in Species.objects.filter(
+            scientificNameWithoutAuthor__in=all_needed_names,
+            type=species_model_type,
+        )
+    }
+
     # Only display core species in the poster
     poster_species = []
     for species_name in core_species:
-      species = Species.objects.filter(
-          scientificNameWithoutAuthor=species_name,
-          type=species_model_type,
-      ).first()
+      species = species_by_name.get(species_name)
 
       if species:
         if species.body_length_cm is None and poster_type == "bird":
@@ -155,14 +164,8 @@ class PosterDataView(APIView):
         })
 
     # Add observed extended species as bonus entries
-    extended_species_list = poster.get("species_extended", [])
-    observed_extended = user_observed_sci_names & set(extended_species_list)
-
     for species_name in observed_extended:
-      species = Species.objects.filter(
-          scientificNameWithoutAuthor=species_name,
-          type=species_model_type,
-      ).first()
+      species = species_by_name.get(species_name)
 
       if species:
         illustration_url = None

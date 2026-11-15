@@ -33,9 +33,11 @@ function QuizQuestionContent() {
   const { authState } = useAuth();
   const { quizState, quizMethods } = useQuiz();
   const [feedback, setFeedback] = useState<{ text: string; correct: boolean } | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   useHtmlBackground('2');
 
   const questionId = Number(searchParams.get('id') || 0);
+  const question = quizState.quiz?.multiple_choice_questions[questionId];
 
   useEffect(() => {
     if (authState.isLoading) return;
@@ -43,28 +45,25 @@ function QuizQuestionContent() {
       router.replace('/');
       return;
     }
-    if (!quizState.quiz) {
+    if (!quizState.quiz || !question) {
       router.replace('/quiz');
       return;
     }
-  }, [authState.isLoading, authState.userToken, quizState.quiz, router]);
+  }, [authState.isLoading, authState.userToken, quizState.quiz, question, router]);
 
-  if (authState.isLoading || !authState.userToken || !quizState.quiz) return null;
-
-  const question = quizState.quiz.multiple_choice_questions[questionId];
-  if (!question) return null;
+  if (authState.isLoading || !authState.userToken || !quizState.quiz || !question) return null;
   
   const hasSelected = quizState.answers[questionId] !== null;
   const hasAnswered = quizMethods.isQuestionAnswered(quizState, questionId);
   const isCorrect = quizMethods.isAnswerCorrect(quizState, questionId);
 
   const handleSelectAnswer = (answerId: number) => {
-    if (hasAnswered) return;
+    if (hasAnswered || isSubmitting) return;
     quizMethods.selectQuestion(questionId, answerId);
   };
 
   const handleCheck = async () => {
-    if (!hasSelected) return;
+    if (!hasSelected || isSubmitting) return;
 
     // If feedback is already shown, navigate to next question
     if (feedback) {
@@ -79,26 +78,24 @@ function QuizQuestionContent() {
 
     // Otherwise, submit the answer
     if (!hasAnswered) {
-      const correctAnswers = await quizMethods.answerQuiz(quizState);
-      if (correctAnswers) {
-        const isRight = correctAnswers[questionId] === true;
-        setFeedback({ text: getRandomFeedback(isRight), correct: isRight });
+      setIsSubmitting(true);
+      try {
+        const correctAnswers = await quizMethods.answerQuiz(quizState);
+        if (correctAnswers) {
+          const isRight = correctAnswers[questionId] === true;
+          setFeedback({ text: getRandomFeedback(isRight), correct: isRight });
+        }
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
-
-  const buttonLabel = hasSelected
-    ? hasAnswered
-      ? isCorrect
-        ? 'Continue'
-        : 'Got it'
-      : 'Check'
-    : 'Continue';
 
   return (
     <div className="page-background-2 min-h-screen flex flex-col">
       <button
         onClick={() => router.replace('/quiz')}
+        aria-label="Exit quiz"
         className="fixed top-4 left-4 z-10 bg-white/80 px-3 py-1 rounded shadow"
       >
         ✕
@@ -147,12 +144,12 @@ function QuizQuestionContent() {
           <div className="mt-auto pt-8">
             <button
               onClick={handleCheck}
-              disabled={!hasSelected}
+              disabled={!hasSelected || isSubmitting}
               className={`w-full max-w-md mx-auto block btn-primary text-xl py-4 rounded-full ${
-                !hasSelected ? 'opacity-50 cursor-not-allowed' : ''
+                !hasSelected || isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >
-              CHECK
+              {isSubmitting ? 'CHECKING...' : 'CHECK'}
             </button>
           </div>
         )}

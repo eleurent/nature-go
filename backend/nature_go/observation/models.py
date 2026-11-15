@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 from dataclasses import dataclass
 import typing as tp
 
@@ -42,10 +43,10 @@ class Species(models.Model):
     def rarity(self):
         rgpt = self.rarity_gpt
         ocdf = self.occurences_cdf
-        if not rgpt:
+        if rgpt is None:
             return 'Legendary'
 
-        if ocdf:
+        if ocdf is not None:
             if rgpt <= 2.8:
                 return 'Very Common'
             elif (2.8 < rgpt <= 3.4) or ocdf >= 0.3097:
@@ -85,7 +86,7 @@ class Observation(models.Model):
     species = models.ForeignKey(Species, on_delete=models.CASCADE, blank=True, null=True)
     location = models.JSONField(default=dict, blank=True, null=True)
     identification_response = models.JSONField(default=dict, blank=True, null=True)
-    datetime = models.DateTimeField(blank=True)
+    datetime = models.DateTimeField(default=timezone.now, blank=True)
     xp = models.JSONField(default=dict, blank=True, null=True)
 
     def __str__(self):

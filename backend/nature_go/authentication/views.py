@@ -38,7 +38,9 @@ class CreateUserAPIView(generics.CreateAPIView):
 class LogoutUserAPIView(APIView):
     queryset = get_user_model().objects.all()
 
-    def get(self, request, format=None):
-        # simply delete the token to force a login
-        request.user.auth_token.delete()
+    def post(self, request, format=None):
+        Token.objects.filter(user=request.user).delete()
         return Response(status=status.HTTP_200_OK)
+
+    def get(self, request, format=None):
+        return self.post(request, format=format)

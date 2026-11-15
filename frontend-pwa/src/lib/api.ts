@@ -1,18 +1,37 @@
 import axios from 'axios';
+import { storage } from './storage';
 
-// Use same origin as the page to avoid CORS issues
 const getApiUrl = () => {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
   if (typeof window !== 'undefined') {
     return window.location.origin + '/';
   }
-  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/';
+  return 'http://localhost:8000/';
 };
 
 export const API_URL = getApiUrl();
 
 export const api = axios.create({
   baseURL: API_URL,
+  timeout: 30000,
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error?.response?.status === 401 && typeof window !== 'undefined') {
+      storage.remove('userToken');
+      delete api.defaults.headers.common.Authorization;
+      const path = window.location.pathname;
+      if (path !== '/' && path !== '/signin' && path !== '/signup') {
+        window.location.href = '/';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const setAuthToken = (token: string | null) => {
   if (token) {

@@ -64,9 +64,13 @@ export default function ProfilePage() {
   if (authState.isLoading || !authState.userToken) return null;
 
   const profile = profileState.profile;
-  const xpProgress = profile
-    ? ((profile.xp - profile.current_level_xp) / (profile.next_level_xp - profile.current_level_xp)) * 100
-    : 0;
+  const levelSpan = profile ? profile.next_level_xp - profile.current_level_xp : 0;
+  const xpProgress =
+    profile && levelSpan > 0
+      ? Math.min(100, Math.max(0, ((profile.xp - profile.current_level_xp) / levelSpan) * 100))
+      : profile
+      ? 100
+      : 0;
 
   return (
     <div className="page-background min-h-screen pb-8">
@@ -126,6 +130,12 @@ export default function ProfilePage() {
                 <span className="font-bold">Exams taken</span>
                 <span>{profile?.quiz_count || 0}</span>
               </div>
+              {profile?.quiz_mean_score != null && (
+                <div className="flex justify-between">
+                  <span className="font-bold">Mean exam score</span>
+                  <span>{profile.quiz_mean_score.toFixed(1)} / 5</span>
+                </div>
+              )}
             </div>
           </div>
         </div>

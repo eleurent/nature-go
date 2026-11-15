@@ -1,5 +1,6 @@
 'use client';
 
+import axios from 'axios';
 import React, { createContext, useContext, useReducer, useEffect, useMemo, ReactNode } from 'react';
 import { api, endpoints, setAuthToken } from '@/lib/api';
 import { storage } from '@/lib/storage';
@@ -14,6 +15,7 @@ interface AuthMethods {
   signIn: (data: { username: string; password: string }) => Promise<void>;
   signOut: () => void;
   signUp: (data: { username: string; password: string; first_name: string; last_name: string }) => Promise<void>;
+  clearError: () => void;
 }
 
 interface AuthContextType {
@@ -27,6 +29,7 @@ type AuthAction =
   | { type: 'RESTORE_TOKEN'; token: string | null }
   | { type: 'SIGN_IN'; token: string }
   | { type: 'SIGN_IN_ERROR'; message: string }
+  | { type: 'CLEAR_ERROR' }
   | { type: 'SIGN_OUT' };
 
 const authReducer = (prevState: AuthState, action: AuthAction): AuthState => {
@@ -37,8 +40,10 @@ const authReducer = (prevState: AuthState, action: AuthAction): AuthState => {
       return { ...prevState, isLoading: false, userToken: action.token, signInErrorMessage: null };
     case 'SIGN_IN_ERROR':
       return { ...prevState, signInErrorMessage: action.message };
+    case 'CLEAR_ERROR':
+      return { ...prevState, signInErrorMessage: null };
     case 'SIGN_OUT':
-      return { ...prevState, isLoading: false, userToken: null };
+      return { ...prevState, isLoading: false, userToken: null, signInErrorMessage: null };
     default:
       return prevState;
   }
@@ -49,6 +54,21 @@ const initialState: AuthState = {
   userToken: null,
   signInErrorMessage: null,
 };
+
+function extractErrorMessage(error: unknown, fallback: string): string {
+  if (axios.isAxiosError(error)) {
+    const data = error.response?.data;
+    if (data && typeof data === 'object') {
+      const messages = Object.entries(data as Record<string, unknown>)
+        .flatMap(([, val]) => (Array.isArray(val) ? val : [val]))
+        .filter((v): v is string => typeof v === 'string');
+      if (messages.length > 0) return messages.join(' ');
+    }
+    if (error.response?.status === 400) return fallback;
+    return error.message || fallback;
+  }
+  return error instanceof Error ? error.message : fallback;
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [authState, dispatch] = useReducer(authReducer, initialState);
@@ -65,16 +85,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setAuthToken(userToken);
           storage.set('userToken', userToken);
           dispatch({ type: 'SIGN_IN', token: userToken });
-        } catch (error: any) {
+        } catch (error: unknown) {
           console.error('Login error', error);
-          const message = error.response?.status === 400 
-            ? 'Invalid username or password.' 
-            : error.message;
+          const message =
+            axios.isAxiosError(error) && error.response?.status === 400
+              ? 'Invalid username or password.'
+              : extractErrorMessage(error, 'Unable to sign in.');
           dispatch({ type: 'SIGN_IN_ERROR', message });
         }
       },
       signOut: () => {
-        api.get(endpoints.auth.logout).catch(() => {});
+        api.post(endpoints.auth.logout).catch(() => {});
         setAuthToken(null);
         storage.remove('userToken');
         dispatch({ type: 'SIGN_OUT' });
@@ -91,10 +112,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setAuthToken(userToken);
           storage.set('userToken', userToken);
           dispatch({ type: 'SIGN_IN', token: userToken });
-        } catch (error: any) {
+        } catch (error: unknown) {
           console.error('Registration error', error);
-          dispatch({ type: 'SIGN_IN_ERROR', message: error.message });
+          const message = extractErrorMessage(error, 'Unable to create account.');
+          dispatch({ type: 'SIGN_IN_ERROR', message });
         }
+      },
+      clearError: () => {
+        dispatch({ type: 'CLEAR_ERROR' });
       },
     }),
     []
