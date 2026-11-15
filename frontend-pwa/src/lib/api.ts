@@ -18,16 +18,19 @@ export const api = axios.create({
   timeout: 30000,
 });
 
+let onUnauthorizedCallback: (() => void) | null = null;
+
+export const setOnUnauthorized = (cb: (() => void) | null) => {
+  onUnauthorizedCallback = cb;
+};
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error?.response?.status === 401 && typeof window !== 'undefined') {
       storage.remove('userToken');
       delete api.defaults.headers.common.Authorization;
-      const path = window.location.pathname;
-      if (path !== '/' && path !== '/signin' && path !== '/signup') {
-        window.location.href = '/';
-      }
+      onUnauthorizedCallback?.();
     }
     return Promise.reject(error);
   }
