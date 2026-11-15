@@ -2,13 +2,13 @@ import axios from 'axios';
 import { storage } from './storage';
 
 const getApiUrl = () => {
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL;
-  }
   if (typeof window !== 'undefined') {
+    if (window.location.hostname === 'localhost' && process.env.NEXT_PUBLIC_API_URL) {
+      return process.env.NEXT_PUBLIC_API_URL;
+    }
     return window.location.origin + '/';
   }
-  return 'http://localhost:8000/';
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/';
 };
 
 export const API_URL = getApiUrl();
